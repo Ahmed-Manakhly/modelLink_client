@@ -1,0 +1,36 @@
+@use '../../index.scss' as *;
+
+
+.spinner {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 50vh;
+  left: 47vw;
+  z-index: 500000000;
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 12px solid var(--main-blue);
+    border-color: var(--main-blue) transparent var(--main-blue) transparent;
+    animation: spinner 1.2s linear infinite;
+  }
+}
+//-----------------------------
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

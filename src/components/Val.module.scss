@@ -1,0 +1,137 @@
+@use '../index.scss' as * ;
+
+
+//=========================================== screens
+
+@mixin small_mobile  {
+  @media only screen and (max-width: 480px ) {
+      @content;
+  }
+}
+@mixin medium_mobile  {
+  @media only screen and (max-width: 767px ) {
+      @content;
+  }
+}
+
+
+
+//=========================================================================
+// .section__container {
+//   // background-color: var(--color-white);
+//   max-width: 1200px;
+//   margin: auto;
+//   padding: 5rem 1rem;
+// }
+
+.container { padding-top: 4.5rem}
+.room__grid {
+  margin-top: 4rem;
+  display: grid;
+  gap: 2rem;
+  }
+  
+  .room__card {
+    padding-top: 1rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px var(--cultured);
+    cursor: pointer;
+    @extend%tran;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    &:hover {
+      background-color: var(--cultured);
+    }
+  }
+  
+  .room__card__image {
+    isolation: isolate;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    img {
+    // @extend %rad50 ;
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      object-fit: cover !important;
+      // box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+
+  
+  .room__card__details {
+    padding: 1rem;
+  }
+  
+  .room__card h4 {
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--main-blue);
+  }
+  
+  .room__card p {
+    margin-bottom: 0.5rem;
+    color: var(--eerie-black);
+    font-weight: var(--weight-300);
+    // color: #fff;
+  }
+  
+  .room__card h5 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    // font-weight: 500;
+    // color: #fff;
+  }
+
+
+
+  @media screen and (min-width:  576px) {
+    .room__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+
+  @media screen and (min-width:  768px) {
+    .room__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+  }
+
+  @media screen and (min-width:  1024px) {
+    .room__grid {
+      gap: 2rem;
+    }
+  }
+
+
+  %rad50 {
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+
+%tran {
+  transition: all 5ms;
+  -webkit-transition: all 5ms;
+  -moz-transition: all 5ms;
+  -ms-transition: all 5ms;
+  -o-transition: all 5ms;
+}

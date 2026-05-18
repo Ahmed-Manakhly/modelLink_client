@@ -1,0 +1,66 @@
+@use '../index.scss' as * ;
+//--------------------
+
+
+.cartCon{
+    padding: 0.1rem  1rem;
+    height: 70vh;
+    margin: auto;
+    @extend %out ;
+    background-image: url('../assets/cart-banner.png');
+    background-size: cover;
+    box-shadow:  -5px -9px 2rem rgba(0,0,0,0.75) , inset 5px 3px 2rem rgba(158, 154, 154, 0.75);
+    overflow: auto;
+}
+
+%out {
+    border: 3px var(--main-blue) solid;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+//-------------------------------------------------------
+
+.product-main { margin-bottom: 30px; }
+
+.product-grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+
+@media (min-width: 480px) {
+    .product-grid {
+        -ms-grid-columns: 1fr 30px 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-container .container {
+        position: relative;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    .product-grid {  grid-template-columns: repeat(3, 1fr); }
+}
+
+
+@media (min-width: 1200px) {
+    .product-grid { grid-template-columns: repeat(4, 1fr); }
+}

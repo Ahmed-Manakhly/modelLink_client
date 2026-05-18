@@ -1,0 +1,289 @@
+@use '../index.scss' as * ;
+
+.container{
+    padding: .3rem 0 0 0;
+    .contact__container {
+        padding: 4rem;
+        display: grid;
+        grid-template-columns: 40% 60%;
+        gap: 4rem;
+        height: 28rem;
+        margin: 7rem auto;
+        border-radius: 1rem;
+        background-color: #eee;
+        // box-shadow: 3rem 2rem 20rem rgba(0,0,0,0.25) , -10rem 0rem 10rem rgba(255, 255, 255, 0.75) ;
+        border-bottom: 2px solid rgba(149, 140, 140, 0.241);
+        border-right: 2px solid rgba(149, 140, 140, 0.241);
+        border-left: 3px solid #fff;
+        .contact__aside { 
+            background: #ddd;
+            padding: 2rem;
+            position: relative;
+            bottom: 10rem;
+            box-shadow: 3rem 2rem 20rem rgba(0,0,0,0.25) , -10rem 0rem 10rem rgba(255, 255, 255, 0.75) ;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
+            .secCon{
+                padding: 3rem;
+                background-image: url('../assets/login-banner.png');
+                background-size: cover ;
+                box-shadow: inset -3rem 2rem 20rem rgba(0,0,0,0.25) , -3rem 6rem 20rem rgba(233, 229, 229, 0.25) ;
+                border: 2px solid var(--main-2-blue);
+                border-radius: 15px;
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                -ms-border-radius: 15px;
+                -o-border-radius: 15px;
+                h2 {
+                    font-weight: bolder;
+                    text-align: left;
+                    margin-bottom: 1rem;
+                }
+                p {
+                    font-size: 0.98rem;
+                    text-align: left;
+                    margin-bottom: 1.4rem;
+                }
+                
+                .aside__image img{
+                    display: block;
+                    object-fit: cover;
+                    width: 100%;
+                    margin-bottom: 2rem;
+                }
+                .contact__details{
+                    padding-left: 0 !important;
+                }
+            }
+            border-radius: 15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            -ms-border-radius: 15px;
+            -o-border-radius: 15px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-right: 4rem;
+            .form__name {
+                display: flex;
+                gap: 1.2rem;
+                input {
+                    width: 50%;
+                    &:focus{
+                        outline: none;
+                    }
+                    border-radius: 15px;
+                    -webkit-border-radius: 15px;
+                    -moz-border-radius: 15px;
+                    -ms-border-radius: 15px;
+                    -o-border-radius: 15px;
+                }
+            }
+            input,textarea {
+                width: 100%;
+                padding: 15px;
+                color: var(--sonic-silver);
+                border: 2px solid var(--main-2-blue);
+                &:focus{
+                    outline: none;
+                }
+                border-radius: 15px;
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                -ms-border-radius: 15px;
+                -o-border-radius: 15px;
+            }
+            .banner-btn {
+                background: var(--main-2-blue);
+                color: var(--white);
+                width: -webkit-max-content;
+                width: -moz-max-content;
+                width: max-content;
+                // font-size: var(--fs-11);
+                font-size: 15px ;
+                font-weight: var(--weight-600); 
+                text-transform: uppercase;
+                padding: 7px 15px;
+                -webkit-border-radius: var(--border-radius-sm);
+                border-radius: var(--border-radius-sm);
+                -webkit-transition: var(--transition-timing);
+                -o-transition: var(--transition-timing);
+                transition: var(--transition-timing);
+                border: 3px solid var(--main-2-blue);
+                &:hover { 
+                    background :transparent;
+                    color: var(--main-2-blue);
+                }
+            }
+        }
+    }
+}
+/* ====================================================== responsive */
+
+
+/* media queries tablets */
+
+@media screen and (max-width: 1024px) {
+    .container {
+        padding-bottom: 0;
+        .contact__container {
+            grid-template-columns: auto !important;
+            grid-template-rows: auto auto !important;
+            // height: fit-content;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            padding: 0;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            height: auto;
+            border: none;
+            width: 100%;
+            .contact__aside {
+                align-self: center;
+                position: none;
+                width: 100%;
+                height: auto;
+                padding: 0rem;
+                bottom: 0;
+                left: 0;
+                margin: 0;
+                .secCon{
+                    width: 95%;
+                    margin: auto;
+                    padding: 0 !important;
+                    background-image: url('../assets/login-banner.png');
+                    background-size: cover ;
+                    box-shadow: inset -3rem 2rem 20rem rgba(0,0,0,0.25) , -3rem 6rem 20rem rgba(233, 229, 229, 0.25) ;
+                    border: 2px solid var(--main-2-blue);
+                    border-radius: 15px;
+                    -webkit-border-radius: 15px;
+                    -moz-border-radius: 15px;
+                    -ms-border-radius: 15px;
+                    -o-border-radius: 15px;
+                    h2 {
+                        margin: 15px;
+                        font-weight: bolder;
+                        text-align: left;
+                        margin-bottom: 1rem;
+                    }
+                    p {
+                        margin: 15px;
+                        font-size: 12px;
+                        text-align: left;
+                        margin-bottom: 1.4rem;
+                    }
+                    
+                    .aside__image {
+                        img{
+                            display: flex;
+                            object-fit: cover;
+                            width: 100%;
+                            justify-content: center;
+                            align-items: center;
+                            margin-bottom: 1rem;
+                        }
+                    }
+                    .contact__details{
+                        margin: 15px;
+                        padding-left: 0 !important;
+                    }
+                }
+            }
+            form {
+                align-self: center;
+                // margin-right: 0 !important;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                width: 95%;
+                height: auto;
+                padding-bottom: 20px ;
+                .form__name {
+                    flex-direction: column;
+                    gap: 1.2rem;
+                    width: 100%;
+                    input {
+                        width: 100%;
+                        &:focus{
+                            outline: none;
+                        }
+                        border-radius: 15px;
+                        -webkit-border-radius: 15px;
+                        -moz-border-radius: 15px;
+                        -ms-border-radius: 15px;
+                        -o-border-radius: 15px;
+                    }
+                }
+                input,textarea {
+                    width: 100%;
+                    padding: 7px;
+                    color: var(--sonic-silver);
+                    border: 2px solid var(--main-2-blue);
+                    &:focus{
+                        outline: none;
+                    }
+                    border-radius: 15px;
+                    -webkit-border-radius: 15px;
+                    -moz-border-radius: 15px;
+                    -ms-border-radius: 15px;
+                    -o-border-radius: 15px;
+                }
+                .banner-btn {
+                    background: var(--main-2-blue);
+                    color: var(--white);
+                    width: -webkit-max-content;
+                    width: -moz-max-content;
+                    width: max-content;
+                    // font-size: var(--fs-11);
+                    font-size: 12px ;
+                    font-weight: var(--weight-600); 
+                    text-transform: uppercase;
+                    padding: 7px 10px;
+                    -webkit-border-radius: var(--border-radius-sm);
+                    border-radius: var(--border-radius-sm);
+                    -webkit-transition: var(--transition-timing);
+                    -o-transition: var(--transition-timing);
+                    transition: var(--transition-timing);
+                    border: 3px solid var(--main-2-blue);
+                    &:hover { 
+                        background :transparent;
+                        color: var(--main-2-blue);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/* media queries phones */
+
+// @media screen and (max-width: 600px) {
+//     .contact__container {
+//         grid-template-columns: 1fr !important;
+//         grid-template-rows: 1fr 1fr !important;
+//         gap: 3rem;
+//         margin: 0;
+//         padding: 0;
+//         .contact__aside {
+//             width: 100%;
+//             // padding: 1.5rem;
+//             bottom: 0;
+//             left: -20px;
+//         }
+//         form {
+//             margin: 0 1.5rem 3rem;
+//             .form__name {
+//                 flex-direction: column;
+//                 input {
+//                     width: 100%;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+

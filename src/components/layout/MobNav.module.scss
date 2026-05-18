@@ -1,0 +1,114 @@
+@use '../../index.scss' as *;
+
+//----------------------------------
+.header-user-actions {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-user-actions .action-btn {
+    position: relative;
+    font-size: 35px;
+    color: var(--sonic-silver);
+    padding: 5px;
+    &:hover {
+        color: var(--main-blue);
+        .count{
+            transform: scale(1.3);
+            -webkit-transform: scale(1.3);
+            -moz-transform: scale(1.3);
+            -ms-transform: scale(1.3);
+            -o-transform: scale(1.3);
+        }
+    }
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+}
+
+.header-user-actions .count {
+    position: absolute;
+    top: -2.5px;
+    right: -3.5px;
+    background: var(--main-blue);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: var(--weight-500);
+    line-height: 1;
+    padding: 2px 4px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.mobile-bottom-navigation {
+    background: var(--white);
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 100%;
+    // max-width: 500px;
+    margin: auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 5px 0;
+    -webkit-box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.25);
+    box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.25);
+    z-index: 60002;
+}
+
+.mobile-bottom-navigation .action-btn {
+    position: relative;
+    font-size: 26px;
+    color: var(--eerie-black);
+    padding: 10px;
+}
+
+.mobile-bottom-navigation .count {
+    background: var(--main-2-blue);
+    color: var(--white);
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 12px;
+    font-weight: var(--weight-500);
+    line-height: 1;
+    padding: 2px 4px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+}
+
+
+
+@media (min-width: 480px) {
+    .mobile-bottom-navigation {
+        -webkit-border-top-left-radius: var(--border-radius-md);
+        border-top-left-radius: var(--border-radius-md);
+        -webkit-border-top-right-radius: var(--border-radius-md);
+        border-top-right-radius: var(--border-radius-md);
+    }
+}
+
+@media (min-width: 1024px) {
+    .mobile-bottom-navigation { display: none; }
+}

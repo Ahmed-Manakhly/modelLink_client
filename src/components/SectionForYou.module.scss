@@ -1,0 +1,81 @@
+@use '../index.scss' as * ;
+
+//----------------------------------
+
+.teamwork{
+    margin: 3rem;
+    display: grid;
+    grid-template-rows: 10% 1fr;
+    h1 {
+        height: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 900;
+    }
+    .teamwork-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 2rem;
+        .container-right {
+            display: flex;
+            flex-direction: column;
+            padding: 3rem;
+            justify-content: center;
+            align-items: center;
+            h3 {
+                color: var(--main-2-blue);
+                font-size: xx-large;
+            }
+        }
+        .container-left{
+            padding: 0.5rem;
+            img{
+                border-radius: 18px;
+                object-fit: cover;
+                display: block;
+                width: 100%;
+                -webkit-border-radius: 18px;
+                -moz-border-radius: 18px;
+                -ms-border-radius: 18px;
+                -o-border-radius: 18px;
+            }
+        }
+    }
+}
+
+
+
+.banner-btn {
+    background: var(--main-blue);
+    color: var(--white);
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    font-size: 20px ;
+    margin: 3rem;
+    font-weight: var(--weight-600); 
+    text-transform: uppercase;
+    padding: 4px 10px;
+    -webkit-border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-sm);
+    -webkit-transition: var(--transition-timing);
+    -o-transition: var(--transition-timing);
+    transition: var(--transition-timing);
+    border: 3px solid var(--main-blue);
+    &:hover { 
+        background :transparent;
+        color: var(--main-blue);
+    }
+    &.signUp {
+        background :transparent;
+        color: var(--main-blue);
+        border: 3px solid var(--main-blue);
+        padding: 7px 14px;
+        &:hover {
+            color: var(--davys-gray);
+            border-color: var(--davys-gray);
+        }
+    }
+}

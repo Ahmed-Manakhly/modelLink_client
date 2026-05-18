@@ -1,0 +1,17 @@
+export const origin = `http://127.0.0.1:8000/`; 
+// export const origin = `https://aixserver-production.up.railway.app/`; 
+export const LOGIN_URL = `${origin}api/auth/login` ;
+export const SIGNUP_URL = `${origin}api/auth/register` ;
+export const ALL_MODELS_URL = `${origin}api/aiModel` ;
+export const ALL_MODELS_BY_USER_URL = `${origin}api/aiModel/byUser` ;
+export const UPDATE_USER_BY_ID_URL = `${origin}api/users-me` ; //here 1
+// export const UPLOAD_FILES_URL = `${origin}upload` ;
+export const CREATE_ORDER_URL = `${origin}api/orders/create-payment-intent/` ;
+export const CONFIRM_ORDER_URL = `${origin}api/orders/confirm-order` ;
+export const GET_ORDER_URL = `${origin}api/orders` ;
+export const GET_ORDERS_BY_MODEL_URL = `${origin}api/orders/byModel` ;
+export const GET_ORDERS_BY_DEV_URL = `${origin}api/orders/byDev` ;
+export const GET_ORDERS_BY_CLIENT_URL = `${origin}api/orders/byClient` ;
+export const REV_URL = `${origin}api/reviews` ;
+export const REV_BY_ORDER_URL = `${origin}api/reviews/byOrder` ;
+export const GET_REVIEWS_BY_MODEL_URL = `${origin}api/reviews/byModel` ;

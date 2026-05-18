@@ -1,0 +1,221 @@
+@use '../index.scss' as * ;
+
+// //----------------------------------
+
+
+// @mixin small_mobile  {
+//     @media only screen and (max-width: 480px ) {
+//         @content;
+//     }
+// }
+// @mixin medium_mobile  {
+//     @media only screen and (max-width: 767px ) {
+//         @content;
+//     }
+// }
+// //-------------------------
+// %trans_ {
+//     transition: all 400ms ease;
+//     -webkit-transition: all 400ms ease;
+//     -moz-transition: all 400ms ease;
+//     -ms-transition: all 400ms ease;
+//     -o-transition: all 400ms ease;
+// }
+
+// %rad__{
+//     border-radius: 15px !important;
+//     -webkit-border-radius: 15px !important;
+//     -moz-border-radius: 15px !important;
+//     -ms-border-radius: 15px !important;
+//     -o-border-radius: 15px !important;
+// }
+// //==========================================================================
+// .section__subheader {
+//     margin-bottom: 0.5rem;
+//     position: relative;
+//     // font-weight: 700;
+//     letter-spacing: 2px;
+//     color: #16967f;
+//     margin-top: 5rem;
+//     @include medium_mobile {
+//         font-size: 1rem !important;
+//         text-align: left !important;
+//     }
+//     @include small_mobile {
+//         font-size: .75rem !important;
+//         text-align: left !important;
+//     }
+//     text-align: right;
+//     margin-right: 6rem;
+// }
+
+// .section__subheader::after {
+//     position: absolute;
+//     content: "";
+//     top: 50%;
+//     transform: translate(1rem, -50%);
+//     height: 5px;
+//     width: 5rem;
+//     background-color: #011668 ;
+//     border-radius: 10px;
+//     -webkit-border-radius: 10px;
+//     -moz-border-radius: 10px;
+//     -ms-border-radius: 10px;
+//     -o-border-radius: 10px;
+// }
+
+// .__strong {
+//     color: #001668;
+//     display: block;
+//     // font-weight: 500;
+//     font-size: 1.1875rem;
+//     font-style: italic;
+//     margin-bottom: 4rem;
+//     background: transparent;
+//     text-align: right;
+//     @include medium_mobile {
+//         text-align: left !important;
+//         margin: 2rem auto !important;
+//     }
+//     @include small_mobile {
+//         text-align: left !important;
+//         margin: 2rem auto !important;
+//     }
+// }
+
+
+// //===========================================================
+
+
+// //react-multi-carousel-dot react-multi-carousel-dot--active
+// // .rootCon{
+// //     max-width: 1320px;
+// //     margin: auto !important;
+// //     padding: .2rem;
+// // }
+
+// //==========================================================================here 
+// .cardCon{
+//     display: flex;
+//     flex-direction: column;
+//     // width: 40%;
+//     // margin: 25px !important;
+//     padding: 2rem;
+//     @include medium_mobile {
+//         width: 100%;
+//     }
+//     @include small_mobile {
+//         width: 100%;
+//     }
+//     border-radius: 20px;
+//     align-items: center;
+//     overflow: hidden;
+//     cursor: pointer;
+//     &:hover{
+//         .cardHead{
+//             // background: #16967f;
+//             // background-image: url('../assets/bg-texture-4.png') ;
+//             // background-image: url('../assets/IN_DARK_PATTERN.png');
+//             // background-repeat: no-repeat;
+//             background-size: 170%;
+//         }
+//         .cardBody{
+//             background: linear-gradient(120deg, #fff 0%, #d7d6d6 100%);
+//             // .ico{
+//             //     color: #16967f;
+//             // }
+//         }
+//     }
+//     .cardHead{
+//         @extend %trans_ ;
+//         background: #011668; 
+//         // background-image: url('../assets/bg-texture-4.png') ;
+//         background-image: url('../assets/IN_DARK_PATTERN.png');
+//         // background-repeat: no-repeat;
+//         background-size: contain;
+//         position: relative;
+//         padding: 1rem;
+//         width: 100% !important;
+//         border-bottom: #fff solid 8px;
+//         // box-shadow:  inset  -.7rem .8rem 1.9rem rgba(255, 255, 255, 0.438);
+//         h4{
+//             text-align: left;
+//             padding: 0.2rem;
+//             color: #fff;
+//             font-weight: bold;
+//             font-size: 1.2rem;
+//             height: 45px;
+//         }
+//         h6{
+//             text-align: left;
+//             padding: 0.2rem;
+//             color: #fff;
+//             // font-weight: bold;
+//             // font-size: 1.2rem;
+//             height: 45px;
+//             margin-bottom: 50px;
+//         }
+//         img{
+//             object-fit: cover;
+//             position: absolute;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             width: 100px ;
+//             height: 100px;
+//             border-radius: 50%;
+//             -webkit-border-radius: 50%;
+//             -moz-border-radius: 50%;
+//             -ms-border-radius: 50%;
+//             -o-border-radius: 50%;
+//             outline: #fff solid 8px;
+//             bottom:-50px ;
+//             left: calc( 50% - 50px);
+//             border: 8px solid;
+//             border-color: #011668 #F0F0F0  #F0F0F0 #011668;
+//             z-index: 100;
+//         }
+//     }
+//     .cardBody{
+//         // background-image: url('../assets/bg-texture-4.png') ;
+//         // background-size: 30%;
+//         background: linear-gradient(120deg, #fff 0%, #F0F0F0 100%);
+//         position: relative;
+//         padding: 1rem;
+//         width: 100% !important;
+//         // height: 280px;
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         // box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+//         // box-shadow: inset  -.3rem .4rem 3rem rgba(0, 0, 0, 0.2);
+//         p{
+//             text-align: left;
+//             margin-top: 35px;
+//             padding: 0.1rem;
+//             color: #444;
+//             height: 215px;
+//             @include medium_mobile {
+//                 height: 350px;
+//             }
+//             @include small_mobile {
+//                 height: 350px;
+//             }
+//         }
+//         .ico{
+//             @extend %trans_ ;
+//             position: absolute;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             font-size: 2rem;
+//             width: 50px ;
+//             height: 50px;
+//             bottom: 5%;
+//             right: 5%;
+//             color: #011668;
+//         }
+//     }
+// }
+
+

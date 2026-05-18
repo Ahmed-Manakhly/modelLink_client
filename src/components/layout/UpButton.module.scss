@@ -1,0 +1,40 @@
+@use '../../index.scss' as *;
+
+
+
+.up {
+    position : fixed ;
+    bottom : 20px ; right : 20px ;
+    display : none;
+    z-index: 50000000;
+    cursor : pointer;
+    &.show {
+    display : block;
+    }
+    background: var(--main-2-blue);
+    color: var(--white);
+    // width: -webkit-max-content;
+    // width: -moz-max-content;
+    // width: max-content;
+    font-size: var(--fs-9);
+    font-weight: var(--weight-600); 
+    text-transform: uppercase;
+    padding: 4px 20px;
+    -webkit-border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-sm);
+    -webkit-transition: var(--transition-timing);
+    -o-transition: var(--transition-timing);
+    transition: var(--transition-timing);
+    border: 3px solid var(--main-2-blue);
+    &:hover { 
+        background :transparent;
+        color: var(--main-2-blue);
+    }
+}
+
+@media (max-width: 1024px) {
+    .up {
+    bottom: 5rem !important;
+    }
+}
+

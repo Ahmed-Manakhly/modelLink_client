@@ -1,0 +1,76 @@
+@use '../index.scss' as * ;
+
+@mixin small_mobile  {
+    @media only screen and (max-width: 480px ) {
+        @content;
+    }
+}
+@mixin medium_mobile  {
+    @media only screen and (max-width: 767px ) {
+        @content;
+    }
+}
+
+
+
+
+
+// .section__container {
+//     max-width: 1200px;
+//     margin: auto;
+//     padding: 3rem 1rem;
+// }
+
+.container{
+    margin-top: 4.5rem;
+    .container_1{
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem;
+        margin-top: 4rem;
+        @include medium_mobile {
+            width: 95%;
+            padding: 1px;
+            margin: 1px;
+            video{
+                width: 100% !important;
+                height: auto !important;
+                object-fit: fill !important;
+            }
+        }
+        @include small_mobile {
+            width: 95%;
+            padding: 1px;
+            margin: 1px;
+            video{
+                width: 100% !important;
+                height: auto !important;
+                object-fit: fill !important;
+            }
+        }
+        video{
+            max-height: 600px !important;
+            // width: 100%;
+            border-radius: inherit;
+            -webkit-border-radius: inherit;
+            -moz-border-radius: inherit;
+            -ms-border-radius: inherit;
+            -o-border-radius: inherit;
+    }
+    }
+}
+%trans_ {
+    transition: all 600ms ease;
+    -webkit-transition: all 600ms ease;
+    -moz-transition: all 600ms ease;
+    -ms-transition: all 600ms ease;
+    -o-transition: all 600ms ease;
+}
+
+

@@ -1,0 +1,88 @@
+
+@use '../../index.scss' as *;
+
+//----------------------------------
+%rad15 {
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+//----------------
+
+.con {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2rem;
+    margin: auto;
+    border: 2px solid var(--cultured);
+    @extend %rad15 ;
+    .msg{
+        color: var(--davys-gray);
+        font-size: var(--fs-5);
+        font-weight: var(--weight-700);
+        letter-spacing: 0.6px;
+        text-transform: capitalize;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--cultured);
+        margin-bottom: 30px;
+    }
+    .actionBox{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 65%;
+        margin: auto;
+        .close{
+
+            color: var(--main-2-blue);
+            font-size: var(--fs-4);
+            font-weight: var(--weight-600); 
+            text-transform: uppercase;
+            padding: 10px;
+            -webkit-border-radius: var(--border-radius-sm);
+            border-radius: var(--border-radius-sm);
+            -webkit-transition: var(--transition-timing);
+            -o-transition: var(--transition-timing);
+            transition: var(--transition-timing);
+            margin-bottom: 1.2rem;
+            &:hover { 
+                color: var(--main-blue);
+            }
+        }
+        .action{
+            background: var(--main-2-blue);
+            color: var(--white);
+            font-size: var(--fs-4);
+            font-weight: var(--weight-600); 
+            text-transform: uppercase;
+            padding: 4px 10px;
+            -webkit-border-radius: var(--border-radius-sm);
+            border-radius: var(--border-radius-sm);
+            -webkit-transition: var(--transition-timing);
+            -o-transition: var(--transition-timing);
+            transition: var(--transition-timing);
+            border: 3px solid var(--main-2-blue);
+            margin-bottom: 1.2rem;
+            &:hover { 
+                background :transparent;
+                color: var(--main-2-blue);
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 1000px){
+    .actionBox {
+        flex-direction:  column-reverse !important;
+    }
+}
+
+
+
