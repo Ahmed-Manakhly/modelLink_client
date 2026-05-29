@@ -3,6 +3,9 @@ import {SIGNUP_URL} from './api' ;
 import {ALL_MODELS_URL} from './api' ;
 import {authError} from '../utility/errorCodeMSG' ;
 
+// Match server ACCESS_TOKEN_EXPIRATION (2700000 ms = 45 min)
+const SESSION_MINUTES = 45;
+
 //------------------------------------------------------
 export async function LoginAction (request , actions , toastHandler , loadingState ) {
     let toast = {status :'', title :'', message:''}
@@ -32,7 +35,7 @@ export async function LoginAction (request , actions , toastHandler , loadingSta
             localStorage.setItem('userData' , JSON.stringify(userData)) ;
             //-----------------------------------
             const expiration = new Date();
-            expiration.setMinutes(expiration.getMinutes()+40) ;
+            expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES) ;
             localStorage.setItem('expiration' , expiration.toISOString()) ;
             toast= {status :'success',message:`Well Come Back ${userData.org_username}`,title:'logged in'}
             toastHandler(toast);
@@ -72,7 +75,7 @@ export async function LoginAction (request , actions , toastHandler , loadingSta
             localStorage.setItem('userData' , JSON.stringify(userData)) ;
             //-----------------------------------
             const expiration = new Date();
-            expiration.setMinutes(expiration.getMinutes()+40) ;
+            expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES) ;
             localStorage.setItem('expiration' , expiration.toISOString()) ;
             toast= {status :'success',message:`Welcome on board, We Have logged You In Now!`,title:'account is registered'}
             toastHandler(toast);

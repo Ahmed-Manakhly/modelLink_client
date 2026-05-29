@@ -25,6 +25,8 @@ import io from "socket.io-client";
 const socket = io(origin);
 
 let init = true
+// Match server ACCESS_TOKEN_EXPIRATION (2700000 ms = 45 min)
+const SESSION_MINUTES = 45;
 
 
 
@@ -108,7 +110,7 @@ const RootLayout = ({msgCounter , notCounter , notifys , handleDeleteNotificatio
                 const userData = localStorage.getItem('userData') ;
                 dispatch(authActions.onLogin(JSON.parse(userData)))
                 const expiration = new Date();
-                expiration.setMinutes(expiration.getMinutes() + 40) ;
+                expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES) ;
                 localStorage.setItem('expiration' , expiration.toISOString()) ;
                 const now = new Date() ;
                 const tokenDuration = expiration.getTime() - now.getTime() ;
