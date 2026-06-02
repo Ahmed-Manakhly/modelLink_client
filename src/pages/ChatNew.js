@@ -115,7 +115,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
   },[notify])
   //========================================
   useEffect(() => {
-    if((user?.id > 0) && chatsUpdated){
+    if((user?.id) && chatsUpdated){
       const getChats = async () => {
         try {
           const { data } = await userChats(user.id);
@@ -130,7 +130,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
   }, [user,chatsUpdated]);
   //============================================================
   useEffect(() => {
-    if((user?.id > 0) && notificationsUpdated){
+    if((user?.id) && notificationsUpdated){
       const getNotifications = async () => {
         try {
           const { data } = await userNotifications(user.id);
@@ -149,19 +149,19 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
       if(chats?.length > 0){
         let exChat
         if(user?.role === 'CLIENT'){
-            exChat = chats.find(chat=> chat?.developerId === +contact)
+            exChat = chats.find(chat=> chat?.developerId === contact)
         }else {
-          exChat = chats.find(chat=> chat?.clientId === +contact)
+          exChat = chats.find(chat=> chat?.clientId === contact)
         }
         if(exChat){
           setCurrentChat(exChat);
           setCurrentChatUpdate(true)
         }else{
-          setCurrentChat({developerId : +contact ,clientId: user?.id , id: 'DUMMY-CHAT'});
+          setCurrentChat({developerId : contact ,clientId: user?.id , id: 'DUMMY-CHAT'});
           setCurrentChatUpdate(true)
         }
       }else{
-        setCurrentChat({developerId : +contact ,clientId: +user?.id , id: 'DUMMY-CHAT'});
+        setCurrentChat({developerId : contact ,clientId: user?.id , id: 'DUMMY-CHAT'});
         setCurrentChatUpdate(true)
       }
     }
@@ -242,7 +242,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
       const sendAndCreate = async ()=>{
         const socket = io(origin);
         try {
-          const { data } = await createChat({clientId:user.id ,developerId: +contact});
+          const { data } = await createChat({clientId:user.id ,developerId: contact});
           const newChat = data?.data?.clientCopy ;
           const message = {
             userId : user.id,
@@ -286,7 +286,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
           socket.emit("msg_created", {message, forId});
         }
         catch(err){
-          console.log(err.respons.data.message);
+          console.log(err?.response?.data?.message);
         }
       }
       sendMsg()

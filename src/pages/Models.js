@@ -54,9 +54,8 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
         }
         const gettingData =(data , res)=>{
             setModels(data?data:[])
-            setCurrentPage(res.page)
-            // setNextPage(res.nextPage)
-            setNumberOfPages(res.numberOfPages)
+            setCurrentPage(res.pagination?.page)
+            setNumberOfPages(res.pagination?.total_pages)
             setLastPath(ALL_MODELS_URL+'?')
         }
         getModel(ALL_MODELS_URL, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
@@ -88,9 +87,8 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             }
             const gettingData =(data,res)=>{
                 setModels(data?data:[])
-                setCurrentPage(res.page)
-                // setNextPage(res.nextPage)
-                setNumberOfPages(res.numberOfPages)
+                setCurrentPage(res.pagination?.page)
+                setNumberOfPages(res.pagination?.total_pages)
                 setLastPath(( searchByVal && searchVal) ?path+'&' : path+'?')
             }
             getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
@@ -118,9 +116,8 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             }
             const gettingData =(data,res)=>{
                 setModels(data?data:[])
-                setCurrentPage(res.page)
-                // setNextPage(res.nextPage)
-                setNumberOfPages(res.numberOfPages)
+                setCurrentPage(res.pagination?.page)
+                setNumberOfPages(res.pagination?.total_pages)
                 setLastPath(( (modelsUpdatedLink !== null )&& (modelsUpdatedLink !== 'All Models'))?path+'&' : path+'?')
             }
             getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
@@ -148,9 +145,8 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             }
             const gettingData =(data,res)=>{
                 setModels(data?data:[])
-                setCurrentPage(res.page)
-                // setNextPage(res.nextPage)
-                setNumberOfPages(res.numberOfPages)
+                setCurrentPage(res.pagination?.page)
+                setNumberOfPages(res.pagination?.total_pages)
                 setLastPath((applyControls !== 'ALL')?path+'&' : path+'?')
             }
             getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
@@ -172,7 +168,7 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             }
             const gettingData =(data , res)=>{
                 setModels(data?data:[])
-                setCurrentPage(res.page)
+                setCurrentPage(res.pagination?.page)
             }
             getModel(lastPath+`page=${currentPage-1}`, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
@@ -191,7 +187,7 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             }
             const gettingData =(data , res)=>{
                 setModels(data?data:[])
-                setCurrentPage(res.page)
+                setCurrentPage(res.pagination?.page)
             }
             getModel(lastPath+`page=${currentPage+1}`, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))

@@ -2,6 +2,7 @@ import classes from './Card.module.scss' ;
 import {origin} from '../lib/api' 
 import {Link} from 'react-router-dom' ;
 import {getAuthToken} from '../utility/tokenLoader'
+import imgHolder from '../assets/imgHolder.jpg'
 
 
 //reloadDocument
@@ -24,8 +25,10 @@ const Card =({category,title, desc, price, deliveryTime , cover , onAddProduct,s
                 <Link to={`/models/view/${id}`}   onClick={()=>{
                     return thisUserId?socket.emit("refreshModel", {to:thisUserId}):null
                 }} >
-                    <img src={origin+cover} alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.default}`}/>
-                    <img src={origin+cover}  alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.hover}`}/>
+                    {cover && <img src={origin+cover} alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.default}`}/>}
+                    {cover && <img src={origin+cover}  alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.hover}`}/>}
+                    {!cover && <img src={imgHolder} alt={title} crossOrigin="anonymous" width="300" className={`${classes["product-img"]} ${classes.default}`}/>}
+                    {!cover && <img src={imgHolder} alt={title} crossOrigin="anonymous" width="300" className={`${classes["product-img"]} ${classes.hover}`}/>}
                 </Link>
                 <p className={classes["showcase-badge"]}>{category}</p>
                 <div className={classes["showcase-actions"]}>

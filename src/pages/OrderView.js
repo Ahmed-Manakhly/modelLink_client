@@ -68,7 +68,7 @@ function OrderView({refresh}) {
             dispatch(uiActions.showNotification(state))
         }
         const gettingData =(data)=>{
-            setOrder(data.order?data.order:null)
+            setOrder(data || null)
         }
         const headers = {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function OrderView({refresh}) {
                 dispatch(uiActions.showNotification(state))
             }
             const gettingData =(data)=>{
-                setOrder(data.order?data.order:null)
+                setOrder(data || null)
             }
             const headers = {
                 'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ function OrderView({refresh}) {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
-                    formdata.append('aiModelId',order.aiModelId)
+                    formdata.append('aiModelId',order?.aiModelId)
                     formdata.append('orderId' , id)
                     formdata.append('desc' , feedback)
                     formdata.append('star' , rate)

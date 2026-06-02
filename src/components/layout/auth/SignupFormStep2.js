@@ -59,7 +59,7 @@ const SignupFormStep2 = ( {stepData}) => {
             setIsLoading(false)
         }catch(error)
         {   
-            setOtpMessage(prev => ({...prev , content : error?.response?.data.data.message , error : true}))
+            setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
             setIsLoading(false)
         }
@@ -77,7 +77,7 @@ const SignupFormStep2 = ( {stepData}) => {
             // }
         }catch(error)
         {
-            setOtpMessage(prev => ({...prev , content : error?.response?.data.data.message , error : true}))
+            setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
             setIsLoading(false)
         }

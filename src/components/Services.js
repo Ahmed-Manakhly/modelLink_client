@@ -21,8 +21,8 @@ function Services({models , title ,noNext,onGoNext,page,pages,noPrev,onGoPrev}) 
             {models.map((ele,i)=>{
                 return(
                 <Card 
-                seller={ele?.userData?.first_name ? ele?.userData?.first_name :ele?.userData?.org_username}
-                avatar={ele.userData.avatar}
+                seller={ele?.User?.first_name ? ele?.User?.first_name :ele?.User?.org_username}
+                avatar={ele?.User?.avatar}
                 key={i}
                 id={ele.id}
                 category ={ele.category}

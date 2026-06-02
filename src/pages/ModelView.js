@@ -326,7 +326,7 @@ function ModelView({onlineUsers , refresh , modelRefresh}) {
     //--------------------------------------------------
     return (
         <>
-            {(model && (thisUserRole !== 'DEVELOPER')) && <ChatCard userData={model.userData} userId={model.userId} onlineUsers={onlineUsers} />}
+            {(model && (thisUserRole !== 'DEVELOPER')) && <ChatCard userData={model.User} userId={model.userId} onlineUsers={onlineUsers} />}
             <ModelDataTop formTitle={'Model Details..'} model={model}  />
             <ModelData  formTitle={''} model={model} />
             <ModelBoxWidgets model={model} orderRequestHandler={orderRequestHandler} isBuyer={isBuyer} otherDev={otherDev} isSeller={isSeller} profileNotCompleted={profileNotCompleted}/>

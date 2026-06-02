@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {uiActions} from '../store/UI-slice' ;
 import {getAuthToken} from '../utility/tokenLoader'
 import {useEffect , useState} from 'react' ;
-import {useNavigate  } from 'react-router-dom';
+import {useNavigate, useOutletContext  } from 'react-router-dom';
 import PageTableSec from '../components/layout/PageTableSec'
 import { Box } from "@mui/material";
 //---------------------------------------icons
@@ -22,6 +22,7 @@ function OrdersClient() {
     const navigate = useNavigate();
     const token = getAuthToken() ;
     const dispatch = useDispatch();  
+    const { msgCounter, notCounter } = useOutletContext();
     //---------------------------------------------
     useEffect(() => {
         if(!id){
@@ -44,8 +45,8 @@ function OrdersClient() {
         const notificationState =(state)=>{
             dispatch(uiActions.showNotification(state))
         }
-        const gettingData =(data)=>{
-            setOrders(data?data?.orders:[])
+        const gettingData =(data, resData)=>{
+            setOrders(data?data:[])
         }
         const headers = {
             'Content-Type': 'application/json',
@@ -106,7 +107,7 @@ function OrdersClient() {
 //--------------------------------------------------
     return (
         <>
-            <BoxWidgets totalOrders={orders.length}/>
+            <BoxWidgets totalOrders={orders.length} msgCounter={msgCounter} notCounter={notCounter}/>
             <PageTableSec data={orders} columns={columns}  tableTitle={'Manage Your Orders'}/>
         </>
     )

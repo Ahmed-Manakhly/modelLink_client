@@ -54,9 +54,12 @@ function CreateModel() {
                 let toast = {status :'', title :'', message:''}
                 loadingState(true)
                     const formdata = new FormData();
-                    formdata.append('cover',file)
+                    if (file) formdata.append('cover',file);
+                    if (modelData) {
+                        formdata.append('data', JSON.stringify(modelData));
+                    }
                     try{
-                        const response = await axios.post(ALL_MODELS_URL,formdata , {params:modelData});
+                        const response = await axios.post(ALL_MODELS_URL, formdata);
                         const resData =  response.data ;
                         loadingState(false)
                         toast= {status :resData.status,message:'Model has been created',title:'Creating Model'}

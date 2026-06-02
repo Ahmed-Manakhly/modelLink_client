@@ -14,7 +14,7 @@ import { FaUserAlt } from "react-icons/fa";
 import getStarted from '../assets/getStarted.png'
 import {origin} from '../lib/api'
 
-const BoxWidgets = ( {  profile=false , HandelFileChange , file , totalModels , totalOrders}) => {
+const BoxWidgets = ( {  profile=false , HandelFileChange , file , totalModels , totalOrders , msgCounter=0 , notCounter=0}) => {
 
 
   const org_username = JSON.parse(localStorage.getItem('userData'))?.org_username
@@ -91,12 +91,12 @@ const handleImgClick=()=>{
                     <div className={styles["widget_1"]}>
                     <h1>Unread Messages</h1>
                       <FaRegMessage className={styles.iconImg} />
-                      <span>0</span>
+                      <span>{msgCounter}</span>
                     </div>
                     <div className={styles["widget_2"]}>
-                    <h1>Reviews</h1>
+                    <h1>Notifications</h1>
                       <GoCodeReview className={styles.iconImg} />
-                      <span>0</span>
+                      <span>{notCounter}</span>
                     </div>
                   </div>
                 </>}

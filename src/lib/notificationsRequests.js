@@ -17,6 +17,6 @@ export const getUser = (userId , token) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
-    return API.get(`api/users-me/${userId}`,{headers})
+    return API.get(`api/users/${userId}`,{headers})
 }; //here 1
 

@@ -36,7 +36,7 @@ const OrderBoxWidgets = ( { order  , confirmOrdeerHandler}) => {
                 </Col>
               </div>
               <Row className={styles.infoCon_}>
-              <Link to={`/models/view/${order.aiModelId}`} className={styles["banner-btn"]}> {'VIEW MODEL'} </Link>
+              <Link to={`/models/view/${order?.aiModelId}`} className={styles["banner-btn"]}> {'VIEW MODEL'} </Link>
               </Row>
             </div>
             {/* //------------------------- */}

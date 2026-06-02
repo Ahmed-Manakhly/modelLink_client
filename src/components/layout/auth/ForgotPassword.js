@@ -5,7 +5,7 @@ import { Row , Col  } from 'react-bootstrap'
 import { useState , useEffect } from 'react' ;
 import { createOtp , validateOtp } from "../../../lib/authRequests";
 import { IoMdCheckmarkCircle } from "react-icons/io";
-import {UPDATE_USER_BY_ID_URL} from '../../../lib/api'
+import {RESET_PASSWORD_URL} from '../../../lib/api'
 import axios from 'axios'
 import {useDispatch} from 'react-redux'; 
 import {uiActions} from '../../../store/UI-slice' ;
@@ -55,7 +55,7 @@ const ForgotPassword = ( ) => {
             setIsLoading(false)
         }catch(error)
         {   
-            setOtpMessage(prev => ({...prev , content : error?.response?.data.data.message , error : true}))
+            setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
             setIsLoading(false)
         }
@@ -71,7 +71,7 @@ const ForgotPassword = ( ) => {
             setIsLoading(false)
         }catch(error)
         {
-            setOtpMessage(prev => ({...prev , content : error?.response?.data.data.message , error : true}))
+            setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
             setIsLoading(false)
         }
@@ -97,7 +97,7 @@ const ForgotPassword = ( ) => {
             loadingState(true)
             //---------------------------------------------                
             try{
-                const response = await axios.post(UPDATE_USER_BY_ID_URL,{email: enteredEmail , password:enteredPass1 , passwordConfirm : enteredPass2});
+                const response = await axios.patch(RESET_PASSWORD_URL,{email: enteredEmail , password:enteredPass1 , passwordConfirm : enteredPass2, otp: theOtp});
                 const resData =  response.data ;
                 loadingState(false)
                 console.log(resData)

@@ -40,8 +40,8 @@ function PopularServices({models , title}) {
             draggable   >
             {models.map((ele,i)=>{return(
                 <Card 
-                seller={ele?.userData?.first_name ? ele?.userData?.first_name :ele?.userData?.org_username}
-                avatar={ele?.userData?.avatar}
+                seller={ele?.User?.first_name ? ele?.User?.first_name :ele?.User?.org_username}
+                avatar={ele?.User?.avatar}
                 key={i}
                 category ={ele?.category}
                 title ={ele?.title}

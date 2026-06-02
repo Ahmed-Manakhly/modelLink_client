@@ -31,8 +31,8 @@ const LoginForm = ( ) => {
         <Col className={`d-flex flex-column justify-content-center  p-lg-4 align-items-center`}>
             {/* {====================================================} */}
                 <Row className={`${userNameClasses} d-flex flex-column align-items-center w-100`} >
-                    <label htmlFor="userName" ><MdEmail  />User Email</label>
-                    <input type="text"  placeholder="User Name" name="org_username" id='userName'
+                    <label htmlFor="userEmail" ><MdEmail  />User Email</label>
+                    <input type="email"  placeholder="User Email" name="email" id='userEmail'
                     onChange={userInputChangeHandler} onBlur={userInputBlurHandler} />
                     {userInputIsInvalid && <p className={classes['error-text']}>Kindly Use A Valid Email : simple@example.com </p>}
                 </Row>

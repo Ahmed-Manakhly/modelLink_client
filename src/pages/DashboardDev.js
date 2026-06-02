@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {uiActions} from '../store/UI-slice' ;
 import {getAuthToken} from '../utility/tokenLoader'
 import {useEffect , useState} from 'react' ;
-import {useNavigate  } from 'react-router-dom';
+import {useNavigate, useOutletContext  } from 'react-router-dom';
 import WarningModal from '../components/layout/WarningModal'
 import PageTable from '../components/layout/PageTable'
 import PageTableSec from '../components/layout/PageTableSec'
@@ -23,6 +23,7 @@ function DashboardDev() {
     const navigate = useNavigate();
     const token = getAuthToken() ;
     const dispatch = useDispatch();  
+    const { msgCounter, notCounter } = useOutletContext();
     //---------------------------------------------
     useEffect(() => {
         if(!id){
@@ -62,8 +63,8 @@ function DashboardDev() {
         const notificationState =(state)=>{
             dispatch(uiActions.showNotification(state))
         }
-        const gettingData =(data)=>{
-            setOrders(data?data?.orders:[])
+        const gettingData =(data, resData)=>{
+            setOrders(data?data:[])
         }
         const headers = {
             'Content-Type': 'application/json',
@@ -180,7 +181,7 @@ function DashboardDev() {
     return (
         <>
             {warning.show && <WarningModal onClose={closeModal} warning={warning} onAction={onAction}/>}
-            <BoxWidgets totalOrders={orders.length} totalModels={models.length}/>
+            <BoxWidgets totalOrders={orders.length} totalModels={models.length} msgCounter={msgCounter} notCounter={notCounter}/>
             <PageTable data={models} columns={columns}  tableTitle={'Manage Your Models'}/>
             <PageTableSec data={orders} columns={columns_2}  tableTitle={'Manage Your Orders'}/>
         </>

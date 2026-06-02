@@ -6,7 +6,7 @@ import {useEffect , useState} from 'react' ;
 import {useNavigate , Link } from 'react-router-dom';
 import ProfileBoxWidgetsDev from '../components/ProfileBoxWidgetsDev'
 import {getModel , getOrder} from '../lib/loaders';
-import {UPDATE_USER_BY_ID_URL , ALL_MODELS_BY_USER_URL ,GET_ORDERS_BY_CLIENT_URL , origin} from '../lib/api' ;
+import {GET_USER_PROFILE_URL , ALL_MODELS_BY_USER_URL ,GET_ORDERS_BY_CLIENT_URL , origin} from '../lib/api' ;
 import PopularServices from '../components/PopularServices'
 import PageTableSec from '../components/layout/PageTableSec'
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -65,7 +65,7 @@ function ProfileDev({onlineUsers}) {
             setUser(data?data?.user:null)
             setUserUpdated(true)
         }
-        getOrder(UPDATE_USER_BY_ID_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'user!' )
+        getOrder(GET_USER_PROFILE_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'user!' )
         dispatch(uiActions.showNotification(false))
         // return redirect('');
     },[dispatch , id , token])

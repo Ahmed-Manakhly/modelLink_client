@@ -162,7 +162,7 @@ const RootLayout = ({msgCounter , notCounter , notifys , handleDeleteNotificatio
             <main >
                 <UpButton scroll={scroll} />
                 <ScrollRestoration/>
-                <Outlet />
+                <Outlet context={{ msgCounter, notCounter }} />
             </main>
             <Footer footerNavData={mobNavData_2} footerCategoriesData={footerCategoriesData}   onClickLink={onClickLink} />
         </>

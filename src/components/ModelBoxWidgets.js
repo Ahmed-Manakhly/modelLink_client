@@ -10,13 +10,14 @@ import {origin} from '../lib/api'
 
 const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isSeller,profileNotCompleted}) => {
 
-  const org_username = model?.userData?.org_username
-  const avatar = model?.userData?.avatar
-  const country = model?.userData?.country
-  const role = model?.userData?.role
-  const createdAt = model?.userData?.createdAt
+  const User = model?.User;
+  const org_username = User?.org_username
+  const avatar = User?.avatar
+  const country = User?.country
+  const role = User?.role
+  const createdAt = User?.createdAt
   const id = model?.userId;
-  const first_name = model?.userData?.first_name;
+  const first_name = User?.first_name;
   const navigate = useNavigate();
   function cancelHandler() {
   navigate('..');

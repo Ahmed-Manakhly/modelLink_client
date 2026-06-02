@@ -5,7 +5,8 @@ export async function getModel(url ,toastHandler, loadingState , notificationSta
         const response = await fetch(url);
         const resData = await response.json() ;
         loadingState(false)
-        gettingData(resData.data , resData )
+        const data = resData?.data?.models || resData?.data?.model || resData?.data;
+        gettingData(data, resData);
     }catch(err){
         loadingState(false)
         toast = {status :'error',message:err.message || `Could not get ${item}!`,title:'Getting data failed'};
@@ -21,7 +22,8 @@ export async function getOrder(url ,headers,toastHandler, loadingState , notific
         const response = await fetch(url,{headers:headers});
         const resData = await response.json() ;
         loadingState(false)
-        gettingData(resData.data)
+        const data = resData?.data?.orders || resData?.data?.order || resData?.data;
+        gettingData(data, resData);
     }catch(err){
         loadingState(false)
         toast = {status :'error',message:err.message || `Could not get ${item}!`,title:'Getting data failed'};

@@ -116,13 +116,13 @@ function App() {
   },[notify])
   //-------------------
   useEffect(() => {
-    if((userId > 0) && chatsUpdated){
+    if((userId) && chatsUpdated){
       const getChats = async () => {
         try {
           const { data } = await userChats(userId);
           setChats(data?.data?.chats);
         } catch (error) {
-          console.log(error.respons.data.message);
+          console.log(error?.response?.data?.message);
         }
       };
       getChats();
@@ -131,13 +131,13 @@ function App() {
   }, [userId,chatsUpdated]);
   //-------------------
   useEffect(() => {
-    if((userId > 0) && notifysUpdated){
+    if((userId) && notifysUpdated){
       const getNotifications = async () => {
         try {
           const { data } = await userNotifications(userId);
           setNotifys(data?.data);
         } catch (error) {
-          console.log(error.respons.data.message);
+          console.log(error?.response?.data?.message);
         }
       };
       getNotifications();
@@ -171,7 +171,7 @@ function App() {
       setNotifysUpdated(true)
       setNotify(data)
     }catch(err){
-      console.log(err.respons.data.message);
+      console.log(err?.response?.data?.message);
     }
   }
   //-------------------------------------
@@ -182,7 +182,7 @@ function App() {
       setNotifysUpdated(true)
       setNotify(data)
     }catch(err){
-      console.log(err.respons.data.message);
+      console.log(err?.response?.data?.message);
     }
   }
   //-------------------------------------
@@ -213,7 +213,7 @@ function App() {
       setChatsUpdated(true)
       setMsg(data)
     }catch(err){
-      console.log(err.respons.data.message);
+      console.log(err?.response?.data?.message);
     }
   }
   //=====================================================================================

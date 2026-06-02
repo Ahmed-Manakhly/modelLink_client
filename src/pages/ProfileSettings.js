@@ -3,7 +3,7 @@ import BoxWidgets from '../components/BoxWidgets' ;
 import FormProfile from '../components/FormProfile' ;
 import Val from '../components/Val'
 import {vals} from '../data' ;
-import {UPDATE_USER_BY_ID_URL} from '../lib/api'
+import {UPDATE_MY_PROFILE_URL} from '../lib/api'
 import axios from 'axios'
 import {useDispatch} from 'react-redux'; 
 import {uiActions} from '../store/UI-slice' ;
@@ -44,16 +44,16 @@ function ProfileSettings() {
             loadingState(true)
             //---------------------------------------------
                 const formdata = new FormData();
-                file?formdata.append('avatar',file):null
+                if (file) formdata.append('avatar', file);
+                if (authData) formdata.append('data', JSON.stringify(authData));
                 const config = {
                     headers: {
                     'Content-Type': 'multipart/form-data', // Use 'multipart/form-data' for FormData
                     'Authorization': `Bearer ${token}`,
-                    },
-                    params: authData ? authData : null,
+                    }
                 };
                 try{
-                    const response = await axios.patch(UPDATE_USER_BY_ID_URL+'/'+id,formdata , config);
+                    const response = await axios.patch(UPDATE_MY_PROFILE_URL, formdata , config);
                     const resData =  response.data ;
                     loadingState(false)
                     const token =  localStorage.getItem('token') ;

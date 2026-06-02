@@ -67,9 +67,12 @@ function EditModel() {
             loadingState(true)
             //---------------------------------------------
                 const formdata = new FormData();
-                file?formdata.append('cover',file):null
+                if (file) formdata.append('cover',file);
+                    if (modelData) {
+                        formdata.append('data', JSON.stringify(modelData));
+                    }
                 try{
-                    const response = await axios.put(ALL_MODELS_URL+'/'+id,formdata , {params:modelData?modelData:null});
+                    const response = await axios.put(ALL_MODELS_URL+'/'+id, formdata);
                     const resData =  response.data ;
                     loadingState(false)
                     toast= {status :resData.status,message:"Model has been updated",title:'Updating  Model'}
