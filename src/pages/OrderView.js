@@ -1,6 +1,6 @@
 
 import {useParams}  from "react-router-dom";
-import {useDispatch} from 'react-redux'; 
+import {useDispatch} from 'react-redux';
 import {uiActions} from '../store/UI-slice' ;
 import {getAuthToken} from '../utility/tokenLoader'
 import {useEffect , useState} from 'react' ;
@@ -8,14 +8,12 @@ import {useNavigate } from 'react-router-dom';
 import OrderBoxWidgets from '../components/OrderBoxWidgets'
 import FeedbackForm from '../components/FeedbackForm'
 import FeedbackList from '../components/FeedbackList'
-import {getOrder} from '../lib/loaders';
-import {CONFIRM_ORDER_URL} from '../lib/api' ;
-import {GET_ORDER_URL  ,REV_URL , REV_BY_ORDER_URL} from '../lib/api' ;
-import axios from 'axios'
+import { getData, getOrderByIdReq, getReviewByOrderReq } from '../lib/loaders';
+import { confirmOrderReq } from '../lib/orderRequests';
+import { submitReviewReq } from '../lib/reviewRequests';
 import {createNotification} from '../lib/notificationsRequests'
-//=-----------------------------
 import io from "socket.io-client";
-import {origin} from '../lib/api'
+import { BASE_URL } from '../lib/api';
 
 
 //==========================
@@ -74,7 +72,7 @@ function OrderView({refresh}) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         };
-        getOrder(GET_ORDER_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Order!' )
+        getData(() => getOrderByIdReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Order!' )
         dispatch(uiActions.showNotification(false))
     },[dispatch , id , token])
     //------------------------------------------
@@ -96,7 +94,7 @@ function OrderView({refresh}) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
-            getOrder(GET_ORDER_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Order!' )
+            getData(() => getOrderByIdReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Order!' )
             dispatch(uiActions.showNotification(false))
             setUpdated(false)
         }
@@ -120,7 +118,7 @@ function OrderView({refresh}) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
-            getOrder(REV_BY_ORDER_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Review!' )
+            getData(() => getReviewByOrderReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Review!' )
             dispatch(uiActions.showNotification(false))
         }
     },[order , dispatch , id , token])
@@ -144,7 +142,7 @@ function OrderView({refresh}) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 };
-                getOrder(REV_BY_ORDER_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Review!' )
+                getData(() => getReviewByOrderReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Review!' )
                 dispatch(uiActions.showNotification(false))
                 setUpdated(false)
             }
@@ -153,7 +151,7 @@ function OrderView({refresh}) {
     //------------------------------------------
 
     const confirmOrdeerHandler =()=>{
-        const socket = io(origin);
+        const socket = io(BASE_URL);
         async function onConfirmOrdeerHandler (toastHandler , loadingState ) {
             let toast = {status :'', title :'', message:''}
             loadingState(true)
@@ -164,7 +162,7 @@ function OrderView({refresh}) {
                     'Authorization': `Bearer ${token}`
                 };
                 try{
-                    const response = await axios.patch(CONFIRM_ORDER_URL+'/'+id, formdata ,{headers} );
+                    const response = await confirmOrderReq(id, formdata, headers);
                     const resData =  response?.data ;
                     loadingState(false)
                     toast= {status :resData.status,message:"Order Confirmed successfully",title:'Confirm Order'}
@@ -230,7 +228,7 @@ function OrderView({refresh}) {
     //     dispatch(uiActions.showNotification(false))
     // }
     const onSubmitFeedback =(feedback , rate)=>{
-        const socket = io(origin);
+        const socket = io(BASE_URL);
         if(order){
             async function onSubmitFeedbackHandler (toastHandler , loadingState ) {
                 let toast = {status :'', title :'', message:''}
@@ -246,7 +244,7 @@ function OrderView({refresh}) {
                     formdata.append('desc' , feedback)
                     formdata.append('star' , rate)
                     try{
-                        const response = await axios.post(REV_URL, formdata ,{headers} );
+                        const response = await submitReviewReq(formdata, headers);
                         const resData =  response?.data ;
                         loadingState(false)
                         toast= {status :resData.status,message:"review Submitted successfully",title:'Submit review'}

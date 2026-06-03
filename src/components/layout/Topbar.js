@@ -5,7 +5,7 @@ import { useDispatch} from 'react-redux';
 import {authActions} from '../../store/Auth.-slice' ;
 import {uiActions} from '../../store/UI-slice' ;
 import classes from './Topbar.module.scss' ;
-import {origin} from '../../lib/api'
+import { BASE_URL, FILES_BASE_API_URL } from '../../lib/api'
 import io from "socket.io-client";
 
 
@@ -18,7 +18,7 @@ function Topbar({txt_1 , txt_2 , txt_3 , txt_4}) {
   const userData = useSelector(state => state.auth.userData) ;
   const {org_username , role , id:userID , avatar , first_name} = userData;
   const logoutAction = ()=> {
-    const socket = io(origin);
+    const socket = io(BASE_URL);
     socket.emit("leavingRoom", userID);
     const toast = {status :'success',message: 'come back soon',title:'logged out'};
     dispatch(authActions.onLoginOut());
@@ -38,14 +38,14 @@ function Topbar({txt_1 , txt_2 , txt_3 , txt_4}) {
         <li className={` ${classes.container_} ${classes['menu-category']} `}>       
           <div  className={` ${classes.imgCon} ${classes['menu-title']} `} >
             {/* <img src={UserHolder} alt="UserHolder" /> */}
-            {avatar &&<img src={origin+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
+            {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
             {!avatar &&  <div className={classes['UserHolder']} >{org_username&&org_username[0]?.toUpperCase()}</div>}
           </div>
           <ul className={classes["dropdown-list"]}>
             <li className={` ${classes.item_}   ${classes['dropdown-item']}`}>
               <div  className={` ${classes.imgCon} ${classes['menu-title']}  `} >
                 {/* <img src={UserHolder} alt="UserHolder" /> */}
-                {avatar &&<img src={origin+avatar}alt="Model Cover" crossOrigin="anonymous"  />}
+                {avatar &&<img src={FILES_BASE_API_URL+avatar}alt="Model Cover" crossOrigin="anonymous"  />}
                 {!avatar &&  <div className={classes['UserHolder']} >{org_username&&org_username[0]?.toUpperCase()}</div>}
               </div>
              {first_name && <h4>{first_name?.toUpperCase()?.slice(0, 9)}</h4>}

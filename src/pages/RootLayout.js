@@ -19,10 +19,10 @@ import {uiActions} from '../store/UI-slice' ;
 import UpButton from '../components/layout/UpButton'
 import {  footerCategoriesData , mobNavData , mobNavData_2} from '../data'
 import WarningModal from '../components/layout/WarningModal'
-import {origin} from '../lib/api'
+import {BASE_URL} from '../lib/api'
 
 import io from "socket.io-client";
-const socket = io(origin);
+const socket = io(BASE_URL);
 
 let init = true
 // Match server ACCESS_TOKEN_EXPIRATION (2700000 ms = 45 min)

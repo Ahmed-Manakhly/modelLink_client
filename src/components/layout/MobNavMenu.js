@@ -8,7 +8,7 @@ import { useDispatch} from 'react-redux';
 import {authActions} from '../../store/Auth.-slice' ;
 import {uiActions} from '../../store/UI-slice' ;
 import styles from './Topbar.module.scss' ;
-import {origin} from '../../lib/api' 
+import {FILES_BASE_API_URL} from '../../lib/api' 
 //----------------------------------------------------------------------------
 const AccordionLink =({menuTitle,menuItems , onClick})=>{  //  onClick={onClickLink?.bind(null,item.title)}
   const [isOpen,setIsOpen]=useState(false) ;
@@ -72,7 +72,7 @@ function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 
       <li className={` ${styles.container_} ${styles['menu-category']} `}>       
         <div  className={` ${styles.imgCon} ${styles['menu-title']} `} >
           {/* <img src={UserHolder} alt="UserHolder" /> */}
-          {avatar &&<img src={origin+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
+          {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
             {!avatar &&  <div className={classes['UserHolder']} >{org_username&&org_username[0]?.toUpperCase()}</div>}
         </div>
       </li>

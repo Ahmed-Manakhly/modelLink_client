@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import classes from './ChatCard.module.scss'
-import {origin} from '../lib/api'
+import {FILES_BASE_API_URL} from '../lib/api'
 
 function ChatCard({userData , onlineUsers , userId}) {
   const checkOnlineStatus = (theUserId) => {
@@ -14,7 +14,7 @@ function ChatCard({userData , onlineUsers , userId}) {
           <div className={`${classes["conversation-con"]}`} >
             {online && <div className={`${classes["online-dot"]}`}></div>}
               <div  className={` ${classes.imgCon}`} >
-                  {userData?.avatar &&<img src={origin+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
+                  {userData?.avatar &&<img src={FILES_BASE_API_URL+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
                   {!userData?.avatar &&  <div className={classes['UserHolder']} >{userData?.org_username&&userData?.org_username[0]?.toUpperCase()}</div>}
               </div>
               <div className={classes["info-box"]}>

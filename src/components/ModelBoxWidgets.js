@@ -6,7 +6,7 @@ import { RiRobot2Line } from "react-icons/ri";
 import {Container , Row , Col  } from 'react-bootstrap' 
 import { FaLocationDot } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
-import {origin} from '../lib/api' 
+import {FILES_BASE_API_URL} from '../lib/api' 
 
 const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isSeller,profileNotCompleted}) => {
 
@@ -35,7 +35,7 @@ const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isS
               </div>
               <div className={styles["widget_11_con"]}>
                 <div  className={` ${styles.imgCon} `} >
-                      {avatar &&<img src={origin+avatar} alt="Cover"  crossOrigin="anonymous"  />}
+                      {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Cover"  crossOrigin="anonymous"  />}
                       {!avatar &&  <div className={styles['UserHolder']} >{org_username?org_username[0]?.toUpperCase():''}</div>}
                 </div>
                 <div className={styles.infoCon}>

@@ -9,7 +9,7 @@ import { MdEmail } from "react-icons/md";
 import { FaPhone } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import imgHolder from '../assets/imgHolder.jpg'
-import {origin} from '../lib/api' 
+import {FILES_BASE_API_URL} from '../lib/api' 
 
 
 
@@ -31,7 +31,7 @@ const OrderBoxWidgets = ( { order  , confirmOrdeerHandler}) => {
               </div>
               <div className={styles["widget_11_con"]}>
                 <Col xs={0} md lg className={`${styles.img_cover} d-flex flex-column align-items-left w-100`} >
-                    {order?.img &&<img src={origin+order.img} alt="Model Cover" crossOrigin="anonymous" />}
+                    {order?.img &&<img src={FILES_BASE_API_URL+order.img} alt="Model Cover" crossOrigin="anonymous" />}
                     {!order?.img && <img src={imgHolder} alt="Model Cover" />}
                 </Col>
               </div>
@@ -109,7 +109,7 @@ const OrderBoxWidgets = ( { order  , confirmOrdeerHandler}) => {
               </div>
               <div className={styles["widget_11_con"]}>
                 <div  className={` ${styles.imgCon} `} >
-                      {order?.developerData?.avatar &&<img src={origin+order?.developerData?.avatar} alt="Cover" crossOrigin="anonymous"  />}
+                      {order?.developerData?.avatar &&<img src={FILES_BASE_API_URL+order?.developerData?.avatar} alt="Cover" crossOrigin="anonymous"  />}
                       {!order?.developerData?.avatar &&  <div className={styles['UserHolder']} >{order?.developerData?.org_username?order?.developerData?.org_username[0]?.toUpperCase():''}</div>}
                 </div>
                 <div className={styles.infoCon}>
@@ -167,7 +167,7 @@ const OrderBoxWidgets = ( { order  , confirmOrdeerHandler}) => {
               </div>
               <div className={styles["widget_11_con"]}>
                 <div  className={` ${styles.imgCon} `} >
-                      {order?.clientData?.avatar &&<img src={origin+order?.clientData?.avatar} alt="Cover"  crossOrigin="anonymous"  />}
+                      {order?.clientData?.avatar &&<img src={FILES_BASE_API_URL+order?.clientData?.avatar} alt="Cover"  crossOrigin="anonymous"  />}
                       {!order?.clientData?.avatar &&  <div className={styles['UserHolder']} >{order?.clientData?.org_username?order?.clientData?.org_username[0]?.toUpperCase():''}</div>}
                 </div>
                 <div className={styles.infoCon}>

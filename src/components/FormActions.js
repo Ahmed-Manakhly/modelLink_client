@@ -9,7 +9,7 @@ import {useEffect} from 'react' ;
 import ToggleSwitch from './ToggleSwitch' ;
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import imgHolder from '../assets/imgHolder.jpg'
-import {origin} from '../lib/api' 
+import {FILES_BASE_API_URL} from '../lib/api' 
 
 
 const   FormActions = ({ thisModel=null , formTitle ,onCreatingModelAction ,payPerClickInit=false ,subscriptionInit=true} ) => {
@@ -204,7 +204,7 @@ const   FormActions = ({ thisModel=null , formTitle ,onCreatingModelAction ,payP
                                         <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={handleImgClick} className={classes["img_ico"]} />
                                     </span>
                                     {file&&<img src={URL.createObjectURL(file)} alt="Model Cover Image" />}
-                                    {(!file && thisModel?.cover) &&<img src={origin+thisModel.cover} crossOrigin="anonymous"  alt="Model Cover Image" />}
+                                    {(!file && thisModel?.cover) &&<img src={FILES_BASE_API_URL+thisModel.cover} crossOrigin="anonymous"  alt="Model Cover Image" />}
                                     {(!file && !thisModel?.cover) && <img src={imgHolder} alt="Model Cover Image" />}
                                 </Col>
                                 <Col> 

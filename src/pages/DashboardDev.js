@@ -14,8 +14,7 @@ import { Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import {getModel , getOrder} from '../lib/loaders';
-import {ALL_MODELS_BY_USER_URL , GET_ORDERS_BY_DEV_URL} from '../lib/api' ;
+import { getData, getModelsByUserReq, getOrdersByDevReq } from '../lib/loaders';
 
 
 function DashboardDev() {
@@ -48,7 +47,7 @@ function DashboardDev() {
             const gettingData =(data)=>{
                 setModels(data?data:[])
             }
-            getModel(ALL_MODELS_BY_USER_URL+'/'+id, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getModelsByUserReq(id), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
     },[dispatch , id])
     //------------------------------------------
@@ -70,7 +69,7 @@ function DashboardDev() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         };
-        getOrder(GET_ORDERS_BY_DEV_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Orders!' )
+        getData(() => getOrdersByDevReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Orders!' )
         dispatch(uiActions.showNotification(false))
     },[dispatch , id,token ])
     //==================================================================

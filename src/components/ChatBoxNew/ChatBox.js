@@ -4,7 +4,7 @@ import classes from "./ChatBox.module.scss";
  // eslint-disable-next-line 
 import { format } from "timeago.js";
 import InputEmoji from 'react-input-emoji'
-import {origin} from '../../lib/api'
+import {FILES_BASE_API_URL} from '../../lib/api'
 import { IoImagesOutline } from "react-icons/io5";
 import { IoSend } from "react-icons/io5";
 import { RiRobot2Line } from "react-icons/ri";
@@ -92,7 +92,7 @@ const ChatBox = ({ chat,currentUserRole, messages  ,currentUser ,onHandleSend , 
               <span  className={`${classes["close"]}`} onClick={onClose}>X</span>
                 <div className={classes.user}>
                   <Link  className={` ${classes.imgCon}`} to={`/profile/${userData?.id}`}>
-                    {userData?.avatar &&<img src={origin+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
+                    {userData?.avatar &&<img src={FILES_BASE_API_URL+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
                     {!userData?.avatar &&  <div className={classes['UserHolder']} >{userData?.org_username&&userData?.org_username[0]?.toUpperCase()}</div>}
                   </Link>
                   <div className={`${classes["info"]}`}>
@@ -125,8 +125,8 @@ const ChatBox = ({ chat,currentUserRole, messages  ,currentUser ,onHandleSend , 
                       <span>{message.desc}</span>}
                     {typeof message?.desc === 'string' && message?.desc?.startsWith('attachment_IMG_') &&
                       <span >
-                        <a href={origin+message?.desc} target={"_self"} >
-                          <img src={origin+message?.desc} crossOrigin="anonymous"  alt="attachment" />
+                        <a href={FILES_BASE_API_URL+message?.desc} target={"_self"} >
+                          <img src={FILES_BASE_API_URL+message?.desc} crossOrigin="anonymous"  alt="attachment" />
                         </a>
                       </span>
                       }

@@ -11,12 +11,10 @@ import {getAuthToken} from '../utility/tokenLoader'
 import {useEffect , useState} from 'react' ;
 import {useNavigate } from 'react-router-dom';
 import FormActions from '../components/FormActions'
-import {getModel} from '../lib/loaders';
-import {ALL_MODELS_URL} from '../lib/api' ;
-import axios from 'axios'
-
+import { getData, getModelByIdReq } from '../lib/loaders';
+import { updateModelReq } from '../lib/modelRequests';
 import io from "socket.io-client";
-import {origin} from '../lib/api'
+import { BASE_URL } from '../lib/api';
 
 
 
@@ -56,12 +54,12 @@ function EditModel() {
             setSubscriptionInit(data? (+data?.subscription === 1? true : false) : true)
             setPayPerClickInit(data? (+data?.payPerClick === 1? true : false) : false)
         }
-        getModel(ALL_MODELS_URL+'/'+id, toastHandler , loadingState , notificationState , gettingData,'model!' )
+        getData(() => getModelByIdReq(id), toastHandler , loadingState , notificationState , gettingData,'model!' )
         dispatch(uiActions.showNotification(false))
     },[])
     //------------------------------------------
     const onUpdatingModelAction =(file=null,modelData=null)=>{
-        const socket = io(origin);
+        const socket = io(BASE_URL);
         async function creatingModelAction (toastHandler , loadingState ) {
             let toast = {status :'', title :'', message:''}
             loadingState(true)
@@ -72,7 +70,7 @@ function EditModel() {
                         formdata.append('data', JSON.stringify(modelData));
                     }
                 try{
-                    const response = await axios.put(ALL_MODELS_URL+'/'+id, formdata);
+                    const response = await updateModelReq(id, formdata, token);
                     const resData =  response.data ;
                     loadingState(false)
                     toast= {status :resData.status,message:"Model has been updated",title:'Updating  Model'}
@@ -99,7 +97,7 @@ function EditModel() {
     return (
         <>
             <Header 
-                txt_1='The AiExchange'
+                txt_1='The ModelLink'
                 txt_2=' Getting New Ideas is always amazing'
                 txt_3=' Share your insights, Together, we’re shaping the future of AI in healthcare.'
                 banner={banner}

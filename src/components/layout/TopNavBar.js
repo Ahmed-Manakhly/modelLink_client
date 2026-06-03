@@ -34,7 +34,7 @@ function TopNavBar({getSearch}) {
     <div className={classes["header-main"]}>
       <div className={classes["container"]}>
         <Link to='/' className={classes["header-logo"]}>
-          <img src={logo} alt="Aiexchange's logo" width='200'/>
+          <img src={logo} alt="ModelLink's logo" width='200'/>
         </Link>
         <div className={classes["search_container"]} >
           

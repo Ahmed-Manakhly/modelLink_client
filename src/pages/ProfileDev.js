@@ -5,8 +5,8 @@ import {getAuthToken} from '../utility/tokenLoader'
 import {useEffect , useState} from 'react' ;
 import {useNavigate , Link } from 'react-router-dom';
 import ProfileBoxWidgetsDev from '../components/ProfileBoxWidgetsDev'
-import {getModel , getOrder} from '../lib/loaders';
-import {GET_USER_PROFILE_URL , ALL_MODELS_BY_USER_URL ,GET_ORDERS_BY_CLIENT_URL , origin} from '../lib/api' ;
+import { getData, getUserProfileReq, getModelsByUserReq, getOrdersByClientReq } from '../lib/loaders';
+import { FILES_BASE_API_URL } from '../lib/api';
 import PopularServices from '../components/PopularServices'
 import PageTableSec from '../components/layout/PageTableSec'
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -65,7 +65,7 @@ function ProfileDev({onlineUsers}) {
             setUser(data?data?.user:null)
             setUserUpdated(true)
         }
-        getOrder(GET_USER_PROFILE_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'user!' )
+        getData(() => getUserProfileReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'user!' )
         dispatch(uiActions.showNotification(false))
         // return redirect('');
     },[dispatch , id , token])
@@ -84,7 +84,7 @@ function ProfileDev({onlineUsers}) {
                 const gettingData =(data)=>{
                     setModels(data?data:[])
                 }
-                getModel(ALL_MODELS_BY_USER_URL+'/'+id, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+                getData(() => getModelsByUserReq(id), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
                 dispatch(uiActions.showNotification(false))
                 setUserUpdated(false)
             }
@@ -102,13 +102,13 @@ function ProfileDev({onlineUsers}) {
                 dispatch(uiActions.showNotification(state))
             }
             const gettingData =(data)=>{
-                setOrders(data?data?.orders:[])
+                setOrders(data?data:[])
             }
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
-            getOrder(GET_ORDERS_BY_CLIENT_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Orders!' )
+            getData(() => getOrdersByClientReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Orders!' )
             dispatch(uiActions.showNotification(false))
             setUserUpdated(false)
         }
@@ -121,7 +121,7 @@ function ProfileDev({onlineUsers}) {
             renderCell: (params) => {
                 return (
                     <Col xs={0} md lg className={` d-flex flex-column align-items-left w-100 P-5`} >
-                        <img width='100px'  src={origin+params?.row?.img} alt={'Model Cover'} crossOrigin="anonymous" />
+                        <img width='100px'  src={FILES_BASE_API_URL+params?.row?.img} alt={'Model Cover'} crossOrigin="anonymous" />
                     </Col>
                 )
             }

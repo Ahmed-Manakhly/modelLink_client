@@ -7,7 +7,7 @@ import WarningModal from '../components/layout/WarningModal'
 import { userChats , createChat , removeChat} from "../lib/ChatRequests";
 import { addMessage, getMessages } from "../lib/MessageRequests";
 import { userNotifications ,removeNotification , updateNotification} from "../lib/notificationsRequests";
-import {origin} from '../lib/api'
+import {BASE_URL} from '../lib/api'
 import { useSearchParams } from 'react-router-dom';
 import { useSelector} from 'react-redux'; 
 import io from "socket.io-client";
@@ -240,7 +240,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
   const onHandleSend=(msg)=>{
     if(currentChat.id === 'DUMMY-CHAT'){
       const sendAndCreate = async ()=>{
-        const socket = io(origin);
+        const socket = io(BASE_URL);
         try {
           const { data } = await createChat({clientId:user.id ,developerId: contact});
           const newChat = data?.data?.clientCopy ;
@@ -277,7 +277,7 @@ const ChatNew = ({msg , onlineUsers , onFeatchChats ,notify , onFeatchNotificati
         forId = currentChat?.clientId;
       }
       const sendMsg = async ()=>{
-        const socket = io(origin);
+        const socket = io(BASE_URL);
         try {
           await addMessage(message);
           setCurrentChat(prev=>prev)

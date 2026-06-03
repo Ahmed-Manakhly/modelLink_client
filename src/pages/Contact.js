@@ -22,7 +22,7 @@ function Contact() {
                         </li>
                         <li>
                             <i className={`${classes["uil-envelope"]} ${classes['uil']}`}></i>
-                            <h5>Support@Aiexchange.com</h5>
+                            <h5>Support@modellink.com</h5>
                         </li>
                         <li>
                             <i className={`${classes["uil-map-marker"]} ${classes['uil']}`}></i>

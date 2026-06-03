@@ -31,7 +31,7 @@ import ChatNew from './pages/ChatNew';
 import {useEffect, useState} from 'react'
 //--------------------------------------
 import io from "socket.io-client";
-import {origin} from './lib/api'
+import {BASE_URL} from './lib/api'
 
 //-----------------------------------------
 function App() {
@@ -66,7 +66,7 @@ function App() {
   //------------
   useEffect(() => {
     if(userData){
-      const socket = io.connect(origin)
+      const socket = io.connect(BASE_URL)
       socket.on("connect", () => {
           socket.emit("joinRoom", userData?.id);
       });

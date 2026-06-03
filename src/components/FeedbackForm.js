@@ -3,7 +3,7 @@ import useInput from '../hooks/Use-Input';
 import styles from "./FeedbackForm.module.scss";
 import { useState } from 'react' ;
 import {Container , Row , Col  } from 'react-bootstrap' 
-import {origin} from '../lib/api' 
+import {FILES_BASE_API_URL} from '../lib/api' 
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { FaRegFaceFrown } from "react-icons/fa6";
 import { FaRegFaceMeh } from "react-icons/fa6";
@@ -95,7 +95,7 @@ const FeedbackForm = ({formTitle , avatar,orgUsername ,thisUserRole,firstName, o
             <Col className={`${styles.__box_leftside} `}>
               <div className={styles["widget_11_con"]}>
                 <div  className={` ${styles.imgCon} `} >
-                      {avatar &&<img src={origin+avatar} alt="Cover"  crossOrigin="anonymous"  />}
+                      {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Cover"  crossOrigin="anonymous"  />}
                       {!avatar &&  <div className={styles['UserHolder']} >{orgUsername?orgUsername[0]?.toUpperCase():''}</div>}
                 </div>
                 <div className={styles.infoCon}>

@@ -80,7 +80,7 @@ function Footer({footerCategoriesData , footerNavData , onClickLink}) {
           <div className={classes["container"]}>  
             <img src={img} alt="payment method" className={classes["payment-img"]} />
             <p className={classes["copyright"]}>
-              Copyright &copy; <Link to="/">The Ai-Exchange</Link> all rights reserved.
+              Copyright &copy; <Link to="/">The ModelLink</Link> all rights reserved.
             </p>
             <ul className={`${classes["footer-nav-list"]} ${classes.container} `}>
               <li>

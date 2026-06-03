@@ -10,8 +10,7 @@ import PageTableSec from '../components/layout/PageTableSec'
 import { Box } from "@mui/material";
 //---------------------------------------icons
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {  getOrder} from '../lib/loaders';
-import { GET_ORDERS_BY_CLIENT_URL} from '../lib/api' ;
+import { getData, getOrdersByClientReq } from '../lib/loaders';
 
 
 
@@ -52,7 +51,7 @@ function OrdersClient() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         };
-        getOrder(GET_ORDERS_BY_CLIENT_URL+'/'+id, headers ,toastHandler , loadingState , notificationState , gettingData,'Orders!' )
+        getData(() => getOrdersByClientReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Orders!' )
         dispatch(uiActions.showNotification(false))
         // return redirect('');
     },[dispatch ,id,token])

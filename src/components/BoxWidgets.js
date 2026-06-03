@@ -12,7 +12,7 @@ import {Row , Col  } from 'react-bootstrap'
 import { FaLocationDot } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import getStarted from '../assets/getStarted.png'
-import {origin} from '../lib/api'
+import {FILES_BASE_API_URL} from '../lib/api'
 
 const BoxWidgets = ( {  profile=false , HandelFileChange , file , totalModels , totalOrders , msgCounter=0 , notCounter=0}) => {
 
@@ -48,7 +48,7 @@ const handleImgClick=()=>{
                     </span>}
                   </Col>
                     {file&&<img src={URL.createObjectURL(file)} alt="avatar" />}
-                    {(!file && avatar) &&<img src={origin+avatar} alt="Model Cover" crossOrigin="anonymous" />}
+                    {(!file && avatar) &&<img src={FILES_BASE_API_URL+avatar} alt="Model Cover" crossOrigin="anonymous" />}
                     {(!file && !avatar) &&  <div className={styles['UserHolder']} >{org_username?org_username[0]?.toUpperCase():''}</div>}
               </div>
               {profile &&

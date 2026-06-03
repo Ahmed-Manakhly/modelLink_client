@@ -1,19 +1,20 @@
-import {origin} from './api'
-import axios from 'axios'
+import { createAPI } from './api';
 
+const API = createAPI();
 
-const API = axios.create({ baseURL: origin });
+// --- URLs ---
+const messagesUrl = 'messages';
 
-export const getMessages = (id) => API.get(`api/messages/${id}`);
+// --- ONE-LINE REQUEST FUNCTIONS ---
+export const getMessages = (id)   => API.get(`${messagesUrl}/${id}`);
 
-// export const addMessage = (data) => API.post('api/messages', data);
 export const addMessage = (data) => {
-    if(typeof data.desc.name === 'string'){
+    if (typeof data.desc.name === 'string') {
         const formdata = new FormData();
-        formdata.append('attachment',data.desc)
-        const {conversationId , userId} = data
-        return API.post('api/messages', formdata , {params:{conversationId , userId}});
-    }else if(typeof data.desc === 'string'){
-        return API.post('api/messages', data);
+        formdata.append('attachment', data.desc);
+        const { conversationId, userId } = data;
+        return API.post(messagesUrl, formdata, { params: { conversationId, userId } });
+    } else if (typeof data.desc === 'string') {
+        return API.post(messagesUrl, data);
     }
 };

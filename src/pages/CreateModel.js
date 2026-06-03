@@ -10,12 +10,9 @@ import {useEffect} from 'react' ;
 import {useNavigate } from 'react-router-dom';
 import FormActions from '../components/FormActions'
 import { useSelector } from 'react-redux'; 
-import {ALL_MODELS_URL} from '../lib/api'
-import axios from 'axios'
+import { BASE_URL } from '../lib/api';
+import { createModelReq } from '../lib/modelRequests';
 import io from "socket.io-client";
-import {origin} from '../lib/api'
-
-
 
 
 function CreateModel() {
@@ -49,7 +46,7 @@ function CreateModel() {
     //==========================================================================================
 
         const onCreatingModelAction =(file,modelData)=>{
-            const socket = io(origin);
+            const socket = io(BASE_URL);
             async function creatingModelAction (toastHandler , loadingState ) {
                 let toast = {status :'', title :'', message:''}
                 loadingState(true)
@@ -59,7 +56,7 @@ function CreateModel() {
                         formdata.append('data', JSON.stringify(modelData));
                     }
                     try{
-                        const response = await axios.post(ALL_MODELS_URL, formdata);
+                        const response = await createModelReq(formdata, token);
                         const resData =  response.data ;
                         loadingState(false)
                         toast= {status :resData.status,message:'Model has been created',title:'Creating Model'}
@@ -87,7 +84,7 @@ function CreateModel() {
     return (
         <>
             <Header 
-                txt_1='The AiExchange'
+                txt_1='The ModelLink'
                 txt_2=' Be part of something bigger'
                 txt_3=' Share your insights, Together, we’re shaping the future of AI in healthcare.'
                 banner={banner}

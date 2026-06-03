@@ -1,13 +1,11 @@
 import useInput from '../../../hooks/Use-Input';
 import { useNavigation , useNavigate} from 'react-router-dom';
 import classes from './Auth.module.scss' ;
-import { Row , Col  } from 'react-bootstrap' 
+import { Row , Col  } from 'react-bootstrap'
 import { useState , useEffect } from 'react' ;
-import { createOtp , validateOtp } from "../../../lib/authRequests";
+import { createOtp , validateOtp , resetPasswordReq } from "../../../lib/authRequests";
 import { IoMdCheckmarkCircle } from "react-icons/io";
-import {RESET_PASSWORD_URL} from '../../../lib/api'
-import axios from 'axios'
-import {useDispatch} from 'react-redux'; 
+import {useDispatch} from 'react-redux';
 import {uiActions} from '../../../store/UI-slice' ;
 
 
@@ -97,7 +95,7 @@ const ForgotPassword = ( ) => {
             loadingState(true)
             //---------------------------------------------                
             try{
-                const response = await axios.patch(RESET_PASSWORD_URL,{email: enteredEmail , password:enteredPass1 , passwordConfirm : enteredPass2, otp: theOtp});
+                const response = await resetPasswordReq({email: enteredEmail , password:enteredPass1 , passwordConfirm : enteredPass2, otp: theOtp});
                 const resData =  response.data ;
                 loadingState(false)
                 console.log(resData)

@@ -10,8 +10,7 @@ import banner from '../assets/banner_2.png'
 import {useDispatch} from 'react-redux'; 
 import {uiActions} from '../store/UI-slice' ;
 import {useEffect , useState} from 'react' ;
-import {getModel} from '../lib/loaders';
-import {ALL_MODELS_URL} from '../lib/api' ;
+import { getData, getAllModelsReq } from '../lib/loaders';
 
 
 // import {ScrollRestoration } from 'react-router-dom' ;
@@ -56,9 +55,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
             setModels(data?data:[])
             setCurrentPage(res.pagination?.page)
             setNumberOfPages(res.pagination?.total_pages)
-            setLastPath(ALL_MODELS_URL+'?')
+            setLastPath('?')
         }
-        getModel(ALL_MODELS_URL, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+        getData(() => getAllModelsReq(''), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
         dispatch(uiActions.showNotification(false))
     },[])
     //------------------------------------------ on mod update
@@ -72,9 +71,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 searchByVal ==='Body Part'? field = 'bodyPart':
                 searchByVal ==='Indications'? field = 'indications':
                 searchByVal ==='Modality' ? field = 'modality':''
-                path = ALL_MODELS_URL+`?${field}=${searchVal.trim()}`
+                path = `?${field}=${searchVal.trim()}&`
             }else{
-                path = ALL_MODELS_URL
+                path = '?'
             }
             const toastHandler =(toast)=>{
                 dispatch(uiActions.notificationDataChanged(toast))
@@ -89,9 +88,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 setModels(data?data:[])
                 setCurrentPage(res.pagination?.page)
                 setNumberOfPages(res.pagination?.total_pages)
-                setLastPath(( searchByVal && searchVal) ?path+'&' : path+'?')
+                setLastPath(( searchByVal && searchVal) ? path : '?')
             }
-            getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(path), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
             onModelsUpdated(false)
         }
@@ -101,9 +100,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
         if(modelsUpdatedLink){
             let path
             if( (modelsUpdatedLink !== null )&& (modelsUpdatedLink !== 'All Models')){
-                path = ALL_MODELS_URL+`?category=${modelsUpdatedLink.trim()}`
+                path = `?category=${modelsUpdatedLink.trim()}&`
             }else{
-                path = ALL_MODELS_URL
+                path = '?'
             }
             const toastHandler =(toast)=>{
                 dispatch(uiActions.notificationDataChanged(toast))
@@ -118,9 +117,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 setModels(data?data:[])
                 setCurrentPage(res.pagination?.page)
                 setNumberOfPages(res.pagination?.total_pages)
-                setLastPath(( (modelsUpdatedLink !== null )&& (modelsUpdatedLink !== 'All Models'))?path+'&' : path+'?')
+                setLastPath(( (modelsUpdatedLink !== null )&& (modelsUpdatedLink !== 'All Models')) ? path : '?')
             }
-            getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(path), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
             onModelsUpdatedLink(false)
         }
@@ -130,9 +129,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
         if(applyControls){
             let path
             if(applyControls !== 'ALL'){
-                path = ALL_MODELS_URL+`?${applyControls.trim()}`
+                path = `?${applyControls.trim()}&`
             }else{
-                path = ALL_MODELS_URL
+                path = '?'
             }
             const toastHandler =(toast)=>{
                 dispatch(uiActions.notificationDataChanged(toast))
@@ -147,9 +146,9 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 setModels(data?data:[])
                 setCurrentPage(res.pagination?.page)
                 setNumberOfPages(res.pagination?.total_pages)
-                setLastPath((applyControls !== 'ALL')?path+'&' : path+'?')
+                setLastPath((applyControls !== 'ALL') ? path : '?')
             }
-            getModel(path, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(path), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
             setApplyControls(null)
         }
@@ -170,7 +169,7 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 setModels(data?data:[])
                 setCurrentPage(res.pagination?.page)
             }
-            getModel(lastPath+`page=${currentPage-1}`, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(lastPath+`page=${currentPage-1}`), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
         }
     }
@@ -189,7 +188,7 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
                 setModels(data?data:[])
                 setCurrentPage(res.pagination?.page)
             }
-            getModel(lastPath+`page=${currentPage+1}`, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(lastPath+`page=${currentPage+1}`), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
         }
     }
@@ -197,7 +196,7 @@ function Models({modelsUpdated , onModelsUpdated , searchByVal ,searchVal ,model
     return (
         <>
             <Header 
-                txt_1='The AiExchange'
+                txt_1='The ModelLink'
                 txt_2='Find the right AI models, right away'
                 txt_3='You can search ,or filter based on your interests'
                 banner={banner}

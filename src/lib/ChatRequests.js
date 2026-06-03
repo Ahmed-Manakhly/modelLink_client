@@ -1,23 +1,20 @@
-import {origin} from './api'
-import axios from 'axios'
+import { createAPI } from './api';
 
+const API = createAPI();
 
-const API = axios.create({ baseURL: origin });
-// api/conversations
-export const createChat = (data) => API.post('api/conversations', data);
+// --- URLs ---
+const conversationsUrl = 'conversations';
+const usersUrl         = 'users';
 
-export const userChats = (id) => API.get(`api/conversations/${id}`);
-export const removeChat = (id) => API.delete(`api/conversations/${id}`);
+// --- ONE-LINE REQUEST FUNCTIONS ---
+export const createChat = (data) => API.post(conversationsUrl, data);
+export const userChats  = (id)   => API.get(`${conversationsUrl}/${id}`);
+export const removeChat = (id)   => API.delete(`${conversationsUrl}/${id}`);
 
-
-
-
-
-export const getUser = (userId , token) => {
+export const getUser = (userId, token) => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
-    return API.get(`api/users/${userId}`,{headers})
-}; //here 1
-
+    return API.get(`${usersUrl}/${userId}`, { headers });
+};

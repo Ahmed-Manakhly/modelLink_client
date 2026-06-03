@@ -23,7 +23,7 @@ export const vals = [
       title : 'Access to Advanced Technologies',
       img : ml_1,
       description :
-      `AI exchange platforms bridge the gap between data providers and seekers. They offer access to cutting-edge AI models, algorithms, and solutions. For your users, this means having a wealth of AI capabilities at their fingertips, whether they’re developing new applications or seeking AI-driven insights.`,
+      `ModelLink platforms bridge the gap between data providers and seekers. They offer access to cutting-edge AI models, algorithms, and solutions. For your users, this means having a wealth of AI capabilities at their fingertips, whether they’re developing new applications or seeking AI-driven insights.`,
   },
   {
       title : 'Efficiency and Process Automation',
@@ -47,7 +47,7 @@ export const vals = [
       title : 'Scalability and Flexibility',
       img : solutions_5,
       description :
-      `AI exchange platforms allow rapid deployment of solutions. Users can scale their projects without starting from scratch. Flexibility is key in a dynamic field like AI.`,
+      `ModelLink platforms allow rapid deployment of solutions. Users can scale their projects without starting from scratch. Flexibility is key in a dynamic field like AI.`,
   },
   {
       title : 'Collaboration and Knowledge Sharing',

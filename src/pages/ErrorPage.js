@@ -19,7 +19,7 @@ import {uiActions} from '../store/UI-slice' ;
 import UpButton from '../components/layout/UpButton'
 import { footerCategoriesData , mobNavData , mobNavData_2} from '../data'
 import WarningModal from '../components/layout/WarningModal'
-import {origin} from '../lib/api'
+import {BASE_URL} from '../lib/api'
 
 //=======================================================
 import { RiRobot2Line } from "react-icons/ri";
@@ -102,7 +102,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         }
         //-----------------------------------------------------
         if(token === 'EXPIRED' && !timeExtanded) {    
-            const socket = io(origin);
+            const socket = io(BASE_URL);
             socket.emit("leavingRoom", userData?.id); 
             dispatch(authActions.onLoginOut())
             navigate("/auth?mode=login",{replace :true});

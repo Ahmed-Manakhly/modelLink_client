@@ -1,6 +1,14 @@
-import { LOGIN_URL } from './api';
-import { SIGNUP_URL } from './api';
-import { ALL_MODELS_URL } from './api';
+import { createAPI } from './api';
+import { deleteModelReq } from './modelRequests';
+
+const API = createAPI();
+
+const authUrl    = 'auth';
+const loginUrl   = `${authUrl}/login`;
+const signupUrl  = `${authUrl}/register`;
+
+const loginRequest  = (data) => API.post(loginUrl, data);
+const signupRequest = (data) => API.post(signupUrl, data);
 
 
 // Match server ACCESS_TOKEN_EXPIRATION (2700000 ms = 45 min)
@@ -19,13 +27,9 @@ export async function LoginAction(request, actions, toastHandler, loadingState) 
     if (mode === 'login') {
         loadingState(true)
         const authData = { email: data.get('email'), password: data.get('password') };
-        const response = await fetch(LOGIN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(authData) });
-        const resData = await response.json();
-        if (!response.ok) {
-            loadingState(false)
-            toast = { status: 'error', message: resData?.message || 'Authentication failed', title: 'Authentication failed' };
-            toastHandler(toast);
-        } else {
+        try {
+            const response = await loginRequest(authData);
+            const resData = response.data;
             loadingState(false)
             //------ store user data
             const token = resData.token;
@@ -38,6 +42,10 @@ export async function LoginAction(request, actions, toastHandler, loadingState) 
             expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES);
             localStorage.setItem('expiration', expiration.toISOString());
             toast = { status: 'success', message: `Well Come Back ${userData.org_username}`, title: 'logged in' }
+            toastHandler(toast);
+        } catch (error) {
+            loadingState(false)
+            toast = { status: 'error', message: error?.response?.data?.message || 'Authentication failed', title: 'Authentication failed' };
             toastHandler(toast);
         }
         //------------------------------------
@@ -58,14 +66,9 @@ export async function LoginAction(request, actions, toastHandler, loadingState) 
             target_id: 0,
             module_id: 0
         }
-        const response = await fetch(SIGNUP_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(authData) });
-        const resData = await response.json();
-        //------------------------------------------------
-        if (!response.ok) {
-            loadingState(false)
-            toast = { status: 'error', message: resData?.message || 'registration failed', title: 'registration failed' };
-            toastHandler(toast);
-        } else {
+        try {
+            const response = await signupRequest(authData);
+            const resData = response.data;
             loadingState(false)
             //------ store user data
             const token = resData.token;
@@ -78,6 +81,10 @@ export async function LoginAction(request, actions, toastHandler, loadingState) 
             expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES);
             localStorage.setItem('expiration', expiration.toISOString());
             toast = { status: 'success', message: `Welcome on board, We Have logged You In Now!`, title: 'account is registered' }
+            toastHandler(toast);
+        } catch (error) {
+            loadingState(false)
+            toast = { status: 'error', message: error?.response?.data?.message || 'registration failed', title: 'registration failed' };
             toastHandler(toast);
         }
     }
@@ -92,21 +99,22 @@ export async function deletingModelAction(request, toastHandler, loadingState, p
     //---------------------------------------------
     if (params.id) {
         const id = params.id
+        const token = localStorage.getItem('token');
         try {
-            const response = await fetch(ALL_MODELS_URL + `/${id}`, { method: 'DELETE' });
+            const response = await deleteModelReq(id, token);
             if (response.status === 204) {
                 loadingState(false);
                 toast = { status: 'success', message: "Model has been Deleted", title: 'Delete Model' };
                 toastHandler(toast);
                 return;
             }
-            const resData = await response.json();
+            const resData = response.data;
             loadingState(false)
             toast = { status: resData.status, message: resData.message || "Model has been Deleted", title: 'Delete Model' }
             toastHandler(toast);
         } catch (err) {
             loadingState(false)
-            toast = { status: 'error', message: err.message, title: 'Deleting Model failed' };
+            toast = { status: 'error', message: err?.response?.data?.message || err.message, title: 'Deleting Model failed' };
             toastHandler(toast);
         }
     }

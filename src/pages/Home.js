@@ -8,8 +8,7 @@ import img from '../assets/about.jpg'
 import {vals} from '../data' ;
 import banner from '../assets/banner.png'
 import img_2 from '../assets/instructor-1x-v3.jpg'
-import {getModel} from '../lib/loaders';
-import {ALL_MODELS_URL} from '../lib/api' ;
+import { getData, getAllModelsReq } from '../lib/loaders';
 import {useDispatch} from 'react-redux'; 
 import {uiActions} from '../store/UI-slice' ;
 import {useEffect , useState} from 'react' ;
@@ -33,7 +32,7 @@ function Home({modelsUpdated , onModelsUpdated , onClickLink }) {
         const gettingData =(data)=>{
             setModels(data?data:[])
         }
-        getModel(ALL_MODELS_URL, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+        getData(() => getAllModelsReq(''), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
         dispatch(uiActions.showNotification(false))
         // return redirect('');
     },[dispatch])
@@ -53,7 +52,7 @@ function Home({modelsUpdated , onModelsUpdated , onClickLink }) {
             const gettingData =(data)=>{
                 setModels(data?data:[])
             }
-            getModel(ALL_MODELS_URL, toastHandler , loadingState , notificationState , gettingData,'list of models!' )
+            getData(() => getAllModelsReq(''), toastHandler , loadingState , notificationState , gettingData,'list of models!' )
             dispatch(uiActions.showNotification(false))
             onModelsUpdated(false)
             // return redirect('');
@@ -63,7 +62,7 @@ function Home({modelsUpdated , onModelsUpdated , onClickLink }) {
     return (
         <>
             <Header 
-                txt_1='The AiExchange'
+                txt_1='The ModelLink'
                 txt_2='A digital marketplace for medical AI'
                 txt_3='that facilitates the connection between AI developers'
                 banner={banner}
@@ -71,9 +70,9 @@ function Home({modelsUpdated , onModelsUpdated , onClickLink }) {
             <Categories onClickLink={onClickLink} />
             <PopularServices models={models}/>
             
-            <Box title={'Welcome to AI Exchange!'}
-                text_1={'At AI Exchange, we’re more than just a marketplace. We’re a vibrant community where AI enthusiasts, developers, and healthcare professionals converge. Here’s what sets us apart:'}
-                text_2={'We’re on a mission to revolutionize how AI impacts healthcare. Whether you’re a seasoned developer or a curious medical practitioner, AI Exchange is your go-to hub for innovation'}
+            <Box title={'Welcome to ModelLink!'}
+                text_1={'At ModelLink, we’re more than just a marketplace. We’re a vibrant community where AI enthusiasts, developers, and healthcare professionals converge. Here’s what sets us apart:'}
+                text_2={'We’re on a mission to revolutionize how AI impacts healthcare. Whether you’re a seasoned developer or a curious medical practitioner, ModelLink is your go-to hub for innovation'}
                 img={img}
             />
             <Video/>

@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Notifications.module.scss'
-import {origin} from '../../lib/api'
+import {FILES_BASE_API_URL} from '../../lib/api'
  // eslint-disable-next-line 
 import { format } from "timeago.js";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,7 +30,7 @@ const Notifications = ({ data, onRemove , onUpdate}) => {
       <div className={`${classes["conversation"]} ${ data?.unRead === true ? classes.active : ''}`} >
         <div className={`${classes["conversation-con"]}`} >
           <Link  className={` ${classes.imgCon}`} to={`/profile/${userData?.id}`} >
-            {userData?.avatar &&<img src={origin+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
+            {userData?.avatar &&<img src={FILES_BASE_API_URL+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
             {!userData?.avatar &&  <div className={classes['UserHolder']} >{userData?.org_username&&userData?.org_username[0]?.toUpperCase()}</div>}
           </Link>
 

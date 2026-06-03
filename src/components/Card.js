@@ -1,5 +1,5 @@
 import classes from './Card.module.scss' ;
-import {origin} from '../lib/api' 
+import { BASE_URL, FILES_BASE_API_URL } from '../lib/api' 
 import {Link} from 'react-router-dom' ;
 import {getAuthToken} from '../utility/tokenLoader'
 import imgHolder from '../assets/imgHolder.jpg'
@@ -8,7 +8,7 @@ import imgHolder from '../assets/imgHolder.jpg'
 //reloadDocument
 
 import io from "socket.io-client";
-const socket = io(origin);
+const socket = io(BASE_URL);
 
 
 const Card =({category,title, desc, price, deliveryTime , cover , onAddProduct,starFrequency,totalStars ,id ,avatar,seller , userId ,onRemoveProduct , cart=false})=> {
@@ -25,8 +25,8 @@ const Card =({category,title, desc, price, deliveryTime , cover , onAddProduct,s
                 <Link to={`/models/view/${id}`}   onClick={()=>{
                     return thisUserId?socket.emit("refreshModel", {to:thisUserId}):null
                 }} >
-                    {cover && <img src={origin+cover} alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.default}`}/>}
-                    {cover && <img src={origin+cover}  alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.hover}`}/>}
+                    {cover && <img src={FILES_BASE_API_URL+cover} alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.default}`}/>}
+                    {cover && <img src={FILES_BASE_API_URL+cover}  alt={title}  crossOrigin="anonymous"  width="300" className={`${classes["product-img"]} ${classes.hover}`}/>}
                     {!cover && <img src={imgHolder} alt={title} crossOrigin="anonymous" width="300" className={`${classes["product-img"]} ${classes.default}`}/>}
                     {!cover && <img src={imgHolder} alt={title} crossOrigin="anonymous" width="300" className={`${classes["product-img"]} ${classes.hover}`}/>}
                 </Link>
@@ -55,7 +55,7 @@ const Card =({category,title, desc, price, deliveryTime , cover , onAddProduct,s
                 <div className={classes["user-card"]}>
                     <div className={` ${classes.imgCon_1}`} >
                         <Link to={`/profile/${userId}`}  className={` ${classes.imgCon}`} >
-                            {avatar &&<img src={origin+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
+                            {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
                             {!avatar &&  <div className={classes['UserHolder']} >{seller&&seller[0]?.toUpperCase()}</div>}
                         </Link>
                     </div>

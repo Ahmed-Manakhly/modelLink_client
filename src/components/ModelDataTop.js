@@ -1,7 +1,7 @@
 import classes from './ModelData.module.scss' ;
 import {Container , Row , Col  } from 'react-bootstrap' 
 import imgHolder from '../assets/imgHolder.jpg'
-import {origin} from '../lib/api' 
+import {FILES_BASE_API_URL} from '../lib/api' 
 
 
 
@@ -18,7 +18,7 @@ const   ModelDataTop = ({ model=null , formTitle }) => {
                         <Row className={`justify-content-md-center d-flex flex-column justify-content-center  p-lg-4 align-items-center`}>
                             <Row className={classes["img_sec"]}>
                                 <Col xs={0} md lg className={`${classes.img_cover} d-flex flex-column align-items-left w-100`} >
-                                    {model?.cover &&<img src={origin+model?.cover} alt="Model Cover" crossOrigin="anonymous"  />}
+                                    {model?.cover &&<img src={FILES_BASE_API_URL+model?.cover} alt="Model Cover" crossOrigin="anonymous"  />}
                                     {!model?.cover && <img src={imgHolder} alt="Model Cover" crossOrigin="anonymous"  />}
                                 </Col>
                                 <Col> 

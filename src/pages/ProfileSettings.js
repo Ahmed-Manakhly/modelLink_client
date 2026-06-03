@@ -3,14 +3,13 @@ import BoxWidgets from '../components/BoxWidgets' ;
 import FormProfile from '../components/FormProfile' ;
 import Val from '../components/Val'
 import {vals} from '../data' ;
-import {UPDATE_MY_PROFILE_URL} from '../lib/api'
-import axios from 'axios'
-import {useDispatch} from 'react-redux'; 
+import {useDispatch} from 'react-redux';
 import {uiActions} from '../store/UI-slice' ;
 import {useState} from 'react' ;
 import {useNavigate } from 'react-router-dom';
 import {authActions} from '../store/Auth.-slice' ;
 import {getAuthToken} from '../utility/tokenLoader'
+import { updateMyProfileReq } from '../lib/userRequests';
 
 
 function ProfileSettings() {
@@ -53,7 +52,7 @@ function ProfileSettings() {
                     }
                 };
                 try{
-                    const response = await axios.patch(UPDATE_MY_PROFILE_URL, formdata , config);
+                    const response = await updateMyProfileReq(formdata, config);
                     const resData =  response.data ;
                     loadingState(false)
                     const token =  localStorage.getItem('token') ;
