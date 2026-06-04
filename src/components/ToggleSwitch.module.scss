@@ -9,7 +9,7 @@
         &:checked + div {
             background-color: var(--main-blue);
         }
-        appearance: none;
+        & { appearance: none; }
         &:checked + div {
             .circle {
                 left: calc(100% - 28px);

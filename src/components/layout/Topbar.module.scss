@@ -80,8 +80,10 @@
                 margin: 0;
             }
         }
-        background-color: var(--cultured);
-        background-color: rgba(238, 238, 238, 0.94);
+        & {
+            background-color: var(--cultured);
+            background-color: rgba(238, 238, 238, 0.94);
+        }
         &::after{
             // box-shadow: 2px 2px 5px var(--sonic-silver);
             background-color: var(--cultured);

@@ -15,13 +15,15 @@
   &.active:hover {
     background-color: #987ffb38;
   }
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 5px;
-  border: var(--cultured) solid 2px;
-  // box-shadow: 5px 5px 10px var(--cultured);
-  background-color: #fff;
+  & {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    border: var(--cultured) solid 2px;
+    // box-shadow: 5px 5px 10px var(--cultured);
+    background-color: #fff;
+  }
   &:hover {
     background: var(--cultured);
     cursor: pointer;
@@ -118,11 +120,13 @@
       }
     }
   }
-  border-radius: 1rem;
-  -webkit-border-radius: 1rem;
-  -moz-border-radius: 1rem;
-  -ms-border-radius: 1rem;
-  -o-border-radius: 1rem;
+  & {
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+  }
 }
 //=============================================
 

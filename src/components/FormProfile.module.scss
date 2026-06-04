@@ -206,10 +206,6 @@ a {
             }
         }
         select {
-            &.done{
-                color : var(--main-2-blue) !important;
-            }
-            padding: 15px !important;
             // font-weight: 600;
             // color : #001668 !important;
             color: var(--sonic-silver);
@@ -217,7 +213,11 @@ a {
             // border: none !important;
             border: 2px solid  var(--cultured);
             outline: none !important;
+            padding: 15px !important;
             // box-shadow: inset -4px -1px 12px rgba(0, 0, 0, 0.148), inset 1px 1px 12px var(--sonic-silver)30;
+            &.done{
+                color : var(--main-2-blue) !important;
+            }
             &::placeholder {
                 color: var(--sonic-silver) ;
                 font-size: smaller;

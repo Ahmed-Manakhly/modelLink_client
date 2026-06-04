@@ -17,7 +17,8 @@ const getNormalizedBaseUrl = (url) => {
 export const BASE_URL = getNormalizedBaseUrl(rawBaseUrl);
 
 // ---------------------------------------------------
-export const FILES_BASE_API_URL = process.env.NODE_ENV === "development"
+export const FILES_BASE_API_URL = process.env.NODE_ENV === "development" ||
+    process.env.NODE_ENV === "docker_development"
     ? process.env.REACT_APP_FILES_BASE_API_DEV
     : process.env.REACT_APP_FILES_BASE_API_PROD;
 

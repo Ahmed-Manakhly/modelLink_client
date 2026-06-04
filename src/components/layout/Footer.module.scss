@@ -312,7 +312,7 @@ footer {
             }
             img{width: 100% !important;}
         }
-        text-align: left;
+        & { text-align: left; }
     }
 }
 

@@ -68,11 +68,13 @@
         color: var(--sonic-silver);
         cursor: not-allowed;
       }
-      border-radius: 15px;
-      -webkit-border-radius: 15px;
-      -moz-border-radius: 15px;
-      -ms-border-radius: 15px;
-      -o-border-radius: 15px;
+      & {
+        border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        -ms-border-radius: 15px;
+        -o-border-radius: 15px;
+      }
       @include small_mobile{
         padding: 2px !important;
         font-size: 12px !important;

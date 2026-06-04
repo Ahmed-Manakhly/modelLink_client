@@ -210,10 +210,6 @@ a {
             }
         }
         select {
-            &.done{
-                color : var(--main-2-blue) !important;
-            }
-            padding: 15px !important;
             // font-weight: 600;
             // color : #001668 !important;
             color: var(--sonic-silver);
@@ -221,7 +217,11 @@ a {
             // border: none !important;
             border: 2px solid  var(--cultured);
             outline: none !important;
+            padding: 15px !important;
             // box-shadow: inset -4px -1px 12px rgba(0, 0, 0, 0.148), inset 1px 1px 12px var(--sonic-silver)30;
+            &.done{
+                color : var(--main-2-blue) !important;
+            }
             &::placeholder {
                 color: var(--sonic-silver) ;
                 font-size: smaller;
@@ -428,17 +428,21 @@ select{
                 background :transparent;
                 color: #f55074;
             }
-            border-radius: 50%;
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            -ms-border-radius: 50%;
-            -o-border-radius: 50%;
+            & {
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+            }
 }   
+    & {
         border-radius: 30px;
         -webkit-border-radius: 30px;
         -moz-border-radius: 30px;
         -ms-border-radius: 30px;
         -o-border-radius: 30px;
+    }
 }
 }
 
@@ -487,16 +491,20 @@ select{
             z-index: 3;
                 font-size: larger;
             }
-            border-radius: 50% ;
-            -webkit-border-radius: 50% ;
-            -moz-border-radius: 50% ;
-            -ms-border-radius: 50% ;
-            -o-border-radius: 50% ;
+            & {
+                border-radius: 50% ;
+                -webkit-border-radius: 50% ;
+                -moz-border-radius: 50% ;
+                -ms-border-radius: 50% ;
+                -o-border-radius: 50% ;
+            }
 }
+    & {
         border-radius: 15px ;
         -webkit-border-radius: 15px ;
         -moz-border-radius: 15px ;
         -ms-border-radius: 15px ;
         -o-border-radius: 15px ;
+    }
 }
 }

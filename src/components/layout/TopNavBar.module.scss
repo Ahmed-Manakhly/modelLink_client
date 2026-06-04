@@ -170,18 +170,20 @@
                 color : var(--white) !important;
                 background-color: var(--main-2-blue);
             }
-            background-image: url("../../assets/select_down_direction_download_pointer_arrow_icon.png") !important;
-            background-size: 5%;
-            background-position: 95% center;
-            background-repeat: no-repeat; 
-            font-size: 15px;
-            padding: 8px 10px;
-            padding-right: 50px;
-            border: 2.5px solid var(--main-2-blue);
-            border-right: none;
-            -webkit-border-radius: var(--border-radius-md);
-            border-radius: var(--border-radius-md);
-            outline: none !important;
+            & { background-image: url("../../assets/select_down_direction_download_pointer_arrow_icon.png") !important; }
+            & {
+                background-size: 5%;
+                background-position: 95% center;
+                background-repeat: no-repeat; 
+                font-size: 15px;
+                padding: 8px 10px;
+                padding-right: 50px;
+                border: 2.5px solid var(--main-2-blue);
+                border-right: none;
+                -webkit-border-radius: var(--border-radius-md);
+                border-radius: var(--border-radius-md);
+                outline: none !important;
+            }
             &::placeholder {
                 color: var(--sonic-silver) ;
                 font-size: smaller;
@@ -192,11 +194,13 @@
             &:focus  option:hover { 
                 background: #000 !important;
             }
-            border-radius: 9px 0px 0px 9px;
-            -webkit-border-radius: 9px 0px 0px 9px;
-            -moz-border-radius: 9px 0px 0px 9px;
-            -ms-border-radius: 9px 0px 0px 9px;
-            -o-border-radius: 9px 0px 0px 9px;
+            & {
+                border-radius: 9px 0px 0px 9px;
+                -webkit-border-radius: 9px 0px 0px 9px;
+                -moz-border-radius: 9px 0px 0px 9px;
+                -ms-border-radius: 9px 0px 0px 9px;
+                -o-border-radius: 9px 0px 0px 9px;
+            }
         }
     }
 }

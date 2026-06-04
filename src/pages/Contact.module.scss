@@ -55,11 +55,13 @@
                     padding-left: 0 !important;
                 }
             }
-            border-radius: 15px;
-            -webkit-border-radius: 15px;
-            -moz-border-radius: 15px;
-            -ms-border-radius: 15px;
-            -o-border-radius: 15px;
+            & {
+                border-radius: 15px;
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                -ms-border-radius: 15px;
+                -o-border-radius: 15px;
+            }
         }
         form {
             display: flex;
@@ -74,11 +76,13 @@
                     &:focus{
                         outline: none;
                     }
-                    border-radius: 15px;
-                    -webkit-border-radius: 15px;
-                    -moz-border-radius: 15px;
-                    -ms-border-radius: 15px;
-                    -o-border-radius: 15px;
+                    & {
+                        border-radius: 15px;
+                        -webkit-border-radius: 15px;
+                        -moz-border-radius: 15px;
+                        -ms-border-radius: 15px;
+                        -o-border-radius: 15px;
+                    }
                 }
             }
             input,textarea {
@@ -89,11 +93,13 @@
                 &:focus{
                     outline: none;
                 }
-                border-radius: 15px;
-                -webkit-border-radius: 15px;
-                -moz-border-radius: 15px;
-                -ms-border-radius: 15px;
-                -o-border-radius: 15px;
+                & {
+                    border-radius: 15px;
+                    -webkit-border-radius: 15px;
+                    -moz-border-radius: 15px;
+                    -ms-border-radius: 15px;
+                    -o-border-radius: 15px;
+                }
             }
             .banner-btn {
                 background: var(--main-2-blue);
@@ -210,11 +216,13 @@
                         &:focus{
                             outline: none;
                         }
-                        border-radius: 15px;
-                        -webkit-border-radius: 15px;
-                        -moz-border-radius: 15px;
-                        -ms-border-radius: 15px;
-                        -o-border-radius: 15px;
+                        & {
+                            border-radius: 15px;
+                            -webkit-border-radius: 15px;
+                            -moz-border-radius: 15px;
+                            -ms-border-radius: 15px;
+                            -o-border-radius: 15px;
+                        }
                     }
                 }
                 input,textarea {
@@ -225,11 +233,13 @@
                     &:focus{
                         outline: none;
                     }
-                    border-radius: 15px;
-                    -webkit-border-radius: 15px;
-                    -moz-border-radius: 15px;
-                    -ms-border-radius: 15px;
-                    -o-border-radius: 15px;
+                    & {
+                        border-radius: 15px;
+                        -webkit-border-radius: 15px;
+                        -moz-border-radius: 15px;
+                        -ms-border-radius: 15px;
+                        -o-border-radius: 15px;
+                    }
                 }
                 .banner-btn {
                     background: var(--main-2-blue);

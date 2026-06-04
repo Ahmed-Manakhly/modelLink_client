@@ -1,0 +1,34 @@
+services:
+  frontend:
+    container_name: modellink_frontend
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Pass dev values explicitly (bypasses .env completely)
+        - NODE_ENV=docker_development
+        - REACT_APP_BASE_API_PROD=$REACT_APP_BASE_API_PROD
+        - REACT_APP_FILES_BASE_API_DEV=$REACT_APP_FILES_BASE_API_DEV
+    restart: always
+    # Overriding explicitly (ignores .env runtime configs)
+    environment:
+      - NODE_ENV=docker_development
+      - REACT_APP_BASE_API_PROD=$REACT_APP_BASE_API_PROD
+      - REACT_APP_FILES_BASE_API_DEV=$REACT_APP_FILES_BASE_API_DEV
+      - LOG_DIR=/logs
+    # locally we map the port instead of just expose    
+    ports:
+      - "3000:3000"
+    networks:
+      - modelink-network
+    volumes:
+      - modellink_frontend-logs:/logs
+
+networks:
+  modelink-network:
+    external: true
+
+volumes:
+  modellink_frontend-logs:
