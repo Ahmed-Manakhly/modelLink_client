@@ -1,65 +1,76 @@
-@use '../index.scss' as * ;
+@use '../index.scss' as *;
 
 //----------------------------------
 .category-item {
-    box-shadow: 2px 2px 15px var(--cultured);
-    min-width: 100%;
+    background: var(--gradient-brand);
+    // box-shadow: none;
+    // border: 1px solid var(--main-blue);
+    width: 100%;
+    margin: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
     padding: 15px;
     -webkit-border-radius: var(--border-radius-md);
     border-radius: var(--border-radius-md);
     scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     height: 100%;
+
+    // Force carousel items to stretch equally
+    :global(.react-multi-carousel-track) {
+        align-items: stretch;
+    }
+
     .category-img-box {
         width: 100%;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        img{
-            width: 30%;
+        background-color: #ffffff;
+        border: 2px solid var(--main-blue);
+        border-radius: 50%;
+        padding: 5px;
+        width: 80px;
+        height: 80px;
+
+        img {
+            width: 60px;
+            height: 60px;
             margin: 0;
             display: block;
             object-fit: contain;
         }
     }
+
     .category-content-box {
-        width: 100%; 
-        border: 3px solid var(--cultured);
+        width: 100%;
+        border: 3px solid #fff;
         padding: 6px 5px;
+        background-color: #fff;
         -webkit-border-radius: var(--border-radius-md);
         border-radius: var(--border-radius-md);
+
         .category-content-flex {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
             display: flex;
-            -webkit-box-pack: justify;
-            -webkit-justify-content: space-between;
-            -ms-flex-pack: justify;
-            justify-content: space-between;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-            -ms-flex-align: center;
+            justify-content: flex-start;
             align-items: center;
             margin-bottom: 10px;
+
             .category-item-title {
-                color: var(--onyx);
-                color: var(--sonic-silver);
+                color: var(--color-text-main);
                 font-size: var(--fs-9);
                 font-weight: var(--weight-600);
                 text-transform: uppercase;
                 padding: 5px 0;
-                -webkit-transition: var(--transition-timing);
-                -o-transition: var(--transition-timing);
                 transition: var(--transition-timing);
                 position: relative;
-                &::after{
+
+                &::after {
                     content: '';
                     position: absolute;
                     top: 100%;
@@ -70,23 +81,32 @@
                 }
             }
         }
+
         .category-btn {
             color: var(--sonic-silver);
             font-size: var(--fs-10);
             text-transform: capitalize;
-            -webkit-transition: var(--transition-timing);
-            -o-transition: var(--transition-timing);
             transition: var(--transition-timing);
-            // padding-left: 4px;
-            &:hover{
+            text-align: left;
+            display: block;
+
+            &:hover {
                 color: var(--main-blue);
             }
         }
     }
 }
 
+.carouselItem {
+    padding: 0 10px;
+    display: flex;
+    align-items: stretch;
+}
 
+:global(.react-multi-carousel-track) {
+    margin-bottom: 40px !important; // Make room for dots inside the container
+}
 
-
-
-
+:global(.react-multi-carousel-dot-list) {
+    bottom: 0 !important;
+}

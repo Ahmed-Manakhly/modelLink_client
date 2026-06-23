@@ -6,9 +6,9 @@ import SignupFormStep1 from './SignupFormStep1' ;
 import SignupFormStep2 from './SignupFormStep2' ;
 import AccountRoleForm from './AccountRoleForm' ;
 import ForgotPassword from './ForgotPassword' ;
-import logo from '../../../assets/LOGO_3.png'
+// import logo from '../../../assets/LOGO_3.png'
 import { useState} from 'react' ;
-import { Row , Col  } from 'react-bootstrap' 
+import { Row , Col  } from 'react-bootstrap'
 
 //-----------------------------------------
 
@@ -49,8 +49,11 @@ const Auth = ( ) => {
         <Modal onClose={onClose} >
             <Row md={2} xs={1} lg={3} className={` justify-content-center w-100 ${classes.mainRow}`}>
                 <Col className={`${classes['contact-col']} ${classes['contact-col2']} d-flex flex-column `}>
-                    <Row className=' d-flex flex-column '>                        
-                        <img src={logo} alt="logo" />
+                    <Row className=' d-flex flex-column '>
+                        <div className="brand-logo-text" style={{ marginBottom: '20px' }}>
+                          {/* <img src={logo} alt="logo" /> */}
+                          Model<span>Link</span>
+                        </div>
                         <Row>
                             <h1 className={classes.title_2}>Success starts here</h1>
                         </Row>
@@ -84,7 +87,7 @@ const Auth = ( ) => {
 
                 <Col  className={`${classes["contact-col"]} flex-fill`}>
                     <AuthCard title={isLogin ? "Sign in to your account" : isSignup ? "Create a new account" : ''}/>
-                    {(!isLogin && !isForgotPassword )&&                     
+                    {(!isLogin && !isForgotPassword )&&
                     <Row className={'d-flex flex-column justify-content-center ms-lg-5 me-lg-5 ps-lg-5 pe-lg-5'}>
                         <div className={`${classes['progressLineOut']}`}>
                             <div className={`${classes['progressLineIn']}`} style={{width : `${innerWidth}`}}>
@@ -112,14 +115,14 @@ const Auth = ( ) => {
                                 <Link to={`?mode=signup`}>Join here</Link>
                             </Row>
                         </div>
-                    ) : (
+                    ) : !isForgotPassword ? (
                         <div className={classes.actions}>
                             <Row className={classes.actionsBox}>
                                 <p > {`Already have an account ?`}</p>
                                 <Link to={`?mode=login`}>Sign In</Link>
                             </Row>
                         </div>
-                    )}
+                    ) : null}
                     </div>
                 </Col>
             </Row>

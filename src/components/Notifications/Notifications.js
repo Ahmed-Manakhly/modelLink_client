@@ -1,54 +1,82 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Notifications.module.scss'
-import {FILES_BASE_API_URL} from '../../lib/api'
- // eslint-disable-next-line 
+import { FILES_BASE_API_URL } from '../../lib/api'
 import { format } from "timeago.js";
+import UserAvatar from '../ui/UserAvatar';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Link} from 'react-router-dom'
-import {getAuthToken} from '../../utility/tokenLoader'
+import { Link } from 'react-router-dom'
+import { getAuthToken } from '../../utility/tokenLoader'
+import { getNotificationType, getNotificationTypeLabel } from '../../utility/chatHelpers';
+import { useSelector } from 'react-redux';
 
-const Notifications = ({ data, onRemove , onUpdate}) => {
-  const token = getAuthToken() ;
+const resolveActionLink = (link, role) => {
+  if (role === 'CLIENT' && link === '/dashboard/orders') {
+    return '/orders-client';
+  }
+  return link;
+};
+
+const Notifications = ({ data, onRemove, onUpdate }) => {
+  const token = getAuthToken();
+  const userRole = useSelector((state) => state.auth.userData?.role);
   const [userData, setUserData] = useState(null)
-  useEffect(()=> {
-    let userId = data?.from
-    const getUserData = async ()=> {
-      try{
-        const {data} =await getUser(userId , token)
+  const notifType = getNotificationType(data);
+  const typeLabel = getNotificationTypeLabel(notifType);
+  const actionLink = resolveActionLink(data?.actionLink, userRole);
+  
+  useEffect(() => {
+    let userId = data?.senderId
+    if (!userId) {
+      setUserData({
+        first_name: "SYSTEM",
+        org_username: "SYSTEM",
+        role: "SYSTEM",
+        avatar: null
+      });
+      return;
+    }
+    const getUserData = async () => {
+      try {
+        const { data } = await getUser(userId, token)
         setUserData(data?.data?.user)
-      }catch(error)
-      {
-        console.log(error?.respons?.data?.message);
+      } catch (error) {
+        console.log(error?.response?.data?.message);
+        setUserData({
+          first_name: "SYSTEM",
+          org_username: "SYSTEM",
+          role: "SYSTEM",
+          avatar: null
+        });
       }
     }
     token && getUserData();
-  }, [data , token])
+  }, [data, token])
   //=====================================================================================================================
   return (
     <>
-      <div className={`${classes["conversation"]} ${ data?.unRead === true ? classes.active : ''}`} >
+      <div className={`${classes["conversation"]} ${data?.unRead === true ? classes.active : ''}`} >
         <div className={`${classes["conversation-con"]}`} >
-          <Link  className={` ${classes.imgCon}`} to={`/profile/${userData?.id}`} >
-            {userData?.avatar &&<img src={FILES_BASE_API_URL+userData?.avatar} alt="User Avatar" crossOrigin="anonymous"  />}
-            {!userData?.avatar &&  <div className={classes['UserHolder']} >{userData?.org_username&&userData?.org_username[0]?.toUpperCase()}</div>}
+          <Link className={` ${classes.imgCon}`} to={`/profile/${userData?.id}`} >
+            <UserAvatar user={userData} />
           </Link>
 
           <div className={classes["info-box"]}>
             <div className={classes["row_1"]}>
               <div className={classes["Col_1"]}>
-                <span>{userData?.first_name ? userData?.first_name?.toUpperCase()?.slice(0, 9) :userData?.org_username?.toUpperCase()?.slice(0, 9) }</span>
+                <span>{userData?.first_name ? userData?.first_name?.toUpperCase()?.slice(0, 9) : userData?.org_username?.toUpperCase()?.slice(0, 9)}</span>
+                <span style={{ fontSize: '10px', marginLeft: '6px', opacity: 0.75 }}>{typeLabel}</span>
               </div>
-                <div className={classes["Col_2"]}>
-                  <span>{format(data?.createdAt)}</span>
-                </div>
+              <div className={classes["Col_2"]}>
+                <span>{format(data?.createdAt)}</span>
+              </div>
             </div>
             <div className={classes["row_2"]}>
               <div className={classes["Col_1"]}>
-                <Link to={data?.actionLink} onClick={onUpdate.bind(null,data?.id)}  >{data?.actionDesc && data?.actionDesc }</Link>
+                <Link to={actionLink} onClick={onUpdate?.bind(null, data?.id)}  >{data?.actionDesc && data?.actionDesc}</Link>
               </div>
-              <div className={classes["Col_2"]}  onClick={onRemove.bind(null,data?.id)} >
-                <span> <DeleteIcon style={{cursor:'pointer'}} title="delete"  /> </span>
+              <div className={classes["Col_2"]} onClick={onRemove?.bind(null, data?.id)} >
+                <span> <DeleteIcon style={{ cursor: 'pointer' }} title="delete" /> </span>
               </div>
             </div>
           </div>

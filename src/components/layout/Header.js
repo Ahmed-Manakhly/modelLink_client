@@ -16,7 +16,7 @@ function Header({txt_1,txt_2 , txt_3 , banner ,actionTo , actionTitle , action})
                     <p className={classes["banner-text"]}>
                         {txt_3}
                     </p>
-                    {action &&              
+                    {action &&
                         <Link to={actionTo} className={classes["banner-btn_"]} >{actionTitle}</Link>
                     }
                     </div>

@@ -27,7 +27,7 @@ function About() {
                     so we can give you a detailed overview of their capabilities.</p>
                 <div className={classes["achievment__cards"]}>
                 <article className={classes["achievment__card"]}>
-                    <span className={classes["achievment__icon"]}><i className='uil uil-video'></i></span> 
+                    <span className={classes["achievment__icon"]}><i className='uil uil-video'></i></span>
                     <h3>45+</h3>
                     <p>AI model, used in a huge projects</p>
                 </article>

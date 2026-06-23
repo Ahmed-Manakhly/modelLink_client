@@ -1,4 +1,4 @@
-import img from '../../assets/LOGO_3.png' ;
+// import img from '../../assets/LOGO_3.png' ;
 import classes from './Footer.module.scss' ;
 import {Link} from 'react-router-dom' ;
 import robot from '../../assets/chat_bot.png'
@@ -14,7 +14,7 @@ import robot from '../../assets/chat_bot.png'
 //   )
 // }
 //-------------------------------------------------------------------------------
-const FooterNav = ({title,links , onClickLink})=>{
+const FooterNav = ({title,links })=>{
   return (
     <ul className={classes["footer-nav-list"]}>
     <li className={classes["footer-nav-item"]}>
@@ -22,14 +22,14 @@ const FooterNav = ({title,links , onClickLink})=>{
     </li>
     {links.map((item,index)=>{return(
         <li key={index} className={classes["footer-nav-item"]}>
-          <Link  to={item.to} className={classes["footer-nav-link"]} onClick={onClickLink?.bind(null,item.title)}>{item.title}</Link>
+          <Link  to={item.to} className={classes["footer-nav-link"]} >{item.title}</Link>
         </li>
       )})}
   </ul>
   )
 }
 //-----------------------------------------------------------------------
-function Footer({footerCategoriesData , footerNavData , onClickLink}) {
+function Footer({footerCategoriesData , footerNavData }) {
     return (
         <footer>
         {/* {=============================================} */}
@@ -37,7 +37,7 @@ function Footer({footerCategoriesData , footerNavData , onClickLink}) {
           <div className={classes["container"]}>
             {/* {=============================================} */}
             {footerNavData.map((item,index)=>{return(
-                <FooterNav key={index}  title={`${item.title}`} links={item.links} onClickLink={onClickLink}/>
+                <FooterNav key={index}  title={`${item.title}`} links={item.links} />
             )})}
             {/* {=============================================} */}
             <ul className={classes["footer-nav-list"]}>
@@ -70,15 +70,18 @@ function Footer({footerCategoriesData , footerNavData , onClickLink}) {
               <Link to='/models'>
                <img src={robot} alt='models' />
               </Link>
-              
+
           </div>
           {/* {=============================================} */}
-          </div> 
+          </div>
         </div>
         {/* {=============================================} */}
-        <div className={classes["footer-bottom"]}>  
-          <div className={classes["container"]}>  
-            <img src={img} alt="payment method" className={classes["payment-img"]} />
+        <div className={classes["footer-bottom"]}>
+          <div className={classes["container"]}>
+            <div className="brand-logo-text" style={{ marginBottom: '15px' }}>
+              {/* <img src={img} alt="payment method" className={classes["payment-img"]} /> */}
+              Model<span>Link</span>
+            </div>
             <p className={classes["copyright"]}>
               Copyright &copy; <Link to="/">The ModelLink</Link> all rights reserved.
             </p>
@@ -108,7 +111,7 @@ function Footer({footerCategoriesData , footerNavData , onClickLink}) {
                 </ul>
               </li>
             </ul>
-          </div>  
+          </div>
         </div>
         {/* {=============================================} */}
       </footer>

@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "./FeedbackList.module.scss";
 import { Container, Row, Col } from 'react-bootstrap'
-import { FILES_BASE_API_URL } from '../lib/api'
+import { FILES_BASE_API_URL } from '../lib/api';
+import UserAvatar from './ui/UserAvatar';
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { FaRegFaceFrown } from "react-icons/fa6";
 import { FaRegFaceMeh } from "react-icons/fa6";
@@ -11,7 +12,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-
+const getReviewerName = (userData = {}) => {
+    const fullName = [userData.first_name, userData.last_name].filter(Boolean).join(' ');
+    return fullName || userData.org_username || 'Reviewer';
+};
 
 const RatingLabel = ({ ratingValue }) => {
   const ratingLabel = [
@@ -38,29 +42,49 @@ const RatingLabel = ({ ratingValue }) => {
   );
 };
 
+const FeedbackCard = ({ userData, desc, star, createdAt, versionLabel, profileId }) => {
+  const reviewerName = getReviewerName(userData);
+  const profileLink = profileId || userData?.id;
 
-const FeedbackCard = ({ userData, desc, star, createdAt }) => {
   return (
     <Row className={`${styles["contact-col"]} `} >
       <Col className={styles.__box_leftside}>
         <h6 style={{ color: '#5DB8DD' }} >{'Reviewed On '}{createdAt ? new Date(createdAt).toLocaleDateString('pt-PT') : null}</h6>
+        {versionLabel && (
+          <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>Review for v{versionLabel}</p>
+        )}
         <div className={styles["widget_11_con"]}>
-          <div className={` ${styles.imgCon} `} >
-            {userData?.avatar && <img src={FILES_BASE_API_URL + userData?.avatar} alt="Cover" crossOrigin="anonymous" />}
-            {!userData?.avatar && <div className={styles['UserHolder']} >{userData?.org_username ? userData?.org_username[0]?.toUpperCase() : ''}</div>}
-          </div>
+          {profileLink ? (
+            <Link to={`/profile/${profileLink}`} className={` ${styles.imgCon} `}>
+              <UserAvatar user={userData} />
+            </Link>
+          ) : (
+            <div className={` ${styles.imgCon} `} >
+              <UserAvatar user={userData} />
+            </div>
+          )}
           <div className={styles.infoCon}>
-
-            {userData?.first_name && <h3 className={styles.title_} >{userData?.first_name?.toUpperCase()?.slice(0, 6)}</h3>}
-            {!userData?.first_name && <h3 className={styles.title_} >{userData?.org_username?.toUpperCase()?.slice(0, 6)}</h3>}
+            {profileLink ? (
+              <Link to={`/profile/${profileLink}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h3 className={styles.title_} title={reviewerName}>
+                  {reviewerName}
+                </h3>
+              </Link>
+            ) : (
+              <h3 className={styles.title_} title={reviewerName}>
+                {reviewerName}
+              </h3>
+            )}
             <h6 className={styles.info}>{userData?.role ? userData?.role : ''}</h6>
             <h6 className={styles.info__}><FaLocationDot style={{ color: '#5DB8DD' }} />{'From '}{userData?.country ? userData?.country : ''}</h6>
             <h6 className={styles.info__}><FaUserAlt style={{ color: '#5DB8DD' }} />{'Member since '}{userData?.createdAt ? new Date(userData?.createdAt).toLocaleDateString('pt-PT') : null}</h6>
           </div>
         </div>
-        <Row className={styles.infoCon_}>
-          <Link to={`/profile/${userData?.id}`} className={styles["banner-btn"]}> {'VIEW PROFILE'} </Link>
-        </Row>
+        {profileLink && (
+          <Row className={styles.infoCon_}>
+            <Link to={`/profile/${profileLink}`} className={styles["banner-btn"]}> {'VIEW PROFILE'} </Link>
+          </Row>
+        )}
       </Col>
       <Col xs={0} md lg className={`${styles["form-control"]}`} >
         <Row xs={0} md lg className={`${styles["stars-con"]}`} >
@@ -80,8 +104,7 @@ const FeedbackCard = ({ userData, desc, star, createdAt }) => {
   )
 }
 
-
-const FeedbackList = ({ formTitle, rev }) => {
+const FeedbackList = ({ formTitle, rev, versionMap = {} }) => {
   return (
     <Container>
       <h2 className={styles["title"]}>{formTitle}</h2>
@@ -94,6 +117,8 @@ const FeedbackList = ({ formTitle, rev }) => {
               star={ele.star}
               desc={ele.desc}
               createdAt={ele.createdAt}
+              versionLabel={ele.versionId ? versionMap[ele.versionId] : null}
+              profileId={ele.clientId}
             />
           )
         })}
@@ -101,8 +126,5 @@ const FeedbackList = ({ formTitle, rev }) => {
     </Container>
   );
 };
-
-
-
 
 export default FeedbackList;

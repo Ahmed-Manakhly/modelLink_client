@@ -37,7 +37,7 @@ const Box = ({title,img,text_1,text_2,actionTo ,title_2,content_1,title_3,conten
               <strong className={styles.__strong}>
               {closure}
               </strong>
-              {action &&              
+              {action &&
                 <Link to={actionTo} className={styles["banner-btn_"]} >{actionTitle}</Link>
               }
             </div>

@@ -4,7 +4,7 @@ import 'react-international-phone/style.css';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { useNavigation , Link ,useSearchParams} from 'react-router-dom';
 import classes from './Auth.module.scss' ;
-import { Row , Col  } from 'react-bootstrap' 
+import { Row , Col  } from 'react-bootstrap'
 import { useState , useEffect } from 'react' ;
 import { createOtp , validateOtp } from "../../../lib/authRequests";
 import { IoMdCheckmarkCircle } from "react-icons/io";
@@ -58,7 +58,7 @@ const SignupFormStep2 = ( {stepData}) => {
             setRest(true)
             setIsLoading(false)
         }catch(error)
-        {   
+        {
             setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
             setIsLoading(false)
@@ -100,7 +100,7 @@ const SignupFormStep2 = ( {stepData}) => {
         <Col className={`d-flex flex-column justify-content-center  p-lg-4 align-items-center`}>
             {/* {====================================================} */}
             <input type="email"    name="email"            hidden value={stepData.enteredEmail}readOnly/>
-            <input type="password" name="password"         hidden value={stepData.enteredPass1}readOnly/> 
+            <input type="password" name="password"         hidden value={stepData.enteredPass1}readOnly/>
             <input type="password" name="passwordConfirm"  hidden value={stepData.enteredPass2}readOnly/>
             {/* {====================================================} */}
             <Row xs={0} md lg  className={`${orgName1Classes} d-flex flex-column align-items-center w-100`} >
@@ -135,7 +135,7 @@ const SignupFormStep2 = ( {stepData}) => {
                 </div>
                 {isLoading && <p>Please Wait...</p>}
                 {otpMessage.content !== '' && <p className={`
-                    ${classes['otp-text']} ${otpMessage.error && classes['otp-text-error']}    
+                    ${classes['otp-text']} ${otpMessage.error && classes['otp-text-error']}
                 `} >{!otpMessage.error && <IoMdCheckmarkCircle/>}{otpMessage.content}</p>}
             </div>
             {/* {===================================} */}

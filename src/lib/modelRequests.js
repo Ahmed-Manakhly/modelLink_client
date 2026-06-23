@@ -13,7 +13,7 @@ export const createModelReq = (data, token) => {
 };
 
 export const updateModelReq = (id, data, token) => {
-    return API.put(`${aiModelUrl}/${id}`, data, {
+    return API.patch(`${aiModelUrl}/${id}`, data, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
 };

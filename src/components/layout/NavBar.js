@@ -1,12 +1,22 @@
-import {categoriesList} from '../../data' ;
-import {menuList} from '../../data' ;
-import {Link} from 'react-router-dom' ;
+import { menuList } from '../../constants/marketingData' ;
+import { Link } from 'react-router-dom' ;
 import classes from './NavBar.module.scss' ;
 import { FaCode } from "react-icons/fa";
 import { GrOrganization } from "react-icons/gr";
-import {useSelector} from 'react-redux'; 
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import Notifications from '../Notifications/Notifications'
-import Conversation from '../CoversationNew/Conversation'
+import Conversation from '../ConversationNew/Conversation'
+import { getCategoriesReq } from '../../lib/loaders';
+import { buildCategoriesList } from '../../lib/categoryHelpers';
+import {
+    selectUnreadChats,
+    selectUnreadNotifications,
+    selectChats,
+    selectNotifications,
+    selectOnlineUsers,
+    checkOnlineStatus as checkChatOnlineStatus,
+} from '../../store/realtimeSlice';
 
 //-------------------------------------
 const SingleLink = ({title , to })=>{
@@ -17,12 +27,12 @@ const SingleLink = ({title , to })=>{
   )
 }
 //----------------------------
-const MultipleLink = ({categoryTitle,to,subCategory , categoryImg , onClickLink })=>{
+const MultipleLink = ({categoryTitle,to,subCategory , categoryImg})=>{
   return (
     <ul className={classes["dropdown-panel-list"]}>
       <li className={classes["menu-title"]}> <Link to={to} >{categoryTitle}</Link></li>
       {subCategory.map((item,index)=>{return(
-        <li className={classes["panel-list-item"]} key={index} > <Link to={item.to} onClick={onClickLink?.bind(null,item.title)} >{item.title} </Link> </li>
+        <li className={classes["panel-list-item"]} key={index} > <Link to={item.to} >{item.title} </Link> </li>
       )})}
       <li className={`${classes["panel-list-item"]}   ${classes["img-con"]}`}>
         <Link to='/'>
@@ -32,19 +42,20 @@ const MultipleLink = ({categoryTitle,to,subCategory , categoryImg , onClickLink 
   </ul>
   )
 }
-//------------------------------------
-const MultipleLinkList =({listName , listItems , onClickLink})=> {
+//----------------------------------
+const MultipleLinkList =({listName , listItems})=> {
   return(
     <li className={classes["menu-category"]} >
       <Link to="/" className={classes["menu-title"]}>{listName}</Link>
       <div className={classes["dropdown-panel"]}>
         {listItems.map((item,index)=>{return(
-          <MultipleLink   key={index} categoryTitle={item.title} to={item.to} subCategory={item.items} categoryImg={item.img} onClickLink={onClickLink}/>
+          <MultipleLink   key={index} categoryTitle={item.title} to={item.to} subCategory={item.items} categoryImg={item.img} />
         )})}
       </div>
     </li>
   )
 }
+
 //----------------------------------
 const MenuList = ({title,list})=>{
   return(
@@ -61,49 +72,58 @@ const MenuList = ({title,list})=>{
   )
 }
 //----------------------------------------------------------
-function NavBar({msgCounter , notCounter , notifys , handleDeleteNotification , handleUpdateNotification , chats , checkOnlineStatus , handleDeleteChat ,onClickLink}) {
+function NavBar({ handleDeleteNotification , handleUpdateNotification , handleReadAllNotifications , handleDeleteChat}) {
   const userData = useSelector(state => state.auth.userData) ;
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn) ;
   const quantity = useSelector(state => state.cart.quantity) ;
+  const msgCounter = useSelector(selectUnreadChats);
+  const notCounter = useSelector(selectUnreadNotifications);
+  const chats = useSelector(selectChats);
+  const notifys = useSelector(selectNotifications);
+  const onlineUsers = useSelector(selectOnlineUsers);
   const {role} = userData;
+  const [categoriesList, setCategoriesList] = useState([]);
 
-  const getMember = (chat) =>{
-    let chatMember
-    if(role === 'CLIENT'){
-      chatMember = chat?.developerId;
-    }else {
-      chatMember = chat?.clientId;
-    }
-    return chatMember
+  useEffect(() => {
+    getCategoriesReq('?parentId=null&limit=12')
+      .then((res) => {
+        const dbCategories = res.data?.data?.categories || [];
+        setCategoriesList(buildCategoriesList(dbCategories));
+      })
+      .catch((err) => console.error('Failed to load navbar categories:', err));
+  }, []);
+
+  const getMember = (chat) => {
+    return chat?.participants?.find(p => p.userId !== userData?.id)?.userId;
   }
   return (
     <nav className={classes["desktop-navigation-menu"]}>
       <div className={classes["container"]}>
         <ul className={classes["desktop-menu-category-list"]}>
           <SingleLink  title='Home' to='/'/>
-          <MultipleLinkList  listName='models' listItems={categoriesList} onClickLink={onClickLink}/>
+          <MultipleLinkList  listName='models' listItems={categoriesList} />
           {!isLoggedIn && <>
-          
+
             {menuList.map((item,index)=>{return(
                 <MenuList key={index} list={item.items}  title={item.title} />
             )})}
-          </>} 
+          </>}
           {/* <SingleLink  title='ABOUT US' to='/about'/> */}
           <SingleLink  title='contact us' to='/contact'/>
-            {isLoggedIn && 
+            {isLoggedIn &&
               <div className={classes["header-user-actions"]}>
-                {role === 'CLIENT' &&                
+                {role === 'CLIENT' &&
                   <Link className={classes["action-btn"]} to='/cart' >
                     <ion-icon name="heart-outline"></ion-icon>
                     <span className={classes["count"]}>{quantity}</span>
                   </Link>
                 }
-                {role === 'DEVELOPER' && 
+                {role === 'DEVELOPER' &&
                   <div className={classes["action-btn"]}>
                   <Link  to='/dashboard-dev' >
                     <ion-icon name="grid-outline"></ion-icon>
                   </Link>
-                  </div>               
+                  </div>
                 }
                 {/* {--------------------------------------------} */}
                 <div className={classes["action-btn"]} >
@@ -121,9 +141,9 @@ function NavBar({msgCounter , notCounter , notifys , handleDeleteNotification , 
                             <Conversation
                               to={`/chat?contact=${getMember(chat)}`}
                               onRemove={handleDeleteChat}
-                              currentUserRole={role}
+                              currentUserId={userData?.id}
                               data={chat}
-                              online={checkOnlineStatus(chat)}
+                              online={checkChatOnlineStatus(chat, userData?.id, onlineUsers)}
                             />
                           </div>
                       ))}
@@ -149,6 +169,19 @@ function NavBar({msgCounter , notCounter , notifys , handleDeleteNotification , 
                           />
                         </div>
                       ))}
+                  {notCounter > 0 && handleReadAllNotifications && (
+                    <button
+                      type="button"
+                      className={classes["show-btn"]}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleReadAllNotifications();
+                      }}
+                    >
+                      Mark all as read
+                    </button>
+                  )}
                   <Link className={classes["show-btn"]} to='/chat?to=notification'>Show All</Link>
                   </div>}
                 </div>

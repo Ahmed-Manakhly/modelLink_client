@@ -1,405 +1,1062 @@
 /* eslint-disable */
-import classes from './FormActions.module.scss' ;
-import { useNavigate , Form ,useNavigation } from 'react-router-dom';
+import classes from './FormActions.module.scss';
+import CustomSelect from './ui/CustomSelect';
+import { useNavigate, Form as RouterForm, useNavigation } from 'react-router-dom';
 import useInput from '../hooks/Use-Input';
-import React, { useState , useRef} from 'react';
-import {Container , Row , Col  } from 'react-bootstrap' 
-import {range} from '../utility/Consts' ;
-import {useEffect} from 'react' ;
-import ToggleSwitch from './ToggleSwitch' ;
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import ToggleSwitch from './ToggleSwitch';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import imgHolder from '../assets/imgHolder.jpg'
-import {FILES_BASE_API_URL} from '../lib/api' 
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import DeleteIcon from '@mui/icons-material/Delete';
+import imgHolder from '../assets/imgHolder.jpg';
+import { FILES_BASE_API_URL } from '../lib/api';
+import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
+import { isMedicalSubcategory } from '../lib/categoryHelpers';
+import { getPrimaryVersion } from '../lib/modelHelpers';
+import { createVersionReq } from '../lib/versionRequests';
+import { getAuthToken } from '../utility/tokenLoader';
+import VersionAssetsPanel from './ui/VersionAssetsPanel';
+import Modal from './layout/Modal';
+import { Button as BsButton } from 'react-bootstrap';
 
+const getAssetFromVersion = (version, type) =>
+    version?.assets?.find((a) => a.type === type)?.decryptedValue || '';
 
-const   FormActions = ({ thisModel=null , formTitle ,onCreatingModelAction ,payPerClickInit=false ,subscriptionInit=true} ) => {
-    const authority =  JSON.parse(localStorage.getItem('userData'))?.id 
-    const [file,setFile] = useState() 
-    const [payPerClick,setPayPerClick] = useState(false ) 
-    const [subscription,setSubscription] = useState( true) 
-    const [features, setfeatures] = useState([]);
-    const [isEditing, setEditing] = useState({title :false , category : false , indications: false ,modality:false ,fdaUrl:false , endpointUrl: false,
-            price:false , deliveryTime : false ,bodyPart : false ,desc:false});
-    const [isTouched, setIsTouched] = useState(false);
-    const [isChanged, setIsChanged] = useState(false);
-    const [imgWarnning, setImgWarnning] = useState(false);
-    const featuresIsValid = features.length > 0 ;
-    const featuresIsInValid = !featuresIsValid && isTouched
-    const imgRef = useRef(null);
-    
+const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onModelReload, preferredVersionId = null }) => {
+    const authority = useSelector(state => state.auth.userData)?.id;
+
+    const [dbCategories, setDbCategories] = useState([]);
+    const [dbModalities, setDbModalities] = useState([]);
+    const [dbBodyParts, setDbBodyParts] = useState([]);
 
     useEffect(() => {
-        if(thisModel){
-            setPayPerClick(payPerClickInit)
-            setSubscription(subscriptionInit)
+        getCategoriesReq('?subcategoriesOnly=true&limit=500')
+            .then(res => setDbCategories(res.data?.data?.categories || []))
+            .catch(err => console.error(err));
+        getModalitiesReq('?limit=500').then(res => setDbModalities(res.data?.data?.modalities || [])).catch(err => console.error(err));
+        getBodyPartsReq('?limit=500').then(res => setDbBodyParts(res.data?.data?.bodyParts || [])).catch(err => console.error(err));
+    }, []);
+
+    const initialCover = thisModel?.galleryImages?.[0] || null;
+    const initialGallery = thisModel?.galleryImages?.length > 1 ? thisModel.galleryImages.slice(1) : [];
+
+    const [file, setFile] = useState(null);
+    const [existingCover, setExistingCover] = useState(initialCover);
+    const [fda, setFda] = useState(thisModel ? (thisModel.versions?.[0]?.fda || false) : false);
+    const [isActive, setIsActive] = useState(thisModel ? (thisModel.versions?.[0]?.isActive ?? true) : true);
+    const [isPrimary, setIsPrimary] = useState(thisModel ? (thisModel.versions?.[0]?.isPrimary || false) : false);
+    const [status, setStatus] = useState(thisModel ? (thisModel.status || 'DRAFT') : 'DRAFT');
+
+    const [features, setFeatures] = useState(thisModel ? (thisModel.versions?.[0]?.features?.map(f => typeof f === 'string' ? f : f.feature) || []) : []);
+    const [metrics, setMetrics] = useState(thisModel ? (thisModel.versions?.[0]?.metrics?.map(m => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []) : []);
+    const [tags, setTags] = useState(thisModel ? (thisModel.tags || []) : []);
+    const [galleryImages, setGalleryImages] = useState(initialGallery);
+
+    const [uploadedGalleryFiles, setUploadedGalleryFiles] = useState([]);
+
+    // Stable blob URL for a newly selected cover file (revoke on replace/unmount)
+    const [coverBlobUrl, setCoverBlobUrl] = useState(null);
+    // Selection by slot key — avoids broken URL equality (createObjectURL returns new refs each call)
+    const [selectedImageKey, setSelectedImageKey] = useState('cover');
+
+    const coverBlobUrlRef = useRef(null);
+    useEffect(() => {
+        coverBlobUrlRef.current = coverBlobUrl;
+    }, [coverBlobUrl]);
+
+    useEffect(() => {
+        return () => {
+            if (coverBlobUrlRef.current) URL.revokeObjectURL(coverBlobUrlRef.current);
+        };
+    }, []);
+
+    const [tagInput, setTagInput] = useState('');
+    const [tagSuggestions, setTagSuggestions] = useState([]);
+    const [featureSuggestions, setFeatureSuggestions] = useState([]);
+    const [metricSuggestions, setMetricSuggestions] = useState([]);
+
+
+
+    const [isEditing, setEditing] = useState({
+        title: false, categoryId: false, useCases: false, modalityId: false, fdaUrl: false, endpointUrl: false,
+        price: false, deliveryTime: false, bodyPart: false, desc: false, version: false, dockerImage: false,
+        downloadLink: false, licenseKey: false, huggingFaceUrl: false
+    });
+
+    const [isTouched, setIsTouched] = useState({ features: false, metrics: false, tags: false });
+    const [isChanged, setIsChanged] = useState(false);
+    const [imgWarning, setImgWarning] = useState(false);
+
+    const modelVersions = thisModel?.versions || [];
+    const [selectedVersionId, setSelectedVersionId] = useState(null);
+    const versionDraftsRef = useRef({});
+    const token = getAuthToken();
+
+    const [showAddVersionModal, setShowAddVersionModal] = useState(false);
+    const [newVersionCode, setNewVersionCode] = useState('');
+    const [newVersionPrice, setNewVersionPrice] = useState('');
+    const [addVersionLoading, setAddVersionLoading] = useState(false);
+    const [addVersionError, setAddVersionError] = useState('');
+    const [assetWarning, setAssetWarning] = useState(false);
+
+    const getSelectedVersion = () => {
+        if (!modelVersions.length) return null;
+        if (selectedVersionId != null) {
+            return modelVersions.find((v) => v.id === selectedVersionId) || getPrimaryVersion(thisModel);
         }
-    },[thisModel,payPerClickInit,subscriptionInit])
-    // ------------------------------------
-    const navigate = useNavigate();
-    function cancelHandler() {
-    navigate('..');
-    }
-    const navigation = useNavigation();
-    const isSubmitting = navigation.state === 'submitting' ;
-    //--------------------------------------------------
-
-    const urlEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-    //-----------------------------------------------------------------------
-    const {hasError : modelNameIsInvalid , valueIsValid : modelNameIsValid ,value : title,
-    valueChangeHandler : modelNameChangeHandler , inputBlurHandler : modelNameBlurHandler} = useInput(value => (value.trim() !=='') ); 
-    const {hasError : categoryIsInvalid , valueIsValid : categoryIsValid ,value: category,
-    valueChangeHandler : categoryChangeHandler , inputBlurHandler : categoryBlurHandler} = useInput(value => value.trim() !=='' && value.trim() !== '--Please Choose An Option--') ;
-    const {hasError : indicationsIsInvalid , valueIsValid : indicationsIsValid ,value: indications,
-    valueChangeHandler : indicationsChangeHandler , inputBlurHandler : indicationsBlurHandler} = useInput(value =>( value.trim() !=='') );  
-    const {hasError : modalityIsInvalid , valueIsValid : modalityIsValid ,value: modality,
-    valueChangeHandler : modalityChangeHandler , inputBlurHandler : modalityBlurHandler} = useInput(value => (value.trim() !=='') );
-    //---------------------------------------------------------------------------------
-    const {hasError : fdaUrlIsInvalid , valueIsValid : fdaUrlIsValid ,value: fdaUrl,
-    valueChangeHandler : fdaUrlChangeHandler , inputBlurHandler : fdaUrlBlurHandler} = useInput(value => (value.trim() !=='' && urlEx.test(value)) );
-    const {hasError : endpointUrlIsInvalid , valueIsValid : endpointUrlIsValid ,value: endpointUrl,
-    valueChangeHandler : endpointUrlChangeHandler , inputBlurHandler : endpointUrlBlurHandler} = useInput(value => (value.trim() !==''&& urlEx.test(value)) );
-    //======================================================================
-    const {hasError : deliveryTimeIsInvalid , valueIsValid : deliveryTimeIsValid ,value: deliveryTime,
-    valueChangeHandler : deliveryTimeChangeHandler , inputBlurHandler : deliveryTimeBlurHandler} = useInput(value => (value.trim() !=='' && +value.trim() !== 0) );
-    const {hasError : priceIsInvalid , valueIsValid : priceIsValid ,value: price,
-    valueChangeHandler : priceChangeHandler , inputBlurHandler : priceBlurHandler} = useInput(value => (value.trim() !=='' && +value.trim() !== 0) );
-    //===================================================================
-    const {hasError : metricsUrlIsInvalid , valueIsValid : metricsUrlIsValid ,value: metricsUrl,
-    valueChangeHandler : metricsUrlChangeHandler , inputBlurHandler : metricsUrlBlurHandler} = useInput(value =>( value.trim() !==''&& urlEx.test(value)) );
-    const {hasError : imageUrlIsInvalid , valueIsValid : imageUrlIsValid ,value: imageUrl,
-    valueChangeHandler : imageUrlChangeHandler , inputBlurHandler : imageUrlBlurHandler} = useInput(value => (value.trim() !==''&& urlEx.test(value)) );
-    const {hasError : featureIsInvalid , valueIsValid : featureIsValid ,value:feature ,reset : resetFeature,
-    valueChangeHandler : featureChangeHandler , inputBlurHandler : featureBlurHandler} = useInput(value => (value.trim() !=='') );
-    //-------------------------------------------------------------------
-    const {hasError : bodyPartIsInvalid , valueIsValid : bodyPartIsValid ,value: bodyPart,
-    valueChangeHandler : bodyPartChangeHandler , inputBlurHandler : bodyPartBlurHandler} = useInput(value => (value.trim() !=='') ); 
-    const {hasError : descIsInvalid , valueIsValid : descIsValid ,value: desc,
-    valueChangeHandler : descChangeHandler , inputBlurHandler : descBlurHandler} = useInput(value => (value.trim() !=='') );
-    //-------------------------------------------------
-    const modelNameClasses = modelNameIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const categoryClasses = categoryIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const indicationsClasses = indicationsIsInvalid  ?`${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const modalityClasses = modalityIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const fdaUrlClasses = fdaUrlIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const endpointUrlClasses = endpointUrlIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const metricsUrlClasses = metricsUrlIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    // const coverClasses = coverIsInvalid&& !thisModel?? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const deliveryTimeClasses = deliveryTimeIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const priceClasses = priceIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const imageUrlClasses = imageUrlIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const featureClasses = featuresIsInValid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const bodyPartClasses = bodyPartIsInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    const descClasses = descIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
-    //----------------------------------------------------------
-
-    const defaultData = { 
-        sales: 0,
-        revisionNumber:0,
-        starFrequency:0,
-        totalStars:0,
-        fda : true,
-        userId : authority
-    }
-    //===================================
-    const removeFeature = (index) => {
-        const clonedFeatures = [...features];
-        clonedFeatures.splice(index, 1);
-        setfeatures(clonedFeatures);
+        return getPrimaryVersion(thisModel);
     };
 
+    const featuresIsValid = features.length > 0;
+    const featuresIsInValid = !featuresIsValid && isTouched.features;
+
+    const imgRef = useRef(null);
+    const galleryInputRef = useRef(null);
+
+    const urlEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+    const { hasError: modelNameIsInvalid, valueIsValid: modelNameIsValid, value: title, valueChangeHandler: modelNameChangeHandler, inputBlurHandler: modelNameBlurHandler } = useInput(value => value.trim() !== '');
+    const { hasError: categoryIsInvalid, valueIsValid: categoryIsValid, value: categoryId, valueChangeHandler: categoryChangeHandler, inputBlurHandler: categoryBlurHandler } = useInput(value => value !== '' && value !== '--Please Choose An Option--');
+    const { hasError: useCasesIsInvalid, valueIsValid: useCasesIsValid, value: useCases, valueChangeHandler: useCasesChangeHandler, inputBlurHandler: useCasesBlurHandler } = useInput(() => true);
+    const { hasError: modalityIsInvalid, valueIsValid: modalityIsValid, value: modalityId, valueChangeHandler: modalityChangeHandler, inputBlurHandler: modalityBlurHandler } = useInput(value => true);
+    const { hasError: fdaUrlIsInvalid, valueIsValid: fdaUrlIsValid, value: fdaUrl, valueChangeHandler: fdaUrlChangeHandler, inputBlurHandler: fdaUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
+    const { hasError: endpointUrlIsInvalid, valueIsValid: endpointUrlIsValid, value: endpointUrl, valueChangeHandler: endpointUrlChangeHandler, inputBlurHandler: endpointUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
+    const { hasError: deliveryTimeIsInvalid, valueIsValid: deliveryTimeIsValid, value: deliveryTime, valueChangeHandler: deliveryTimeChangeHandler, inputBlurHandler: deliveryTimeBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() > 0);
+    const { hasError: priceIsInvalid, valueIsValid: priceIsValid, value: price, valueChangeHandler: priceChangeHandler, inputBlurHandler: priceBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() >= 10);
+    const { hasError: bodyPartIsInvalid, valueIsValid: bodyPartIsValid, value: bodyPartId, valueChangeHandler: bodyPartChangeHandler, inputBlurHandler: bodyPartBlurHandler } = useInput(value => true);
+
+    // Derived AFTER all useInput hooks — categoryId must be initialized first
+    const showMedicalFields = isMedicalSubcategory(categoryId, dbCategories);
+
+    useEffect(() => {
+        if (!showMedicalFields) {
+            modalityChangeHandler({ target: { value: '' } });
+            bodyPartChangeHandler({ target: { value: '' } });
+            fdaUrlChangeHandler({ target: { value: '' } });
+            setFda(false);
+        }
+    }, [showMedicalFields, categoryId]);
+
+    const { hasError: descIsInvalid, valueIsValid: descIsValid, value: desc, valueChangeHandler: descChangeHandler, inputBlurHandler: descBlurHandler } = useInput(value => value.trim() !== '');
+    const versionEx = /^\d+\.\d+\.\d+$/;
+    const { hasError: versionIsInvalid, valueIsValid: versionIsValid, value: version, valueChangeHandler: versionChangeHandler, inputBlurHandler: versionBlurHandler } = useInput(value => value.trim() !== '' && versionEx.test(value));
+    const { hasError: dockerImageIsInvalid, valueIsValid: dockerImageIsValid, value: dockerImage, valueChangeHandler: dockerImageChangeHandler, inputBlurHandler: dockerImageBlurHandler } = useInput(value => value.trim() === '' || true);
+    const { hasError: downloadLinkIsInvalid, valueIsValid: downloadLinkIsValid, value: downloadLink, valueChangeHandler: downloadLinkChangeHandler, inputBlurHandler: downloadLinkBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
+    const { hasError: licenseKeyIsInvalid, valueIsValid: licenseKeyIsValid, value: licenseKey, valueChangeHandler: licenseKeyChangeHandler, inputBlurHandler: licenseKeyBlurHandler } = useInput(value => value.trim() === '' || true);
+    const { hasError: huggingFaceUrlIsInvalid, valueIsValid: huggingFaceUrlIsValid, value: huggingFaceUrl, valueChangeHandler: huggingFaceUrlChangeHandler, inputBlurHandler: huggingFaceUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
+
+    const hasAtLeastOneDeliveryAsset = [
+        endpointUrl,
+        dockerImage,
+        downloadLink,
+        licenseKey,
+        huggingFaceUrl,
+    ].some((value) => (value || '').trim() !== '');
+
+    const { hasError: featureIsInvalid, valueIsValid: featureIsValid, value: feature, reset: resetFeature, valueChangeHandler: featureChangeHandler, inputBlurHandler: featureBlurHandler } = useInput(value => value.trim() !== '');
+    const { hasError: metricIsInvalid, valueIsValid: metricIsValid, value: metric, reset: resetMetric, valueChangeHandler: metricChangeHandler, inputBlurHandler: metricBlurHandler } = useInput(value => value.trim() !== '');
+    const { value: metricValue, reset: resetMetricValue, valueChangeHandler: metricValueChangeHandler } = useInput(value => value.trim() !== '');
+    const { value: metricUrl, reset: resetMetricUrl, valueChangeHandler: metricUrlChangeHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
+
+    useEffect(() => {
+        if (!thisModel) {
+            versionChangeHandler({ target: { value: '1.0.0' } });
+        }
+    }, [thisModel]);
+
+    useEffect(() => {
+        if (!thisModel?.id) return;
+        const v = preferredVersionId
+            ? modelVersions.find((row) => row.id === preferredVersionId) || getPrimaryVersion(thisModel)
+            : getPrimaryVersion(thisModel);
+        setSelectedVersionId(v?.id ?? modelVersions[0]?.id ?? null);
+        versionDraftsRef.current = {};
+        modelNameChangeHandler({ target: { value: thisModel.title || '' } });
+        categoryChangeHandler({ target: { value: String(thisModel.categoryId || thisModel.categoryRel?.id || '') } });
+        useCasesChangeHandler({ target: { value: v?.indications || v?.useCases || '' } });
+        modalityChangeHandler({ target: { value: v?.modalityId ? String(v.modalityId) : '' } });
+        bodyPartChangeHandler({ target: { value: v?.bodyPartId ? String(v.bodyPartId) : '' } });
+        fdaUrlChangeHandler({ target: { value: v?.fdaUrl || '' } });
+        priceChangeHandler({ target: { value: v?.price != null ? String(v.price) : '' } });
+        deliveryTimeChangeHandler({ target: { value: v?.deliveryTime != null ? String(v.deliveryTime) : '' } });
+        descChangeHandler({ target: { value: thisModel.desc || '' } });
+        versionChangeHandler({ target: { value: v?.version || '' } });
+        endpointUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'API_ENDPOINT') } });
+        dockerImageChangeHandler({ target: { value: getAssetFromVersion(v, 'DOCKER_IMAGE') } });
+        downloadLinkChangeHandler({ target: { value: getAssetFromVersion(v, 'DOWNLOAD_LINK') } });
+        licenseKeyChangeHandler({ target: { value: getAssetFromVersion(v, 'LICENSE_KEY') } });
+        huggingFaceUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'HUGGINGFACE_URL') } });
+        setFda(v.fda || false);
+        setIsActive(v.isActive ?? true);
+        setIsPrimary(v.isPrimary || false);
+        setFeatures(v?.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
+        setMetrics(v?.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
+    }, [thisModel?.id, preferredVersionId]);
+
+    const closeAddVersionModal = () => {
+        setShowAddVersionModal(false);
+        setNewVersionCode('');
+        setNewVersionPrice('');
+        setAddVersionError('');
+    };
+
+    const handleAddVersionSubmit = async (e) => {
+        e.preventDefault();
+        if (!versionEx.test(newVersionCode.trim())) {
+            setAddVersionError('Version must use semver format (e.g. 1.0.0).');
+            return;
+        }
+        const parsedPrice = parseInt(newVersionPrice, 10);
+        if (Number.isNaN(parsedPrice) || parsedPrice < 10) {
+            setAddVersionError('Price must be at least $10.');
+            return;
+        }
+        setAddVersionLoading(true);
+        setAddVersionError('');
+        try {
+            const res = await createVersionReq(
+                thisModel.id,
+                { version: newVersionCode.trim(), price: parsedPrice },
+                token
+            );
+            const newId = res.data?.data?.version?.id;
+            closeAddVersionModal();
+            setIsChanged(true);
+            if (onModelReload) onModelReload(newId);
+        } catch (err) {
+            setAddVersionError(err?.response?.data?.message || err.message || 'Failed to create version');
+        } finally {
+            setAddVersionLoading(false);
+        }
+    };
+
+    const persistCurrentVersionDraft = () => {
+        if (!selectedVersionId) return;
+        versionDraftsRef.current[selectedVersionId] = {
+            price, deliveryTime, version, useCases, modalityId, bodyPartId, fdaUrl,
+            endpointUrl, dockerImage, downloadLink, licenseKey, huggingFaceUrl,
+            fda, isActive, isPrimary, features, metrics,
+        };
+    };
+
+    const loadVersionIntoForm = (v) => {
+        if (!v) return;
+        priceChangeHandler({ target: { value: v.price != null ? String(v.price) : '' } });
+        deliveryTimeChangeHandler({ target: { value: v.deliveryTime != null ? String(v.deliveryTime) : '' } });
+        versionChangeHandler({ target: { value: v.version || '' } });
+        useCasesChangeHandler({ target: { value: v.useCases || v.indications || '' } });
+        modalityChangeHandler({ target: { value: v.modalityId ? String(v.modalityId) : '' } });
+        bodyPartChangeHandler({ target: { value: v.bodyPartId ? String(v.bodyPartId) : '' } });
+        fdaUrlChangeHandler({ target: { value: v.fdaUrl || '' } });
+        endpointUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'API_ENDPOINT') } });
+        dockerImageChangeHandler({ target: { value: getAssetFromVersion(v, 'DOCKER_IMAGE') } });
+        downloadLinkChangeHandler({ target: { value: getAssetFromVersion(v, 'DOWNLOAD_LINK') } });
+        licenseKeyChangeHandler({ target: { value: getAssetFromVersion(v, 'LICENSE_KEY') } });
+        huggingFaceUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'HUGGINGFACE_URL') } });
+        setFda(v.fda || false);
+        setIsActive(v.isActive ?? true);
+        setIsPrimary(v.isPrimary || false);
+        setFeatures(v.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
+        setMetrics(v.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
+        setEditing({
+            title: false, categoryId: false, useCases: false, modalityId: false, fdaUrl: false, endpointUrl: false,
+            price: false, deliveryTime: false, bodyPart: false, desc: false, version: false, dockerImage: false,
+            downloadLink: false, licenseKey: false, huggingFaceUrl: false,
+        });
+        setIsChanged(false);
+    };
+
+    const handleVersionSelect = (nextId) => {
+        const parsedId = parseInt(nextId, 10);
+        if (!parsedId || parsedId === selectedVersionId) return;
+        persistCurrentVersionDraft();
+        setSelectedVersionId(parsedId);
+        const draft = versionDraftsRef.current[parsedId];
+        const versionRow = modelVersions.find((v) => v.id === parsedId);
+        if (draft) {
+            loadVersionIntoForm({ ...versionRow, ...draft, features: draft.features, metrics: draft.metrics });
+        } else {
+            loadVersionIntoForm(versionRow);
+        }
+    };
+
+    const getClasses = (isInvalid) => isInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}`;
+
+    const defaultData = { sales: 0, starFrequency: 0, totalStars: 0, reviewCount: 0, userId: authority };
+
+    const getCoverPreviewSrc = () => {
+        if (coverBlobUrl) return coverBlobUrl;
+        if (existingCover) {
+            return existingCover.startsWith('http') ? existingCover : FILES_BASE_API_URL + existingCover;
+        }
+        return imgHolder;
+    };
+
+    const getPreviewForKey = (key) => {
+        if (key === 'cover') return getCoverPreviewSrc();
+        if (key.startsWith('gallery-url-')) {
+            const idx = Number(key.replace('gallery-url-', ''));
+            const img = galleryImages[idx];
+            if (!img) return imgHolder;
+            return img.startsWith('http') ? img : FILES_BASE_API_URL + img;
+        }
+        if (key.startsWith('gallery-file-')) {
+            const idx = Number(key.replace('gallery-file-', ''));
+            return uploadedGalleryFiles[idx]?.preview || imgHolder;
+        }
+        return imgHolder;
+    };
+
+    const selectedGalleryImage = getPreviewForKey(selectedImageKey);
+
+    const setCoverFile = (newFile) => {
+        if (coverBlobUrl) URL.revokeObjectURL(coverBlobUrl);
+        const nextUrl = newFile ? URL.createObjectURL(newFile) : null;
+        setCoverBlobUrl(nextUrl);
+        setFile(newFile);
+        setSelectedImageKey('cover');
+    };
+
+    const navigate = useNavigate();
+    function cancelHandler() { navigate('..'); }
+    const navigation = useNavigation();
+    const isSubmitting = navigation.state === 'submitting';
+
     const addFeature = () => {
-            if(feature.trim() ===''){
-                return
+        if (feature.trim() === '') return;
+        setFeatures([...features, feature]);
+        setIsChanged(true);
+        resetFeature();
+    };
+    const removeFeature = (index) => {
+        const cloned = [...features];
+        cloned.splice(index, 1);
+        setFeatures(cloned);
+        setIsChanged(true);
+    };
+
+    const addMetric = () => {
+        if (metric.trim() === '') return;
+        setMetrics([...metrics, { metric, value: metricValue, metricsUrl: metricUrl }]);
+        setIsChanged(true);
+        resetMetric();
+        resetMetricValue();
+        resetMetricUrl();
+    };
+    const removeMetric = (index) => {
+        const cloned = [...metrics];
+        cloned.splice(index, 1);
+        setMetrics(cloned);
+        setIsChanged(true);
+    };
+
+    const handleTagInputChange = async (e) => {
+        const val = e.target.value;
+        setTagInput(val);
+        if (val.trim().length > 1) {
+            getTagsReq(val.trim(), 10).then(res => setTagSuggestions(res.data?.data?.tags || [])).catch(() => {});
+        } else {
+            setTagSuggestions([]);
+        }
+    };
+
+    const handleFeatureInputChange = async (e) => {
+        const val = e.target.value;
+        featureChangeHandler(e);
+        if (val.trim().length > 1) {
+            getFeaturesReq(val.trim(), 10).then(res => setFeatureSuggestions(res.data?.data?.features || [])).catch(() => {});
+        } else {
+            setFeatureSuggestions([]);
+        }
+    };
+
+    const handleMetricInputChange = async (e) => {
+        const val = e.target.value;
+        metricChangeHandler(e);
+        if (val.trim().length > 1) {
+            getMetricsReq(val.trim(), 10).then(res => setMetricSuggestions(res.data?.data?.metrics || [])).catch(() => {});
+        } else {
+            setMetricSuggestions([]);
+        }
+    };
+        const addTag = () => {
+        const trimmed = tagInput.trim();
+        if (trimmed && !tags.includes(trimmed)) {
+            setTags([...tags, trimmed]);
+            setIsChanged(true);
+        }
+        setTagInput('');
+        setTagSuggestions([]);
+    };
+    const removeTag = (tagToRemove) => {
+        setTags(tags.filter(t => t !== tagToRemove));
+        setIsChanged(true);
+    };
+
+
+    const removeGalleryImage = (index) => {
+        const cloned = [...galleryImages];
+        cloned.splice(index, 1);
+        setGalleryImages(cloned);
+        if (selectedImageKey === `gallery-url-${index}`) {
+            setSelectedImageKey('cover');
+        } else if (selectedImageKey.startsWith('gallery-url-')) {
+            const selectedIdx = Number(selectedImageKey.replace('gallery-url-', ''));
+            if (selectedIdx > index) {
+                setSelectedImageKey(`gallery-url-${selectedIdx - 1}`);
             }
-            setfeatures([...features, feature]);
-            resetFeature()
-    }
-    //===================================
-    const handelFileChange = (e)=>{
-        setFile(e.target.files[0])
-        setIsChanged(true)
-    }
-    const handelpayPerClickChange = ()=>{
-        setPayPerClick(prev => !prev)
-        setIsChanged(true)
-    }
-    const handelSubscriptionChange = ()=>{
-        setSubscription(prev => !prev)
-        setIsChanged(true)
-    }
+        }
+        setIsChanged(true);
+    };
+    const handleGalleryFiles = (e) => {
+        const files = Array.from(e.target.files || []);
+        const previews = files.map(f => ({ file: f, preview: URL.createObjectURL(f), name: f.name }));
+        setUploadedGalleryFiles(prev => {
+            const startIdx = prev.length;
+            if (previews.length > 0) {
+                setSelectedImageKey(`gallery-file-${startIdx}`);
+            }
+            return [...prev, ...previews];
+        });
+        setIsChanged(true);
+        e.target.value = '';
+    };
+    const removeUploadedGalleryFile = (index) => {
+        const cloned = [...uploadedGalleryFiles];
+        URL.revokeObjectURL(cloned[index].preview);
+        cloned.splice(index, 1);
+        setUploadedGalleryFiles(cloned);
+        if (selectedImageKey === `gallery-file-${index}`) {
+            setSelectedImageKey('cover');
+        } else if (selectedImageKey.startsWith('gallery-file-')) {
+            const selectedIdx = Number(selectedImageKey.replace('gallery-file-', ''));
+            if (selectedIdx > index) {
+                setSelectedImageKey(`gallery-file-${selectedIdx - 1}`);
+            }
+        }
+        setIsChanged(true);
+    };
 
-    const handleImgClick=()=>{
-        imgRef.current.click();
-    }
+    const handleEditMainViewerImage = (e) => {
+        const newFile = e.target.files[0];
+        if (!newFile) return;
 
+        if (selectedImageKey === 'cover') {
+            setCoverFile(newFile);
+        } else if (selectedImageKey.startsWith('gallery-file-')) {
+            const fileIdx = Number(selectedImageKey.replace('gallery-file-', ''));
+            const newPreviews = [...uploadedGalleryFiles];
+            if (newPreviews[fileIdx]) {
+                URL.revokeObjectURL(newPreviews[fileIdx].preview);
+                newPreviews[fileIdx] = {
+                    file: newFile,
+                    preview: URL.createObjectURL(newFile),
+                    name: newFile.name,
+                };
+                setUploadedGalleryFiles(newPreviews);
+                setSelectedImageKey(`gallery-file-${fileIdx}`);
+            }
+        } else if (selectedImageKey.startsWith('gallery-url-')) {
+            const urlIdx = Number(selectedImageKey.replace('gallery-url-', ''));
+            const newGalleryImages = [...galleryImages];
+            newGalleryImages.splice(urlIdx, 1);
+            setGalleryImages(newGalleryImages);
 
+            const newPreview = {
+                file: newFile,
+                preview: URL.createObjectURL(newFile),
+                name: newFile.name,
+            };
+            setUploadedGalleryFiles(prev => {
+                const nextIdx = prev.length;
+                setSelectedImageKey(`gallery-file-${nextIdx}`);
+                return [...prev, newPreview];
+            });
+        }
+        setIsChanged(true);
+        e.target.value = '';
+    };
+
+    const handelFdaChange = () => { setFda(prev => !prev); setIsChanged(true); };
+    const handelIsActiveChange = () => { setIsActive(prev => !prev); setIsChanged(true); };
+    const handelIsPrimaryChange = () => { setIsPrimary(prev => !prev); setIsChanged(true); };
+    const handelStatusChange = (e) => { setStatus(e.target.value); setIsChanged(true); };
 
     const formCompleted = (thisModel &&
-    !isEditing.title && !isEditing.category && !isEditing.indications && !isEditing.modality
-    &&!isEditing.fdaUrl&&!isEditing.price && !isEditing.deliveryTime && !isEditing.bodyPart&&!isEditing.desc &&!isEditing.endpointUrl)
+        !isEditing.title && !isEditing.categoryId && !isEditing.useCases && !isEditing.modalityId
+        && !isEditing.fdaUrl && !isEditing.price && !isEditing.deliveryTime && !isEditing.bodyPartId && !isEditing.desc
+        && !isEditing.version && !isEditing.dockerImage && !isEditing.downloadLink && !isEditing.licenseKey && !isEditing.huggingFaceUrl);
 
-    let formIsValid = false
-    if(
-        ((thisModel&&!metricsUrlIsValid)||(!thisModel&&metricsUrlIsValid))&&
-        ((thisModel&&!imageUrlIsValid)||(!thisModel&&imageUrlIsValid))&&
-        ((thisModel&&!featuresIsValid)||(!thisModel&&featuresIsValid))&&
-        (payPerClick ||subscription)&&
-        ((thisModel && !isEditing.title) || (!thisModel && modelNameIsValid )|| (thisModel && isEditing.title && modelNameIsValid))&&
-        (( thisModel && !isEditing.category)  || (!thisModel && categoryIsValid )|| (thisModel && isEditing.category && categoryIsValid))&&
-        (( thisModel&& !isEditing.indications ) || (!thisModel && indicationsIsValid )|| (thisModel && isEditing.indications && indicationsIsValid))&&
-        ((thisModel&& !isEditing.modality) || (!thisModel && modalityIsValid )|| (thisModel && isEditing.modality && modalityIsValid))&&
-        (( thisModel&&!isEditing.fdaUrl) || (!thisModel && fdaUrlIsValid )|| (thisModel && isEditing.fdaUrl && fdaUrlIsValid))&&
-        ((thisModel&&!isEditing.endpointUrl )|| (!thisModel && endpointUrlIsValid )|| (thisModel && isEditing.endpointUrl && endpointUrlIsValid))&&
-        ((thisModel&&!isEditing.price ) || (!thisModel && priceIsValid )|| (thisModel && isEditing.price && priceIsValid))&&
-        (( thisModel&& !isEditing.deliveryTime ) || (!thisModel && deliveryTimeIsValid )|| (thisModel && isEditing.deliveryTime && deliveryTimeIsValid))&&
-        (( thisModel&& !isEditing.bodyPart) || (!thisModel && bodyPartIsValid )|| (thisModel && isEditing.bodyPart && bodyPartIsValid))&&
-        ((  thisModel&&!isEditing.desc ) || (!thisModel && descIsValid )|| (thisModel && isEditing.desc && descIsValid))&&
-        (!formCompleted ||(formCompleted&&isChanged))
-    ){
+    const markEdited = () => {
+        if (thisModel) setIsChanged(true);
+    };
+
+    const wrapChange = (handler) => (event) => {
+        handler(event);
+        markEdited();
+    };
+
+    const wrapSelectChange = (handler) => (value) => {
+        handler({ target: { value } });
+        markEdited();
+    };
+
+    const featuresRequired = !thisModel;
+    const featuresPass = featuresRequired ? featuresIsValid : true;
+
+    const editHasChanges = isChanged || !!file || uploadedGalleryFiles.length > 0;
+    const submitGate = thisModel ? editHasChanges : (!formCompleted || isChanged);
+
+    const isFieldValid = (fieldIsEditing, fieldIsValid) => {
+        return (thisModel && !fieldIsEditing) || (!thisModel && fieldIsValid) || (thisModel && fieldIsEditing && fieldIsValid);
+    };
+
+    let formIsValid = false;
+    if (
+        isFieldValid(isEditing.title, modelNameIsValid) &&
+        isFieldValid(isEditing.categoryId, categoryIsValid) &&
+        isFieldValid(isEditing.useCases, useCasesIsValid) &&
+        (!showMedicalFields || isFieldValid(isEditing.modalityId, modalityIsValid && modalityId !== '')) &&
+        isFieldValid(isEditing.fdaUrl, fdaUrlIsValid) &&
+        (!thisModel ? isFieldValid(isEditing.endpointUrl, endpointUrlIsValid) : true) &&
+        isFieldValid(isEditing.price, priceIsValid) &&
+        isFieldValid(isEditing.deliveryTime, deliveryTimeIsValid) &&
+        (!showMedicalFields || isFieldValid(isEditing.bodyPartId, bodyPartIsValid && bodyPartId !== '')) &&
+        isFieldValid(isEditing.desc, descIsValid) &&
+        isFieldValid(isEditing.version, versionIsValid) &&
+        (!thisModel ? (
+            isFieldValid(isEditing.dockerImage, dockerImageIsValid) &&
+            isFieldValid(isEditing.downloadLink, downloadLinkIsValid) &&
+            isFieldValid(isEditing.licenseKey, licenseKeyIsValid) &&
+            isFieldValid(isEditing.huggingFaceUrl, huggingFaceUrlIsValid) &&
+            hasAtLeastOneDeliveryAsset
+        ) : true) &&
+        featuresPass &&
+        submitGate
+    ) {
         formIsValid = true;
     }
 
-
-    //============================================================
-    const handelSubmit =(e)=>{
-        if(!file && !thisModel){
-            e.preventDefault();
-            setImgWarnning(true)
+    const handelSubmit = (e) => {
+        e.preventDefault();
+        setImgWarning(false);
+        setAssetWarning(false);
+        if (!file && !thisModel) {
+            setImgWarning(true);
             return;
         }
-        e.preventDefault();
-        const feature = features.length !==0?features.join(','):null
-        let modelData = {}
-        !thisModel? modelData={...modelData,...defaultData}:null
-        feature ? modelData.feature = feature : null
-        title ? modelData.title = title : null
-        category ? modelData.category = category : null
-        indications ? modelData.indications = indications : null
-        modality ? modelData.modality = modality : null
-        fdaUrl ? modelData.fdaUrl = fdaUrl : null
-        endpointUrl ? modelData.endpointUrl = endpointUrl : null
-        price ? modelData.price = price : null
-        deliveryTime ? modelData.deliveryTime = deliveryTime : null
-        metricsUrl ? modelData.metricsUrl = metricsUrl : null
-        desc ? modelData.desc = desc : null
-        payPerClick ? modelData.payPerClick = payPerClick : null
-        subscription ? modelData.subscription = subscription : null
-        imageUrl ? modelData.imageUrl = imageUrl : null
-        bodyPart ? modelData.bodyPart = bodyPart : null
-        onCreatingModelAction(file?file:null,Object.keys(modelData).length !==0?modelData:null)
-    }
+        if (!thisModel && !hasAtLeastOneDeliveryAsset) {
+            setAssetWarning(true);
+            return;
+        }
 
-    return(
+        let modelData = {};
+        if (!thisModel) modelData = { ...defaultData };
+
+        if (title) modelData.title = title;
+        if (categoryId) modelData.categoryId = parseInt(categoryId, 10);
+        if (useCases) modelData.indications = useCases;
+        if (modalityId) modelData.modalityId = parseInt(modalityId, 10);
+        if (fdaUrl) modelData.fdaUrl = fdaUrl;
+        if (price) modelData.price = parseInt(price, 10);
+        if (deliveryTime) modelData.deliveryTime = parseInt(deliveryTime, 10);
+        if (desc) modelData.desc = desc;
+        if (bodyPartId) modelData.bodyPartId = parseInt(bodyPartId, 10);
+        if (version) modelData.version = version;
+        if (!thisModel) {
+            modelData.version = '1.0.0';
+            if (endpointUrl) modelData.endpointUrl = endpointUrl;
+            if (dockerImage) modelData.dockerImage = dockerImage;
+            if (downloadLink) modelData.downloadLink = downloadLink;
+            if (licenseKey) modelData.licenseKey = licenseKey;
+            if (huggingFaceUrl) modelData.huggingFaceUrl = huggingFaceUrl;
+        }
+
+        modelData.fda = fda;
+        modelData.isActive = isActive;
+        modelData.isPrimary = isPrimary;
+        modelData.status = status;
+
+        if (thisModel && selectedVersionId) {
+            modelData.versionId = selectedVersionId;
+        }
+
+        if (features.length > 0) modelData.features = features;
+        if (metrics.length > 0) modelData.metrics = metrics;
+        if (tags.length > 0) modelData.tags = tags;
+
+        let finalGallery = [];
+        if (existingCover && !file) finalGallery.push(existingCover);
+        if (galleryImages.length > 0) finalGallery = [...finalGallery, ...galleryImages];
+        if (finalGallery.length > 0) modelData.galleryImages = finalGallery;
+
+        const formdata = new FormData();
+        if (file) formdata.append('cover', file);
+        if (Object.keys(modelData).length > 0) {
+            formdata.append('data', JSON.stringify(modelData));
+        }
+        if (uploadedGalleryFiles.length > 0) {
+            uploadedGalleryFiles.forEach((item) => {
+                formdata.append('gallery', item.file, item.name);
+            });
+        }
+        onCreatingModelAction(file ? file : null, Object.keys(modelData).length !== 0 ? modelData : null, uploadedGalleryFiles);
+    };
+
+    const selectedVersion = getSelectedVersion();
+    const getAsset = (type) => getAssetFromVersion(selectedVersion, type);
+
+    const renderInputRow = (label, name, value, hookValue, hookChange, hookBlur, hookInvalid, isEditingField, setEditingField, type = 'text', placeholder = '', isSelect = false, options = []) => {
+        const classesName = getClasses(hookInvalid);
+        const onChange = wrapChange(hookChange);
+        const onSelectChange = wrapSelectChange(hookChange);
+        return (
+            <Row xs={0} md lg className={`${classesName} d-flex flex-column align-items-left w-100`} >
+                <label htmlFor={name}>{label}</label>
+                {(!thisModel?.[name] || (thisModel?.[name] && isEditing[setEditingField])) && <>
+                    {isSelect ? (
+                        <CustomSelect
+                            options={options.map(item => ({ label: item.name, value: String(item.id ?? item.name) }))}
+                            value={hookValue !== '' ? hookValue : (thisModel?.[name] || '')}
+                            onChange={onSelectChange}
+                            placeholder={`--Please Choose ${label}--`}
+                            isWeb={true}
+                        />
+                    ) : (
+                        type === 'textarea' ?
+                        <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} /> :
+                        <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                    )}
+                    {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
+                </>}
+                {(thisModel?.[name] && !isEditing[setEditingField]) &&
+                    <p>{name === 'categoryId'
+                        ? (thisModel?.categoryRel?.name || thisModel?.[name])
+                        : thisModel?.[name]} <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                }
+            </Row>
+        );
+    };
+
+    const renderVersionInputRow = (label, name, thisValue, hookValue, hookChange, hookBlur, hookInvalid, isEditingField, setEditingField, type = 'text', placeholder = '', isSelect = false, options = []) => {
+        const classesName = getClasses(hookInvalid);
+        const onChange = wrapChange(hookChange);
+        const onSelectChange = wrapSelectChange(hookChange);
+        return (
+            <Row xs={0} md lg className={`${classesName} d-flex flex-column align-items-left w-100`} >
+                <label htmlFor={name}>{label}</label>
+                {(!thisValue || (thisValue && isEditing[setEditingField])) && <>
+                    {isSelect ? (
+                        <CustomSelect
+                            options={options.map(item => ({ label: item.name, value: String(item.id ?? item.name) }))}
+                            value={hookValue !== '' ? hookValue : (thisValue || '')}
+                            onChange={onSelectChange}
+                            placeholder={`--Please Choose ${label}--`}
+                            isWeb={true}
+                        />
+                    ) : type === 'textarea' ? (
+                        <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} />
+                    ) : (
+                        <input type={type} id={name} name={name} placeholder={placeholder} required={type !== 'url' && !placeholder.includes('URL')} onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                    )}
+                    {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
+                </>}
+                {(thisValue && !isEditing[setEditingField]) &&
+                    <p>{thisValue} <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                }
+            </Row>
+        );
+    };
+
+    return (
         <Container>
             <section className={`${classes.secpro} w-100`}>
-            <h2 className={classes["title"]}>{formTitle}</h2>
-            <Container  className={`g-5 p-0  gap-5  justify-content-center`}>
-                <Col  className={`${classes["contact-col"]} flex-fill`}>
-                    <Form method='post'>
-                        <Row className={`justify-content-md-center d-flex flex-column justify-content-center  p-lg-4 align-items-center`}>
-                            <Row className={classes["img_sec"]}>
-                                <Col xs={0} md lg className={`${classes.img_cover} d-flex flex-column align-items-left w-100`} >
-                                    <input name='cover'type="file" onChange={handelFileChange} ref={imgRef} style={{display : 'none'}}/>
-                                    <span>
-                                        <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={handleImgClick} className={classes["img_ico"]} />
-                                    </span>
-                                    {file&&<img src={URL.createObjectURL(file)} alt="Model Cover Image" />}
-                                    {(!file && thisModel?.cover) &&<img src={FILES_BASE_API_URL+thisModel.cover} crossOrigin="anonymous"  alt="Model Cover Image" />}
-                                    {(!file && !thisModel?.cover) && <img src={imgHolder} alt="Model Cover Image" />}
-                                </Col>
-                                <Col> 
-                                    <Row xs={0} md lg className={`${modelNameClasses} d-flex flex-column align-items-left w-100`} >
-                                        <label htmlFor='modelName'>Model Name</label>
-                                        {(!thisModel?.title || (thisModel?.title &&isEditing.title))&& <>
-                                            <input type='text' id='modelName' name="title" placeholder="Your Model Name" required
-                                            onChange={modelNameChangeHandler} onBlur={modelNameBlurHandler} defaultValue={thisModel? thisModel?.title : ''}/>
-                                            {modelNameIsInvalid && <p className={classes['error-text']}>Your Model Name must not be empty</p>}
-                                        </>}
-                                        {(thisModel?.title&&!isEditing.title)&&
-                                            <p>{thisModel?.title} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,title:true}})}}/></p>
-                                        }
-                                    </Row>                         
-                                    <Row xs={0} md lg className={`${categoryClasses} d-flex flex-column align-items-left w-100`} >
-                                        <label htmlFor="category" >Model Category</label>
-                                        {(!thisModel?.category || (thisModel?.category &&isEditing.category))&& <>
-                                            <select  defaultValue={thisModel? thisModel?.category : "--Please Choose An Option--"}  id='category' name="category" required
-                                        onChange={categoryChangeHandler} onBlur={categoryBlurHandler}  className={categoryIsValid?classes.done:null}>
-                                            {thisModel&&<option value={thisModel?.category}  >{thisModel?.category }</option>}
-                                            {range.map(item => {return <option value={item.name} key={item.code} >{item.name}</option>})}
-                                        </select>
-                                        {categoryIsInvalid && <p className={classes['error-text']}>Model Category must not be empty</p>}
-                                        </>}
-                                        {(thisModel?.category&&!isEditing.category)&&
-                                            <p>{thisModel?.category} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,category:true}})}}/></p>
-                                        }
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <Row >
-                                <Col xs={0} md lg className={`${indicationsClasses} d-flex flex-column align-items-left w-100`} >
-                                    <label htmlFor='indications'>Indications</label>
-                                    {(!thisModel?.indications || (thisModel?.indications &&isEditing.indications))&& <>
-                                        <input type='text' id='indications' name="indications" placeholder="Your Model Indications" required
-                                        onChange={indicationsChangeHandler} onBlur={indicationsBlurHandler} defaultValue={thisModel? thisModel?.indications : ''}/>
-                                        {indicationsIsInvalid &&  <p className={classes['error-text']}>Model Indications must not be empty</p>}
-                                    </>}
-                                    {(thisModel?.indications&&!isEditing.indications)&&
-                                        <p>{thisModel?.indications} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,indications:true}})}}/></p>
-                                    }
-                                </Col>
-                                <Col xs={0} md lg className={`${modalityClasses} d-flex flex-column align-items-left w-100`} >
-                                    <label htmlFor='modality'>Model Modality</label>
-                                    {(!thisModel?.modality || (thisModel?.modality &&isEditing.modality))&& <>
-                                        <input type='text' id='modality' name="modality" placeholder="Model Modality" required
-                                        onChange={modalityChangeHandler} onBlur={modalityBlurHandler} defaultValue={thisModel? thisModel?.modality : ''}/>
-                                    {modalityIsInvalid && <p className={classes['error-text']}>Model Modality must not be empty</p>}
-                                    </>}
-                                    {(thisModel?.modality&&!isEditing.modality)&&
-                                        <p>{thisModel?.modality} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,modality:true}})}}/></p>
-                                    }
-                                </Col>
-                            </Row>
-                            <Row >
-                                <Col xs={0} md lg className={`${fdaUrlClasses} d-flex flex-column align-items-left w-100`} >
-                                    <label htmlFor='fdaUrl'>FDA URL</label>
-                                    {(!thisModel?.fdaUrl || (thisModel?.fdaUrl &&isEditing.fdaUrl))&& <>
-                                        <input type='text' id='fdaUrl' name="fdaUrl" placeholder="FDA URL" required
-                                        onChange={fdaUrlChangeHandler} onBlur={fdaUrlBlurHandler} defaultValue={thisModel? thisModel?.fdaUrl : ''}/>
-                                        {fdaUrlIsInvalid && <p className={classes['error-text']}>Enter a valid URL</p>}
-                                    </>}
-                                    {(thisModel?.fdaUrl&&!isEditing.fdaUrl)&&
-                                        <p>{thisModel?.fdaUrl} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,fdaUrl:true}})}}/></p>
-                                    }
-                                </Col>
-                                <Col xs={0} md lg className={`${endpointUrlClasses} d-flex flex-column align-items-left w-100`} >
-                                <label htmlFor='endpointUrl'>Endpoint URL</label>
-                                    {(!thisModel?.endpointUrl || (thisModel?.endpointUrl &&isEditing.endpointUrl))&& <>
-                                        <input type='text' id='endpointUrl' name="endpointUrl" placeholder="Endpoint URL" 
-                                    onChange={endpointUrlChangeHandler} onBlur={endpointUrlBlurHandler} defaultValue={thisModel? thisModel?.endpointUrl : ''}/>
-                                    {endpointUrlIsInvalid&& <p className={classes['error-text']}>Enter a valid URL</p>}
-                                    </>}
-                                    {(thisModel?.endpointUrl&&!isEditing.endpointUrl)&&
-                                        <p>{thisModel?.endpointUrl} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,endpointUrl:true}})}}/></p>
-                                    }
-                                </Col>
-                            </Row>
-                            <Row >
-                                <Col xs={0} md lg className={`${priceClasses} d-flex flex-column align-items-left w-100`} >
-                                <label htmlFor='price'>Model Price</label>
-                                    {(!thisModel?.price || (thisModel?.price &&isEditing.price))&& <>
-                                        <input type='number' id='price' name="price" placeholder="Model Price (USD)" required step="0.01" min="10"
-                                    onChange={priceChangeHandler} onBlur={priceBlurHandler} defaultValue={thisModel? thisModel?.price : ''}/>
-                                    {priceIsInvalid && <p className={classes['error-text']}>Enter a valid Price </p>}
-                                    </>}
-                                    {(thisModel?.price&&!isEditing.price)&&
-                                        <p>{thisModel?.price} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,price:true}})}}/></p>
-                                    }
-                                </Col>
-                                <Col xs={0} md lg className={`${deliveryTimeClasses} d-flex flex-column align-items-left w-100`} >
-                                    <label htmlFor='deliveryTime'>Delivery Time</label>
-                                    {(!thisModel?.deliveryTime || (thisModel?.deliveryTime &&isEditing.deliveryTime))&& <>
-                                        <input type='number' id='deliveryTime' name="deliveryTime" placeholder="How long it will take in days" min="1" max="30" step="1"
-                                        onChange={deliveryTimeChangeHandler} onBlur={deliveryTimeBlurHandler} defaultValue={thisModel? thisModel?.deliveryTime : ''}/>
-                                    {deliveryTimeIsInvalid && <p className={classes['error-text']}>Enter a valid number of days</p>}
-                                    </>}
-                                    {(thisModel?.deliveryTime&&!isEditing.deliveryTime)&&
-                                        <p>{thisModel?.deliveryTime} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,deliveryTime:true}})}}/></p>
-                                    }
-                                </Col>
-                                <Col xs={0} md lg className={`d-flex flex-column align-items-left w-100`} >
+                <h2 className={classes["title"]}>{formTitle}</h2>
+                <Container className={`g-5 p-0 gap-5 justify-content-center`}>
+                    <Col className={`${classes["contact-col"]} flex-fill`}>
+                        <RouterForm method='post'>
+                            <Row className={`justify-content-md-center d-flex flex-column justify-content-center p-lg-4 align-items-center`}>
+
+                                {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
+                                <Row className="w-100 mb-5" style={{ gap: '20px' }}>
+                                    {/* LEFT: GALLERY UX */}
+                                    <Col xs={12} lg={5} className="d-flex flex-column gap-3">
+                                        <h4 style={{ textAlign: 'left', color: 'var(--main-blue)' }}>Model Gallery</h4>
+                                        <div className={`${classes.img_cover} d-flex flex-column align-items-center w-100`} style={{ minHeight: '300px', background: '#f5f5f5', borderRadius: '15px', position: 'relative', overflow: 'hidden', padding: '0' }} >
+                                            <input name='cover' type="file" onChange={handleEditMainViewerImage} ref={imgRef} style={{ display: 'none' }} accept="image/*" />
+                                            <span style={{ position: 'absolute', top: 10, right: 10, background: '#fff', padding: '5px', borderRadius: '50%', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
+                                                <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="Upload Main Cover" onClick={() => imgRef.current.click()} />
+                                            </span>
+                                            <img src={selectedGalleryImage} alt="Model Main Viewer" style={{ width: '100%', height: '400px', objectFit: 'contain' }} />
+                                        </div>
+
+                                        <div className="w-100" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
+                                            <div onClick={() => setSelectedImageKey('cover')}
+                                                 style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                <img src={getCoverPreviewSrc()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="cover thumb" />
+                                            </div>
+                                            {galleryImages.map((img, idx) => (
+                                                <div key={`gal-url-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-url-${idx}` ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                    <img src={img.startsWith('http') ? img : FILES_BASE_API_URL + img} onClick={() => setSelectedImageKey(`gallery-url-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
+                                                    <div onClick={(e) => { e.stopPropagation(); removeGalleryImage(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
+                                                </div>
+                                            ))}
+                                            {uploadedGalleryFiles.map((item, idx) => (
+                                                <div key={`gal-file-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-file-${idx}` ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                    <img src={item.preview} onClick={() => setSelectedImageKey(`gallery-file-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
+                                                    <div onClick={(e) => { e.stopPropagation(); removeUploadedGalleryFile(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
+                                                </div>
+                                            ))}
+                                            <div onClick={() => galleryInputRef.current?.click()} style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: '2px dashed #ccc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>
+                                                <AddPhotoAlternateIcon />
+                                            </div>
+                                        </div>
+
+                                        <div className="w-100 d-flex gap-2">
+                                            <input ref={galleryInputRef} type="file" multiple accept="image/*" style={{ display: 'none' }} onChange={handleGalleryFiles} />
+
+
+                                        </div>
+                                    </Col>
+
+                                    {/* RIGHT: CORE DETAILS */}
+                                    <Col xs={12} lg={6} className="d-flex flex-column gap-3">
+                                        <h4 style={{ textAlign: 'left', color: 'var(--main-blue)' }}>Core Identity</h4>
+                                        <Row>
+                                            <Col xs={12}>
+                                                {renderInputRow('Model Name', 'title', title, title, modelNameChangeHandler, modelNameBlurHandler, modelNameIsInvalid, 'title', 'title')}
+                                            </Col>
+                                            <Col xs={12}>
+                                                {renderInputRow('Model Category (subcategory)', 'categoryId', categoryId, categoryId, categoryChangeHandler, categoryBlurHandler, categoryIsInvalid, 'categoryId', 'categoryId', 'text', '', true, dbCategories)}
+                                            </Col>
+                                            <Col xs={12}>
+                                                {renderVersionInputRow('Model Price (USD)', 'price', selectedVersion?.price, price, priceChangeHandler, priceBlurHandler, priceIsInvalid, 'price', 'price', 'number', '10.00')}
+                                            </Col>
+                                            <Col xs={12}>
+                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                                    <label htmlFor='status'>Status</label>
+                                                    <div style={{ width: '100%', marginTop: '5px' }}>
+                                                    <CustomSelect
+                                                        options={[{label: 'DRAFT', value: 'DRAFT'}, {label: 'PUBLISHED', value: 'PUBLISHED'}, {label: 'SUSPENDED', value: 'SUSPENDED'}]}
+                                                        value={status}
+                                                        onChange={(val) => handelStatusChange({ target: { value: val } })}
+                                                        placeholder="Select Status"
+                                                        isWeb={true}
+                                                    />
+                                                    </div>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+
+                                {/* SECTION 2: PUBLIC SPECIFICATIONS / VERSIONS */}
+                                <Row className="w-100 mb-5 d-flex flex-column gap-3">
+                                    <h4 style={{ textAlign: 'left', color: 'var(--main-blue)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+                                        {thisModel ? 'Version specifications' : 'Initial version (v1.0.0)'}
+                                        <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                                            {thisModel
+                                                ? 'Select a version to edit its public specs. Use Add new version for v2+.'
+                                                : 'Public specs and delivery assets for your first version. After save you can add more versions on Edit.'}
+                                        </span>
+                                    </h4>
+                                    {thisModel && modelVersions.length >= 1 && (
+                                        <Row className="align-items-end">
+                                            <Col xs={12} md={6}>
+                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
+                                                    <label htmlFor="versionSelect">Editing Version</label>
+                                                    <CustomSelect
+                                                        options={modelVersions.map((v) => ({
+                                                            label: `${v.version}${v.isPrimary ? ' (primary)' : ''}${v.isActive === false ? ' [inactive]' : ''}`,
+                                                            value: String(v.id),
+                                                        }))}
+                                                        value={selectedVersionId != null ? String(selectedVersionId) : ''}
+                                                        onChange={handleVersionSelect}
+                                                        placeholder="Select version to edit"
+                                                        isWeb={true}
+                                                    />
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6} className="mb-3">
+                                                <BsButton type="button" variant="outline-primary" onClick={() => {
+                                                    setNewVersionCode('');
+                                                    setNewVersionPrice(price || String(selectedVersion?.price || ''));
+                                                    setAddVersionError('');
+                                                    setShowAddVersionModal(true);
+                                                }}>
+                                                    Add new version
+                                                </BsButton>
+                                            </Col>
+                                        </Row>
+                                    )}
                                     <Row>
-                                        <Col>
-                                            <ToggleSwitch type='checkbox' name='payPerClick' value={payPerClick} onChange={handelpayPerClickChange}
-                                            title='Pay Per Click' checked={payPerClick}  id={'payPerClick'}/>
+                                        <Col xs={12} md={6}>
+                                            {!thisModel ? (
+                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
+                                                    <label htmlFor="version">Version</label>
+                                                    <p style={{ margin: 0, fontWeight: 600 }}>1.0.0</p>
+                                                    <span style={{ fontSize: '13px', color: '#666' }}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
+                                                </Row>
+                                            ) : (
+                                                renderVersionInputRow('Version', 'version', selectedVersion?.version, version, versionChangeHandler, versionBlurHandler, versionIsInvalid, 'version', 'version', 'text', '1.0.0')
+                                            )}
                                         </Col>
-                                        <Col>
-                                            <ToggleSwitch type='checkbox' name='subscription' value={subscription} onChange={handelSubscriptionChange}
-                                            title='Subscription' checked={subscription}  id={'subscription'}/>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('Delivery Time (Days)', 'deliveryTime', selectedVersion?.deliveryTime, deliveryTime, deliveryTimeChangeHandler, deliveryTimeBlurHandler, deliveryTimeIsInvalid, 'deliveryTime', 'deliveryTime', 'number', '3')}
                                         </Col>
-                                        {(!payPerClick &&!subscription) && <p className={classes['error-text']}>at least one method should be picked up</p>}
+                                    </Row>
+                                    {showMedicalFields && (
+                                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>
+                                            Technical specs — optional fields for medical AI listings (modality, anatomy, regulatory).
+                                        </p>
+                                    )}
+                                    <Row>
+                                        {showMedicalFields && (
+                                            <>
+                                                <Col xs={12} md={6}>
+                                                    {renderVersionInputRow('Modality', 'modalityId', selectedVersion?.modalityRel?.name, modalityId, modalityChangeHandler, modalityBlurHandler, modalityIsInvalid, 'modalityId', 'modalityId', 'text', '', true, dbModalities)}
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    {renderVersionInputRow('Body Part', 'bodyPartId', selectedVersion?.bodyPartRel?.name, bodyPartId, bodyPartChangeHandler, bodyPartBlurHandler, bodyPartIsInvalid, 'bodyPartId', 'bodyPartId', 'text', '', true, dbBodyParts)}
+                                                </Col>
+                                            </>
+                                        )}
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, useCasesChangeHandler, useCasesBlurHandler, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            {renderInputRow('Model Description', 'desc', desc, desc, descChangeHandler, descBlurHandler, descIsInvalid, 'desc', 'desc', 'textarea', 'Description...')}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        {showMedicalFields && (
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('FDA URL', 'fdaUrl', selectedVersion?.fdaUrl, fdaUrl, fdaUrlChangeHandler, fdaUrlBlurHandler, fdaUrlIsInvalid, 'fdaUrl', 'fdaUrl', 'url', 'https://fda.gov/...')}
+                                            </Col>
+                                        )}
+                                        <Col xs={12} md={6} className="d-flex align-items-center gap-4">
+                                            {showMedicalFields && <ToggleSwitch type='checkbox' name='fda' value={fda} onChange={handelFdaChange} title='FDA Compliant' checked={fda} id='fda' />}
+                                            <ToggleSwitch type='checkbox' name='isActive' value={isActive} onChange={handelIsActiveChange} title='Is Active Version' checked={isActive} id='isActive' />
+                                            <ToggleSwitch type='checkbox' name='isPrimary' value={isPrimary} onChange={handelIsPrimaryChange} title='Is Primary Version' checked={isPrimary} id='isPrimary' />
+                                        </Col>
+                                    </Row>
+                                </Row>
+
+                                {/* SECTION 3: DELIVERY ASSETS */}
+                                {thisModel && selectedVersion && (
+                                    <VersionAssetsPanel
+                                        version={selectedVersion}
+                                        assetsLocked={selectedVersion?.hasPaidOrders === true}
+                                        onAssetsChanged={() => onModelReload?.(selectedVersionId)}
+                                    />
+                                )}
+                                {!thisModel && (
+                                <Row className="w-100 mb-5 d-flex flex-column gap-3">
+                                    <h4 style={{ textAlign: 'left', color: 'red', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+                                        Delivery assets (v1.0.0)
+                                        <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                                            At least one field is required (API endpoint, Docker image, download link, license key, or Hugging Face URL).
+                                        </span>
+                                    </h4>
+                                    {assetWarning && (
+                                        <p className={classes['error-text']}>Add at least one delivery asset before submitting.</p>
+                                    )}
+                                    <Row>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('Endpoint URL', 'endpointUrl', getAsset('API_ENDPOINT'), endpointUrl, endpointUrlChangeHandler, endpointUrlBlurHandler, endpointUrlIsInvalid, 'endpointUrl', 'endpointUrl', 'url', 'https://api.example.com')}
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('Docker Image', 'dockerImage', getAsset('DOCKER_IMAGE'), dockerImage, dockerImageChangeHandler, dockerImageBlurHandler, dockerImageIsInvalid, 'dockerImage', 'dockerImage', 'text', 'docker.io/your/image:tag')}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('Download Link', 'downloadLink', getAsset('DOWNLOAD_LINK'), downloadLink, downloadLinkChangeHandler, downloadLinkBlurHandler, downloadLinkIsInvalid, 'downloadLink', 'downloadLink', 'url', 'https://...')}
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('License Key', 'licenseKey', getAsset('LICENSE_KEY'), licenseKey, licenseKeyChangeHandler, licenseKeyBlurHandler, licenseKeyIsInvalid, 'licenseKey', 'licenseKey')}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12} md={6}>
+                                            {renderVersionInputRow('HuggingFace URL', 'huggingFaceUrl', getAsset('HUGGINGFACE_URL'), huggingFaceUrl, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler, huggingFaceUrlIsInvalid, 'huggingFaceUrl', 'huggingFaceUrl', 'url', 'https://huggingface.co/...')}
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                )}
+
+                                {/* SECTION 4: DYNAMIC METADATA */}
+                                <Col className="mt-4 w-100">
+                                    <h4 style={{ textAlign: 'left', color: 'var(--main-blue)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
+                                    {/* TAGS */}
+                                    <Row>
+                                        <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                            <label>Model Tags</label>
+                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`} style={{ position: 'relative' }}>
+                                                <Col>
+                                                    <input type='text' placeholder="Add a Tag" value={tagInput} onChange={handleTagInputChange}
+                                                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }} />
+                                                    {tagSuggestions.length > 0 && (
+                                                        <ul style={{ position: 'absolute', top: '100%', left: '15px', zIndex: 10, background: '#fff', width: 'calc(100% - 30px)', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                            {tagSuggestions.map((s, idx) => (
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
+                                                                    onMouseDown={() => { setTagInput(s); setTagSuggestions([]); }}
+                                                                    onMouseEnter={(e) => e.target.style.background = '#f5f5f5'}
+                                                                    onMouseLeave={(e) => e.target.style.background = '#fff'}
+                                                                >
+                                                                    {s}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </Col>
+                                                <Col>
+                                                    <button type="button" onClick={addTag} className={classes['feature-btn']}>Add Tag</button>
+                                                </Col>
+                                            </Row>
+                                            <Row className={classes.f_list}>
+                                                {tags.map((tag, index) => (
+                                                    <Col key={`tag-${index}`} className={classes.f_item}>
+                                                        <span className={classes.f_item_title}>{tag}</span>
+                                                        <span className={classes.f_item_icon} onClick={() => removeTag(tag)}> X </span>
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Col>
+                                    </Row>
+
+                                    {/* FEATURES */}
+                                    <Row>
+                                        <Col xs={0} md lg className={`${getClasses(featuresIsInValid)} d-flex flex-column align-items-left w-100`} >
+                                            <label htmlFor='feature'>Model Features</label>
+                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
+                                                <Col>
+                                                    <input type='text' id='feature' name="feature" placeholder="Enter Feature Name"
+                                                        onChange={handleFeatureInputChange} onBlur={() => setIsTouched({ ...isTouched, features: true })} value={feature} />
+                                                    {featureSuggestions.length > 0 && (
+                                                        <ul style={{ position: 'absolute', zIndex: 10, background: '#fff', width: '100%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                            {featureSuggestions.map((s, idx) => (
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer' }} onMouseDown={() => { featureChangeHandler({ target: { value: s } }); setFeatureSuggestions([]); }}>{s}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </Col>
+                                                <Col>
+                                                    <button type="button" onClick={addFeature} className={classes['feature-btn']}>Add Feature</button>
+                                                </Col>
+                                            </Row>
+                                            {featuresIsInValid && featuresRequired && <p className={classes['error-text']}>Set at least one Feature</p>}
+                                            <Row className={classes.f_list}>
+                                                {features.map((feat, index) => (
+                                                    <Col key={`feat-${index}`} className={classes.f_item}>
+                                                        <span className={classes.f_item_title}>{feat}</span>
+                                                        <span className={classes.f_item_icon} onClick={() => removeFeature(index)}> X </span>
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Col>
+                                    </Row>
+
+                                    {/* METRICS */}
+                                    <Row>
+                                        <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                            <label>Model Metrics</label>
+                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
+                                                <Col xs={12} md={4}>
+                                                    <input type='text' placeholder="Metric Name (e.g. Accuracy)" onChange={handleMetricInputChange} value={metric} />
+                                                    {metricSuggestions.length > 0 && (
+                                                        <ul style={{ position: 'absolute', zIndex: 10, background: '#fff', width: '100%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                            {metricSuggestions.map((s, idx) => (
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer' }} onMouseDown={() => { metricChangeHandler({ target: { value: s } }); setMetricSuggestions([]); }}>{s}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </Col>
+                                                <Col xs={12} md={3}>
+                                                    <input type='text' placeholder="Value (e.g. 98%)" onChange={metricValueChangeHandler} value={metricValue} />
+                                                </Col>
+                                                <Col xs={12} md={3}>
+                                                    <input type='text' placeholder="URL (Optional)" onChange={metricUrlChangeHandler} value={metricUrl} />
+                                                </Col>
+                                                <Col xs={12} md={2}>
+                                                    <button type="button" onClick={addMetric} className={classes['feature-btn']} style={{ width: '100%', padding: '10px' }}>Add</button>
+                                                </Col>
+                                            </Row>
+                                            <Row className={classes.f_list} style={{ flexDirection: 'column', gap: '10px' }}>
+                                                {metrics.map((m, index) => (
+                                                    <div key={`metric-${index}`} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--main-3-blue)', padding: '10px 15px', borderRadius: '8px', color: 'var(--main-2-blue)' }}>
+                                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                                            <strong>{m.metric}:</strong> <span>{m.value}</span>
+                                                            {m.metricsUrl && <a href={m.metricsUrl} target="_blank" rel="noreferrer">Link</a>}
+                                                        </div>
+                                                        <span onClick={() => removeMetric(index)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>&times;</span>
+                                                    </div>
+                                                ))}
+                                            </Row>
+                                        </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            {!thisModel&&  <>                    
-                                <Row >
-                                    <Col xs={0} md lg className={`${metricsUrlClasses} d-flex flex-column align-items-left w-100`} >
-                                        <label htmlFor='metricsUrl'>Metrics URL</label>
-                                        <input type='text' id='metricsUrl' name="metricsUrl" placeholder="Metrics URL" 
-                                        onChange={metricsUrlChangeHandler} onBlur={metricsUrlBlurHandler} />
-                                        {metricsUrlIsInvalid && <p className={classes['error-text']}>Enter a valid URL</p>}
+
+                                <Row className="w-100 mt-4">
+                                    {imgWarning && <p className={classes['error-text']} style={{ textAlign: 'center' }}>Please Select a cover Image</p>}
+                                    <Col xs={6} className={classes["form-actions"]}>
+                                        <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className={classes["feature-btn"]} type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
                                     </Col>
-                                    <Col xs={0} md lg className={`${imageUrlClasses} d-flex flex-column align-items-left w-100`} >
-                                        <label htmlFor='imageUrl'>Image URL</label>
-                                        <input type='text' id='imageUrl' name="imageUrl" placeholder="Image URL" 
-                                        onChange={imageUrlChangeHandler} onBlur={imageUrlBlurHandler} />
-                                        {imageUrlIsInvalid &&  <p className={classes['error-text']}>Enter a valid URL</p>}
+                                    <Col xs={6} className={classes["form-actions"]}>
+                                        <button type="button" onClick={cancelHandler} className={classes["cancel-btn"]}>Cancel</button>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col xs={0} md lg className={`${featureClasses} d-flex flex-column align-items-left w-100`} >
-                                        <label htmlFor='feature'>Model Feature</label>
-                                        <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                            <Col>
-                                                <input type='text' id='feature' name="feature" placeholder="Enter at least one Feature Name" required
-                                                onChange={featureChangeHandler} onBlur={()=>{setIsTouched(true)}} value={feature} />
-                                            </Col>
-                                            <Col>
-                                                <button type="button" onClick={addFeature} className={classes['feature-btn']} disabled={features.length === 6} >Add Feature</button>
-                                            </Col>
-                                        </Row>
-                                        {featuresIsInValid && <p className={classes['error-text']}>set at least one Feature</p>}
-                                        <Row className={`${classes.f_list}`}>
-                                            {features.map((feature, index) => {
-                                                return (
-                                                <Col key={feature + index.toString()} className={`${classes.f_item}`} >
-                                                    <span className={`${classes.f_item_title}`}>{feature}</span>
-                                                    <span className={`${classes.f_item_icon}`}  onClick={() => removeFeature(index)} > X </span>
-                                                </Col>
-                                                );
-                                            })}
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </>}
-                            <Row  >
-                                <Col xs={0} md lg className={`${bodyPartClasses} d-flex flex-column align-items-left w-100`} >
-                                    <label htmlFor='bodyPart'>Body part</label>
-                                    {(!thisModel?.bodyPart || (thisModel?.bodyPart &&isEditing.bodyPart))&& <>
-                                        <textarea id='bodyPart' name="bodyPart" cols="30" rows="7" placeholder="Body part" required
-                                    onChange={bodyPartChangeHandler} onBlur={bodyPartBlurHandler} defaultValue={thisModel? thisModel?.bodyPart : ''}/>
-                                    {bodyPartIsInvalid &&<p className={classes['error-text']}>Body Part Must Not Be Empty</p>}
-                                    </>}
-                                    {(thisModel?.bodyPart&&!isEditing.bodyPart)&&
-                                        <p>{thisModel?.bodyPart} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,bodyPart:true}})}}/></p>
-                                    }
-                                </Col>
-                                <Col xs={0} md lg className={`${descClasses} d-flex flex-column align-items-left w-100`} >
-                                <label htmlFor='desc'>Model Description</label>
-                                    {(!thisModel?.desc || (thisModel?.desc &&isEditing.desc))&& <>
-                                        <textarea id='desc' name="desc" cols="30" rows="7" placeholder="Model Description" required
-                                    onChange={descChangeHandler} onBlur={descBlurHandler} defaultValue={thisModel? thisModel?.desc : ''}/>
-                                    {descIsInvalid && <p className={classes['error-text']}>Model Description Must Not Be Empty</p>}
-                                    </>}
-                                    {(thisModel?.desc&&!isEditing.desc)&&
-                                        <p>{thisModel?.desc} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,desc:true}})}}/></p>
-                                    }
-                                </Col>
                             </Row>
-                            <Row >
-                                {imgWarnning && <p className={classes['error-text']}>Please Select a cover Image</p>}
-                                <Col xs={0} md lg  className={`${classes["form-actions"]} `}>
-                                    <button   onClick={handelSubmit} disabled={!formIsValid||isSubmitting}  className={`${classes["feature-btn"]} `} type="submit">{isSubmitting?'submitting...':(thisModel?  "Update" : "Submit")}</button>
-                                </Col>
-                                <Col xs={0} md lg  className={`${classes["form-actions"]} `}>
-                                    <button type="button" onClick={cancelHandler} className={`${classes["cancel-btn"]} `}>Cancel</button>
-                                </Col>
-                            </Row>
-                        </Row>
-                    </Form>
-                </Col>
-            </Container>
+                        </RouterForm>
+                    </Col>
+                </Container>
             </section>
+            {showAddVersionModal && (
+                <Modal onClose={closeAddVersionModal}>
+                    <div className="p-4">
+                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                            <h5 className="mb-0">Add New Version</h5>
+                            <button type="button" className="btn-close" aria-label="Close" onClick={closeAddVersionModal} />
+                        </div>
+                        <Form onSubmit={handleAddVersionSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Version (semver)</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="1.1.0"
+                                    value={newVersionCode}
+                                    onChange={(e) => setNewVersionCode(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Price (USD)</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    min={10}
+                                    step={1}
+                                    value={newVersionPrice}
+                                    onChange={(e) => setNewVersionPrice(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            {addVersionError && <p className="text-danger small">{addVersionError}</p>}
+                            <div className="d-flex justify-content-end gap-2 pt-3 border-top">
+                                <BsButton variant="secondary" type="button" onClick={closeAddVersionModal}>Close</BsButton>
+                                <BsButton type="submit" variant="primary" disabled={addVersionLoading}>
+                                    {addVersionLoading ? 'Creating…' : 'Create Version'}
+                                </BsButton>
+                            </div>
+                        </Form>
+                    </div>
+                </Modal>
+            )}
         </Container>
-    )
-}
-export default FormActions
+    );
+};
+
+export default FormActions;

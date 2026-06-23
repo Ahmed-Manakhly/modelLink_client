@@ -206,13 +206,40 @@ a.banner-btn_ {
         max-width: 460px;
     }
 }
+@media (max-width: 768px) {
+    .banner-title {
+        font-size: var(--fs-3) !important;
+        line-height: var(--leading-tight);
+        word-wrap: break-word;
+    }
+
+    .banner-subtitle {
+        font-size: var(--fs-7) !important;
+        letter-spacing: 2px;
+    }
+
+    .banner-content {
+        width: 95%;
+        max-width: 100%;
+        padding: 0.75rem;
+    }
+
+    a.banner-btn_ {
+        margin: 1rem;
+        font-size: var(--fs-5);
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
 @media (max-width: 1000px){
     .banner-title {
-        font-size: 25px !important;
+        font-size: var(--fs-3) !important;
     }
 }
 @media (max-width: 1000px){
     .banner-text{
-        font-size: 12px !important;;
+        font-size: var(--fs-9) !important;
         }
 }

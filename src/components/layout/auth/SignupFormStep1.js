@@ -2,7 +2,7 @@ import useInput from '../../../hooks/Use-Input';
 
 import { useSearchParams , Link , useNavigate} from 'react-router-dom';
 import classes from './Auth.module.scss' ;
-import { Row , Col  } from 'react-bootstrap' 
+import { Row , Col  } from 'react-bootstrap'
 
 //-----------------------------------------
 const SignupFormStep1 = ( {onStepData}) => {

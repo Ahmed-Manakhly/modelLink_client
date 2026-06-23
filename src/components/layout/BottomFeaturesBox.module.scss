@@ -1,0 +1,128 @@
+// Handled inline
+//----------------------------------
+
+.bottom-features-box{
+    width: 100%;
+    max-width: 1140px;
+    margin: 1rem auto 0;
+    padding: 0 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .3rem;
+    &.main-site{
+        max-width: 1140px;
+        margin: 8rem auto;
+        padding: 0 16px;
+        overflow: hidden;
+        @media (max-width: 1024px) {
+            width: 100%;
+        }
+        .page-data-count{
+            color: var(--main-blue);
+            font-size: medium;
+        }
+        .pages{
+            .page{
+                background-color: var(--white);
+                color: var(--eerie-black);
+                &:hover{
+                    background-color: var(--main-blue);
+                    color: var(--white);
+                }
+                &.active{
+                    background-color: var(--main-blue);
+                    color: var(--white);
+                    border: none;
+                }
+            }
+        }
+        .previous-handler , .next-handler{
+            .prev-icon , .next-icon{
+                color:  var(--main-blue);
+                &:hover{
+                    color: var(--secondary-color);
+                }
+            }
+            &:disabled{
+                .prev-icon , .next-icon{
+                    color: var(--checkbox-border);
+                    &:hover{
+                        color: var(--checkbox-border);
+                    }
+                }
+            }
+        }
+    }
+    .page-data-count{
+        width: 100%;
+        font-size: .7rem;
+        color: var(--font-2-color);
+        font-style: italic;
+        margin: 0;
+        // margin-bottom: 1rem;
+    }
+    .pages{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .5rem;
+        // padding: 1rem 1.2rem;
+        .page{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 22px;
+            height: 22px;
+            background: var(--btn-bg-hover-color);
+            color: var(--btn-font-hover-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: .8rem;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+            &:hover{
+                background: var(--btn-bg-color);
+                color: var(--btn-font-color);
+            }
+            &.active{
+                background: var(--btn-bg-color);
+                color: var(--btn-font-color);
+            }
+        }
+    }
+    .previous-handler , .next-handler{
+        transition: all 0.3s ease;
+        border: none;
+        outline: none;
+        background: transparent ;
+        .prev-icon , .next-icon{
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            color: var(--font-1-color);
+            cursor: pointer;
+            &:hover{
+                color: var(--font-2-color);
+            }
+        }
+        &:disabled{
+            .prev-icon , .next-icon{
+                color: var(--checkbox-border);
+                cursor: not-allowed;
+                &:hover{
+                    color: var(--checkbox-border);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+

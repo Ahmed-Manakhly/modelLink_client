@@ -3,100 +3,98 @@ import React from "react";
 import styles from "./ModelBoxWidgets.module.scss";
 import { useNavigate ,Link } from "react-router-dom";
 import { RiRobot2Line } from "react-icons/ri";
-import {Container , Row , Col  } from 'react-bootstrap' 
-import { FaLocationDot } from "react-icons/fa6";
-import { FaUserAlt } from "react-icons/fa";
-import {FILES_BASE_API_URL} from '../lib/api' 
+import {Container , Row , Col  } from 'react-bootstrap'
+import { getModelMarketingFields } from '../lib/modelHelpers';
+import UserProfileStrip from './UserProfileStrip';
 
-const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isSeller,profileNotCompleted}) => {
-
-  const User = model?.User;
-  const org_username = User?.org_username
-  const avatar = User?.avatar
-  const country = User?.country
-  const role = User?.role
-  const createdAt = User?.createdAt
-  const id = model?.userId;
-  const first_name = User?.first_name;
+const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isSeller,profileNotCompleted, selectedVersionId, onVersionChange, modelCount = null}) => {
+  const marketing = getModelMarketingFields(model, selectedVersionId);
+  const versions = model?.versions || [];
+  const hasMultipleVersions = versions.length > 1;
+  const canOrder = !((!otherDev && isSeller) || (!isSeller && otherDev) || profileNotCompleted);
+  const orderDisabled = canOrder && hasMultipleVersions && !selectedVersionId;
+  const User = model?.developer;
+  const id = model?.developerId;
   const navigate = useNavigate();
   function cancelHandler() {
   navigate('..');
   }
 
   return (
-    <Container>
+    <Container className="my-5">
 
       <div className={styles.___container}>
           <div className={styles.__box_main}>
             {/* //------------------------- */}
             <div className={styles.__box_leftside}>
               <div className={styles["widget_1_con"]}>
-                    <RiRobot2Line className={styles.iconImg} /><h4 className={styles.title_}>This Model Created By</h4>
+                    <RiRobot2Line className={styles.iconImg} /><h3 className="title_2 mb-0">This Model Created By</h3>
               </div>
               <div className={styles["widget_11_con"]}>
-                <div  className={` ${styles.imgCon} `} >
-                      {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Cover"  crossOrigin="anonymous"  />}
-                      {!avatar &&  <div className={styles['UserHolder']} >{org_username?org_username[0]?.toUpperCase():''}</div>}
-                </div>
-                <div className={styles.infoCon}>
-
-                  {first_name && <h3 className={styles.title_} >{first_name?.toUpperCase()?.slice(0, 9)}</h3>}
-                  { !first_name && <h3 className={styles.title_} >{org_username?.toUpperCase()?.slice(0, 9)}</h3>} 
-                  <h6 className={styles.info}>{role?role:''}</h6>
-                  <h6 className={styles.info__}><FaLocationDot style={{color: '#5DB8DD'}} />{'From '}{country?country:''}</h6>
-                  <h6 className={styles.info__}><FaUserAlt style={{color: '#5DB8DD'}} />{'Member since '}{createdAt?new Date(createdAt).toLocaleDateString('pt-PT'):null}</h6>
-                </div>
+                <UserProfileStrip
+                  user={User}
+                  variant="model-developer"
+                  
+                  modelCount={modelCount}
+                  verifiedAt={User?.verification?.verifiedAt}
+                  showViewProfileLink
+                  profileLinkTo={`/profile/${id}`}
+                  viewProfileLabel="VIEW PROFILE"
+                />
               </div>
-              <Row className={styles.infoCon_}>
-                <Link to={`/profile/${id}`} className={styles["banner-btn"]}> {'VIEW PROFILE'} </Link>
-              </Row>
             </div>
             {/* //------------------------- */}
             <div className={styles.__box_rightside}>
                   <Col xs={0} md lg className={` ${styles["controlCon-1"]} d-flex flex-column align-items-left w-100`} >
-                      <p className={styles.title_} >available plans for this model</p>
+                      <h3 className="title_2" >Model Details & Metadata</h3>
 
                       <Row className={`d-flex justify-content-center  align-items-start gap-3 w-100  ${styles["controlCon-2"]} `}>
-                        <Col className={`${styles.f_list}  gap-2 w-100`}>                
+                        <Col className={`${styles.f_list}  gap-2`}>
                                 <Row className={`${styles.f_item}`} >
-                                    {model?.payPerClick&&<Col className={`${styles.f_item_title}`}>payPerClick</Col>}
-                                    {!model?.payPerClick&& <del className={`${styles.f_item_title_false}`}>payPerClick</del>}
+                                    <Col className={`${styles.f_item_title}`}>{`Model Price : $${Number(marketing.price || 0).toFixed(2)}`}</Col>
                                 </Row>
                                 <Row className={`${styles.f_item}`} >
-                                    {model?.subscription&&<Col className={`${styles.f_item_title}`}>subscription</Col>}
-                                    {!model?.subscription&& <del className={`${styles.f_item_title_false}`}>subscription</del>}
-                                </Row>
-                        </Col>
-                        <Col className={`${styles.f_list}  gap-2`}>               
-                                <Row className={`${styles.f_item}`} >
-                                    <Col className={`${styles.f_item_title}`}>{`Model Price : ${model?.price}`}</Col>
+                                    <Col className={`${styles.f_item_title}`}>{`Delivery Time : ${marketing.deliveryTime ?? 'N/A'} days`}</Col>
                                 </Row>
                                 <Row className={`${styles.f_item}`} >
-                                    <Col className={`${styles.f_item_title}`}>{`Delivery Time : ${model?.deliveryTime}`}</Col>
-                                </Row>
-                        </Col>
-                        <Col className={`${styles.f_list}  gap-2`}>                
-                                <Row className={`${styles.f_item}`} >
-                                  <Col className={`${styles.f_item_title}`}>{`Indications : ${model?.indications}`}</Col>
+                                    <Col className={`${styles.f_item_title}`}>{`Category : ${marketing.category || 'N/A'}`}</Col>
                                 </Row>
                                 <Row className={`${styles.f_item}`} >
-                                    <Col className={`${styles.f_item_title}`}>{` Modality : ${model?.modality}`}</Col>
+                                    <Col className={`${styles.f_item_title}`}>{`Last Updated : ${model?.updatedAt ? new Date(model.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}`}</Col>
                                 </Row>
                         </Col>
                       </Row>
+                      {hasMultipleVersions && canOrder && (
+                        <Row className={`d-flex justify-content-center align-items-start gap-3 w-100 ${styles["controlCon-2"]} mt-2`}>
+                          <Col className={`${styles.f_list} gap-2`}>
+                            <label htmlFor="model-version-select" className={styles.f_item_title}>Select Version</label>
+                            <select
+                              id="model-version-select"
+                              className="form-select form-select-sm"
+                              value={selectedVersionId ?? ''}
+                              onChange={(e) => onVersionChange?.(parseInt(e.target.value, 10))}
+                            >
+                              {versions.map((version) => (
+                                <option key={version.id} value={version.id}>
+                                  v{version.version} — ${Number(version.price || 0).toFixed(2)}
+                                </option>
+                              ))}
+                            </select>
+                          </Col>
+                        </Row>
+                      )}
                   </Col>
               <Row>
               <label htmlFor='feature'>For More Information Contact the Developer</label>
                   <Col>
                         <button type="button" onClick={cancelHandler} className={`${styles["cancel-btn"]} `}>Back</button>
                   </Col>
-                  {!((!otherDev&&isSeller) || (!isSeller&&otherDev) || profileNotCompleted) &&  (
+                  {canOrder && (
                   <Col >
-                        <button  disabled={false} onClick={orderRequestHandler} className={`${styles["feature-btn"]}`}>{`${isBuyer?'I WANT TO ORDER AGAIN..':'ORDER NOW'}`}</button>
+                        <button disabled={orderDisabled} onClick={orderRequestHandler} className={`${styles["feature-btn"]}`}>{`${isBuyer?'I WANT TO ORDER AGAIN..':'ORDER NOW'}`}</button>
                   </Col>
-                  )                 
-                  }
-                  {profileNotCompleted && 
+                  )}
+                  {profileNotCompleted &&
                     <Link  className={styles["banner-btn"]} to={`/profileSettings`} >Complete Your profile to be able to create Orders!</Link>
                   }
               </Row>
@@ -108,5 +106,3 @@ const ModelBoxWidgets = ( { model , orderRequestHandler , isBuyer ,otherDev ,isS
 };
 
 export default ModelBoxWidgets;
-
-

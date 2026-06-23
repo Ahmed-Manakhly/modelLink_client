@@ -227,6 +227,10 @@
             font-size: 25px;
             color: var(--main-2-blue);
             text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            max-width: 100%;
           }
           .info {
             color: var(--sonic-silver);

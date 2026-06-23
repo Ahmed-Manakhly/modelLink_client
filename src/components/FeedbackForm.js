@@ -2,8 +2,9 @@ import React from "react";
 import useInput from '../hooks/Use-Input';
 import styles from "./FeedbackForm.module.scss";
 import { useState } from 'react' ;
-import {Container , Row , Col  } from 'react-bootstrap' 
-import {FILES_BASE_API_URL} from '../lib/api' 
+import {Container , Row , Col  } from 'react-bootstrap'
+import {FILES_BASE_API_URL} from '../lib/api';
+import UserAvatar from './ui/UserAvatar';
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { FaRegFaceFrown } from "react-icons/fa6";
 import { FaRegFaceMeh } from "react-icons/fa6";
@@ -55,7 +56,7 @@ const FeedbackForm = ({formTitle , avatar,orgUsername ,thisUserRole,firstName, o
     e.preventDefault();
     onSubmitFeedback(reviewText , rating)
   };
-  
+
 
   const {hasError : descIsInvalid , valueIsValid : descIsValid ,value: reviewText,
     valueChangeHandler : descChangeHandler , inputBlurHandler : descBlurHandler} = useInput(value => (value.trim() !=='') );
@@ -74,7 +75,7 @@ const FeedbackForm = ({formTitle , avatar,orgUsername ,thisUserRole,firstName, o
     <Container>
       <h2 className={styles["title"]}>{formTitle}</h2>
       <Container  className={`${styles.secpro}`}>
-        <form onSubmit={handleSubmit} className={`${styles["contact-col"]} `} > 
+        <form onSubmit={handleSubmit} className={`${styles["contact-col"]} `} >
           <Row xs={0} md lg className={`${styles["stars-con"]}`} >
             <Col className={`${styles["stars-con-2"]}`} >
             {[1, 2, 3, 4, 5].map((star) => (
@@ -95,12 +96,11 @@ const FeedbackForm = ({formTitle , avatar,orgUsername ,thisUserRole,firstName, o
             <Col className={`${styles.__box_leftside} `}>
               <div className={styles["widget_11_con"]}>
                 <div  className={` ${styles.imgCon} `} >
-                      {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Cover"  crossOrigin="anonymous"  />}
-                      {!avatar &&  <div className={styles['UserHolder']} >{orgUsername?orgUsername[0]?.toUpperCase():''}</div>}
+                      <UserAvatar user={{ avatar, org_username: orgUsername, role: thisUserRole }} />
                 </div>
                 <div className={styles.infoCon}>
                   {firstName && <h3 className={styles.title_} >{firstName?.toUpperCase()?.slice(0, 9)}</h3>}
-                  { !firstName && <h3 className={styles.title_} >{orgUsername?.toUpperCase()?.slice(0, 9)}</h3>} 
+                  { !firstName && <h3 className={styles.title_} >{orgUsername?.toUpperCase()?.slice(0, 9)}</h3>}
                   <h6 className={styles.info}>{thisUserRole?thisUserRole:''}</h6>
                 </div>
               </div>

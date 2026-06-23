@@ -1,4 +1,4 @@
-// eslint-disable-next-line 
+// eslint-disable-next-line
 /* eslint-disable */
 import { useLoaderData ,useNavigate  , ScrollRestoration } from 'react-router-dom' ;
 import Topbar from '../components/layout/Topbar' ;
@@ -11,23 +11,19 @@ import Toast from '../components/layout/Toast' ;
 import LoadingSpinner from '../components/layout/LoadingSpinner' ;
 //-----------------------------------------
 import {useState , useEffect} from 'react'
+import { Link } from 'react-router-dom';
+import { RiRobot2Line } from "react-icons/ri";
+import styles from './ErrorPage.module.scss';
 import { getTokenDuration , getAuthToken } from '../utility/tokenLoader';
-import { useDispatch , useSelector} from 'react-redux'; 
-import {authActions} from '../store/Auth.-slice' ;
+import { safeParseStorage } from '../utility/safeParseStorage';
+import { useDispatch , useSelector} from 'react-redux';
+import {authActions} from '../store/authSlice' ;
 import {cartActions} from '../store/Cart-slice' ;
 import {uiActions} from '../store/UI-slice' ;
 import UpButton from '../components/layout/UpButton'
-import { footerCategoriesData , mobNavData , mobNavData_2} from '../data'
+import { footerCategoriesData , mobNavData , mobNavData_2} from '../constants/marketingData'
 import WarningModal from '../components/layout/WarningModal'
-import {BASE_URL} from '../lib/api'
-
-//=======================================================
-import { RiRobot2Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import styles from "./ErrorPage.module.scss";
-
-
-import io from "socket.io-client";
+import { socket } from '../hooks/useSocket';
 
 let init = true
 
@@ -45,9 +41,9 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         setMenuOpen(false)
     }
     //----------------------------------------
-    const notificationData = useSelector(state => state.ui.notificationData) 
-    const showNotification = useSelector(state => state.ui.showNotification) 
-    const userData = JSON.parse(localStorage.getItem('userData'))
+    const notificationData = useSelector(state => state.ui.notificationData)
+    const showNotification = useSelector(state => state.ui.showNotification)
+    const userData = useSelector(state => state.auth.userData) || {}
     const {status,message,title} = notificationData ;
     const isLoading = useSelector(state => state.ui.isLoading)
     //----------------------------------------
@@ -68,7 +64,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         dispatch(uiActions.showNotification(false))
     }
     //----------------------------------------
-    const dispatch = useDispatch();   
+    const dispatch = useDispatch();
     //----------------------------------------
     let token = getAuthToken() ;
 
@@ -80,10 +76,10 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     //----------------------------------CART DATA
     useEffect(()=>{
         if(token){
-            if(userData?.role === 'CLIENT'){ 
-                const cartItems = localStorage.getItem('cartItems') ;
-                if(cartItems){
-                    dispatch(cartActions.onSetCart(JSON.parse(cartItems)))
+            if(userData?.role === 'CLIENT'){
+                const cartItems = safeParseStorage('cartItems');
+                if (cartItems) {
+                    dispatch(cartActions.onSetCart(cartItems))
                 }
             }
         }
@@ -101,17 +97,18 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             return ;
         }
         //-----------------------------------------------------
-        if(token === 'EXPIRED' && !timeExtanded) {    
-            const socket = io(BASE_URL);
-            socket.emit("leavingRoom", userData?.id); 
+        if(token === 'EXPIRED' && !timeExtanded) {
+            socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut())
             navigate("/auth?mode=login",{replace :true});
             // console.log('EXPIRED')
         }
         if(token && init  ){
             if(timeExtanded){
-                const userData = localStorage.getItem('userData') ;
-                dispatch(authActions.onLogin(JSON.parse(userData)))
+                const storedUserData = safeParseStorage('userData');
+                if (storedUserData) {
+                    dispatch(authActions.onLogin(storedUserData))
+                }
                 const expiration = new Date();
                 expiration.setMinutes(expiration.getMinutes() + 40) ;
                 localStorage.setItem('expiration' , expiration.toISOString()) ;
@@ -123,8 +120,10 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
                 setTimeExtanded(false)
                 init = false
             }else if(token !== 'EXPIRED'){
-                const userData = localStorage.getItem('userData') ;
-                dispatch(authActions.onLogin(JSON.parse(userData)))
+                const storedUserData = safeParseStorage('userData');
+                if (storedUserData) {
+                    dispatch(authActions.onLogin(storedUserData))
+                }
                 const tokenDuration = getTokenDuration() ;
                 setTimeout(()=>{
                     setWarning({show:true , type : 'action' , message : 'Your session will be expired in 5 seconds' , action :'Keep Me Login'}) ;
@@ -136,10 +135,10 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     //----------------------------------------
     useEffect(()=>{
         if(warning.show === true){
-            
+
                 if(!timeExtanded){
                     setTimeout(()=>{
-                        closeModal();                  
+                        closeModal();
                         init = true;
                     },5000)
                 }else{
@@ -154,14 +153,14 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             {showNotification && <Toast close={onCloseNotificationHandler} status={status} title={title} message={message} onAnimationEnd={onCloseNotificationHandler}/>}
             <div className={`overlay  ${(menuOpen || isLoading) && 'active'}`}  onClick={onCloseHandler} ></div>
             {isLoading && <LoadingSpinner/>}
-            <Topbar txt_1={'specializing in medical AI solutions for easy and global accessibility.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
+            <Topbar txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
             <TopNavBar getSearch={getSearch}/>
             <NavBar msgCounter={msgCounter} notCounter={notCounter} notifys={notifys} handleUpdateNotification={handleUpdateNotification} chats={chats}
-                handleDeleteNotification={handleDeleteNotification}  checkOnlineStatus={checkOnlineStatus} handleDeleteChat={handleDeleteChat} 
+                handleDeleteNotification={handleDeleteNotification}  checkOnlineStatus={checkOnlineStatus} handleDeleteChat={handleDeleteChat}
                 onClickLink={onClickLink} />
             <MobNav onClick={onClickHandler} txt_3={'sign in'} txt_4={'Join'} msgCounter={msgCounter} notCounter={notCounter}/>
             <MobNavMenu menuOpen={menuOpen}  onClose={onCloseHandler} NavData={token? mobNavData_2:mobNavData}  onClickLink={onClickLink}
-            txt_1={'specializing in medical AI solutions for easy and global accessibility.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
+            txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
             />
             <main className={styles['container']}>
                 <UpButton scroll={scroll} />

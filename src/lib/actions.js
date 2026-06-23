@@ -101,7 +101,11 @@ export async function deletingModelAction(request, toastHandler, loadingState, p
         const id = params.id
         const token = localStorage.getItem('token');
         try {
-            const response = await deleteModelReq(id, token);
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+            const response = await deleteModelReq(id, headers);
             if (response.status === 204) {
                 loadingState(false);
                 toast = { status: 'success', message: "Model has been Deleted", title: 'Delete Model' };

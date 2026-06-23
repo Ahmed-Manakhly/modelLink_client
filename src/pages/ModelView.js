@@ -1,336 +1,427 @@
 
-import {  Link ,useParams}  from "react-router-dom";
-import {useDispatch} from 'react-redux';
-import {uiActions} from '../store/UI-slice' ;
-import {getAuthToken} from '../utility/tokenLoader'
-import {useEffect , useState} from 'react' ;
-import {useNavigate } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '../store/UI-slice';
+import { getAuthToken } from '../utility/tokenLoader'
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ModelData from '../components/ModelData'
 import ModelDataTop from '../components/ModelDataTop'
+import ModelGallery from '../components/ModelGallery'
 import ModelBoxWidgets from '../components/ModelBoxWidgets'
 import FeedbackList from '../components/FeedbackList'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getData, getModelByIdReq, getOrdersByModelReq, getModelsByUserReq, getReviewsByModelReq } from '../lib/loaders';
 import { createOrderReq } from '../lib/orderRequests';
-import PageTableSec from '../components/layout/PageTableSec'
+import DashboardDataSection from '../components/layout/DashboardDataSection'
+import { getOrderColumns } from '../utility/tableColumns'
 import { Box } from "@mui/material";
 import PopularServices from '../components/PopularServices'
 import ChatCard from '../components/ChatCard'
-import {createNotification} from '../lib/notificationsRequests'
-import io from "socket.io-client";
-import { BASE_URL } from '../lib/api';
+import AssetDeliveryCallout from '../components/ui/AssetDeliveryCallout'
+import VersionHistoryPanel from '../components/ui/VersionHistoryPanel'
+import MetricsComparisonTable from '../components/ui/MetricsComparisonTable'
+import { getModelRating } from '../lib/modelHelpers'
 
 
 //==========================
 
 
-function ModelView({onlineUsers , refresh , modelRefresh}) {
+function ModelView({ onlineUsers, refresh, modelRefresh }) {
     const navigate = useNavigate();
-    const token = getAuthToken() ;
-    const thisUserRole = token? JSON.parse(localStorage.getItem('userData')).role : null
-    const thisUserId = token? JSON.parse(localStorage.getItem('userData')).id : null
-    const org_ipAddress = token? JSON.parse(localStorage.getItem('userData')).org_ipAddress : null
+    const token = getAuthToken();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const userData = useSelector(state => state.auth.userData) || {};
+    const thisUserRole = userData.role ?? null;
+    const thisUserId = userData.id ?? null;
 
-   
+
     useEffect(() => {
-        if(!token ){
-            navigate("/auth?mode=login",{replace :true});
-            return ;
+        if (!token && (thisUserRole === 'DEVELOPER' || thisUserRole === 'ADMIN')) {
+            navigate("/auth?mode=login", { replace: true });
         }
-    },[token ,navigate])
+    }, [token, thisUserRole, navigate])
 
-    const dispatch = useDispatch();  
-    const [model,setModel] = useState({}) ;
-    const [orders,setOrders] = useState([]) ;
-    const [models,setModels] = useState([]) ;
-    const [reviews,setReviews] = useState([]) ;
-    const [updated,setUpdated] = useState(false) ;
-    const [modelUpdated,setModelUpdated] = useState(false) ;
-    const [singleModelUpdated,setSingleModelUpdated] = useState(false) ;
-    const { id } = useParams();
+    const dispatch = useDispatch();
+    const [model, setModel] = useState({});
+    const [orders, setOrders] = useState([]);
+    const [models, setModels] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [updated, setUpdated] = useState(false);
+    const [modelUpdated, setModelUpdated] = useState(false);
+    const [singleModelUpdated, setSingleModelUpdated] = useState(false);
+    const [selectedVersionId, setSelectedVersionId] = useState(null);
+    let { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const versionIdFromQuery = searchParams.get('versionId');
 
 
     //------------------------------------------------
-    let clientOrders, isBuyer , isSeller , otherDev , otherClient , profileNotCompleted;
-    if(orders && model){
-        clientOrders = orders.filter(order=>order.clientId === thisUserId)
-        isBuyer= clientOrders.length > 0 ;
-        isSeller = model.userId === thisUserId ;
+    let clientOrders, isBuyer, isSeller, otherDev, otherClient, profileNotCompleted;
+    if (orders && model) {
+        clientOrders = orders.filter(order => order.clientId === thisUserId)
+        isBuyer = clientOrders.length > 0;
+        isSeller = model.developerId === thisUserId;
         otherDev = !isSeller && thisUserRole === 'DEVELOPER'
         otherClient = !isBuyer && thisUserRole === 'CLIENT'
     }
-    if(otherClient && !org_ipAddress){
-        profileNotCompleted=true
+    if (otherClient && (!userData.org_name || !userData.org_phone)) {
+        profileNotCompleted = true
     }
 
-    const goUpHandler = ()=> {
+    const goUpHandler = () => {
         window.scrollTo({
             top: 0,
             left: 0,
             behavior: "smooth",
         });
     }
-    useEffect(()=>{
+    useEffect(() => {
         goUpHandler()
-    },[model])
+    }, [model])
 
-    useEffect(()=>{
-        if(refresh){
+    const redirectIfModelForbidden = (err) => {
+        const status = err?.response?.status;
+        if (status === 403 || status === 404) {
+            navigate('/not-found', { replace: true });
+            return true;
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        const versions = model?.versions || [];
+        if (versions.length === 0) {
+            setSelectedVersionId(null);
+            return;
+        }
+        if (versionIdFromQuery) {
+            const fromQuery = versions.find((v) => String(v.id) === String(versionIdFromQuery));
+            if (fromQuery) {
+                setSelectedVersionId(fromQuery.id);
+                return;
+            }
+        }
+        const primary = versions.find(v => v.isPrimary) || versions[versions.length - 1];
+        setSelectedVersionId(primary?.id ?? null);
+    }, [model?.versions, model?.id, versionIdFromQuery]);
+
+    useEffect(() => {
+        if (refresh) {
             setUpdated(true)
         }
-    },[refresh])
-    useEffect(()=>{
-        if(modelRefresh){
+    }, [refresh])
+    useEffect(() => {
+        if (modelRefresh) {
             setSingleModelUpdated(true)
         }
-    },[modelRefresh])
+    }, [modelRefresh])
 
     useEffect(() => {
 
-        const toastHandler =(toast)=>{
+        const toastHandler = (toast) => {
             dispatch(uiActions.notificationDataChanged(toast))
-        } 
-        const loadingState = (state)=>{
+        }
+        const loadingState = (state) => {
             dispatch(uiActions.showLoading(state))
         }
-        const notificationState =(state)=>{
+        const notificationState = (state) => {
             dispatch(uiActions.showNotification(state))
         }
-        const gettingData =(data)=>{
-            setModel(data?data:null)
+        const gettingData = (data) => {
+            setModel(data ? data : null)
             setModelUpdated(true)
         }
-        getData(() => getModelByIdReq(id), toastHandler , loadingState , notificationState , gettingData,'model!' )
+        getData(
+            () => getModelByIdReq(id),
+            toastHandler,
+            loadingState,
+            notificationState,
+            gettingData,
+            'model!',
+            { onError: redirectIfModelForbidden }
+        )
         dispatch(uiActions.showNotification(false))
-    },[id , dispatch])
+    }, [id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {
-        if(singleModelUpdated){
-            const toastHandler =(toast)=>{
+        if (singleModelUpdated) {
+            const toastHandler = (toast) => {
                 dispatch(uiActions.notificationDataChanged(toast))
-            } 
-            const loadingState = (state)=>{
+            }
+            const loadingState = (state) => {
                 dispatch(uiActions.showLoading(state))
             }
-            const notificationState =(state)=>{
+            const notificationState = (state) => {
                 dispatch(uiActions.showNotification(state))
             }
-            const gettingData =(data)=>{
-                setModel(data?data:null)
+            const gettingData = (data) => {
+                setModel(data ? data : null)
                 setModelUpdated(true)
             }
-            getData(() => getModelByIdReq(id), toastHandler , loadingState , notificationState , gettingData,'model details!' )
+            getData(
+                () => getModelByIdReq(id),
+                toastHandler,
+                loadingState,
+                notificationState,
+                gettingData,
+                'model details!',
+                { onError: redirectIfModelForbidden }
+            )
             dispatch(uiActions.showNotification(false))
             setSingleModelUpdated(false)
         }
-    },[singleModelUpdated , id , dispatch])
+    }, [singleModelUpdated, id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {
-        
-        const toastHandler =(toast)=>{
+
+        const toastHandler = (toast) => {
             dispatch(uiActions.notificationDataChanged(toast))
-        } 
-        const loadingState = (state)=>{
+        }
+        const loadingState = (state) => {
             dispatch(uiActions.showLoading(state))
         }
-        const notificationState =(state)=>{
+        const notificationState = (state) => {
             dispatch(uiActions.showNotification(state))
         }
-        const gettingData =(data)=>{
-            setOrders(data?data:[])
+        const gettingData = (data) => {
+            setOrders(data ? data : [])
         }
+        if (!token) return;
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         };
-        getData(() => getOrdersByModelReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Orders!' )
+        getData(() => getOrdersByModelReq(id, '', headers), toastHandler, loadingState, notificationState, gettingData, 'Orders!')
         dispatch(uiActions.showNotification(false))
-    },[dispatch , id ,token ])
+    }, [dispatch, id, token])
     //----------------------------------------------------
     useEffect(() => {
-        
-        const toastHandler =(toast)=>{
+
+        const toastHandler = (toast) => {
             dispatch(uiActions.notificationDataChanged(toast))
-        } 
-        const loadingState = (state)=>{
+        }
+        const loadingState = (state) => {
             dispatch(uiActions.showLoading(state))
         }
-        const notificationState =(state)=>{
+        const notificationState = (state) => {
             dispatch(uiActions.showNotification(state))
         }
-        const gettingData =(data)=>{
-            setReviews(data?data?.allReviews:[])
+        const gettingData = (data) => {
+            setReviews(data ? data?.allReviews : [])
         }
-        const headers = {
+        const headers = token ? {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        };
-        getData(() => getReviewsByModelReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Reviews!' )
-        dispatch(uiActions.showNotification(false))
-    },[token , id ,dispatch ])
+        } : {};
+        getData(() => getReviewsByModelReq(id, headers), toastHandler, loadingState, notificationState, gettingData, 'Reviews!', { silent: true })
+    }, [token, id, dispatch])
     //----------------------------------------------------
     useEffect(() => {
-        if(updated){
-            const toastHandler =(toast)=>{
+        if (updated) {
+            const toastHandler = (toast) => {
                 dispatch(uiActions.notificationDataChanged(toast))
-            } 
-            const loadingState = (state)=>{
+            }
+            const loadingState = (state) => {
                 dispatch(uiActions.showLoading(state))
             }
-            const notificationState =(state)=>{
+            const notificationState = (state) => {
                 dispatch(uiActions.showNotification(state))
             }
-            const gettingData =(data)=>{
-                setReviews(data?data?.allReviews:[])
+            const gettingData = (data) => {
+                setReviews(data ? data?.allReviews : [])
+            }
+            const headers = token ? {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            } : {};
+            getData(() => getReviewsByModelReq(id, headers), toastHandler, loadingState, notificationState, gettingData, 'Reviews!', { silent: true })
+            setUpdated(false)
+        }
+
+    }, [dispatch, id, token, updated])
+    //----------------------------------------------------
+    useEffect(() => {
+
+        if (updated) {
+            const toastHandler = (toast) => {
+                dispatch(uiActions.notificationDataChanged(toast))
+            }
+            const loadingState = (state) => {
+                dispatch(uiActions.showLoading(state))
+            }
+            const notificationState = (state) => {
+                dispatch(uiActions.showNotification(state))
+            }
+            const gettingData = (data) => {
+                setOrders(data ? data : [])
+            }
+            if (!token) {
+                setUpdated(false);
+                return;
             }
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
-            getData(() => getReviewsByModelReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Reviews!' )
-            dispatch(uiActions.showNotification(false))
+            getData(() => getOrdersByModelReq(id, '', headers), toastHandler, loadingState, notificationState, gettingData, 'Orders!')
             setUpdated(false)
         }
-        
-    },[dispatch , id , token , updated])
+    }, [updated, id, dispatch, token])
     //----------------------------------------------------
     useEffect(() => {
-        
-        if(updated){
-            const toastHandler =(toast)=>{
+        if (modelUpdated) {
+            const toastHandler = (toast) => {
                 dispatch(uiActions.notificationDataChanged(toast))
-            } 
-            const loadingState = (state)=>{
+            }
+            const loadingState = (state) => {
                 dispatch(uiActions.showLoading(state))
             }
-            const notificationState =(state)=>{
+            const notificationState = (state) => {
                 dispatch(uiActions.showNotification(state))
             }
-            const gettingData =(data)=>{
-                setOrders(data?data:[])
+            const gettingData = (data) => {
+                setModels(data ? data : [])
             }
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            };
-            getData(() => getOrdersByModelReq(id, headers), toastHandler , loadingState , notificationState , gettingData,'Orders!' )
-            dispatch(uiActions.showNotification(false))
-            setUpdated(false)
-        }
-    },[updated , id ,dispatch ,token])
-    //----------------------------------------------------
-    useEffect(() => {
-        if(modelUpdated){
-            const toastHandler =(toast)=>{
-                dispatch(uiActions.notificationDataChanged(toast))
-            } 
-            const loadingState = (state)=>{
-                dispatch(uiActions.showLoading(state))
-            }
-            const notificationState =(state)=>{
-                dispatch(uiActions.showNotification(state))
-            }
-            const gettingData =(data)=>{
-                setModels(data?data:[])
-            }
-            getData(() => getModelsByUserReq(model?.userId), toastHandler , loadingState , notificationState , gettingData,'other models!' )
-            dispatch(uiActions.showNotification(false))
+            getData(() => getModelsByUserReq(model?.developerId), toastHandler, loadingState, notificationState, gettingData, 'other models!')
             setModelUpdated(false)
         }
-    },[modelUpdated , dispatch , model?.userId ,])
-    //---------------------------------------------------------------------
-    const orderRequestHandler =()=>{
-        const socket = io(BASE_URL);
-        async function onOrderRequestHandler (toastHandler , loadingState ,gettingData) {
-            let toast = {status :'', title :'', message:''}
+    }, [modelUpdated, dispatch, model?.developerId,])
+    const orderRequestHandler = () => {
+        if (!token) {
+            navigate('/auth?mode=login');
+            return;
+        }
+        async function onOrderRequestHandler(toastHandler, loadingState) {
+            let toast = { status: '', title: '', message: '' }
             loadingState(true)
-            //---------------------------------------------
-                const formdata = new FormData();
-                formdata.append('id',id)
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+            const requestData = {
+                id: parseInt(id, 10),
+                aiModelId: parseInt(id, 10),
+                ...(selectedVersionId ? { versionId: parseInt(selectedVersionId, 10) } : {})
+            };
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+            try {
+                const response = await createOrderReq(requestData, headers);
+                const resData = response.data;
+                const orderId = resData?.data?.order?.id;
+                loadingState(false)
+                toast = {
+                    status: 'success',
+                    message: 'Order created! Complete payment below to confirm your purchase.',
+                    title: 'Order Created',
                 };
-                try{
-                    const response = await createOrderReq(formdata, headers);
-                    const resData =  response.data ;
-                    loadingState(false)
-                    toast= {status :resData.status,message:"Order Created Successfully",title:'Creating Order'}
-                    toastHandler(toast);
-                    gettingData(resData.data.order)
-                    const notificationData ={
-                        actionDesc :`You have Got a New Order!`,
-                        to : model?.userId,
-                        from : thisUserId,
-                        actionLink : `/order/view/${resData?.data?.order?.id}`,
-                    }
-                    const { data } = await createNotification(notificationData);
-                    socket.emit("order_created", data.data.newNotification);
-                }catch(err){
-                    loadingState(false)
-                    toast = {status :'error',message:err.response.data.message,title:'Creating Order failed'};
-                    toastHandler(toast);
+                toastHandler(toast);
+                if (orderId) {
+                    navigate(`/order/view/${orderId}`, { state: { fromOrderCreation: true } });
+                } else {
+                    setUpdated(true);
                 }
-        } 
-        const toastHandler =(toast)=>{
+            } catch (err) {
+                loadingState(false)
+                toast = { status: 'error', message: err?.response?.data?.message || err.message, title: 'Creating Order failed' };
+                toastHandler(toast);
+            }
+        }
+        const toastHandler = (toast) => {
             dispatch(uiActions.notificationDataChanged(toast))
             dispatch(uiActions.showNotification(true))
-        } 
-        const loadingState = (state)=>{
+        }
+        const loadingState = (state) => {
             dispatch(uiActions.showLoading(state))
         }
-        const gettingData =(data)=>{
-            setUpdated(true)
-        }
-        onOrderRequestHandler(toastHandler , loadingState ,gettingData)
-        dispatch(uiActions.showNotification(false))
+        onOrderRequestHandler(toastHandler, loadingState)
     }
     //------------------------- columns
-    const columns = [
-        {field: "createdAt",headerName: "Created At",flex: 0.4,
-            renderCell: (params) => {
-                return (
-                    <p>{`${new Date(params?.row?.createdAt).toLocaleString('en-US')}`}</p>
-                )
-            }
-        },
-        {field: "updatedAt",headerName: "Updated At",flex: 0.4,
-            renderCell: (params) => {
-                return (
-                    <p>{`${new Date(params?.row?.updatedAt).toLocaleString('en-US')}`}</p>
-                )
-            }
-        },
-        {field: "status",headerName: "Order Status",flex: 0.5,cellClassName: "name-column--cell",
-            renderCell: (params) => {
-                return (
-                    <p>{`${params.row?.isCompleted? 'pending on payment' :'Waiting for seller confirmation'}`}</p>
-                )
-            }
-        },
-        {field: "view",headerName: "View Order Details",flex: 0.2,
-            renderCell: (params) => {
-                return (
-                    <Box width="40%" m="0 auto" p="5px" display="flex" justifyContent="space-around">
-                        <Link to={"/order/view/" + params.row?.id} style={{textDecoration: "none"}}>
-                            <VisibilityIcon style={{textDecoration: "none", color: '#5DB8DD'}} title="view"/>
-                        </Link>
-                    </Box>
-                )
-            }
-        },
-    ];
+
+    const reviewVersionMap = useMemo(() => {
+        const map = {};
+        (model?.versions || []).forEach((v) => {
+            if (v?.id != null) map[v.id] = v.version;
+        });
+        return map;
+    }, [model?.versions]);
+
+    const modelForDisplay = useMemo(() => {
+        if (!model?.id || getModelRating(model) > 0 || !reviews.length) return model;
+        const totalStars = reviews.reduce((sum, review) => sum + (Number(review.star) || 0), 0);
+        const reviewCount = reviews.length;
+        return {
+            ...model,
+            totalStars,
+            reviewCount,
+            starFrequency: reviewCount,
+        };
+    }, [model, reviews]);
+
+    const visibleVersions = useMemo(() => {
+        const all = model?.versions || [];
+        if (isSeller && model?.status === 'DRAFT') return all;
+        return all.filter((v) => v.isActive !== false);
+    }, [model?.versions, isSeller, model?.status]);
+
     //--------------------------------------------------
     return (
         <>
-            {(model && (thisUserRole !== 'DEVELOPER')) && <ChatCard userData={model.User} userId={model.userId} onlineUsers={onlineUsers} />}
-            <ModelDataTop formTitle={'Model Details..'} model={model}  />
-            <ModelData  formTitle={''} model={model} />
-            <ModelBoxWidgets model={model} orderRequestHandler={orderRequestHandler} isBuyer={isBuyer} otherDev={otherDev} isSeller={isSeller} profileNotCompleted={profileNotCompleted}/>
-            {isSeller&&<PageTableSec data={orders} columns={columns}  tableTitle={'Orders Made On This Model'}/>}
-            {isBuyer && <PageTableSec data={clientOrders} columns={columns}  tableTitle={'Orders You Made On This Model'}/>}
-            {(reviews.length > 0) && <FeedbackList  rev={reviews} formTitle='Check Reviews made on this model' />}
-            <PopularServices models={models.slice(0,10)} title='More Models Made By This Developer'/>
+            {(model && isLoggedIn && !isSeller) && (
+                <ChatCard userData={model?.developer} userId={model?.developerId} onlineUsers={onlineUsers} />
+            )}
+            <ModelGallery images={model?.galleryImages} alt={model?.title} />
+            <ModelDataTop formTitle={'Model Details..'} model={modelForDisplay} selectedVersionId={selectedVersionId} />
+            <ModelBoxWidgets
+                model={model}
+                orderRequestHandler={orderRequestHandler}
+                isBuyer={isBuyer}
+                otherDev={otherDev}
+                isSeller={isSeller}
+                profileNotCompleted={profileNotCompleted}
+                selectedVersionId={selectedVersionId}
+                onVersionChange={setSelectedVersionId}
+                modelCount={models.length}
+            />
+            <VersionHistoryPanel
+                versions={model?.versions || []}
+                selectedVersionId={selectedVersionId}
+                onSelect={setSelectedVersionId}
+                showInactive={Boolean(isSeller && model?.status === 'DRAFT')}
+            />
+            <MetricsComparisonTable versions={visibleVersions} />
+            <AssetDeliveryCallout hidden={isSeller && model?.status === 'DRAFT'} />
+            <ModelData formTitle={''} model={model} selectedVersionId={selectedVersionId} />
+            {isSeller && (
+                <DashboardDataSection
+                    getData={(query) => getOrdersByModelReq(id, typeof query === 'string' ? query : '', { 'Authorization': `Bearer ${token}` })}
+                    contentType="orders"
+                    columns={getOrderColumns()}
+                    tableTitle="Orders Made On This Model"
+                />
+            )}
+            {isBuyer && (
+                <DashboardDataSection
+                    getData={(query) => getOrdersByModelReq(id, `?clientId=${thisUserId}` + ((query && typeof query === 'string') ? '&' + query.replace('?', '') : ''), { 'Authorization': `Bearer ${token}` })}
+                    contentType="orders"
+                    columns={getOrderColumns()}
+                    tableTitle="Orders You Made On This Model"
+                />
+            )}
+            {!isLoggedIn && (
+                <Box sx={{ textAlign: 'center', padding: '40px 20px', margin: '30px 0', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e4e5e7' }}>
+                    <h4 style={{ color: '#3665B9', marginBottom: '10px', fontWeight: 'bold' }}>Want to connect or purchase?</h4>
+                    <p style={{ color: '#6c757d', marginBottom: '20px', fontSize: '15px' }}>
+                        Please log in to message the developer and place orders on this model.
+                    </p>
+                    <Link to="/auth?mode=login" className="btn btn-primary" style={{ backgroundColor: '#5DB8DD', border: 'none', padding: '10px 25px', fontWeight: 'bold' }}>
+                        Log In Now
+                    </Link>
+                </Box>
+            )}
+            {reviews.length > 0 && (
+                <FeedbackList rev={reviews} formTitle='Reviews for this model' versionMap={reviewVersionMap} />
+            )}
+            <PopularServices models={models.slice(0, 10)} title='More Models Made By This Developer' />
         </>
     )
 }

@@ -22,7 +22,7 @@ const uiReducer = createSlice({
         // },
     }
 }) ;
-//---------------------------------- 
+//----------------------------------
 
 export const uiActions = uiReducer.actions ;
 export default uiReducer.reducer ;

@@ -12,7 +12,7 @@
     position : fixed ;
     bottom : 25px ; 
     left : 100px ;
-    z-index: 50000000;
+    z-index: 60000;
     cursor : pointer;
     display: flex;
     justify-content: center;
@@ -44,8 +44,8 @@
           left: 43px;
           top: 8px;
           width: 18px;
-          height: 18px ;
-          z-index: 10000000000000000000000000;
+          height: 18px;
+          z-index: 2;
           border: var(--cultured) solid 2.5px;
         }
         .info-box{
@@ -89,7 +89,7 @@
           }
           img {
               top: 0;
-              left: -2px;
+              left: 0;
               position: absolute;
               display: block;
               width: 50px;

@@ -59,6 +59,66 @@
   display: flex;
   flex-direction: column;
   height: 72vh  !important;
+
+  .notification-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--white);
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--cultured);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .unread-toggle {
+      font-size: 13px;
+      color: var(--sonic-silver);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .type-filter {
+      padding: 5px 10px;
+      border: 1px solid var(--cultured);
+      border-radius: 5px;
+      color: var(--sonic-silver);
+      font-size: 13px;
+      outline: none;
+      background-color: var(--white);
+      cursor: pointer;
+      &:focus {
+        border-color: var(--main-blue);
+      }
+    }
+
+    .mark-all-read-btn {
+      background: transparent;
+      color: var(--main-blue);
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: underline;
+      cursor: pointer;
+      &:disabled {
+        color: var(--cultured);
+        cursor: not-allowed;
+        text-decoration: none;
+      }
+    }
+  }
+
   .notification-container {
     display: flex;
     flex-direction: column;

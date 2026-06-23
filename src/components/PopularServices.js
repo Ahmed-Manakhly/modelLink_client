@@ -1,17 +1,21 @@
 /* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom';
 import {cartActions} from '../store/Cart-slice' ;
-import {useDispatch} from 'react-redux'; 
+import {useDispatch} from 'react-redux';
 import Card from './Card' ;
 import classes from './PopularServices.module.scss' ;
+import { getModelMarketingFields } from '../lib/modelHelpers';
 //------------------
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-function PopularServices({models , title}) {
-    const dispatch = useDispatch();   
-    const onAddProduct =(id)=> {
+function PopularServices({ models, title, viewAllLink }) {
+    const dispatch = useDispatch();
+    const onAddProduct =(id, versionId)=> {
         const item = models.find((item)=>item.id === id)
-        dispatch(cartActions.addToCart(item))
+        if (item) {
+            dispatch(cartActions.addToCart({ model: item, versionId }))
+        }
     }
     const responsive = {
         superLargeDesktop: {
@@ -35,25 +39,43 @@ function PopularServices({models , title}) {
     return (
 
     <div className={classes.container}>
-        <h2 className={classes["title"]}>{`${title?title:'Popular Services!'}`}</h2>
-        <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={2500}  keyBoardControl swipeable  
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+            <h2 className={classes["title"]}>{`${title ? title : 'Popular Services!'}`}</h2>
+            {viewAllLink && (
+                <Link to={viewAllLink} className="btn btn-outline-primary btn-sm">
+                    View all
+                </Link>
+            )}
+        </div>
+        <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={2500}  keyBoardControl swipeable
             draggable   >
-            {models.map((ele,i)=>{return(
-                <Card 
-                seller={ele?.User?.first_name ? ele?.User?.first_name :ele?.User?.org_username}
-                avatar={ele?.User?.avatar}
+            {models.map((ele,i)=>{
+                const m = getModelMarketingFields(ele);
+                return(
+                <Card
+                sellerUser={ele?.developer}
                 key={i}
-                category ={ele?.category}
-                title ={ele?.title}
                 id={ele?.id}
-                desc ={ele?.desc}
-                price ={ele?.price}
-                deliveryTime ={ele?.deliveryTime} 
-                cover ={ele?.cover} 
-                starFrequency ={ele?.starFrequency}
-                totalStars ={ele?.totalStars}
-                onAddProduct={onAddProduct.bind(null,ele?.id)}
-                userId={ele.userId}
+                category={m.category}
+                categorySlug={m.categorySlug}
+                title={m.title}
+                desc={m.desc}
+                price={m.price}
+                deliveryTime={m.deliveryTime}
+                cover={ele?.cover || ele?.galleryImages?.[0]}
+                galleryImages={ele?.galleryImages}
+                starFrequency={ele?.starFrequency}
+                totalStars={ele?.totalStars}
+                avgRating={ele?.avgRating}
+                sales={m.sales}
+                views={ele?.views ?? 0}
+                reviewCount={m.reviewCount}
+                tags={m.tags}
+                modality={m.modality}
+                isPrimary={m.isPrimary}
+                featured={ele?.featured === true}
+                onAddProduct={() => onAddProduct(ele?.id)}
+                userId={ele?.developer?.id}
                 />
             )})}
         </Carousel>
@@ -62,4 +84,3 @@ function PopularServices({models , title}) {
 }
 
 export default PopularServices
-

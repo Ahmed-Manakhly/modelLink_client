@@ -7,9 +7,9 @@ const conversationsUrl = 'conversations';
 const usersUrl         = 'users';
 
 // --- ONE-LINE REQUEST FUNCTIONS ---
-export const createChat = (data) => API.post(conversationsUrl, data);
-export const userChats  = (id)   => API.get(`${conversationsUrl}/${id}`);
-export const removeChat = (id)   => API.delete(`${conversationsUrl}/${id}`);
+export const createChat = (data, token) => API.post(conversationsUrl, data, { headers: { Authorization: `Bearer ${token}` } });
+export const userChats  = (id, token)   => API.get(`${conversationsUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+export const removeChat = (id, token)   => API.delete(`${conversationsUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
 
 export const getUser = (userId, token) => {
     const headers = {

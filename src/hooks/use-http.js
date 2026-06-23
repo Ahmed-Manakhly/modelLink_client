@@ -3,7 +3,7 @@ import {transActions} from '../store/transformation-slice' ;
 
 function httpReducer(state, action) {
   if (action.type === 'SEND') {
-    return { 
+    return {
       title : 'sending...' ,
       data: null,
       message: 'Sending Expenses Data',

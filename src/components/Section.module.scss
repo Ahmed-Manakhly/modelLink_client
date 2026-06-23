@@ -3,6 +3,8 @@
 //----------------------------------
 
 .teamwork{
+    background: var(--gradient-brand);
+    color: var(--color-surface);
     display: grid;
     grid-template-rows: 10% 1fr;
     h1 {

@@ -1,5 +1,5 @@
 import useInput from '../../../hooks/Use-Input';
-import { useNavigation , useNavigate} from 'react-router-dom';
+import { useNavigation , useNavigate, Link } from 'react-router-dom';
 import classes from './Auth.module.scss' ;
 import { Row , Col  } from 'react-bootstrap'
 import { useState , useEffect } from 'react' ;
@@ -8,6 +8,7 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import {useDispatch} from 'react-redux';
 import {uiActions} from '../../../store/UI-slice' ;
 
+const RESET_CONFIRMATION = 'If this email is registered, a reset code has been sent.';
 
 //-----------------------------------------
 const ForgotPassword = ( ) => {
@@ -21,10 +22,11 @@ const ForgotPassword = ( ) => {
     const [verified, setVerified] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [rest, setRest] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
     const [otpMessage, setOtpMessage] = useState({content : '' , error : false});
     //--------------------------
     const navigate = useNavigate();
-    const dispatch = useDispatch();  
+    const dispatch = useDispatch();
     //--------------------------
     const {value: enteredEmail ,hasError : emailInputIsInvalid , valueIsValid : mail,
         valueChangeHandler : emailInputChangeHandler , inputBlurHandler : emailInputBlurHandler  } = useInput(value => value.trim() !=='' && emailRegx.test(value)) ;
@@ -43,17 +45,20 @@ const ForgotPassword = ( ) => {
     const passInputClasses = passInputIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
     const pass2InputClasses = (pass2InputIsInvalid  )? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
     const OTPClasses = OTPInputIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
+
     //-----------------------
     const gettingOtp = async ()=> {
+        if (!mail) return;
         setIsLoading(true)
         try{
-            const {data} =await createOtp({email : enteredEmail})
-            setOtpMessage(prev => ({...prev , content : data?.data?.message , error : false}))
-            setRest(true)
-            setIsLoading(false)
+            await createOtp({email : enteredEmail})
+            setOtpMessage({ content: RESET_CONFIRMATION, error: false })
+            setEmailSent(true)
         }catch(error)
-        {   
-            setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
+        {
+            setOtpMessage({ content: RESET_CONFIRMATION, error: false })
+            setEmailSent(true)
+        } finally {
             setRest(true)
             setIsLoading(false)
         }
@@ -66,11 +71,11 @@ const ForgotPassword = ( ) => {
             setOtpMessage(prev => ({...prev , content : data?.data?.message , error : false}))
             setVerified(true)
             setRest(true)
-            setIsLoading(false)
         }catch(error)
         {
             setOtpMessage(prev => ({...prev , content : error?.response?.data?.message , error : true}))
             setRest(true)
+        } finally {
             setIsLoading(false)
         }
     }
@@ -88,40 +93,35 @@ const ForgotPassword = ( ) => {
         }
     },[rest , otpMessage.content])
     //-----------------------
-    const handelSubmit =(e)=>{
+    const handelSubmit = async (e)=>{
         e.preventDefault();
-        let toast = {status :'', title :'', message:''}
-        async function changePass (actions ,toastHandler , loadingState ) {
-            loadingState(true)
-            //---------------------------------------------                
-            try{
-                const response = await resetPasswordReq({email: enteredEmail , password:enteredPass1 , passwordConfirm : enteredPass2, otp: theOtp});
-                const resData =  response.data ;
-                loadingState(false)
-                console.log(resData)
-                actions(resData)
-                toast= {status :resData.status,message:resData.message || "Your Password has been Changed!",title:'Change Password'}
-                toastHandler(toast);
-            }catch(err){
-                console.log(err)
-                loadingState(false)
-                toast = {status :'error',message:err.response.data.message,title:'Updating Information failed'};
-                toastHandler(toast);
-            }
-        } 
-        const toastHandler =(toast)=>{
-            dispatch(uiActions.notificationDataChanged(toast))
-            dispatch(uiActions.showNotification(true))
-        } 
-        const actions =(data)=>{
-            console.log(data)
+        if (!formIsValid) return;
+
+        dispatch(uiActions.showLoading(true));
+        try {
+            const response = await resetPasswordReq({
+                email: enteredEmail,
+                password: enteredPass1,
+                passwordConfirm: enteredPass2,
+                otp: theOtp
+            });
+            dispatch(uiActions.notificationDataChanged({
+                status: response.data?.status || 'success',
+                message: response.data?.message || 'Your password has been changed!',
+                title: 'Change Password'
+            }));
+            dispatch(uiActions.showNotification(true));
+            navigate('/auth?mode=login', { replace: true });
+        } catch (err) {
+            dispatch(uiActions.notificationDataChanged({
+                status: 'error',
+                message: err.response?.data?.message || 'Updating information failed',
+                title: 'Updating Information failed'
+            }));
+            dispatch(uiActions.showNotification(true));
+        } finally {
+            dispatch(uiActions.showLoading(false));
         }
-        const loadingState = (state)=>{
-            dispatch(uiActions.showLoading(state))
-        }
-        changePass(actions ,toastHandler , loadingState )
-        dispatch(uiActions.showNotification(false))
-        navigate(`/auth?mode=login`,{replace :false});
     }
     //-----------------------
     return (
@@ -136,6 +136,11 @@ const ForgotPassword = ( ) => {
             </Row>
             {/* {===================================} */}
 
+            {emailSent && (
+                <p className={`${classes['otp-text']} w-100 text-center`}>
+                    <IoMdCheckmarkCircle /> {RESET_CONFIRMATION}
+                </p>
+            )}
 
                 <Row xs={0} md lg  className={`${passInputClasses} d-flex flex-column align-items-center w-100`} >
                     <label htmlFor="password" >Your New Password</label>
@@ -151,28 +156,32 @@ const ForgotPassword = ( ) => {
                     {(pass2InputIsInvalid) && <p className={classes['error-text']}>Your password is not Matching </p>}
                 </Row>
 
-            {/* {===================================} */}                      
+            {/* {===================================} */}
             <div className={`${OTPClasses} ${classes['__otp__con__1']}`} >
                 <div className={`${OTPClasses} ${classes['__otp__con']}`} >
                     <span  onClick={gettingOtp}>Get OTP</span>
                     <input type="text"  placeholder="OTP is required" id='otp' required
+                    value={theOtp}
                     onChange={OTPInputChangeHandler} onBlur={OTPInputBlurHandler} name="org_name"/>
                     <span onClick={verifingOtp} >Verify Your Email</span>
                 </div>
                 {isLoading && <p>Please Wait...</p>}
-                {otpMessage.content !== '' && <p className={`
-                    ${classes['otp-text']} ${otpMessage.error && classes['otp-text-error']}    
+                {otpMessage.content !== '' && !emailSent && <p className={`
+                    ${classes['otp-text']} ${otpMessage.error && classes['otp-text-error']}
                 `} >{!otpMessage.error && <IoMdCheckmarkCircle/>}{otpMessage.content}</p>}
             </div>
             {/* {===================================} */}
             <button
                 onClick={handelSubmit}
-                type="button" 
-                disabled={!formIsValid}
+                type="button"
+                disabled={!formIsValid || isSubmitting}
                 className={`${classes['form-btn']} d-flex flex-column align-items-left w-100`}
             >
-                { isSubmitting? 'Submitting...' : "Change Password"} 
+                { isSubmitting? 'Submitting...' : "Change Password"}
             </button>
+            <Row className="mt-3">
+                <Link to="/auth?mode=login">Back to login</Link>
+            </Row>
     </Col>
     )
 }

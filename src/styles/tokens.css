@@ -1,0 +1,101 @@
+/* ============================================================
+   ModelLink Design Tokens — bridge layer only
+   Loaded AFTER index.scss so it never overrides your palette.
+   Defines only vars that index.scss does not have.
+   ============================================================ */
+
+:root {
+    /* Flat Colors */
+    --color-primary: #3665B9;
+    --color-secondary: #5DB8DD;
+    --color-accent: #FF7A00;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --bg-surface-secondary: #f5f5f5;
+    --color-text-main: #0F172A;
+    --color-text-muted: #475569;
+    --color-success: #10B981;
+    --color-warning: #FFC107;
+    --color-danger: #F44336;
+    --color-info: #221fcc;
+
+    /* Premium Gradients */
+    --gradient-brand: linear-gradient(135deg, #3665B9 0%, #5DB8DD 100%);
+    --gradient-cta: linear-gradient(135deg, #FF9100 0%, #E05300 100%);
+    --gradient-neutral-subtle: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%);
+
+    --text-primary: var(--onyx);
+    --text-secondary: var(--sonic-silver);
+    --text-muted: var(--davys-gray);
+    --text-inverse: var(--white);
+
+    --bg-page: var(--white);
+    --bg-surface: var(--cultured);
+    --bg-card: var(--white);
+    --bg-input: var(--white);
+    --bg-modal: var(--white);
+
+    --border-default: var(--cultured);
+    --border-focus: var(--main-2-blue);
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-pill: 9999px;
+
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --shadow-focus: 0 0 0 3px rgba(54, 101, 185, 0.25);
+
+    /* --- Spacing --- */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    /* --- Typography extras (index.scss owns --fs-* and --weight-*) --- */
+    --font-sans: "Poppins", sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    --text-xs: var(--fs-9);
+    --text-sm: var(--fs-7);
+    --text-base: var(--fs-5);
+    --text-md: var(--fs-4);
+    --text-lg: var(--fs-3);
+    --text-xl: var(--fs-2);
+    --text-2xl: var(--fs-1);
+
+    --font-normal: var(--weight-400);
+    --font-medium: var(--weight-500);
+    --font-semibold: var(--weight-600);
+    --font-bold: var(--weight-700);
+
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+
+    /* --- Z-index (TopNavBar .header-main uses 50000) --- */
+    --z-modal: 60010;
+    --z-overlay: 60009;
+    --z-dropdown: 800;
+    --z-sticky: 700;
+
+    /* --- Misc aliases used by a few components --- */
+    --primary: var(--color-primary);
+    --primary-color: var(--color-primary);
+    --secondary-color: var(--color-accent);
+    --textColor: var(--onyx);
+    --font-1-color: var(--color-text-main);
+    --font-2-color: var(--color-primary);
+    --bg-2-color: var(--cultured);
+    --bg-3-color: var(--white);
+    --border-color: var(--cultured);
+    --btn-bg-color: var(--white);
+    --btn-bg-hover-color: var(--cultured);
+    --btn-font-color: var(--eerie-black);
+    --btn-font-hover-color: var(--eerie-black);
+    --checkbox-border: var(--cultured);
+}

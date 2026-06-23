@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types */
-import {useState} from 'react' ;
-import classes from './MobNavMenu.module.scss'
+import {useState, useEffect} from 'react' ;
+import classes from './MobNavMenu.module.scss';
+import UserAvatar from '../ui/UserAvatar';
 
 import {Link, useNavigate} from 'react-router-dom'
-import { useSelector } from 'react-redux'; 
-import { useDispatch} from 'react-redux'; 
-import {authActions} from '../../store/Auth.-slice' ;
+import { useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
+import {authActions} from '../../store/authSlice' ;
 import {uiActions} from '../../store/UI-slice' ;
 import styles from './Topbar.module.scss' ;
-import {FILES_BASE_API_URL} from '../../lib/api' 
+import {FILES_BASE_API_URL} from '../../lib/api'
+import { getCategoriesReq } from '../../lib/loaders';
+import { buildCategoriesList } from '../../lib/categoryHelpers';
+import { menuList } from '../../constants/marketingData';
 //----------------------------------------------------------------------------
 const AccordionLink =({menuTitle,menuItems , onClick})=>{  //  onClick={onClickLink?.bind(null,item.title)}
   const [isOpen,setIsOpen]=useState(false) ;
@@ -40,9 +44,9 @@ const SingleLink = ({title , onClick, to})=>{
   )
 }
 
-function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 , onClickLink}) {
+function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 }) {
   const navigate = useNavigate()
-  const dispatch = useDispatch();   
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn) ;
   const userData = useSelector(state => state.auth.userData) ;
   const {org_username , role, id:userID , avatar , first_name} = userData;
@@ -54,8 +58,19 @@ function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 
     navigate('/') ;
     onClose()
   }
+
+  const [categoriesList, setCategoriesList] = useState([]);
+  useEffect(() => {
+    getCategoriesReq('?parentId=null&limit=12')
+      .then((res) => {
+        const dbCategories = res.data?.data?.categories || [];
+        setCategoriesList(buildCategoriesList(dbCategories));
+      })
+      .catch((err) => console.error('Failed to load mobnav categories:', err));
+  }, []);
+
     //---------------------------------
-    const pageActions = <> 
+    const pageActions = <>
     <br />
     <Link onClick={onClose}  to="./auth?mode=login" className={`${styles["banner-btn"]} ${styles.signIn}`}>{txt_3}</Link>
     <br />
@@ -63,21 +78,18 @@ function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 
     <br />
   </>
 //---------------------------------------------------------
-  const onClickNavLink =(title)=>{
-    onClickLink(title)
+  const onClickNavLink =()=>{
     onClose()
   }
-  const userActions = <> 
+  const userActions = <>
     {/* {============================================} */}
-      <li className={` ${styles.container_} ${styles['menu-category']} `}>       
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
         <div  className={` ${styles.imgCon} ${styles['menu-title']} `} >
-          {/* <img src={UserHolder} alt="UserHolder" /> */}
-          {avatar &&<img src={FILES_BASE_API_URL+avatar} alt="Model Cover" crossOrigin="anonymous"  />}
-            {!avatar &&  <div className={classes['UserHolder']} >{org_username&&org_username[0]?.toUpperCase()}</div>}
+          <UserAvatar user={userData} />
         </div>
       </li>
       <br />
-      <li className={` ${styles.container_} ${styles['menu-category']} `}> 
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
       {first_name && <h4>{first_name?.toUpperCase()?.slice(0, 9)}</h4>}
              { !first_name && <h4>{org_username?.toUpperCase()?.slice(0, 9)}</h4>}
               <h6>{role}</h6>
@@ -87,18 +99,34 @@ function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 
       <Link onClick={onClose} to={`/profileSettings`}>Profile Settings</Link>
       </li>
 
-      {role === 'DEVELOPER' && 
-          <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
-            <Link onClick={onClose} to={`/dashboard-dev`} >My Dashboard</Link>
-          </li>
+      {role === 'DEVELOPER' &&
+          <>
+            <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+              <Link onClick={onClose} to={`/dashboard-dev`} >My Dashboard</Link>
+            </li>
+            <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+              <Link onClick={onClose} to={`/reviews-dev`} >My Reviews</Link>
+            </li>
+            <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+              <Link onClick={onClose} to={`/wallet`} >My Wallet</Link>
+            </li>
+          </>
       }
-      {role === 'CLIENT' && 
+      {role === 'CLIENT' &&
           <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
             <Link onClick={onClose} to={`/orders-client`} >My Orders</Link>
           </li>
       }
-            <li className={` ${styles.container_} ${styles['menu-category']} `}>
+      {(role === 'ADMIN' || role === 'EMPLOYEE') &&
+          <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+            <Link onClick={onClose} to={`/admin`} >Admin Dashboard</Link>
+          </li>
+      }
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
       <Link onClick={onClose} to={`/profile/${userID}`}>My Profile</Link>
+      </li>
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
+      <Link onClick={onClose} to={`/change-password`}>Change Password</Link>
       </li>
           <br />
           <hr />
@@ -132,8 +160,11 @@ function MobNavMenu({onClose ,menuOpen ,NavData , txt_1 , txt_2 , txt_3 , txt_4 
 
         <SingleLink  title='Home' to='/' onClick={onClose} />
         {/* {======================================} */}
-        {NavData.map((item,index)=>{return(
-          <AccordionLink key={index}  menuTitle={`${item.title}`} menuItems={item.links} onClick={onClickNavLink} />
+        {categoriesList.map((item,index)=>{return(
+          <AccordionLink key={index}  menuTitle={`${item.title}`} menuItems={item.items} onClick={onClickNavLink} />
+        )})}
+        {!isLoggedIn && menuList.map((item,index)=>{return(
+          <AccordionLink key={`menu_${index}`}  menuTitle={`${item.title}`} menuItems={item.items} onClick={onClickNavLink} />
         )})}
         {/* {======================================} */}
         {/* <SingleLink  title='About Us' to='/about'/> */}

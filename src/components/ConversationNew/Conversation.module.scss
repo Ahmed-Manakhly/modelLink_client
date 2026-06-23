@@ -16,6 +16,13 @@
   border: var(--cultured) solid 2px;
   // box-shadow: 5px 5px 10px var(--cultured);
   background-color: #fff;
+  &.active {
+    background-color: #6541f238;
+    border-color: var(--main-2-blue);
+  }
+  &.active:hover {
+    background-color: #987ffb38;
+  }
   &:hover {
     background: var(--cultured);
     cursor: pointer;
@@ -30,31 +37,41 @@
     position: relative;
     .online-dot {
       display: block;
-      background-color: var(--ocean-green);
+      background-color: var(--color-success);
       border-radius: 50%;
       position: absolute;
       left: 25px;
       top: 10px;
       width: 11px;
-      height: 11px ;
-      z-index: 10000000000000000000000000;
+      height: 11px;
+      z-index: 2;
     }
     .info-box{
-      width: 85% !important  ;
+      width: 100% !important;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
       .row_1 , .row_2{
         width: 100% !important;
         display: grid;
         grid-template-columns: 1fr auto;
+        gap: 5px;
+        align-items: center;
+        min-width: 0;
       }
       .row_2{
         .Col_1{
+          min-width: 0;
           a{
             color: var(--main-blue) !important;
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 500;
             font-style: italic;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         .Col_2{
@@ -72,8 +89,13 @@
       .row_1{
         .Col_1{
           color: var(--sonic-silver);
-          font-size: 18px;
+          font-size: 13px;
           font-weight: bold;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          min-width: 0;
+          text-transform: uppercase;
         }
         .Col_2{
           width: 20px;
@@ -91,10 +113,12 @@
           color: var(--sonic-silver) !important;
           font-size: 10px;
           font-style: italic;
+          white-space: nowrap;
         }
       }
     }
     .imgCon{
+      flex-shrink: 0;
       position: relative;
       width: 35px ;
       height: 35px ;
@@ -106,7 +130,7 @@
       }
       img {
           top: 0;
-          left: -2px;
+          left: 0;
           position: absolute;
           display: block;
           width: 35px;

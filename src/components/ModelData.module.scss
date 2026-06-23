@@ -333,7 +333,7 @@ select{
 
 
 .feature-btn{
-    background: var(--ocean-green);
+    background: var(--main-blue);
     color: var(--white);
     // width: 100%;
     font-size: var(--fs-4);
@@ -345,11 +345,11 @@ select{
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--ocean-green);
+    border: 3px solid var(--main-blue);
     margin-bottom: 1.2rem;
     &:hover { 
         background :transparent;
-        color: var(--ocean-green);
+        color: var(--main-blue);
     }
     &:disabled ,
     &:disabled:hover {

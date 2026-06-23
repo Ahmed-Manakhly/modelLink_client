@@ -1,0 +1,154 @@
+@use '../index.scss' as *;
+
+.mainProfileStrip {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+}
+
+.infoOnlyContainer {
+  gap: 5px;
+}
+
+/* 1. TOP CENTERED SECTION */
+.centerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.imgCon {
+  width: 140px; /* Perfect square base for perfect circle */
+  height: 140px;
+  margin: 0 auto 10px;
+  border-radius: 50% !important;
+  overflow: hidden;
+  border: 4px solid var(--white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--white);
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important; /* Forces the image to fill the square without stretching */
+    border-radius: 50% !important;
+  }
+}
+
+.UserHolder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--main-blue);
+  color: var(--white);
+  font-size: 60px;
+  font-weight: 700;
+  border-radius: 50% !important;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-bottom: 5px;
+}
+
+.title_ {
+  color: var(--color-primary);
+  font-size: 20px; 
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+/* 2. LEFT ALIGNED SECTION */
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.info__ {
+  color: var(--sonic-silver);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  word-break: break-word;
+
+  svg {
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  span {
+    color: var(--sonic-silver);
+  }
+}
+
+@media (max-width: 768px) {
+  .title_ {
+    font-size: 18px;
+  }
+  .info__ {
+    font-size: 13px;
+    gap: 6px;
+    svg {
+      font-size: 14px;
+      margin-top: 2px;
+    }
+  }
+}
+
+/* 3. CENTERED ACTIONS */
+.banner-btn {
+  background: var(--main-blue);
+  color: var(--white);
+  font-size: var(--fs-6);
+  font-weight: var(--weight-600);
+  padding: 10px 20px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-timing);
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--main-2-blue);
+    color: var(--white);
+  }
+}

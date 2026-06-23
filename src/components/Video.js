@@ -18,4 +18,4 @@ function Video() {
 
 export default Video
 //autoPlay loop muted
-//poster={poster} 
+//poster={poster}

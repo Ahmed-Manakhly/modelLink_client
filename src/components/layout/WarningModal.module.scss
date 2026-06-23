@@ -10,6 +10,12 @@
     -o-border-radius: 15px;
 }
 //----------------
+.warningModalOverlay {
+    width: auto !important;
+    max-width: min(550px, calc(100vw - 2rem)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
 
 .con {
     display: flex;
@@ -18,14 +24,11 @@
     align-items: center;
     width: 100%;
     padding: 2rem;
-    margin: auto;
-    border: 2px solid var(--cultured);
-    @extend %rad15 ;
     .msg{
-        color: var(--davys-gray);
+        color: var(--text-primary);
         font-size: var(--fs-5);
         font-weight: var(--weight-700);
-        letter-spacing: 0.6px;
+        line-height: 1.5;
         text-transform: capitalize;
         padding-bottom: 10px;
         border-bottom: 1px solid var(--cultured);
@@ -33,9 +36,10 @@
     }
     .actionBox{
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        gap: 2rem;
         align-items: center;
-        width: 65%;
+        width: 100%;
         margin: auto;
         .close{
 

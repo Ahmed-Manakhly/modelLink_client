@@ -35,10 +35,11 @@
           // height: fit-content;
           .widget_1_con{
             display: flex;
-            // justify-content: space-between;
-            gap: 2rem;
-            align-items: flex-start;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
             width: 100%;
+            margin-bottom: 15px;
             .iconImg{
               display: block;
               font-size: 25px;
@@ -221,7 +222,7 @@
             }
           }
           .feature-btn{
-            background: var(--ocean-green);
+            background: var(--main-blue);
             color: var(--white);
             // width: 100%;
             font-size: var(--fs-4);
@@ -233,11 +234,11 @@
             -webkit-transition: var(--transition-timing);
             -o-transition: var(--transition-timing);
             transition: var(--transition-timing);
-            border: 3px solid var(--ocean-green);
+            border: 3px solid var(--main-blue);
             margin-bottom: 1.2rem;
             &:hover { 
                 background :transparent;
-                color: var(--ocean-green);
+                color: var(--main-blue);
             }
             &:disabled ,
             &:disabled:hover {
@@ -253,7 +254,7 @@
           }
           .feature-btn_{
             a{
-              background: var(--ocean-green);
+              background: var(--main-blue);
               color: var(--white);
               // width: 100%;
               font-size: var(--fs-4);
@@ -265,12 +266,12 @@
               -webkit-transition: var(--transition-timing);
               -o-transition: var(--transition-timing);
               transition: var(--transition-timing);
-              border: 3px solid var(--ocean-green);
+              border: 3px solid var(--main-blue);
               margin-bottom: 1.2rem;
             }
             &:hover a { 
                 background :transparent;
-                color: var(--ocean-green);
+                color: var(--main-blue);
             }
             &:disabled a,
             &:disabled:hover a{
@@ -429,6 +430,106 @@
   -moz-border-radius: 15px;
   -ms-border-radius: 15px;
   -o-border-radius: 15px;
+}
+
+.pageTitle {
+  color: var(--main-2-blue);
+  font-weight: var(--weight-700);
+  font-size: var(--text-xl);
+  margin-bottom: 1rem;
+}
+
+.sectionHeading {
+  font-weight: var(--weight-600);
+  color: var(--main-2-blue);
+  font-size: var(--text-md);
+}
+
+.iconPrimary {
+  color: var(--main-2-blue);
+}
+
+.statusPanel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  background-color: var(--white);
+  border: 1px solid var(--cultured);
+  border-radius: var(--border-radius-md);
+  box-shadow: 5px 5px 10px var(--cultured);
+}
+
+.statusPaid,
+.statusDelivered {
+  color: var(--main-blue);
+  font-weight: var(--weight-700);
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.statusDisputed {
+  color: #d32f2f;
+  font-weight: var(--weight-700);
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.statusCancelled,
+.statusRefunded {
+  color: var(--sonic-silver);
+  font-weight: var(--weight-700);
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.statusPending {
+  color: #f57c00;
+  font-weight: var(--weight-700);
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.actionBtn {
+  border-radius: var(--border-radius-md) !important;
+  min-height: 44px;
+}
+
+.primaryActionBtn {
+  background-color: var(--main-2-blue) !important;
+  border-color: var(--main-2-blue) !important;
+}
+
+.assetCard {
+  border: 1px solid var(--cultured);
+  border-radius: var(--border-radius-md);
+  box-shadow: 5px 5px 10px var(--cultured);
+}
+
+.assetLabel {
+  font-size: var(--fs-9);
+  font-weight: var(--weight-700);
+  text-transform: uppercase;
+  color: var(--sonic-silver);
+  margin-bottom: 0.5rem;
+}
+
+.monoBlock {
+  font-size: var(--fs-7);
+  font-family: var(--font-mono);
+  word-break: break-all;
+  background: var(--cultured);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.emptyDeliverables {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--sonic-silver);
+  background-color: var(--white);
+  border: 1px dashed var(--cultured);
+  border-radius: var(--border-radius-md);
 }
 
 .img_cover{
