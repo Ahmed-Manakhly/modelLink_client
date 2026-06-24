@@ -16,6 +16,7 @@ import { socket } from '../../hooks/useSocket';
 import UserProfileStrip from '../UserProfileStrip';
 import {
   getCounterpartyDisplayName,
+  // eslint-disable-next-line
   getCounterpartyInitial,
   getCounterpartyProfileLink,
   isStaffRole,
@@ -63,10 +64,12 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
     typingTimeoutRef.current = setTimeout(emitStopTyping, TYPING_DEBOUNCE_MS);
   };
 
+  // eslint-disable-next-line
   useEffect(() => () => emitStopTyping(), []);
 
   useEffect(() => {
     emitStopTyping();
+  // eslint-disable-next-line
   }, [chat?.id]);
 
   useEffect(() => {

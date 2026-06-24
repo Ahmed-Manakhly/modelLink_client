@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Notifications.module.scss'
-import { FILES_BASE_API_URL } from '../../lib/api'
+// import { FILES_BASE_API_URL } from '../../lib/api'
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -24,7 +24,7 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
   const notifType = getNotificationType(data);
   const typeLabel = getNotificationTypeLabel(notifType);
   const actionLink = resolveActionLink(data?.actionLink, userRole);
-  
+
   useEffect(() => {
     let userId = data?.senderId
     if (!userId) {

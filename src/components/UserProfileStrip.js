@@ -4,7 +4,7 @@ import { FaLocationDot, FaPhone } from 'react-icons/fa6';
 import { FaUserAlt, FaBuilding, FaIdBadge } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-import { FILES_BASE_API_URL } from '../lib/api';
+// import { FILES_BASE_API_URL } from '../lib/api';
 import VerifiedBadge from './ui/VerifiedBadge';
 import styles from './UserProfileStrip.module.scss';
 import UserAvatar from './ui/UserAvatar';
@@ -47,7 +47,7 @@ const UserProfileStrip = ({
     const showEmail = isLoggedIn && ((variant === 'owner-settings' && user.email)
         || (variant === 'order-party' && partyContactVisible && user.email)
         || (variant === 'public' && user.email) || (variant === 'model-developer' && user.email));
-        
+
     const showPhone = isLoggedIn && ((variant === 'owner-settings' && user.org_phone)
         || (variant === 'order-party' && partyContactVisible && user.org_phone)
         || (variant === 'public' && user.org_phone) || (variant === 'model-developer' && user.org_phone));
@@ -66,7 +66,7 @@ const UserProfileStrip = ({
 
     return (
         <div className={`${styles.mainProfileStrip} ${infoOnly ? styles.infoOnlyContainer : ''}`}>
-            
+
             {/* 1. CENTERED TOP SECTION */}
             <div className={styles.centerSection}>
                 {avatarNode || defaultAvatar}
@@ -81,40 +81,40 @@ const UserProfileStrip = ({
                 {showOrgName && (
                     <h6 className={styles.info__}>
                         <FaBuilding style={{ color: '#5DB8DD' }} />
-                        <span>Organization:</span> <span style={{fontWeight: 'normal', fontStyle: 'italic'}}>{user.org_name}</span>
+                        <span>Organization:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.org_name}</span>
                     </h6>
                 )}
                 {user.role && (
                     <h6 className={styles.info__}>
                         <FaIdBadge style={{ color: '#5DB8DD' }} />
-                        <span>Role:</span> <span style={{fontWeight: 'normal', fontStyle: 'italic'}}>{user.role}</span>
+                        <span>Role:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.role}</span>
                     </h6>
                 )}
                 {showVerifiedAt && (
-                    <h6 className={styles.info__}>Verified since <span style={{fontWeight: 'normal'}}>{formatVerifiedDate(resolvedVerifiedAt)}</span></h6>
+                    <h6 className={styles.info__}>Verified since <span style={{ fontWeight: 'normal' }}>{formatVerifiedDate(resolvedVerifiedAt)}</span></h6>
                 )}
                 {user.country && (
                     <h6 className={styles.info__}>
                         <FaLocationDot style={{ color: '#5DB8DD' }} />
-                        {'From '}<span style={{fontWeight: 'normal'}}>{user.country}</span>
+                        {'From '}<span style={{ fontWeight: 'normal' }}>{user.country}</span>
                     </h6>
                 )}
                 {showMemberSince && user.createdAt && (
                     <h6 className={styles.info__}>
                         <FaUserAlt style={{ color: '#5DB8DD' }} />
-                        {'Member since '}<span style={{fontWeight: 'normal'}}>{formatMemberDate(user.createdAt)}</span>
+                        {'Member since '}<span style={{ fontWeight: 'normal' }}>{formatMemberDate(user.createdAt)}</span>
                     </h6>
                 )}
                 {showEmail && (
                     <h6 className={styles.info__}>
-                        <MdEmail style={{ color: '#5DB8DD', fontSize: '17.5px' }} /> 
-                        <span style={{fontWeight: 'normal'}}>{user.email}</span>
+                        <MdEmail style={{ color: '#5DB8DD', fontSize: '17.5px' }} />
+                        <span style={{ fontWeight: 'normal' }}>{user.email}</span>
                     </h6>
                 )}
                 {showPhone && (
                     <h6 className={styles.info__}>
-                        <FaPhone style={{ color: '#5DB8DD' }} /> 
-                        <span style={{fontWeight: 'normal'}}>{user.org_phone}</span>
+                        <FaPhone style={{ color: '#5DB8DD' }} />
+                        <span style={{ fontWeight: 'normal' }}>{user.org_phone}</span>
                     </h6>
                 )}
                 {!isLoggedIn && (user.email || user.org_phone) && (

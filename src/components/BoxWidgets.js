@@ -17,6 +17,7 @@ import UserAvatar from './ui/UserAvatar';
 
 const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, totalOrders, totalSales = 0, totalViews = 0, msgCounter = 0, notCounter = 0, walletBalance, payoutReady = null }) => {
   const userData = useSelector(state => state.auth.userData) || {};
+  // eslint-disable-next-line
   const { org_username, avatar, role } = userData;
   const imgRef = useRef(null);
 

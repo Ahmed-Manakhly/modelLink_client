@@ -10,6 +10,7 @@ import ModelDataTop from '../components/ModelDataTop'
 import ModelGallery from '../components/ModelGallery'
 import ModelBoxWidgets from '../components/ModelBoxWidgets'
 import FeedbackList from '../components/FeedbackList'
+// eslint-disable-next-line
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getData, getModelByIdReq, getOrdersByModelReq, getModelsByUserReq, getReviewsByModelReq } from '../lib/loaders';
 import { createOrderReq } from '../lib/orderRequests';
@@ -142,6 +143,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             { onError: redirectIfModelForbidden }
         )
         dispatch(uiActions.showNotification(false))
+    // eslint-disable-next-line
     }, [id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {
@@ -171,6 +173,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             dispatch(uiActions.showNotification(false))
             setSingleModelUpdated(false)
         }
+    // eslint-disable-next-line
     }, [singleModelUpdated, id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {

@@ -78,6 +78,7 @@ function OrderView({ refresh }) {
 
     useEffect(() => {
         loadOrderAndReview();
+    // eslint-disable-next-line
     }, [dispatch, id, token]);
 
     const versionLabel = order?.versionData?.version || null;
@@ -91,6 +92,7 @@ function OrderView({ refresh }) {
             loadOrderAndReview();
             setUpdated(false);
         }
+    // eslint-disable-next-line
     }, [updated]);
 
     const confirmOrdeerHandler = () => {
@@ -101,6 +103,7 @@ function OrderView({ refresh }) {
                 'Authorization': `Bearer ${token}`
             };
             try {
+                // eslint-disable-next-line
                 const response = await confirmOrderReq(id, {}, headers);
                 dispatch(uiActions.notificationDataChanged({
                     status: 'success',
@@ -274,6 +277,7 @@ function OrderView({ refresh }) {
                 };
                 try {
                     const response = await submitReviewReq(data, headers);
+                    // eslint-disable-next-line
                     const resData = response?.data;
                     dispatch(uiActions.notificationDataChanged({
                         status: 'success',

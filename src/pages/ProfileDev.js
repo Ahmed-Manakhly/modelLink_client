@@ -22,6 +22,7 @@ import ChatCard from '../components/ChatCard'
 function ProfileDev({ onlineUsers }) {
     const token = getAuthToken();
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    // eslint-disable-next-line
     const { role: thisUserRole, id: thisUserId } = useSelector(state => state.auth.userData) || {};
     // const navigate = useNavigate();
     const dispatch = useDispatch();

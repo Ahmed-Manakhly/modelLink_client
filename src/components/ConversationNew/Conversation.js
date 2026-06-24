@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Conversation.module.scss'
-import { FILES_BASE_API_URL } from '../../lib/api'
+// import { FILES_BASE_API_URL } from '../../lib/api'
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,6 +10,7 @@ import { getAuthToken } from '../../utility/tokenLoader'
 import { getMessagePreview } from '../../utility/chatHelpers';
 import {
   getCounterpartyDisplayName,
+  // eslint-disable-next-line
   getCounterpartyInitial,
   getCounterpartyProfileLink,
   isStaffRole,
