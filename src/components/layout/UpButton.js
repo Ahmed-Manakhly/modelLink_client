@@ -11,7 +11,7 @@ function UpButton({scroll}) {
         });
     }
     return (
-        <button className={` ${scroll && classes.show} ${classes.up} btn__ `} onClick={goUpHandler}>
+        <button className={`btn-glass-primary ${scroll && classes.show} ${classes.up}`} onClick={goUpHandler}>
             To Top
         </button>
     )

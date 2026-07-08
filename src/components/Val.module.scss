@@ -36,20 +36,22 @@
     padding-top: 1rem;
     position: relative;
     overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px var(--cultured);
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    border: var(--border-standard);
+    border-radius: var(--radius-card);
     cursor: pointer;
-    @extend%tran;
+    transition: var(--transition-smooth);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    -ms-border-radius: 15px;
-    -o-border-radius: 15px;
+
     &:hover {
-      background-color: var(--cultured);
+      border-color: rgba(34, 211, 238, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+      transform: translateY(-4px);
     }
   }
   
@@ -81,21 +83,19 @@
     margin-bottom: 1rem;
     font-size: 1.6rem;
     font-weight: 900;
-    color: var(--main-blue);
+    color: var(--on-surface);
   }
   
   .room__card p {
     margin-bottom: 0.5rem;
-    color: var(--eerie-black);
+    color: var(--on-surface-variant);
     font-weight: var(--weight-300);
-    // color: #fff;
   }
   
   .room__card h5 {
     margin-bottom: 1rem;
     font-size: 1rem;
-    // font-weight: 500;
-    // color: #fff;
+    color: var(--secondary);
   }
 
 

@@ -73,48 +73,50 @@
         /* TopNavBar search: matches legacy native select + input join */
         &.flatRight {
             .selectedValue {
-                background-color: var(--main-blue);
-                color: var(--white);
-                border: 2.5px solid var(--main-blue);
+                background-color: var(--bg-surface);
+                color: var(--on-surface-variant);
+                border: var(--border-standard);
                 border-right: none;
-                border-radius: 9px 0 0 9px;
-                font-size: 15px;
+                border-radius: var(--radius-input) 0 0 var(--radius-input);
+                font-size: 13px;
                 font-weight: 400;
                 height: auto;
                 min-height: 0;
                 padding: 8px 10px;
-                padding-right: 50px;
+                padding-right: 35px;
 
                 &:hover:not(.disabled) {
-                    background-color: var(--main-blue);
-                    color: var(--white);
-                    border-color: var(--main-blue);
+                    background-color: rgba(255, 255, 255, 0.03);
+                    color: var(--on-surface);
+                    border-color: rgba(255, 255, 255, 0.1);
                 }
 
                 .open & {
                     box-shadow: none;
-                    border-color: var(--main-blue);
+                    border-color: var(--primary);
                 }
             }
 
             .dropdown {
-                background: var(--main-blue);
-                border: 3px solid var(--main-blue);
-                box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.12);
+                background: var(--bg-surface);
+                border: var(--border-standard);
+                border-top: none;
+                border-radius: 0 0 var(--radius-input) var(--radius-input);
+                box-shadow: var(--glass-shadow);
             }
 
             .option {
-                color: var(--white);
-                font-size: 15px;
+                color: var(--on-surface-variant);
+                font-size: 13px;
 
                 &:hover {
-                    background: var(--white);
-                    color: var(--main-blue);
+                    background: rgba(255, 255, 255, 0.05);
+                    color: var(--on-surface);
                 }
 
                 &.selected {
-                    background: var(--white);
-                    color: var(--main-blue);
+                    background: rgba(34, 211, 238, 0.1);
+                    color: var(--primary);
                 }
             }
 

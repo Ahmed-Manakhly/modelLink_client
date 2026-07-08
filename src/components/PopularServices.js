@@ -42,7 +42,7 @@ function PopularServices({ models, title, viewAllLink }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
             <h2 className={classes["title"]}>{`${title ? title : 'Popular Services!'}`}</h2>
             {viewAllLink && (
-                <Link to={viewAllLink} className="btn btn-outline-primary btn-sm">
+                <Link to={viewAllLink} className="btn-glass-outline">
                     View all
                 </Link>
             )}

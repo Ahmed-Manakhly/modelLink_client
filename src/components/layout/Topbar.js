@@ -29,8 +29,8 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
   }
   //---------------------------------------------------------
   const pageActions = <>
-    <Link to="./auth?mode=login" className={`${classes["banner-btn"]} ${classes.signIn}`}>{txt_3}</Link>
-    <Link to="./auth?mode=signup" className={`${classes["banner-btn"]} ${classes.signUp}`} >{txt_4}</Link>
+    <Link to="./auth?mode=login" className={`btn-glass-primary`}>{txt_3}</Link>
+    <Link to="./auth?mode=signup" className={`btn-glass-outline`} style={{ marginLeft: '10px' }}>{txt_4}</Link>
   </>
   //---------------------------------------------------------
   const userActions = <>
@@ -86,20 +86,20 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
           </li>
           <hr />
           <li className={` ${classes.item_2} ${classes['dropdown-item']}`} style={{ alignItems: 'center' }}>
-            <button onClick={logoutAction} className={`${classes["banner-btn"]} ${classes.signUp}`}  >{'Logout'}</button>
+            <button onClick={logoutAction} className={`btn-glass-primary`} >{'Logout'}</button>
           </li>
         </ul>
       </li>
     </div>
     {/* {============================================} */}
     {role === 'DEVELOPER' &&
-      <Link to="/models/new" className={classes["banner-btn"]}> {'Create Model'} </Link>
+      <Link to="/models/new" className="btn-glass-primary"> {'Create Model'} </Link>
     }
     {role === 'CLIENT' &&
-      <Link to="/orders-client" className={classes["banner-btn"]}> {'My Orders'} </Link>
+      <Link to="/orders-client" className="btn-glass-primary"> {'My Orders'} </Link>
     }
     {(role === 'ADMIN' || role === 'EMPLOYEE') &&
-      <Link to="/admin" className={classes["banner-btn"]}> {'Dashboard'} </Link>
+      <Link to="/admin" className="btn-glass-primary"> {'Dashboard'} </Link>
     }
   </>
   //---------------------------------------------------------

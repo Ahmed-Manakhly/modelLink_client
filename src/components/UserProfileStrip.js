@@ -147,7 +147,7 @@ const UserProfileStrip = ({
             {/* 3. CENTERED BUTTONS SECTION */}
             {showViewProfileLink && profileLinkTo && (
                 <div className={styles.centerSection} style={{ marginTop: '15px' }}>
-                    <Link to={profileLinkTo} className={styles['banner-btn']}>
+                    <Link to={profileLinkTo} className="btn-glass-primary">
                         {viewProfileLabel}
                     </Link>
                 </div>

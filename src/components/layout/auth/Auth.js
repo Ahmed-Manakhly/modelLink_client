@@ -6,7 +6,7 @@ import SignupFormStep1 from './SignupFormStep1' ;
 import SignupFormStep2 from './SignupFormStep2' ;
 import AccountRoleForm from './AccountRoleForm' ;
 import ForgotPassword from './ForgotPassword' ;
-// import logo from '../../../assets/LOGO_3.png'
+import logo from '../../../assets/robot-mascot.png'
 import { useState} from 'react' ;
 import { Row , Col  } from 'react-bootstrap'
 
@@ -51,7 +51,7 @@ const Auth = ( ) => {
                 <Col className={`${classes['contact-col']} ${classes['contact-col2']} d-flex flex-column `}>
                     <Row className=' d-flex flex-column '>
                         <div className="brand-logo-text" style={{ marginBottom: '20px' }}>
-                          {/* <img src={logo} alt="logo" /> */}
+                          <img src={logo} alt="ModelLink Mascot" style={{ width: '120px', height: '120px', borderRadius: '50%', marginBottom: '15px', boxShadow: '0 0 20px rgba(34, 211, 238, 0.2)' }} />
                           Model<span>Link</span>
                         </div>
                         <Row>

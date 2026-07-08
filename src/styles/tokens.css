@@ -1,49 +1,81 @@
 /* ============================================================
-   ModelLink Design Tokens — bridge layer only
+   ModelLink Design Tokens — Neural Midnight
    Loaded AFTER index.scss so it never overrides your palette.
-   Defines only vars that index.scss does not have.
    ============================================================ */
 
 :root {
-    /* Flat Colors */
-    --color-primary: #3665B9;
-    --color-secondary: #5DB8DD;
-    --color-accent: #FF7A00;
-    --color-bg: #F8FAFC;
-    --color-surface: #FFFFFF;
-    --bg-surface-secondary: #f5f5f5;
-    --color-text-main: #0F172A;
-    --color-text-muted: #475569;
+    /* Neural Midnight Core Color Palette */
+    --bg-main: #0A0C10;
+    --bg-surface: #111318;
+    --on-surface: #E2E8F0;
+    --on-surface-variant: #94A3B8;
+
+    /* Brand Accents (Neon System) */
+    --primary: #22D3EE;
+    --primary-glow: rgba(34, 211, 238, 0.4);
+    --secondary: #6366F1;
+    --secondary-glow: rgba(99, 102, 241, 0.3);
+
+    /* Unified Gradients */
+    --gradient-main: linear-gradient(135deg, #0A0C10 0%, #111318 100%);
+    --gradient-marketing: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(34, 211, 238, 0.1) 0px, transparent 50%);
+    --gradient-hero: linear-gradient(105deg, #6366F1 0%, #22D3EE 100%);
+
+    /* Glassmorphism System */
+    --surface-glass: rgba(255, 255, 255, 0.03);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --glass-blur: 20px;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    /* Geometry (Standardized Radii) */
+    --radius-card: 12px;
+    --radius-button: 8px;
+    --radius-input: 8px;
+    --border-standard: 1px solid var(--border-glass);
+
+    /* Interactive States */
+    --btn-hover-glow: 0 0 20px var(--primary-glow);
+    --input-focus-glow: 0 0 12px var(--secondary-glow);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* --- Legacy Aliases (mapped to new tokens to prevent breaking the app) --- */
+    --color-primary: var(--primary);
+    --color-secondary: var(--secondary);
+    --color-accent: var(--primary);
+    --color-bg: var(--bg-main);
+    --color-surface: var(--bg-surface);
+    --bg-surface-secondary: var(--bg-surface);
+    --color-text-main: var(--on-surface);
+    --color-text-muted: var(--on-surface-variant);
+    
     --color-success: #10B981;
     --color-warning: #FFC107;
-    --color-danger: #F44336;
-    --color-info: #221fcc;
+    --color-danger:  #F44336;
+    --color-info:    var(--secondary);
 
-    /* Premium Gradients */
-    --gradient-brand: linear-gradient(135deg, #3665B9 0%, #5DB8DD 100%);
-    --gradient-cta: linear-gradient(135deg, #FF9100 0%, #E05300 100%);
-    --gradient-neutral-subtle: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%);
+    --gradient-brand: var(--gradient-hero);
+    --gradient-cta: var(--gradient-hero);
+    --gradient-neutral-subtle: var(--gradient-main);
 
-    --text-primary: var(--onyx);
-    --text-secondary: var(--sonic-silver);
-    --text-muted: var(--davys-gray);
-    --text-inverse: var(--white);
+    --text-primary: var(--on-surface);
+    --text-secondary: var(--on-surface-variant);
+    --text-muted: var(--on-surface-variant);
+    --text-inverse: var(--bg-main);
 
-    --bg-page: var(--white);
-    --bg-surface: var(--cultured);
-    --bg-card: var(--white);
-    --bg-input: var(--white);
-    --bg-modal: var(--white);
+    --bg-page: var(--bg-main);
+    --bg-card: var(--bg-surface);
+    --bg-input: var(--bg-surface);
+    --bg-modal: var(--bg-surface);
 
-    --border-default: var(--cultured);
-    --border-focus: var(--main-2-blue);
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
+    --border-default: var(--border-glass);
+    --border-focus: var(--secondary);
+    --border-radius-lg: var(--radius-card);
+    --border-radius-xl: var(--radius-card);
     --border-radius-pill: 9999px;
 
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.15);
-    --shadow-focus: 0 0 0 3px rgba(54, 101, 185, 0.25);
+    --shadow-card: var(--glass-shadow);
+    --shadow-modal: var(--glass-shadow);
+    --shadow-focus: var(--input-focus-glow);
 
     /* --- Spacing --- */
     --space-1: 0.25rem;
@@ -56,7 +88,7 @@
     --space-10: 2.5rem;
     --space-12: 3rem;
 
-    /* --- Typography extras (index.scss owns --fs-* and --weight-*) --- */
+    /* --- Typography extras --- */
     --font-sans: "Poppins", sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
@@ -77,25 +109,89 @@
     --leading-normal: 1.5;
     --leading-relaxed: 1.75;
 
-    /* --- Z-index (TopNavBar .header-main uses 50000) --- */
+    /* --- Z-index --- */
     --z-modal: 60010;
     --z-overlay: 60009;
     --z-dropdown: 800;
     --z-sticky: 700;
 
     /* --- Misc aliases used by a few components --- */
-    --primary: var(--color-primary);
     --primary-color: var(--color-primary);
     --secondary-color: var(--color-accent);
-    --textColor: var(--onyx);
+    --textColor: var(--text-primary);
     --font-1-color: var(--color-text-main);
     --font-2-color: var(--color-primary);
-    --bg-2-color: var(--cultured);
-    --bg-3-color: var(--white);
-    --border-color: var(--cultured);
-    --btn-bg-color: var(--white);
-    --btn-bg-hover-color: var(--cultured);
-    --btn-font-color: var(--eerie-black);
-    --btn-font-hover-color: var(--eerie-black);
-    --checkbox-border: var(--cultured);
+    --bg-2-color: var(--bg-surface);
+    --bg-3-color: var(--bg-main);
+    --border-color: var(--border-glass);
+    --btn-bg-color: var(--surface-glass);
+    --btn-bg-hover-color: var(--bg-surface);
+    --btn-font-color: var(--text-primary);
+    --btn-font-hover-color: var(--text-primary);
+    --checkbox-border: var(--border-glass);
+}
+
+/* --- UTILITY BLUEPRINTS --- */
+.glass-container {
+    background: var(--surface-glass);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--border-standard);
+    border-radius: var(--radius-card);
+    box-shadow: var(--glass-shadow);
+}
+
+.btn-glass-primary {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0.4) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    border-radius: var(--radius-button);
+    transition: var(--transition-smooth);
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-glass-primary:hover {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+    transform: translateY(-2px);
+    border-color: rgba(34, 211, 238, 0.8);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.9) 0%, rgba(34, 211, 238, 0.5) 100%);
+}
+
+.btn-glass-outline {
+    background: transparent;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(34, 211, 238, 0.8);
+    border-radius: var(--radius-button);
+    transition: var(--transition-smooth);
+    color: var(--primary);
+    cursor: pointer;
+    padding: 8px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-glass-outline:hover {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+    transform: translateY(-2px);
+    border-color: rgba(34, 211, 238, 1);
+    background: rgba(34, 211, 238, 0.1);
+    color: #fff;
+}
+
+.neon-icon {
+    stroke: var(--secondary);
+    filter: drop-shadow(0 0 4px var(--secondary-glow));
 }

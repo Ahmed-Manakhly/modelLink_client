@@ -13,9 +13,9 @@
 }
 
 .card {
-    border: 2px solid var(--cultured);
-    background-color: rgba(238, 238, 238, 0.278);
-    border-radius: 10px;
+    border: var(--border-standard);
+    background-color: transparent;
+    border-radius: var(--radius-card);
     padding: 25px 0;
 }
 
@@ -37,9 +37,10 @@
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
-    border: 2px solid var(--cultured);
-    background-color: rgba(238, 238, 238, 0.94);
-    border-radius: 10px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    border: var(--border-standard);
+    border-radius: var(--radius-card);
 }
 
 .avatarSlot {

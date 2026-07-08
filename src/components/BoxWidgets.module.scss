@@ -20,9 +20,8 @@
     width: 95%;
     margin: auto;
     margin-bottom: 5rem;
-    border: 2px solid var(--cultured);
-    background-color: rgba(238, 238, 238, 0.278);
-    // box-shadow: 5px 5px 10px var(--cultured);
+    border: none;
+    background-color: transparent;
 
     // background-image: url('../assets/bg-texture-4.png');
     // background-size: 100%;
@@ -100,17 +99,17 @@
               .iconImg {
                 display: block;
                 font-size: 35px;
-                color: var(--sonic-silver);
+                color: var(--primary);
               }
 
               h4.wel {
                 font-size: 30px;
                 margin: 0;
                 font-weight: 700;
-                color: var(--sonic-silver);
+                color: var(--on-surface);
 
                 span {
-                  color: var(--main-blue);
+                  color: var(--secondary);
                 }
               }
             }
@@ -121,9 +120,10 @@
 
               .widget_1,
               .widget_2 {
-                box-shadow: 5px 5px 10px var(--cultured);
-                background-color: var(--white);
-                border-radius: 10px;
+                background: var(--surface-glass);
+                backdrop-filter: blur(12px);
+                border: var(--border-standard);
+                border-radius: var(--radius-card);
                 width: 100%;
                 display: flex;
                 flex-direction: column;
@@ -135,7 +135,7 @@
                 H1 {
                   font-size: 19px;
                   font-weight: 800;
-                  color: var(--sonic-silver);
+                  color: var(--on-surface);
                   margin-top: .5rem;
                 }
 
@@ -143,13 +143,13 @@
                   display: block;
                   font-size: 35px;
                   font-weight: 800;
-                  color: var(--sonic-silver);
+                  color: var(--secondary);
                 }
 
                 span {
                   font-size: 35px;
                   font-weight: 800;
-                  color: var(--main-blue);
+                  color: var(--primary);
                 }
 
                 & {
@@ -178,7 +178,7 @@ img.get_start {
 
 
 .iconPrimary {
-  color: var(--main-2-blue);
+  color: var(--primary);
   cursor: pointer;
 }
 
@@ -202,8 +202,8 @@ img.get_start {
 
 
 a.banner-btn_ {
-  background: var(--main-2-blue) !important;
-  color: var(--cultured);
+  background: var(--primary) !important;
+  color: var(--bg-main);
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
@@ -217,24 +217,26 @@ a.banner-btn_ {
   -webkit-transition: var(--transition-timing);
   -o-transition: var(--transition-timing);
   transition: var(--transition-timing);
-  border: 3px solid var(--main-2-blue);
-  box-shadow: .9px .9px 17px var(--cultured);
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 20px var(--primary-glow);
 
   &:hover {
-    background: var(--cultured) !important;
-    color: var(--main-blue);
-    border-color: var(--main-blue);
+    background: transparent !important;
+    color: var(--primary);
+    border-color: var(--primary);
   }
 
   &.signUp {
     background: transparent;
-    color: var(--main-blue);
-    border: 3px solid var(--main-blue);
+    color: var(--secondary);
+    border: 3px solid var(--secondary);
     padding: 7px 14px;
 
     &:hover {
-      color: var(--davys-gray);
-      border-color: var(--davys-gray);
+      color: var(--bg-main);
+      background: var(--secondary) !important;
+      border-color: var(--secondary);
+      box-shadow: 0 0 20px var(--secondary-glow);
     }
   }
 }
@@ -330,7 +332,7 @@ a.banner-btn_ {
   width: 170px;
   height: 170px;
   @extend %rad;
-  border: 3.5px var(--main-2-blue) solid;
+  border: 3.5px var(--primary) solid;
   margin: 0 auto;
 
   // overflow: hidden;
@@ -356,7 +358,7 @@ a.banner-btn_ {
     font-size: 2.5rem;
     font-weight: 700;
     color: #fff;
-    background-color: var(--main-blue);
+    background-color: var(--primary);
     top: 0;
     left: 0;
     position: absolute;
@@ -413,12 +415,12 @@ a.banner-btn_ {
 
   .title_ {
     font-size: 47px;
-    color: var(--main-2-blue);
+    color: var(--primary);
     text-align: center;
   }
 
   .info {
-    color: var(--sonic-silver);
+    color: var(--on-surface-variant);
     text-align: center;
     font-size: 18px;
     font-style: italic;
@@ -431,7 +433,7 @@ a.banner-btn_ {
     gap: 2rem;
     padding: 0 5px;
     font-size: 15px;
-    color: var(--sonic-silver);
+    color: var(--on-surface-variant);
     font-weight: 900;
     word-spacing: 8px;
   }

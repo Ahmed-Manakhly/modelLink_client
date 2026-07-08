@@ -1,12 +1,13 @@
 @use '../index.scss' as * ;
 
 .showcase {
-    background: #ffffff;
-    border: 1px solid var(--cultured);
-    border-radius: var(--border-radius-md);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.05) 0%, rgba(34, 211, 238, 0.01) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(34, 211, 238, 0.1);
+    border-radius: var(--radius-card);
     overflow: hidden;
-    transition: var(--transition-timing);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: var(--transition-smooth);
+    box-shadow: var(--glass-shadow);
     margin: auto;
     width: 100%;
     height: 540px;
@@ -14,7 +15,7 @@
     flex-direction: column;
 }
 
-.showcase:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.showcase:hover { box-shadow: 0 0 20px rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.4); background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(34, 211, 238, 0.02) 100%); }
 
 .showcase-banner {
     position: relative;
@@ -83,23 +84,23 @@
 .showcase:hover .showcase-actions { transform: translateX(0); }
 
 .btn-action {
-    background: var(--white);
-    color: var(--sonic-silver);
-    border: 1px solid var(--cultured);
+    background: var(--bg-surface);
+    color: var(--on-surface-variant);
+    border: var(--border-standard);
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-radius-sm);
-    transition: var(--transition-timing);
+    border-radius: var(--radius-button);
+    transition: var(--transition-smooth);
     font-size: 16px;
 }
 
 .btn-action:hover {
-    background: var(--main-2-blue);
-    color: var(--white);
-    border-color: var(--main-2-blue);
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
 }
 
 /* Carousel controls */
@@ -163,10 +164,10 @@
 
 .version-badge {
     font-size: 11px;
-    background: var(--cultured);
+    background: var(--bg-main);
     padding: 2px 6px;
     border-radius: 4px;
-    color: var(--sonic-silver);
+    color: var(--on-surface-variant);
     font-weight: 600;
 }
 
@@ -223,9 +224,9 @@
 .tag {
     font-size: 10px;
     padding: 3px 8px;
-    background: var(--cultured);
+    background: rgba(99, 102, 241, 0.1);
     border-radius: 4px;
-    color: var(--sonic-silver);
+    color: var(--primary);
     font-weight: 500;
 }
 
@@ -252,7 +253,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid var(--cultured);
+    border-top: var(--border-standard);
     padding-top: 12px;
     margin-top: auto;
 }

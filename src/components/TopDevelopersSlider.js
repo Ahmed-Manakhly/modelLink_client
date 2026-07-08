@@ -20,15 +20,28 @@ function TopDevelopersSlider({ developers, title }) {
                 {developers.map((dev, i) => (
                     <div key={dev.id || i} style={{ padding: '10px 15px', height: '100%' }}>
                         <div style={{
-                            background: '#fff', 
+                            background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.03) 0%, rgba(34, 211, 238, 0.06) 100%)', 
+                            backdropFilter: 'blur(12px)',
                             borderRadius: '15px', 
                             padding: '20px 10px', 
-                            boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                            boxShadow: 'var(--glass-shadow)',
                             height: '100%',
                             display: 'flex',
                             justifyContent: 'center',
-                            border: '1px solid #eaeaea'
-                        }}>
+                            border: '1px solid rgba(34, 211, 238, 0.1)',
+                            transition: 'var(--transition-smooth)'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = '0 0 15px rgba(34, 211, 238, 0.15)';
+                            e.currentTarget.style.borderColor = 'rgba(34, 211, 238, 0.3)';
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.03) 100%)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
+                            e.currentTarget.style.borderColor = 'rgba(34, 211, 238, 0.1)';
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(34, 211, 238, 0.03) 0%, rgba(34, 211, 238, 0.06) 100%)';
+                        }}
+                        >
                             <UserProfileStrip 
                                 user={dev} 
                                 variant="public" 

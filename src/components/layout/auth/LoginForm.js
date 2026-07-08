@@ -44,7 +44,7 @@ const LoginForm = () => {
                 {passInputIsInvalid && <p className={classes['error-text']}>Password must be at least 12 characters long, including at least one uppercase letter, one lowercase letter, one digit, and one special character.</p>}
             </Row>
             {/* {====================================================} */}
-            <button type="submit" disabled={!formIsValid} className={`${classes['form-btn']} d-flex flex-column align-items-left w-100`} > {isSubmitting ? 'Submitting...' : "Login"} </button>
+            <button type="submit" disabled={!formIsValid} className={`btn-glass-primary d-flex flex-column align-items-center w-100 mt-4`} > {isSubmitting ? 'Submitting...' : "Login"} </button>
         </Col>
     )
 }
