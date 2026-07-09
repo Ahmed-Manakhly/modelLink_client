@@ -9,17 +9,21 @@ import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/authSlice';
 import { uiActions } from '../../store/UI-slice';
 import styles from './Topbar.module.scss';
+import chat_bot from '../../assets/ai-face.png';
 // import {FILES_BASE_API_URL} from '../../lib/api'
 import { getCategoriesReq } from '../../lib/loaders';
 import { buildCategoriesList } from '../../lib/categoryHelpers';
 import { menuList } from '../../constants/marketingData';
 //----------------------------------------------------------------------------
-const AccordionLink = ({ menuTitle, menuItems, onClick }) => {  //  onClick={onClickLink?.bind(null,item.title)}
+const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick={onClickLink?.bind(null,item.title)}
   const [isOpen, setIsOpen] = useState(false);
   return (
     <li className={classes["menu-category"]}>
       <button className={`${classes['accordion-menu']} ${isOpen && classes.active}`} onClick={() => { setIsOpen(prev => !prev) }}>
-        <p className={classes["menu-title"]}>{menuTitle}</p>
+        <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+          {img && <img src={img} alt={menuTitle} style={{width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />}
+          <p className={classes["menu-title"]}>{menuTitle}</p>
+        </div>
         <div>
           {!isOpen && <ion-icon name="add-outline" className={classes["add-icon"]}></ion-icon>}
           {isOpen && <ion-icon name="remove-outline" className={classes["remove-icon"]}></ion-icon>}
@@ -74,10 +78,13 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
 
   //---------------------------------
   const pageActions = <>
-    <br />
-    <Link onClick={onClose} to="./auth?mode=login" className={`${styles["banner-btn"]} ${styles.signIn}`}>{txt_3}</Link>
-    <br />
-    <Link onClick={onClose} to="./auth?mode=signup" className={`${styles["banner-btn"]} ${styles.signUp}`} >{txt_4}</Link>
+    <div style={{display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+      <img src={chat_bot} alt="AI Avatar" style={{width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3.5px solid var(--primary)'}} />
+    </div>
+    <div style={{display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px'}}>
+      <Link onClick={onClose} to="./auth?mode=login" className={`btn-glass-primary`} style={{textAlign: 'center'}}>{txt_3}</Link>
+      <Link onClick={onClose} to="./auth?mode=signup" className={`btn-glass-outline`} style={{textAlign: 'center'}}>{txt_4}</Link>
+    </div>
     <br />
   </>
   //---------------------------------------------------------
@@ -86,16 +93,18 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
   }
   const userActions = <>
     {/* {============================================} */}
-    <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <div className={` ${styles.imgCon} ${styles['menu-title']} `} >
+    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{display: 'flex', justifyContent: 'center', margin: '15px 0'}}>
+      <div className={` ${styles.imgCon} ${styles['menu-title']} `} style={{width: '90px', height: '90px'}} >
         <UserAvatar user={userData} />
       </div>
     </li>
-    <br />
-    <li className={` ${styles.container_} ${styles['menu-category']} `}>
+    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{textAlign: 'center'}}>
       {first_name && <h4>{first_name?.toUpperCase()?.slice(0, 9)}</h4>}
       {!first_name && <h4>{org_username?.toUpperCase()?.slice(0, 9)}</h4>}
-      <h6>{role}</h6>
+      <h6 style={{color: 'var(--sonic-silver)', marginTop: '5px'}}>{role}</h6>
+    </li>
+    <li style={{padding: '10px 20px 25px 20px'}}>
+        <button onClick={logoutAction} className={`btn-glass-outline`} style={{width: '100%'}}>{'Logout'}</button>
     </li>
     <hr />
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
@@ -104,24 +113,24 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
 
     {role === 'DEVELOPER' &&
       <>
-        <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+        <li className={` ${styles.container_} ${styles['menu-category']} `}>
           <Link onClick={onClose} to={`/dashboard-dev`} >My Dashboard</Link>
         </li>
-        <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+        <li className={` ${styles.container_} ${styles['menu-category']} `}>
           <Link onClick={onClose} to={`/reviews-dev`} >My Reviews</Link>
         </li>
-        <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+        <li className={` ${styles.container_} ${styles['menu-category']} `}>
           <Link onClick={onClose} to={`/wallet`} >My Wallet</Link>
         </li>
       </>
     }
     {role === 'CLIENT' &&
-      <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
         <Link onClick={onClose} to={`/orders-client`} >My Orders</Link>
       </li>
     }
     {(role === 'ADMIN' || role === 'EMPLOYEE') &&
-      <li className={` ${styles.item_2}  ${styles['dropdown-item']}`}>
+      <li className={` ${styles.container_} ${styles['menu-category']} `}>
         <Link onClick={onClose} to={`/admin`} >Admin Dashboard</Link>
       </li>
     }
@@ -135,22 +144,16 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
     <hr />
     <br />
     <div className={styles['desktop-menu-category-list']}>
-      <li className={` ${styles.item_2} ${styles['dropdown-item']}`}>
-        <button onClick={logoutAction} className={`${styles["banner-btn"]} ${styles.signUp}`}  >{'Logout'}</button>
-      </li>
-      <br />
       <ul>
       </ul>
-
     </div>
     {/* {============================================} */}
   </>
   //------------------------
   return (
     <nav className={`${classes['mobile-navigation-menu']}  has-scrollbar ${menuOpen && classes.active} `} >
-      <div className={classes["menu-top"]}>
-        <h2 className={classes["menu-title"]}>Menu</h2>
-        <button className={classes["menu-close-btn"]} onClick={onClose}>
+      <div className={classes["menu-top"]} style={{borderBottom: 'none'}}>
+        <button className={classes["menu-close-btn"]} onClick={onClose} style={{marginLeft: 'auto'}}>
           <ion-icon name="close-outline"></ion-icon>
         </button>
       </div>
@@ -165,7 +168,7 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
         {/* {======================================} */}
         {categoriesList.map((item, index) => {
           return (
-            <AccordionLink key={index} menuTitle={`${item.title}`} menuItems={item.items} onClick={onClickNavLink} />
+            <AccordionLink key={index} menuTitle={`${item.title}`} menuItems={item.items} img={item.img} onClick={onClickNavLink} />
           )
         })}
         {!isLoggedIn && menuList.map((item, index) => {

@@ -109,7 +109,7 @@ function Stripe() {
                 <Card className="text-center p-5 shadow-lg" style={{ maxWidth: '500px', borderRadius: '20px', border: 'none' }}>
                     <Card.Body>
                         <FaCheckCircle className="text-success mb-4 animate-bounce" size={80} />
-                        <h2 className="mb-3" style={{ fontWeight: 800, color: 'var(--main-2-blue)' }}>Payment Successful!</h2>
+                        <h2 className="mb-3" style={{ fontWeight: 800, color: 'var(--primary)' }}>Payment Successful!</h2>
                         <p className="text-muted">Stripe has confirmed the transaction. Unlocking asset downloads now...</p>
                     </Card.Body>
                 </Card>

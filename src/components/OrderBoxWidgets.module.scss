@@ -63,7 +63,7 @@
               width: 100px ;
               height: 100px ;
               @extend %rad ;
-              border: 3.5px var(--main-2-blue) solid;
+              border: 3.5px var(--primary) solid;
               img {
                 top: 0;
                 left: 0;
@@ -79,8 +79,8 @@
               .UserHolder{
                   font-size:2.5rem;
                   font-weight: 700;
-                  color: #fff;
-                  background-color: var(--main-blue);
+                  color: var(--on-surface);
+                  background-color: var(--primary);
                   top: 0;
                   left: 0;
                   position: absolute;
@@ -103,7 +103,7 @@
               padding: 1rem;
               .title_ {
                 font-size: 25px;
-                color: var(--main-2-blue);
+                color: var(--primary);
                 text-align: left;
               }
               .info {
@@ -167,7 +167,7 @@
             font-size: larger;
             margin-bottom: 10px ;
             font-weight: 500;
-            color: var(--main-2-blue);
+            color: var(--primary);
             text-align: left;
           }
           p.user{  
@@ -222,7 +222,7 @@
             }
           }
           .feature-btn{
-            background: var(--main-blue);
+            background: var(--primary);
             color: var(--white);
             // width: 100%;
             font-size: var(--fs-4);
@@ -234,18 +234,18 @@
             -webkit-transition: var(--transition-timing);
             -o-transition: var(--transition-timing);
             transition: var(--transition-timing);
-            border: 3px solid var(--main-blue);
+            border: 3px solid var(--primary);
             margin-bottom: 1.2rem;
             &:hover { 
                 background :transparent;
-                color: var(--main-blue);
+                color: var(--primary);
             }
             &:disabled ,
             &:disabled:hover {
                 // box-shadow: none;
                 cursor: not-allowed !important;
                 background: var(--sonic-silver) !important;
-                color: #fff !important;
+                color: var(--on-surface) !important;
                 border: var(--sonic-silver) 3px solid !important;
                 // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
                 @extend %tran ;
@@ -254,7 +254,7 @@
           }
           .feature-btn_{
             a{
-              background: var(--main-blue);
+              background: var(--primary);
               color: var(--white);
               // width: 100%;
               font-size: var(--fs-4);
@@ -266,12 +266,12 @@
               -webkit-transition: var(--transition-timing);
               -o-transition: var(--transition-timing);
               transition: var(--transition-timing);
-              border: 3px solid var(--main-blue);
+              border: 3px solid var(--primary);
               margin-bottom: 1.2rem;
             }
             &:hover a { 
                 background :transparent;
-                color: var(--main-blue);
+                color: var(--primary);
             }
             &:disabled a,
             &:disabled:hover a{
@@ -279,7 +279,7 @@
                 cursor: not-allowed !important;
                 pointer-events: none;
                 background: var(--sonic-silver) !important;
-                color: #fff !important;
+                color: var(--on-surface) !important;
                 border: var(--sonic-silver) 3px solid !important;
                 // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
                 @extend %tran ;
@@ -310,7 +310,7 @@
                 // box-shadow: none;
                 cursor: not-allowed !important;
                 background: var(--sonic-silver) !important;
-                color: #fff !important;
+                color: var(--on-surface) !important;
                 border: var(--sonic-silver) 3px solid !important;
                 // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
                 @extend %tran ;
@@ -386,7 +386,7 @@
   a.banner-btn {
     display: flex;
     justify-content: center;
-    background: var(--main-2-blue) !important;
+    background: var(--primary) !important;
     color: var(--cultured);
     width: -webkit-max-content;
     width: -moz-max-content;
@@ -402,13 +402,13 @@
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-2-blue);
+    border: 3px solid var(--primary);
     // box-shadow: .9px .9px 17px var(--cultured);
   
     &:hover { 
         background :var(--cultured) !important;
-        color: var(--main-2-blue);
-        border-color: var(--main-2-blue);
+        color: var(--primary);
+        border-color: var(--primary);
     }
   }
 }
@@ -433,7 +433,7 @@
 }
 
 .pageTitle {
-  color: var(--main-2-blue);
+  color: var(--primary);
   font-weight: var(--weight-700);
   font-size: var(--text-xl);
   margin-bottom: 1rem;
@@ -441,12 +441,12 @@
 
 .sectionHeading {
   font-weight: var(--weight-600);
-  color: var(--main-2-blue);
+  color: var(--primary);
   font-size: var(--text-md);
 }
 
 .iconPrimary {
-  color: var(--main-2-blue);
+  color: var(--primary);
 }
 
 .statusPanel {
@@ -461,7 +461,7 @@
 
 .statusPaid,
 .statusDelivered {
-  color: var(--main-blue);
+  color: var(--primary);
   font-weight: var(--weight-700);
   font-size: var(--text-xl);
   margin: 0;
@@ -495,8 +495,8 @@
 }
 
 .primaryActionBtn {
-  background-color: var(--main-2-blue) !important;
-  border-color: var(--main-2-blue) !important;
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 .assetCard {
@@ -551,7 +551,7 @@
       justify-content: center;
       align-items: center;
       background-color: var(--cultured);
-      border: var(--main-blue) solid 2px;
+      border: var(--primary) solid 2px;
       padding: 4px;
       position: absolute;
       right: 7px;

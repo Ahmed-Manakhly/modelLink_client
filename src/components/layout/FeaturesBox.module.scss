@@ -12,7 +12,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: #fff;
+        background: var(--on-surface);
         padding: 15px 20px;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -72,7 +72,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        background: #fff;
+        background: var(--on-surface);
         padding: 15px 20px;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -121,7 +121,7 @@
                 font-weight: 600;
                 transition: 0.3s;
                 background: #5DB8DD;
-                color: #fff;
+                color: var(--on-surface);
 
                 &:hover {
                     background: #4ca3c7;

@@ -26,7 +26,7 @@
             bottom: 12px;
             right: 12px;
             background: rgba(0, 0, 0, 0.6);
-            color: #fff;
+            color: var(--on-surface);
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 0.8rem;
@@ -49,11 +49,11 @@
         overflow: hidden;
         border: 2px solid transparent;
         transition: border-color 150ms ease;
-        background: #fff;
+        background: var(--on-surface);
 
         &:hover,
         &.active {
-            border-color: var(--main-2-blue);
+            border-color: var(--primary);
         }
 
         .thumbnail {
@@ -65,8 +65,8 @@
     }
 
     .customArrow {
-        background: var(--main-2-blue);
-        color: #fff;
+        background: var(--primary);
+        color: var(--on-surface);
         border: none;
         border-radius: 50%;
         width: 36px;
@@ -79,7 +79,7 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 
         &:hover {
-            background: var(--main-3-blue);
+            background: var(--primary-glow);
         }
     }
 }

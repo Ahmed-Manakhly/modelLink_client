@@ -6,7 +6,7 @@ import Video from '../components/Video'
 import Box from '../components/Box'
 import img from '../assets/about.jpg'
 import { vals } from '../constants/marketingData';
-import banner from '../assets/robot-mascot.png'
+import banner from '../assets/ai-face.png'
 import img_2 from '../assets/instructor-1x-v3.jpg'
 import { getData, getAllModelsReq, getPublicDevelopersReq, getFiltersReq, getCategoriesReq } from '../lib/loaders';
 import { mapParentCategoriesToHomeCards } from '../lib/categoryHelpers';

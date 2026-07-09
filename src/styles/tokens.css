@@ -13,13 +13,13 @@
     /* Brand Accents (Neon System) */
     --primary: #22D3EE;
     --primary-glow: rgba(34, 211, 238, 0.4);
-    --secondary: #6366F1;
-    --secondary-glow: rgba(99, 102, 241, 0.3);
 
     /* Unified Gradients */
-    --gradient-main: linear-gradient(135deg, #0A0C10 0%, #111318 100%);
-    --gradient-marketing: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(34, 211, 238, 0.1) 0px, transparent 50%);
-    --gradient-hero: linear-gradient(105deg, #6366F1 0%, #22D3EE 100%);
+    --gradient-marketing: radial-gradient(circle at top right, rgba(34, 211, 238, 0.15) 0%, transparent 60%), var(--bg-surface);
+    --gradient-marketing-transparent: radial-gradient(circle at top right, rgba(34, 211, 238, 0.15) 0%, rgba(17, 19, 24, 0.85) 80%);
+    --bg-glassy-primary: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%);
+    --bg-glassy-solid: var(--bg-glassy-primary), var(--bg-surface);
+    --gradient-text: linear-gradient(to right, var(--primary), var(--on-surface));
 
     /* Glassmorphism System */
     --surface-glass: rgba(255, 255, 255, 0.03);
@@ -35,12 +35,12 @@
 
     /* Interactive States */
     --btn-hover-glow: 0 0 20px var(--primary-glow);
-    --input-focus-glow: 0 0 12px var(--secondary-glow);
+    --input-focus-glow: 0 0 12px var(--primary-glow);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* --- Legacy Aliases (mapped to new tokens to prevent breaking the app) --- */
     --color-primary: var(--primary);
-    --color-secondary: var(--secondary);
+    --color-secondary: var(--primary);
     --color-accent: var(--primary);
     --color-bg: var(--bg-main);
     --color-surface: var(--bg-surface);
@@ -51,11 +51,11 @@
     --color-success: #10B981;
     --color-warning: #FFC107;
     --color-danger:  #F44336;
-    --color-info:    var(--secondary);
+    --color-info:    var(--primary);
 
-    --gradient-brand: var(--gradient-hero);
-    --gradient-cta: var(--gradient-hero);
-    --gradient-neutral-subtle: var(--gradient-main);
+    --gradient-brand: var(--gradient-marketing);
+    --gradient-cta: var(--gradient-marketing);
+    --gradient-neutral-subtle: var(--bg-surface);
 
     --text-primary: var(--on-surface);
     --text-secondary: var(--on-surface-variant);
@@ -68,7 +68,7 @@
     --bg-modal: var(--bg-surface);
 
     --border-default: var(--border-glass);
-    --border-focus: var(--secondary);
+    --border-focus: var(--primary);
     --border-radius-lg: var(--radius-card);
     --border-radius-xl: var(--radius-card);
     --border-radius-pill: 9999px;
@@ -146,7 +146,7 @@
     border: 1px solid rgba(34, 211, 238, 0.5);
     border-radius: var(--radius-button);
     transition: var(--transition-smooth);
-    color: #fff;
+    color: var(--on-surface);
     cursor: pointer;
     padding: 8px 20px;
     font-weight: 600;
@@ -188,10 +188,10 @@
     transform: translateY(-2px);
     border-color: rgba(34, 211, 238, 1);
     background: rgba(34, 211, 238, 0.1);
-    color: #fff;
+    color: var(--on-surface);
 }
 
 .neon-icon {
-    stroke: var(--secondary);
-    filter: drop-shadow(0 0 4px var(--secondary-glow));
+    stroke: var(--primary);
+    filter: drop-shadow(0 0 4px var(--primary-glow));
 }

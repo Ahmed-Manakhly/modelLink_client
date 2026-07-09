@@ -30,7 +30,7 @@
 .action {
     padding: 0.5rem 1.5rem;
     background: var(--primary, #5DB8DD);
-    color: white;
+    color: var(--on-surface);
     border: none;
     border-radius: 6px;
     cursor: pointer;

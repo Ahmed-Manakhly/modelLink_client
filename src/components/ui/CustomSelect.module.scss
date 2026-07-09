@@ -15,11 +15,15 @@
     &.flatRight {
         .selectedValue {
             border-radius: 9px 0 0 9px !important;
-            border-right: none !important;
+            // border-right: none !important;
+
+            // &:hover {
+            //     border-right: 1px solid var(--primary) !important;
+            // }
 
             @media (max-width: 768px) {
                 border-radius: 9px !important;
-                border-right: 2.5px solid var(--main-blue) !important;
+                // border-right: 2.5px solid var(--primary) !important;
             }
         }
     }
@@ -37,7 +41,7 @@
             &:hover:not(.disabled) {
                 border-color: var(--primary-color, #1a73e8);
                 background: var(--primary-color, #1a73e8);
-                color: #fff;
+                color: var(--on-surface);
             }
 
             .open & {
@@ -56,16 +60,16 @@
         }
 
         .option {
-            color: #fff;
+            color: var(--on-surface);
             font-size: .8rem;
 
             &:hover {
-                background: #fff;
+                background: var(--on-surface);
                 color: var(--primary-color, #1a73e8);
             }
 
             &.selected {
-                background: #fff;
+                background: var(--on-surface);
                 color: var(--primary-color, #1a73e8);
             }
         }
@@ -73,10 +77,11 @@
         /* TopNavBar search: matches legacy native select + input join */
         &.flatRight {
             .selectedValue {
-                background-color: var(--bg-surface);
-                color: var(--on-surface-variant);
-                border: var(--border-standard);
-                border-right: none;
+                background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.01) 100%);
+                backdrop-filter: blur(var(--glass-blur, 12px));
+                border: 1px solid rgba(34, 211, 238, 0.2);
+                color: var(--on-surface);
+                // border-right: none;
                 border-radius: var(--radius-input) 0 0 var(--radius-input);
                 font-size: 13px;
                 font-weight: 400;
@@ -86,9 +91,10 @@
                 padding-right: 35px;
 
                 &:hover:not(.disabled) {
-                    background-color: rgba(255, 255, 255, 0.03);
+                    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%);
                     color: var(--on-surface);
-                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: inset 0 0 10px rgba(34, 211, 238, 0.1);
+                    // border-right: none;
                 }
 
                 .open & {
@@ -99,7 +105,7 @@
 
             .dropdown {
                 background: var(--bg-surface);
-                border: var(--border-standard);
+                border: 1px solid rgba(34, 211, 238, 0.2);
                 border-top: none;
                 border-radius: 0 0 var(--radius-input) var(--radius-input);
                 box-shadow: var(--glass-shadow);
@@ -126,7 +132,7 @@
                     padding: 8px 6px;
                     padding-right: 36px;
                     border-radius: 9px !important;
-                    border-right: 2.5px solid var(--main-blue) !important;
+                    // border-right: 2.5px solid var(--primary) !important;
                 }
 
                 .option {

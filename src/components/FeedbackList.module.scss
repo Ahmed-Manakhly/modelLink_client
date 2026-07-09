@@ -185,7 +185,7 @@
           width: 80px ;
           height: 80px ;
           @extend %rad ;
-          border: 3.5px var(--main-2-blue) solid;
+          border: 3.5px var(--primary) solid;
           img {
             top: 0;
             left: 0;
@@ -201,8 +201,8 @@
           .UserHolder{
               font-size:2rem;
               font-weight: 700;
-              color: #fff;
-              background-color: var(--main-blue);
+              color: var(--on-surface);
+              background-color: var(--primary);
               top: 0;
               left: 0;
               position: absolute;
@@ -225,7 +225,7 @@
           padding: 1rem;
           .title_ {
             font-size: 25px;
-            color: var(--main-2-blue);
+            color: var(--primary);
             text-align: left;
             word-wrap: break-word;
             overflow-wrap: break-word;

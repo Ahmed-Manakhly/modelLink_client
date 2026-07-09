@@ -7,13 +7,13 @@
         -webkit-appearance: none !important;
         appearance: none !important;
         &:checked + div {
-            background-color: var(--main-blue);
+            background-color: var(--primary);
         }
         & { appearance: none; }
         &:checked + div {
             .circle {
                 left: calc(100% - 28px);
-                // background-color: var(--main-blue);
+                // background-color: var(--primary);
                 .on {
                     display: block;
                 }
@@ -34,7 +34,7 @@
         cursor: pointer;
         .circle {
             font-weight: 900;
-            background-color: white;
+            background-color: var(--on-surface);
             width: 26px;
             height: 26px;
             position: absolute;

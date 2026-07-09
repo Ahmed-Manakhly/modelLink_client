@@ -236,7 +236,7 @@
             width: 100px ;
             height: 100px ;
             @extend %rad ;
-            border: 3.5px var(--main-2-blue) solid;
+            border: 3.5px var(--primary) solid;
             img {
               top: 0;
               left: 0;
@@ -252,8 +252,8 @@
             .UserHolder{
                 font-size:2.5rem;
                 font-weight: 700;
-                color: #fff;
-                background-color: var(--main-blue);
+                color: var(--on-surface);
+                background-color: var(--primary);
                 top: 0;
                 left: 0;
                 position: absolute;
@@ -276,7 +276,7 @@
             padding: 1rem;
             .title_ {
               font-size: 25px;
-              color: var(--main-2-blue);
+              color: var(--primary);
               text-align: left;
             }
             .info {
@@ -360,7 +360,7 @@
       align-items: center;
       width: 100%;
       .feature-btn{
-        background: var(--main-blue);
+        background: var(--primary);
         color: var(--white);
         font-size: var(--fs-4);
         font-weight: var(--weight-600); 
@@ -371,17 +371,17 @@
         -webkit-transition: var(--transition-timing);
         -o-transition: var(--transition-timing);
         transition: var(--transition-timing);
-        border: 3px solid var(--main-blue);
+        border: 3px solid var(--primary);
         margin-bottom: 1.2rem;
         &:hover { 
             background :transparent;
-            color: var(--main-blue);
+            color: var(--primary);
         }
         &:disabled ,
         &:disabled:hover {
             cursor: not-allowed !important;
             background: var(--sonic-silver) !important;
-            color: #fff !important;
+            color: var(--on-surface) !important;
             border: var(--sonic-silver) 3px solid !important;
             @extend %tran ;
             @extend %animat ;

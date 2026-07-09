@@ -46,7 +46,7 @@
                 color: #404145;
                 outline: none;
                 transition: border-color 0.15s ease-in-out;
-                background-color: #fff;
+                background-color: var(--on-surface);
                 cursor: pointer;
 
                 &:focus {
@@ -77,7 +77,7 @@
                 border-radius: 4px;
                 border: none;
                 background-color: #222325;
-                color: #fff;
+                color: var(--on-surface);
                 font-weight: 600;
                 cursor: pointer;
                 transition: opacity 0.2s;
@@ -162,17 +162,17 @@
 
             &:hover {
                 background-color: #f74040;
-                color: #fff;
+                color: var(--on-surface);
             }
         }
 
         .toggle-filters-btn {
-            color: var(--main-2-blue);
-            border-color: var(--main-2-blue);
+            color: var(--primary);
+            border-color: var(--primary);
 
             &:hover {
-                background-color: var(--main-2-blue);
-                color: #fff;
+                background-color: var(--primary);
+                color: var(--on-surface);
             }
         }
 
@@ -239,7 +239,7 @@
 
         .save-filter-btn {
             background-color: #1dbf73;
-            color: #fff;
+            color: var(--on-surface);
             border: none;
             padding: 9px 15px;
             border-radius: 4px;

@@ -13,8 +13,8 @@ function MobNav({onClick , txt_3 , txt_4}) {
   const notCounter = useSelector(selectUnreadNotifications);
   const {role} = userData;
   const pageActions = <>
-  <Link to="./auth?mode=signup" className={`${styles["banner-btn"]} ${styles.signUp}`} >{txt_4}</Link>
-  <Link to="./auth?mode=login" className={`${styles["banner-btn"]} ${styles.signIn}`}>{txt_3}</Link>
+  <Link to="./auth?mode=signup" className={`btn-glass-outline`} >{txt_4}</Link>
+  <Link to="./auth?mode=login" className={`btn-glass-primary`}>{txt_3}</Link>
 </>
     return (
         <div className={classes["mobile-bottom-navigation"]}>

@@ -2,9 +2,10 @@
 
 //----------------------------------
 footer {
-    background: var(--gradient-brand);
+    background: var(--gradient-marketing);
     color: var(--color-surface);
     margin-top: 7rem ;
+    border-top: 1px solid rgba(34, 211, 238, 0.1);
 }
 
 .footer-category {
@@ -24,7 +25,7 @@ footer {
 }
 
 .footer-category-title {
-    color: var(--main-blue);
+    color: var(--primary);
     font-size: var(--fs-6);
     font-weight: var(--weight-600);
     text-transform: uppercase;
@@ -108,7 +109,7 @@ footer {
 
 .footer-nav .nav-title {
     position: relative;
-    color: var(--main-2-blue);
+    color: var(--primary);
     font-size: var(--fs-8);
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -121,7 +122,7 @@ footer {
     position: absolute;
     bottom: 0;
     left: 0;
-    background: var(--main-2-blue);
+    background: var(--primary);
     width: 50%;
     height: 4px;
 }
@@ -141,7 +142,7 @@ footer {
     transition: var(--transition-timing);
 }
 
-.footer-nav-link:hover { color: var(--main-blue); }
+.footer-nav-link:hover { color: var(--primary); }
 
 .footer-nav-item.flex {
     display: -webkit-box;

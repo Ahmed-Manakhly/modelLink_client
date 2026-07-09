@@ -94,6 +94,7 @@ const Card = ({ category, categorySlug, title, desc, price, deliveryTime, cover,
                     {isPrimary && <p className={`${classes["showcase-badge"]} ${classes.primaryBadge}`}>Primary</p>}
                     {fda === true && <p className={`${classes["showcase-badge"]} ${classes.fdaBadge}`}>FDA Cleared</p>}
                     {featured === true && <p className={`${classes["showcase-badge"]} ${classes.featuredBadge}`}>Featured</p>}
+                    <span className={`${classes["showcase-badge"]} ${classes.versionBadge}`}>v{version}</span>
                 </div>
 
                 <div className={classes["showcase-actions"]}>
@@ -118,9 +119,6 @@ const Card = ({ category, categorySlug, title, desc, price, deliveryTime, cover,
             </div>
             
             <div className={classes["showcase-content"]}>
-                <div className={classes["header-row"]}>
-                    <span className={classes["version-badge"]}>v{version}</span>
-                </div>
 
                 <Link to={`/models/view/${id}`} onClick={()=>{return thisUserId?socket.emit("refreshModel", {to:thisUserId}):null}} className={classes["showcase-title"]}>
                     {title}

@@ -99,13 +99,13 @@
       background-color: var(--white);
       cursor: pointer;
       &:focus {
-        border-color: var(--main-blue);
+        border-color: var(--primary);
       }
     }
 
     .mark-all-read-btn {
       background: transparent;
-      color: var(--main-blue);
+      color: var(--primary);
       border: none;
       font-size: 13px;
       font-weight: 500;
@@ -226,7 +226,7 @@
 .search-field::-webkit-search-cancel-button { display: none; }
 
 .search-btn {
-    background:var(--main-2-blue) ;
+    background:var(--primary) ;
     position: absolute;
     top: 50%;
     right: 0px;
@@ -285,10 +285,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: var(--main-2-blue);
+        color: var(--primary);
         border-bottom: 3px solid transparent;
         &.active{
-          border-bottom: 3px solid var(--main-2-blue);
+          border-bottom: 3px solid var(--primary);
           font-weight: 900;
         }
         & {

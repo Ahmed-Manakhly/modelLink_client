@@ -109,7 +109,7 @@
                 color: var(--on-surface);
 
                 span {
-                  color: var(--secondary);
+                  color: var(--primary);
                 }
               }
             }
@@ -143,7 +143,7 @@
                   display: block;
                   font-size: 35px;
                   font-weight: 800;
-                  color: var(--secondary);
+                  color: var(--primary);
                 }
 
                 span {
@@ -188,7 +188,7 @@ img.get_start {
 }
 
 .walletBalance {
-  color: var(--main-blue);
+  color: var(--primary);
 }
 
 %trans_ {
@@ -228,14 +228,14 @@ a.banner-btn_ {
 
   &.signUp {
     background: transparent;
-    color: var(--secondary);
-    border: 3px solid var(--secondary);
+    color: var(--primary);
+    border: 3px solid var(--primary);
     padding: 7px 14px;
 
     &:hover {
       color: var(--bg-main);
-      background: var(--secondary) !important;
-      border-color: var(--secondary);
+      background: var(--primary) !important;
+      border-color: var(--primary);
       box-shadow: 0 0 20px var(--secondary-glow);
     }
   }
@@ -302,7 +302,7 @@ a.banner-btn_ {
 
 .banner-btn {
 
-  background: var(--main-2-blue);
+  background: var(--primary);
   color: var(--white);
   width: -webkit-max-content;
   width: -moz-max-content;
@@ -316,14 +316,14 @@ a.banner-btn_ {
   -webkit-transition: var(--transition-timing);
   -o-transition: var(--transition-timing);
   transition: var(--transition-timing);
-  border: 3px solid var(--main-2-blue);
+  border: 3px solid var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover {
     background: transparent;
-    color: var(--main-2-blue);
+    color: var(--primary);
   }
 }
 
@@ -357,7 +357,7 @@ a.banner-btn_ {
   .UserHolder {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--on-surface);
     background-color: var(--primary);
     top: 0;
     left: 0;
@@ -379,7 +379,7 @@ a.banner-btn_ {
       justify-content: center;
       align-items: center;
       background-color: var(--cultured);
-      border: var(--main-2-blue) solid 2px;
+      border: var(--primary) solid 2px;
       padding: 1px;
       position: absolute;
       left: -1px;
@@ -391,7 +391,7 @@ a.banner-btn_ {
       .img_ico {
         z-index: 3;
         font-size: larger;
-        color: var(--main-2-blue) !important;
+        color: var(--primary) !important;
       }
 
       & {

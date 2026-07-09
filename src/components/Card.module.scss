@@ -15,7 +15,7 @@
     flex-direction: column;
 }
 
-.showcase:hover { box-shadow: 0 0 20px rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.4); background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(34, 211, 238, 0.02) 100%); }
+.showcase:hover { box-shadow: 0 0 20px rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.4); background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(34, 211, 238, 0.02) 100%); transform: translateY(-3px); }
 
 .showcase-banner {
     position: relative;
@@ -66,8 +66,9 @@
 
 .fdaBadge { background-color: var(--ocean-green); }
 .featuredBadge { background-color: #ffd700; color: #1a1a1a; }
-.categoryBadge { background-color: var(--main-2-blue); }
+.categoryBadge { background-color: var(--primary); color: #111318; }
 .primaryBadge { background-color: #e0e0e0; color: #1a1a1a; }
+.versionBadge { background-color: rgba(17, 19, 24, 0.8); color: var(--on-surface-variant); }
 
 .showcase-actions {
     position: absolute;
@@ -99,7 +100,7 @@
 
 .btn-action:hover {
     background: var(--primary);
-    color: #fff;
+    color: var(--on-surface);
     border-color: var(--primary);
 }
 
@@ -149,10 +150,7 @@
 }
 
 .header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    display: none;
 }
 
 .category-link {
@@ -160,15 +158,6 @@
     color: var(--color-primary);
     text-transform: uppercase;
     font-weight: 700;
-}
-
-.version-badge {
-    font-size: 11px;
-    background: var(--bg-main);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--on-surface-variant);
-    font-weight: 600;
 }
 
 .showcase-title {

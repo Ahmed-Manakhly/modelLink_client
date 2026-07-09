@@ -20,7 +20,7 @@
             width: 100%;
         }
         .page-data-count{
-            color: var(--main-blue);
+            color: var(--primary);
             font-size: medium;
         }
         .pages{
@@ -28,11 +28,11 @@
                 background-color: var(--white);
                 color: var(--eerie-black);
                 &:hover{
-                    background-color: var(--main-blue);
+                    background-color: var(--primary);
                     color: var(--white);
                 }
                 &.active{
-                    background-color: var(--main-blue);
+                    background-color: var(--primary);
                     color: var(--white);
                     border: none;
                 }
@@ -40,7 +40,7 @@
         }
         .previous-handler , .next-handler{
             .prev-icon , .next-icon{
-                color:  var(--main-blue);
+                color:  var(--primary);
                 &:hover{
                     color: var(--secondary-color);
                 }

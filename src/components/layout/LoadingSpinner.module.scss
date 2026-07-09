@@ -19,8 +19,8 @@
     height: 64px;
     margin: 8px;
     border-radius: 50%;
-    border: 12px solid var(--main-blue);
-    border-color: var(--main-blue) transparent var(--main-blue) transparent;
+    border: 12px solid var(--primary);
+    border-color: var(--primary) transparent var(--primary) transparent;
     animation: spinner 1.2s linear infinite;
   }
 }

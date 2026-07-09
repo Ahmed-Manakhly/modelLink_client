@@ -28,7 +28,7 @@
                 background-image: url('../assets/login-banner.png');
                 background-size: cover ;
                 box-shadow: inset -3rem 2rem 20rem rgba(0,0,0,0.25) , -3rem 6rem 20rem rgba(233, 229, 229, 0.25) ;
-                border: 2px solid var(--main-2-blue);
+                border: 2px solid var(--primary);
                 border-radius: 15px;
                 -webkit-border-radius: 15px;
                 -moz-border-radius: 15px;
@@ -89,7 +89,7 @@
                 width: 100%;
                 padding: 15px;
                 color: var(--sonic-silver);
-                border: 2px solid var(--main-2-blue);
+                border: 2px solid var(--primary);
                 &:focus{
                     outline: none;
                 }
@@ -102,7 +102,7 @@
                 }
             }
             .banner-btn {
-                background: var(--main-2-blue);
+                background: var(--primary);
                 color: var(--white);
                 width: -webkit-max-content;
                 width: -moz-max-content;
@@ -117,10 +117,10 @@
                 -webkit-transition: var(--transition-timing);
                 -o-transition: var(--transition-timing);
                 transition: var(--transition-timing);
-                border: 3px solid var(--main-2-blue);
+                border: 3px solid var(--primary);
                 &:hover { 
                     background :transparent;
-                    color: var(--main-2-blue);
+                    color: var(--primary);
                 }
             }
         }
@@ -163,7 +163,7 @@
                     background-image: url('../assets/login-banner.png');
                     background-size: cover ;
                     box-shadow: inset -3rem 2rem 20rem rgba(0,0,0,0.25) , -3rem 6rem 20rem rgba(233, 229, 229, 0.25) ;
-                    border: 2px solid var(--main-2-blue);
+                    border: 2px solid var(--primary);
                     border-radius: 15px;
                     -webkit-border-radius: 15px;
                     -moz-border-radius: 15px;
@@ -229,7 +229,7 @@
                     width: 100%;
                     padding: 7px;
                     color: var(--sonic-silver);
-                    border: 2px solid var(--main-2-blue);
+                    border: 2px solid var(--primary);
                     &:focus{
                         outline: none;
                     }
@@ -242,7 +242,7 @@
                     }
                 }
                 .banner-btn {
-                    background: var(--main-2-blue);
+                    background: var(--primary);
                     color: var(--white);
                     width: -webkit-max-content;
                     width: -moz-max-content;
@@ -257,10 +257,10 @@
                     -webkit-transition: var(--transition-timing);
                     -o-transition: var(--transition-timing);
                     transition: var(--transition-timing);
-                    border: 3px solid var(--main-2-blue);
+                    border: 3px solid var(--primary);
                     &:hover { 
                         background :transparent;
-                        color: var(--main-2-blue);
+                        color: var(--primary);
                     }
                 }
             }

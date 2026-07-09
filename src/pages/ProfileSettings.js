@@ -149,7 +149,7 @@ function ProfileSettings() {
 
                 return (
                     <div className="container my-4 p-4" style={{ backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-                        <h4 style={{ color: 'var(--main-2-blue)', fontWeight: 700 }}>Developer Identity Verification</h4>
+                        <h4 style={{ color: 'var(--primary)', fontWeight: 700 }}>Developer Identity Verification</h4>
 
                         {/* APPROVED */}
                         {isApproved && (
@@ -198,7 +198,7 @@ function ProfileSettings() {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary" style={{ backgroundColor: 'var(--main-2-blue)', borderColor: 'var(--main-2-blue)' }}>
+                                <button type="submit" className="btn btn-primary" style={{ backgroundColor: 'var(--primary)', borderColor: 'var(--primary)' }}>
                                     {isRejected ? 'Re-Submit Verification' : 'Submit Verification'}
                                 </button>
                             </form>

@@ -34,7 +34,7 @@
             justify-content: center;
             align-items: center;
             h3 {
-                color: var(--main-2-blue);
+                color: var(--primary);
                 font-size: xx-large;
             }
         }
@@ -57,7 +57,7 @@
 
 
 .banner-btn {
-    background: var(--main-blue);
+    background: var(--primary);
     color: var(--white);
     width: -webkit-max-content;
     width: -moz-max-content;
@@ -72,15 +72,15 @@
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-blue);
+    border: 3px solid var(--primary);
     &:hover { 
         background :transparent;
-        color: var(--main-blue);
+        color: var(--primary);
     }
     &.signUp {
         background :transparent;
-        color: var(--main-blue);
-        border: 3px solid var(--main-blue);
+        color: var(--primary);
+        border: 3px solid var(--primary);
         padding: 7px 14px;
         &:hover {
             color: var(--davys-gray);

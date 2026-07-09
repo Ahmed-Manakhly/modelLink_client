@@ -66,7 +66,7 @@
     font-size: 15px;
 }
 .form-btn{
-    background: var(--main-2-blue);
+    background: var(--primary);
     color: var(--white);
     // width: 100%;
     font-size: var(--fs-4);
@@ -78,18 +78,18 @@
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-2-blue);
+    border: 3px solid var(--primary);
     margin-bottom: 1.2rem;
     &:hover { 
         background :transparent;
-        color: var(--main-2-blue);
+        color: var(--primary);
     }
     &:disabled ,
     &:disabled:hover {
         // box-shadow: none;
         cursor: not-allowed !important;
         background: var(--sonic-silver) !important;
-        color: #fff !important;
+        color: var(--on-surface) !important;
         border: var(--sonic-silver) 3px solid !important;
         // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
         @extend %tran ;
@@ -100,7 +100,7 @@
 // .title {
 //     font-size: 2.10rem;
 //     text-align: center;
-//     color: var(--main-2-blue) !important;
+//     color: var(--primary) !important;
 //     // text-shadow: 3.5px 3.5px 2.5px black;
 //     // position: relative;
 //     // z-index: 1;
@@ -109,22 +109,22 @@
 
 .section__text__p1 {
     text-align: center;
-    color: var(--main-2-blue) ;
+    color: var(--primary) ;
     margin-top: 2rem !important;
 }
 
 .section__text__p2 {
 font-size: 1.75rem;
 margin-bottom: 1rem;
-color: var(--main-2-blue);
+color: var(--primary);
 // position: relative;
 // z-index: 1;
 // text-shadow: 3.5px 3.5px 2.5px black ;
 a {
-    color: var(--main-2-blue);
+    color: var(--primary);
     font-size: 1.2rem;
     display: block;
-    border-left: var(--main-2-blue) solid 5px;
+    border-left: var(--primary) solid 5px;
     padding-left: 1rem;
 }
 }
@@ -144,7 +144,7 @@ a {
         label {
         // font-weight: bolder;
         margin-bottom: 5px ;
-        color: var(--main-2-blue);
+        color: var(--primary);
         // text-align: left;
         // text-shadow: 3.5px 3.5px 2.5px #0099ff51 ;
         }
@@ -226,7 +226,7 @@ a {
             padding: 15px !important;
             // box-shadow: inset -4px -1px 12px rgba(0, 0, 0, 0.148), inset 1px 1px 12px var(--sonic-silver)30;
             &.done{
-                color : var(--main-2-blue) !important;
+                color : var(--primary) !important;
             }
             &::placeholder {
                 color: var(--sonic-silver) ;
@@ -255,21 +255,21 @@ a {
     justify-content: center;
     margin-top: 1rem;
     gap: 1rem;
-    color: var(--main-2-blue);
+    color: var(--primary);
     .icon {
         color: #16967f;
         cursor: pointer;
         @extend %tran ;
         height: 2.7rem;
         width: 2.7rem;
-        border: solid 3px var(--main-blue);
-        background-color: #fff;
+        border: solid 3px var(--primary);
+        background-color: var(--on-surface);
         padding: 0.5rem;
         overflow: hidden;
         @extend %rounded ;
         &:hover {
-        color: #fff;
-        background: linear-gradient(to right, var(--main-2-blue) -20%, #16967ec6 20%, #16967f 40% ,  var(--main-2-blue) 150%) !important;
+        color: var(--on-surface);
+        background: linear-gradient(to right, var(--primary) -20%, #16967ec6 20%, #16967f 40% ,  var(--primary) 150%) !important;
         border: solid 3px #fff !important;
         // box-shadow: -4px -4px 18px #0099ffa9;
         transform: translatey(-2px);
@@ -333,7 +333,7 @@ select{
 
 
 .feature-btn{
-    background: var(--main-blue);
+    background: var(--primary);
     color: var(--white);
     // width: 100%;
     font-size: var(--fs-4);
@@ -345,18 +345,18 @@ select{
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-blue);
+    border: 3px solid var(--primary);
     margin-bottom: 1.2rem;
     &:hover { 
         background :transparent;
-        color: var(--main-blue);
+        color: var(--primary);
     }
     &:disabled ,
     &:disabled:hover {
         // box-shadow: none;
         cursor: not-allowed !important;
         background: var(--sonic-silver) !important;
-        color: #fff !important;
+        color: var(--on-surface) !important;
         border: var(--sonic-silver) 3px solid !important;
         // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
         @extend %tran ;
@@ -402,7 +402,7 @@ select{
             justify-content: center;
             align-items: center;
             background-color: var(--cultured);
-            border: var(--main-blue) solid 2px;
+            border: var(--primary) solid 2px;
             padding: 4px;
             position: absolute;
             right: 7px;

@@ -683,7 +683,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                 <Row className="w-100 mb-5" style={{ gap: '20px' }}>
                                     {/* LEFT: GALLERY UX */}
                                     <Col xs={12} lg={5} className="d-flex flex-column gap-3">
-                                        <h4 style={{ textAlign: 'left', color: 'var(--main-blue)' }}>Model Gallery</h4>
+                                        <h4 style={{ textAlign: 'left', color: 'var(--primary)' }}>Model Gallery</h4>
                                         <div className={`${classes.img_cover} d-flex flex-column align-items-center w-100`} style={{ minHeight: '300px', background: '#f5f5f5', borderRadius: '15px', position: 'relative', overflow: 'hidden', padding: '0' }} >
                                             <input name='cover' type="file" onChange={handleEditMainViewerImage} ref={imgRef} style={{ display: 'none' }} accept="image/*" />
                                             <span style={{ position: 'absolute', top: 10, right: 10, background: '#fff', padding: '5px', borderRadius: '50%', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
@@ -694,17 +694,17 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                         <div className="w-100" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
                                             <div onClick={() => setSelectedImageKey('cover')}
-                                                 style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                 style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
                                                 <img src={getCoverPreviewSrc()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="cover thumb" />
                                             </div>
                                             {galleryImages.map((img, idx) => (
-                                                <div key={`gal-url-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-url-${idx}` ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                <div key={`gal-url-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-url-${idx}` ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
                                                     <img src={img.startsWith('http') ? img : FILES_BASE_API_URL + img} onClick={() => setSelectedImageKey(`gallery-url-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
                                                     <div onClick={(e) => { e.stopPropagation(); removeGalleryImage(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
                                                 </div>
                                             ))}
                                             {uploadedGalleryFiles.map((item, idx) => (
-                                                <div key={`gal-file-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-file-${idx}` ? '2px solid var(--main-blue)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                <div key={`gal-file-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-file-${idx}` ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
                                                     <img src={item.preview} onClick={() => setSelectedImageKey(`gallery-file-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
                                                     <div onClick={(e) => { e.stopPropagation(); removeUploadedGalleryFile(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
                                                 </div>
@@ -723,7 +723,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                     {/* RIGHT: CORE DETAILS */}
                                     <Col xs={12} lg={6} className="d-flex flex-column gap-3">
-                                        <h4 style={{ textAlign: 'left', color: 'var(--main-blue)' }}>Core Identity</h4>
+                                        <h4 style={{ textAlign: 'left', color: 'var(--primary)' }}>Core Identity</h4>
                                         <Row>
                                             <Col xs={12}>
                                                 {renderInputRow('Model Name', 'title', title, title, modelNameChangeHandler, modelNameBlurHandler, modelNameIsInvalid, 'title', 'title')}
@@ -754,7 +754,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                 {/* SECTION 2: PUBLIC SPECIFICATIONS / VERSIONS */}
                                 <Row className="w-100 mb-5 d-flex flex-column gap-3">
-                                    <h4 style={{ textAlign: 'left', color: 'var(--main-blue)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+                                    <h4 style={{ textAlign: 'left', color: 'var(--primary)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
                                         {thisModel ? 'Version specifications' : 'Initial version (v1.0.0)'}
                                         <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
                                             {thisModel
@@ -891,7 +891,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                 {/* SECTION 4: DYNAMIC METADATA */}
                                 <Col className="mt-4 w-100">
-                                    <h4 style={{ textAlign: 'left', color: 'var(--main-blue)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
+                                    <h4 style={{ textAlign: 'left', color: 'var(--primary)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
                                     {/* TAGS */}
                                     <Row>
                                         <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
@@ -988,7 +988,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                             </Row>
                                             <Row className={classes.f_list} style={{ flexDirection: 'column', gap: '10px' }}>
                                                 {metrics.map((m, index) => (
-                                                    <div key={`metric-${index}`} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--main-3-blue)', padding: '10px 15px', borderRadius: '8px', color: 'var(--main-2-blue)' }}>
+                                                    <div key={`metric-${index}`} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--primary-glow)', padding: '10px 15px', borderRadius: '8px', color: 'var(--primary)' }}>
                                                         <div style={{ display: 'flex', gap: '20px' }}>
                                                             <strong>{m.metric}:</strong> <span>{m.value}</span>
                                                             {m.metricsUrl && <a href={m.metricsUrl} target="_blank" rel="noreferrer">Link</a>}

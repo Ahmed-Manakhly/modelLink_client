@@ -5,12 +5,18 @@
 }
 
 .container_ {
+    a {
+        color: var(--on-surface) !important;
+        &:hover {
+            color: var(--primary) !important;
+        }
+    }
     .imgCon{
         position: relative;
         width: 40px ;
         height: 40px ;
         @extend %rad ;
-        border: 3.5px var(--main-blue) solid;
+        border: 3.5px var(--primary) solid;
         overflow: hidden;
         &:hover::after {
             display: none;
@@ -29,8 +35,8 @@
         .UserHolder{
             font-size:1.1rem;
             font-weight: 500;
-            color: #fff;
-            background-color: var(--main-blue);
+            color: var(--on-surface);
+            background-color: var(--primary);
             top: 0;
             left: 0;
             position: absolute;
@@ -58,6 +64,12 @@
             position: relative;
             margin-bottom: 2px;
             width: 100%;
+            a {
+                color: var(--on-surface) !important;
+                &:hover {
+                    color: var(--primary) !important;
+                }
+            }
         }
         .item_{
             padding: 0.5rem 0.5rem;
@@ -76,25 +88,27 @@
             }
             h4{
                 margin: 7px;
-                color: var(--main-blue);
+                color: var(--primary);
                 font-size: 20px;
             }
             h6 {
-                color: var(--main-blue);
+                color: var(--primary);
                 font-size: 13px;
                 margin: 0;
             }
         }
         & {
-            background-color: var(--cultured);
-            background-color: rgba(238, 238, 238, 0.94);
+            background: var(--bg-glassy-primary), url('../../assets/login-banner.png');
+            background-size: 100% 100%;
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(10px);
         }
         &::after{
             // box-shadow: 2px 2px 5px var(--sonic-silver);
-            background-color: var(--cultured);
+            background-color: transparent;
             z-index: -2;
             border: 1px solid ;
-            border-color: var(--cultured) transparent transparent var(--cultured) ;
+            border-color: var(--border-glass) transparent transparent var(--border-glass) ;
             content: '';
             position: absolute;
             width: 20px;
@@ -126,7 +140,7 @@
 
 .banner-btn {
     width: 100%;
-    background: var(--main-blue);
+    background: var(--primary);
     color: var(--white);
     width: -webkit-max-content;
     width: -moz-max-content;
@@ -140,20 +154,20 @@
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-blue);
+    border: 3px solid var(--primary);
     &:hover { 
         background :transparent;
-        color: var(--main-blue);
+        color: var(--primary);
     }
     &.signUp {
         background :transparent;
-        color: var(--main-blue);
-        border: 3px solid var(--main-blue);
+        color: var(--primary);
+        border: 3px solid var(--primary);
         padding: 4px 25px;
         &:hover {
-            background: var(--main-blue);
-            // border: 3px solid var(--main-blue);
-            color: #fff;
+            background: var(--primary);
+            // border: 3px solid var(--primary);
+            color: var(--on-surface);
         }
     }
     &.signIn {
@@ -163,7 +177,7 @@
         border: none;
         // padding: 7px 14px;
         &:hover {
-            color: var(--main-blue);
+            color: var(--primary);
         }
     }
 }
@@ -182,7 +196,7 @@
     .header-alert-news {
         height: 100%;
         color: var(--sonic-silver);
-        // color: var(--main-blue);
+        // color: var(--primary);
         font-size: var(--fs-9);
         text-transform: uppercase;
         font-weight: var(--weight-900);
@@ -249,18 +263,21 @@
 
     .header-social-container .social-link {
         padding: 5px;
-        background: hsl(0, 0%, 95%);
-        -webkit-border-radius: var(--border-radius-sm);
-        border-radius: var(--border-radius-sm);
+        background: transparent;
         color: var(--sonic-silver);
         -webkit-transition: var(--transition-timing);
         -o-transition: var(--transition-timing);
         transition: var(--transition-timing);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
     }
 
     .header-social-container .social-link:hover {
-        background: var(--main-blue);
-        color: var(--white);
+        background: transparent;
+        color: var(--primary);
     }
     .desktop-menu-category-list {
         position: relative;
@@ -293,7 +310,7 @@
         transition: var(--transition-timing);
     }
 
-    .desktop-menu-category-list .menu-category > .menu-title:hover { color: var(--main-blue); }
+    .desktop-menu-category-list .menu-category > .menu-title:hover { color: var(--primary); }
 
     .desktop-menu-category-list .menu-category > .menu-title::after {
         content: '';
@@ -302,7 +319,7 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background: var(--main-blue);
+        background: var(--primary);
         -webkit-transform: scaleX(0);
         -ms-transform: scaleX(0);
         transform: scaleX(0);
@@ -356,7 +373,7 @@
     }
 
     .dropdown-list .dropdown-item a {
-        color: var(--sonic-silver);
+        color: var(--on-surface) !important;
         font-size: var(--fs-7);
         text-transform: capitalize;
         padding: 4px 20px;
@@ -364,7 +381,7 @@
         -o-transition: var(--transition-timing);
         transition: var(--transition-timing);
     }
-    .dropdown-list .dropdown-item a:hover { color: var(--main-blue); }
+    .dropdown-list .dropdown-item a:hover { color: var(--primary) !important; }
 }
 
 

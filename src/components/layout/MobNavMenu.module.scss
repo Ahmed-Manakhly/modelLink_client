@@ -2,7 +2,7 @@
 //-------------------------------
 
 .mobile-navigation-menu {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%), var(--bg-surface);
     position: fixed;
     top: 0;
     left: -100%;
@@ -47,7 +47,7 @@
 }
 
 .menu-top .menu-title {
-    color: var(--main-blue);
+    color: var(--primary);
     font-size: var(--fs-4);
     font-weight: var(--weight-600);
 }
@@ -84,16 +84,17 @@
 .mobile-menu-category-list .menu-category { border-bottom: 1px solid var(--cultured); }
 
 .mobile-menu-category-list .menu-title {
-    color: var(--onyx);
+    color: var(--on-surface);
     font-size: var(--fs-6);
     font-weight: var(--weight-500);
     padding: 12px 0;
+    &:hover { color: var(--primary); }
 }
 
 .accordion-menu > div { font-size: 14px; }
 
 .accordion-menu ion-icon {
-    color: var(--onyx);
+    color: var(--on-surface);
     --ionicon-stroke-width: 90px;
 }
 
@@ -108,11 +109,11 @@
 .submenu-title {
     padding: 6px 0;
     font-size: var(--fs-6);
-    color: var(--sonic-silver);
+    color: var(--on-surface);
     font-weight: var(--weight-300);
 }
 
-.submenu-title:hover { color: var(--davys-gray); }
+.submenu-title:hover { color: var(--primary); }
 
 
 .submenu-category-list {
@@ -136,7 +137,7 @@
 .menu-bottom .menu-title {
     font-size: var(--fs-6);
     font-weight: var(--weight-500);
-    color: var(--eerie-black);
+    color: var(--on-surface);
     padding: 12px 0;
 }
 
@@ -172,14 +173,17 @@
 }
 
 .menu-social-container .social-link {
-    background: var(--cultured);
-    color: var(--eerie-black);
+    background: transparent;
+    color: var(--sonic-silver);
     font-size: 20px;
     padding: 10px;
     -webkit-border-radius: var(--border-radius-md);
     border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-glass);
+    &:hover { color: var(--primary); }
 }
 
 .header-alert-news{
     padding-left: 34px ;
+    color: var(--sonic-silver);
 }

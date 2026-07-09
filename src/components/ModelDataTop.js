@@ -37,7 +37,7 @@ const   ModelDataTop = ({ model=null , formTitle, selectedVersionId }) => {
                                                 <ion-icon name={`${overAllRev<4?'star-outline':'star'}`}></ion-icon>
                                                 <ion-icon name={`${overAllRev<5?'star-outline':'star'}`}></ion-icon>
                                             </div>
-                                            <div style={{ background: 'var(--cultured)', padding: '4px 10px', borderRadius: '6px', fontWeight: 'bold', color: 'var(--main-2-blue)' }}>
+                                            <div style={{ background: 'var(--cultured)', padding: '4px 10px', borderRadius: '6px', fontWeight: 'bold', color: 'var(--primary)' }}>
                                                 {ratingDisplay}
                                             </div>
                                         </div></>
@@ -58,15 +58,15 @@ const   ModelDataTop = ({ model=null , formTitle, selectedVersionId }) => {
                                         <div className="d-flex flex-column flex-md-row w-100" style={{ gap: '20px', marginTop: '10px' }}>
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, backgroundColor: 'rgba(238, 238, 238, 0.278)', borderLeft: '10px solid var(--cultured)', padding: '15px', borderRadius: '4px' }}>
                                                 <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '13px', textTransform: 'uppercase' }}>Views</span>
-                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--main-2-blue)' }}>{model?.views || 0}</span>
+                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary)' }}>{model?.views || 0}</span>
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, backgroundColor: 'rgba(238, 238, 238, 0.278)', borderLeft: '10px solid var(--cultured)', padding: '15px', borderRadius: '4px' }}>
                                                 <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '13px', textTransform: 'uppercase' }}>Total Sales</span>
-                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--main-2-blue)' }}>{model?.sales || 0}</span>
+                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary)' }}>{model?.sales || 0}</span>
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, backgroundColor: 'rgba(238, 238, 238, 0.278)', borderLeft: '10px solid var(--cultured)', padding: '15px', borderRadius: '4px' }}>
                                                 <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '13px', textTransform: 'uppercase' }}>Total Reviews</span>
-                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--main-2-blue)' }}>{marketing.reviewCount || 0}</span>
+                                                <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary)' }}>{marketing.reviewCount || 0}</span>
                                             </div>
                                         </div>
                                     </Row>

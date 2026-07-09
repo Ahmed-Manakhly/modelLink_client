@@ -29,7 +29,7 @@
     position: relative;
     // padding: 5px;
     width: 100%;
-    background-color: #fff;
+    background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
     .user{
@@ -115,7 +115,7 @@
             width: 40px;
             height: 40px;
             @extend %rad;
-            border: 2px var(--main-2-blue) solid;
+            border: 2px var(--primary) solid;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -135,8 +135,8 @@
             .UserHolder{
                 font-size: 1.1rem;
                 font-weight: 500;
-                color: #fff;
-                background-color: var(--main-blue);
+                color: var(--on-surface);
+                background-color: var(--primary);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -151,7 +151,7 @@
         width: 20px;
         height: 20px;
         padding: 2px;
-        color: #fff;
+        color: var(--on-surface);
         background-color: #fe89a2ce;
         border: 2px solid #fe89a2ce;
         display: flex;
@@ -186,7 +186,7 @@
     gap: 0.5rem;
     padding: 1rem;
     overflow-y: scroll;
-    background-color: #fff;
+    background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
     &::-webkit-scrollbar { width: 10px; }
@@ -244,7 +244,7 @@
 
     background-color: rgba(238, 238, 238, 0.278);
     max-width: 70%;
-    // background-color: #fff;
+    // background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
 
@@ -280,13 +280,13 @@
 }
 
 .own {
-    color: white;
+    color: var(--on-surface);
     align-self: flex-end;
     border-radius: 1rem 1rem 0 1rem;
-    background: linear-gradient(109.6deg, var(--main-blue)  11.2%, rgb(110, 123, 251) 91.1%);
+    background: linear-gradient(109.6deg, var(--primary)  11.2%, rgb(110, 123, 251) 91.1%);
 
     // width: 100%;
-    // background-color: #fff;
+    // background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
     img{
@@ -314,7 +314,7 @@
     //         width: 20px;
     //         height: 20px;
     //         padding: 2px;
-    //         color: #fff;
+    //         color: var(--on-surface);
     //         background-color: #fe89a2ce;
     //         border: 2px solid #fe89a2ce;
     //         display: flex;
@@ -349,11 +349,11 @@
     //    align-items: center;
     //    justify-content: flex-start;
     //    font-size: 25px;
-    //    color: var(--main-blue);
+    //    color: var(--primary);
 
     // } 
     width: 100%;
-    background-color: #fff;
+    background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
 
@@ -406,7 +406,7 @@
 
 
 .feature-btn{
-    background: var(--main-blue);
+    background: var(--primary);
     color: var(--white);
     // width: 100%;
     font-size: var(--fs-4);
@@ -418,20 +418,20 @@
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-blue);
+    border: 3px solid var(--primary);
     display: flex;
     justify-content: center;
     align-items: center;
     &:hover { 
         background :transparent;
-        color: var(--main-blue);
+        color: var(--primary);
     }
     &:disabled ,
     &:disabled:hover {
         // box-shadow: none;
         cursor: not-allowed !important;
         background: var(--sonic-silver) !important;
-        color: #fff !important;
+        color: var(--on-surface) !important;
         border: var(--sonic-silver) 3px solid !important;
         // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
         @extend %tran ;
@@ -519,7 +519,7 @@
 
 .chat-sender-2 {
     width: 100%;
-    background-color: #fff;
+    background-color: var(--on-surface);
     box-shadow: -5px 5px 10px var(--cultured) !important;
     border : 2px solid var(--cultured) ;
     // height: 3.5rem;
@@ -546,7 +546,7 @@
             width: 20px;
             height: 20px;
             padding: 2px;
-            color: #fff;
+            color: var(--on-surface);
             background-color: #fe89a2ce;
             border: 2px solid #fe89a2ce;
             display: flex;
@@ -585,7 +585,7 @@
         align-items: center;
         justify-content: flex-start;
         font-size: 25px;
-        color: var(--main-blue);
+        color: var(--primary);
     }
 }
 

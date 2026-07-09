@@ -152,20 +152,9 @@ function TopNavBar({ getSearch }) {
               <ion-icon name="search-outline"></ion-icon>
             </button>
             {showDropdown && (recentSearches.length > 0 || suggestions.length > 0) && (
-              <div style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                background: '#fff',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                zIndex: 20,
-                maxHeight: '240px',
-                overflowY: 'auto',
-              }}>
+              <div className={classes.searchDropdown}>
                 {recentSearches.length > 0 && (
-                  <div style={{ padding: '8px 12px', fontSize: '12px', color: '#666', borderBottom: '1px solid #eee' }}>
+                  <div className={classes.searchDropdownHeader}>
                     Recent searches
                   </div>
                 )}
@@ -174,13 +163,13 @@ function TopNavBar({ getSearch }) {
                     key={`recent-${index}`}
                     type="button"
                     onMouseDown={() => runSearch(item.field, item.value)}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                    className={classes.searchDropdownItem}
                   >
                     {item.value}
                   </button>
                 ))}
                 {suggestions.length > 0 && (
-                  <div style={{ padding: '8px 12px', fontSize: '12px', color: '#666', borderBottom: '1px solid #eee' }}>
+                  <div className={classes.searchDropdownHeader}>
                     Suggestions
                   </div>
                 )}
@@ -189,7 +178,7 @@ function TopNavBar({ getSearch }) {
                     key={`suggest-${item.id}`}
                     type="button"
                     onMouseDown={() => navigate(`/models/view/${item.id}`)}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                    className={classes.searchDropdownItem}
                   >
                     {item.title}
                   </button>
@@ -202,7 +191,7 @@ function TopNavBar({ getSearch }) {
       </div>
       <div className={classes.trendingBar}>
         <div className={`${classes.trendingInner}`}>
-          <span className={classes.trendingLabel}>Trending:</span>
+          <span className={classes.trendingLabel}>TRENDING: 🔥</span>
           
           <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('left')}>
             <ion-icon name="chevron-back-outline"></ion-icon>

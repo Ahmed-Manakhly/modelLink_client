@@ -28,7 +28,7 @@ const TopDevelopers = () => {
         <div style={{ minHeight: '80vh', backgroundColor: '#f4f7f6', padding: '40px 0' }}>
             <Container>
                 <div className="text-center mb-5">
-                    <h2 style={{ fontWeight: 700, color: 'var(--main-blue)', textTransform: 'uppercase' }}>
+                    <h2 style={{ fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase' }}>
                         Top AI Developers
                     </h2>
                     <p className="text-muted">

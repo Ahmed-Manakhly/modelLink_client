@@ -1,5 +1,5 @@
 import { FILES_BASE_API_URL } from './api';
-import chat_bot from '../assets/chat_bot.png';
+import chat_bot from '../assets/ai-face.png';
 
 export const MEDICAL_PARENT_SLUGS = new Set([
     'medical-imaging',

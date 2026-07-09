@@ -32,7 +32,7 @@
     font-weight: 600;
 }
 .achievment__right>h1 {
-    color: var(--main-blue);
+    color: var(--primary);
     font-weight: 900;
     margin: 1.3rem 0 3rem;
     font-size: 2rem;
@@ -67,7 +67,7 @@
 }
 
 .achievment__icon {
-    background-color: var(--main-blue);
+    background-color: var(--primary);
     display: inline-block;
     border-radius: 1rem;
     margin-bottom: 2rem;
@@ -95,7 +95,7 @@
     // box-shadow: inset 0 0 3.5rem rgba(0, 0, 0, 0.5);
     h2 {
         display: block;
-        color: var(--main-blue);
+        color: var(--primary);
         font-weight: 900;
         margin: 1.3rem 0 3rem;
         font-size: 2rem;
@@ -142,7 +142,7 @@
 }
 
 .team__mem:hover {
-    border-color: var(--main-blue);
+    border-color: var(--primary);
     background-color: transparent;
     box-shadow: inset -1rem 0rem 18rem rgba(158, 148, 148, 0.01) ;
 
@@ -187,7 +187,7 @@
     right: -100%;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: var(--on-surface);
     border-radius: 1rem 0 0 1rem;
     box-shadow: -2rem 0 2rem rgba(0, 0, 0, 0.5);
     transition: var(--transition-timing);

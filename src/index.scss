@@ -49,8 +49,27 @@
 }
 
 
+/* Global Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-glow, var(--primary));
+}
+
 /*-----------------------------------*\
-  #RESET
+ * #RESET
 \*-----------------------------------*/
 
 *,
@@ -140,14 +159,14 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background: hsl(0, 0%, 80%);
-  border: 3px solid var(--white);
+  background: var(--primary);
+  border: 3px solid var(--bg-main);
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: hsl(0, 0%, 70%);
+  background: var(--primary-glow, var(--primary));
 }
 
 /*-----------------------------------*\
@@ -185,13 +204,17 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .title {
-  color: var(--color-primary) !important;
+  color: #e2e2e8 !important;
   font-size: 40px;
   font-weight: 900;
   letter-spacing: 1px;
   text-transform: capitalize;
   padding-bottom: 2px;
   margin: 50px 0 7px;
+}
+
+h1 {
+  color: #e2e2e8 !important;
 }
 
 .title_2 {
@@ -358,7 +381,7 @@ body::-webkit-scrollbar-thumb:hover {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: var(--main-blue);
+  background: var(--primary);
   color: var(--white);
   font-size: 16px;
   padding: 5px;
@@ -421,7 +444,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .btn-newsletter:hover {
-  background: var(--main-blue);
+  background: var(--primary);
 }
 
 
@@ -518,6 +541,14 @@ body::-webkit-scrollbar-thumb:hover {
   .react-multi-carousel-track {
     padding: 50px 0 !important;
     min-height: fit-content !important;
+
+    @include small_mobile {
+      padding: 5px 0 30px !important;
+    }
+
+    @include medium_mobile {
+      padding: 5px 0 30px !important;
+    }
   }
 }
 
@@ -526,12 +557,12 @@ li.react-multi-carousel-dot {
     // background-color: #011668 !important;
     width: 17px;
     height: 17px;
-    background: var(--main-2-blue) !important;
-    border-color: var(--main-blue) !important;
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
 
     &:hover {
-      background-color: var(--main-blue) !important;
-      border-color: var(--main-2-blue) !important;
+      background-color: var(--primary) !important;
+      border-color: var(--primary) !important;
     }
   }
 }
@@ -542,8 +573,8 @@ li.react-multi-carousel-dot {
 
 li.react-multi-carousel-dot--active {
   button {
-    background-color: var(--main-blue) !important;
-    border-color: var(--main-2-blue) !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
   }
 }
 
@@ -562,7 +593,7 @@ button[aria-label].react-multiple-carousel__arrow--right {
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0.4) 100%) !important;
     backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(34, 211, 238, 0.5) !important;
-    color: #fff !important;
+    color: var(--on-surface) !important;
   }
 
   &:hover,
@@ -588,7 +619,7 @@ button[aria-label].react-multiple-carousel__arrow--left {
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0.4) 100%) !important;
     backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(34, 211, 238, 0.5) !important;
-    color: #fff !important;
+    color: var(--on-surface) !important;
   }
 
   &:hover,
@@ -905,14 +936,14 @@ div[dir] {
   font-size: 1.625rem;
   font-weight: 700;
   letter-spacing: -0.05em;
-  color: #444;
+  color: #e2e2e8;
   text-decoration: none;
   font-family: "Poppins", sans-serif;
   display: inline-block;
   flex-shrink: 0;
 
   span {
-    color: var(--main-blue);
+    color: var(--primary);
   }
 }
 

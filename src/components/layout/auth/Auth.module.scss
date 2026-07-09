@@ -4,24 +4,42 @@
         padding: 0;
         margin: 0 !important;
         width: 100%;
-        background: var(--bg-main);
+        background: var(--bg-surface);
         max-height: 90vh;
         overflow-y: auto !important;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(34, 211, 238, 0.05);
         @extend %rad15 ;
+        
+        @include small_mobile {
+            padding-bottom: 40px;
+        }
+        @include medium_mobile {
+            padding-bottom: 40px;
+        }
+
+        // Custom scrollbar for modal
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
         .contact-col2{
             justify-content: space-between;
             min-height: 90vh;
             padding: 2rem;
             border: var(--border-standard) !important;
-            background: var(--surface-glass);
+            border-right: none !important;
+            background: var(--gradient-marketing-transparent), url('../../../assets/login-banner.png');
+            background-size: cover;
+            background-position: center;
             backdrop-filter: blur(12px);
-            border-radius: var(--radius-card);
-            // .title {
-            //     font-size: 1.2rem;
-            //     text-align: center;
-            //     color: var(--sonic-silver) !important;
-            //     margin-bottom: 1rem;
-            // }
+            border-radius: var(--radius-card) 0 0 var(--radius-card);
             .section__text__p2 {
                 font-size: 1.75rem;
                 margin-bottom: 1rem;
@@ -33,6 +51,13 @@
                 }
         }
     }
+
+.gradientText {
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 // }
 
 .card {
@@ -49,7 +74,7 @@
 }
 
 %out {
-    border: 3px var(--main-blue) solid;
+    border: 3px var(--primary) solid;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -158,8 +183,8 @@
         cursor: not-allowed !important;
         background: #9a888861 !important;
         border:#9a888861 2px solid !important;
-        color:  var(--main-2-blue)  !important;
-        // border: #fff 3px solid !important;
+        color:  var(--primary)  !important;
+        // border: var(--on-surface) 3px solid !important;
         // box-shadow: -10px -10px 15px rgba(0, 0, 0, 0.185) ,inset  3px 3px 18px rgba(0, 0, 0, 0.159);
         @extend %tran ;
         @extend %animat ;
@@ -228,7 +253,7 @@
                     text-decoration: underline !important;
                     color: var(--primary) !important;
                     &:hover {
-                        color: var(--secondary) !important;
+                        color: var(--primary) !important;
                     }
                     // margin-top:  5px ;
                 }
@@ -320,7 +345,7 @@
             padding: 15px !important;
             // box-shadow: inset -4px -1px 12px rgba(0, 0, 0, 0.148), inset 1px 1px 12px var(--sonic-silver)30;
             &.done{
-                color : var(--main-2-blue) !important;
+                color : var(--primary) !important;
             }
             &::placeholder {
                 color: var(--sonic-silver) ;
@@ -329,7 +354,7 @@
         }
     }
     .invalid input  , .invalid textarea , .invalid select , .invalid select.done {
-        border: 2px solid #ef9a9a !important;
+        border: 2px solid var(--color-danger) !important;
         background-color: var(--cultured) !important;
         // box-shadow: inset -4px -1px 12px rgba(255, 255, 255, 0.761), inset 1px 1px 12px #000;
         color: var(--sonic-silver) !important;
@@ -339,7 +364,7 @@
     }
     .error-text {
         font-size: 12px;
-        color: #ef9a9a;
+        color: var(--color-danger);
         margin-top: 1px;
     }
     p{
@@ -348,37 +373,29 @@
 }
 //------------------
 .header-social-container {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
     align-items: center;
     gap: 5px;
 }
+
 .header-social-container .social-link {
     padding: 5px;
-    background: #fff;
-    border: 2px solid var(--main-2-blue);
-    -webkit-border-radius: var(--border-radius-sm);
-    border-radius: var(--border-radius-sm);
-    color: var(--main-2-blue);
-    -webkit-transition: var(--transition-timing);
-    -o-transition: var(--transition-timing);
+    background: transparent;
+    color: var(--on-surface-variant);
     transition: var(--transition-timing);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-social-container .social-link:hover {
-    background: var(--main-2-blue);
-    color: #fff;
+    background: transparent;
+    color: var(--primary);
 }
 
 a.email {
     text-decoration: none;
     width: 70%;
-    // margin-top: 3rem;
     margin: 0.5rem !important;
     overflow: hidden;
 }
@@ -412,7 +429,7 @@ select{
 //-------------------------
 
 .banner-btn {
-    background: var(--main-2-blue);
+    background: var(--primary);
     color: var(--white);
     width: -webkit-max-content;
     width: -moz-max-content;
@@ -426,20 +443,20 @@ select{
     -webkit-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
-    border: 3px solid var(--main-2-blue);
+    border: 3px solid var(--primary);
     &:hover { 
         background :transparent;
-        color: var(--main-2-blue);
+        color: var(--primary);
     }
     &.signUp {
         background :transparent;
-        color: var(--main-2-blue);
-        border: 3px solid var(--main-2-blue);
+        color: var(--primary);
+        border: 3px solid var(--primary);
         padding: 5px 10px;
         &:hover {
-            background: var(--main-2-blue);
-            // border: 3px solid var(--main-blue);
-            color: #fff;
+            background: var(--primary);
+            // border: 3px solid var(--primary);
+            color: var(--on-surface);
         }
     }
     &.signIn {
@@ -449,7 +466,7 @@ select{
         border: none;
         // padding: 7px 14px;
         &:hover {
-            color: var(--main-2-blue);
+            color: var(--primary);
         }
     }
 }
@@ -462,7 +479,7 @@ select{
     margin: auto;
     background: var(--cultured);
     height: .5rem;
-    //border: var(--main-2-blue) 2px solid;
+    //border: var(--primary) 2px solid;
     margin-bottom: .8rem;
     border-radius: 18px;
     -webkit-border-radius: 18px;
@@ -477,7 +494,7 @@ select{
         left: 0;
         top:0;
         height: 100%;
-        background: var(--main-2-blue);
+        background: linear-gradient(to right, var(--primary), var(--on-surface));
         border-radius: 18px;
         -webkit-border-radius: 18px;
         -moz-border-radius: 18px;
@@ -546,12 +563,12 @@ select{
             padding: 0.5rem;
             @extend %rad15 ;
             @extend %tran ;
-            border: var(--main-2-blue) 2px solid !important;
+            border: var(--primary) 2px solid !important;
             background: transparent !important;
-            color:  var(--main-2-blue)!important;
+            color:  var(--primary)!important;
             &:hover {
-                background: var(--main-2-blue) !important;
-                color: white!important;
+                background: var(--primary) !important;
+                color: var(--on-surface)!important;
             }
             & {
                 display: flex;
@@ -563,8 +580,8 @@ select{
                 // box-shadow: none;
                 cursor: not-allowed !important;
                 background: #9a888861 !important;
-                color:  var(--main-2-blue)  !important;
-                border: #fff 3px solid !important;
+                color:  var(--primary)  !important;
+                border: var(--on-surface) 3px solid !important;
                 @extend %tran ;
                 @extend %animat ;
             }
@@ -601,9 +618,9 @@ select{
         font-style: italic;
         font-weight: 700;
         text-align: left;
-        color: var(--main-blue);
+        color: var(--primary);
         &.otp-text-error{
-            color: #ef9a9a;
+            color: var(--color-danger);
         }
     }
 }

@@ -33,11 +33,11 @@
     z-index: 600000000000000005;
     animation: slideInOut 10s ease-in-out ;
     -webkit-animation: slideInOut 10s ease-in-out ;
-    background-color: var(--cultured);
-    background-image: url('../../assets/login-banner.png');
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%), url('../../assets/login-banner.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    border: 1px solid var(--white);
+    border: 1px solid var(--border-glass);
+    backdrop-filter: blur(10px);
   }
     
   @-webkit-keyframes slideInOut {
@@ -91,7 +91,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    color: var(--sonic-silver);
+    color: var(--on-surface);
   }
   
   .toast-close-btn ion-icon { --ionicon-stroke-width: 50px; }
@@ -122,22 +122,22 @@
   .toast-message {
     font-size: var(--fs-10);
     font-weight: 600;
-    color: var(--sonic-silver);
+    color: var(--on-surface-variant);
     margin-bottom: 8px;
   }
     
   .toast-title {
     font-size: var(--fs-7);
     font-weight: var(--weight-500);
-    color: var(--onyx);
-    border-left: 4px var(--sonic-silver) solid; ;
+    color: var(--on-surface);
+    border-left: 4px var(--primary) solid; ;
     padding-left: 4px;
   }
     
   .toast-meta {
     font-size: var(--fs-10);
     font-weight: 500;
-    color: var(--sonic-silver);
+    color: var(--on-surface-variant);
   }
 
 
