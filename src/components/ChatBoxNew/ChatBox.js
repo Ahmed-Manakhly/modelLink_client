@@ -4,7 +4,8 @@ import classes from "./ChatBox.module.scss";
 // eslint-disable-next-line
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
-import InputEmoji from 'react-input-emoji'
+import { BsEmojiSmile } from "react-icons/bs";
+import EmojiPicker from 'emoji-picker-react';
 import { FILES_BASE_API_URL } from '../../lib/api'
 import { IoImagesOutline } from "react-icons/io5";
 import { IoSend } from "react-icons/io5";
@@ -13,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { getAuthToken } from '../../utility/tokenLoader'
 import { buildChatDisplayItems, getMessageReceipt } from '../../utility/chatHelpers';
 import { socket } from '../../hooks/useSocket';
+import aiFace from '../../assets/ai-face.png';
 import UserProfileStrip from '../UserProfileStrip';
 import {
   getCounterpartyDisplayName,
@@ -31,6 +33,7 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
   const [newMessage, setNewMessage] = useState("");
   const [file, setFile] = useState()
   const [update, setUpdate] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const typingTimeoutRef = useRef(null);
   const isTypingRef = useRef(false);
 
@@ -69,21 +72,27 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
   useEffect(() => {
     emitStopTyping();
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [chat?.id]);
 
   useEffect(() => {
     setUpdate(true)
   }, [messages])
 
-  const handleChange = (newMessage) => {
-    setNewMessage(newMessage);
-    if (newMessage.trim()) {
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setNewMessage(value);
+    if (value.trim()) {
       emitTyping();
     } else {
       emitStopTyping();
     }
   }
+
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage(prev => prev + emojiObject.emoji);
+    emitTyping();
+  };
 
   const otherParticipant = chat?.participants?.find((p) => p.userId !== currentUser);
   const embeddedUser = otherParticipant?.user;
@@ -122,7 +131,8 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
   // Send Message
   const onKeyDownHandler = e => {
-    if (e.keyCode === 13) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSend();
     }
   };
@@ -137,11 +147,24 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
       emitStopTyping();
       onHandleSend(newMessage)
       setNewMessage('')
+      setShowEmojiPicker(false);
     }
   }
 
   const scroll = useRef(null);
   const imageRef = useRef();
+  const emojiRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiRef.current && !emojiRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleImgClick = () => {
     imageRef.current.click();
   }
@@ -158,7 +181,7 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
   return (
     <>
-      <div className={`${classes["ChatBox-container"]}`}>
+      <div className={`${classes["ChatBox-container"]} ${messages === null ? classes.empty : ''}`}>
         {messages !== null ? (
           <>
             {/* chat-header */}
@@ -178,11 +201,11 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
                     <div className={`${classes["info"]}`}>
                       {profileLink ? (
-                        <Link className={`${classes["name"]}`} to={profileLink}>
+                        <Link className={`${classes["name"]} ${classes["gradientText"]}`} to={profileLink}>
                           <span title={displayName}>{displayName?.length > 15 ? displayName.slice(0, 15) + '...' : displayName}</span>
                         </Link>
                       ) : (
-                        <span className={`${classes["name"]}`} title={displayName}>
+                        <span className={`${classes["name"]} ${classes["gradientText"]}`} title={displayName}>
                           {displayName?.length > 15 ? displayName.slice(0, 15) + '...' : displayName}
                         </span>
                       )}
@@ -272,39 +295,64 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
 
             <div className={`${classes["chat-sender"]}`}>
-              <InputEmoji
-                background={'white'}
-                theme='light'
-                value={newMessage}
-                onChange={handleChange}
-                // cleanOnEnter
-                // onEnter={handleSend}
-                onKeyDown={onKeyDownHandler}
-                placeholder="Type a message"
-              />
+              <div className={classes.actionButtons}>
+                <button className={classes.iconBtn} onClick={handleImgClick} type="button">
+                  <IoImagesOutline />
+                </button>
+                <input name='attachment' type="file" onChange={handelFileChange} ref={imageRef} style={{ display: 'none' }} />
+                
+                <div ref={emojiRef}>
+                  <button 
+                    className={classes.iconBtn} 
+                    onClick={() => setShowEmojiPicker((prev) => !prev)} 
+                    type="button"
+                  >
+                    <BsEmojiSmile />
+                  </button>
+                  {showEmojiPicker && (
+                    <div className={classes.emojiPickerWrapper}>
+                      <EmojiPicker 
+                        theme="dark" 
+                        onEmojiClick={handleEmojiClick}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
 
-              <button className={`${classes["feature-btn"]} `} onClick={handleSend} type="submit"
-                disabled={(newMessage.trim() === '') && (!file)}
-              ><IoSend /></button>
+              <div className={classes.inputWrapper}>
+                <textarea
+                  className={classes.customChatInput}
+                  value={newMessage}
+                  onChange={handleChange}
+                  onKeyDown={onKeyDownHandler}
+                  placeholder="Synthesize message..."
+                  rows={1}
+                />
+                <button 
+                  className={classes.sendBtn} 
+                  onClick={handleSend} 
+                  type="submit"
+                  disabled={(newMessage.trim() === '') && (!file)}
+                >
+                  <IoSend />
+                </button>
+              </div>
             </div>
 
-            <div className={`${classes["chat-sender-2"]}`}>
-              {/* <button  className={`${classes["feature-btn"]} `} onClick = {handleSend} type="submit"
-              disabled={(newMessage.trim() === '') && (!file)}
-              ><IoSend /></button> */}
-              <span className={`${classes["chat-img"]}`} onClick={handleImgClick}><IoImagesOutline style={{ cursor: 'pointer' }} /></span>
-              <input name='attachment' type="file" onChange={handelFileChange} ref={imageRef} style={{ display: 'none' }} />
-              {file && <span className={`${classes["chat-sender-v"]}`}>
-                <img src={URL.createObjectURL(file)} alt="attachment" />
-                <span onClick={() => { setFile(null) }}>X</span>
-              </span>
-              }
-            </div>
+            {file && (
+              <div className={`${classes["chat-sender-2"]}`}>
+                <span className={`${classes["chat-sender-v"]}`}>
+                  <img src={URL.createObjectURL(file)} alt="attachment" />
+                  <span onClick={() => { setFile(null) }}>X</span>
+                </span>
+              </div>
+            )}
           </>
         ) : (
           <span className={`${classes["chatbox-empty-message"]}`}>
-            <RiRobot2Line className={classes.iconImg} />
-            <h1>Tap on a chat to start conversation...</h1>
+            <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+            <h1 className={classes.gradientText}>Tap on a chat to start conversation...</h1>
           </span>
         )}
       </div>

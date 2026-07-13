@@ -1,6 +1,7 @@
 @use '../index.scss' as *;
 
 //----------------------------------
+
 .category-item {
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.01) 100%);
     backdrop-filter: blur(var(--glass-blur, 12px));
@@ -25,6 +26,7 @@
         box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
         transform: translateY(-4px);
     }
+
     scroll-snap-align: start;
     justify-content: center;
     align-items: center;

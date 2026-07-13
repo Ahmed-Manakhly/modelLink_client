@@ -17,8 +17,8 @@ function AuthCard({ title }) {
     return (
         <div className={classes.card}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h1 className={`${classes.title} ${classes.gradientText}`}>
-                    {title}
+                <h1 className={`${classes.title} page-main-title`}>
+                    <span className="gradient-text">{title}</span>
                 </h1>
             </div>
         </div>
@@ -57,10 +57,10 @@ const Auth = () => {
                             Model<span>Link</span>
                         </div>
                         <Row>
-                            <h1 className={classes.title_2}>Success starts here</h1>
-                        </Row>
-                        <Row>
-                            <p className={`${classes["section__text__p2"]}`}>Access to talent and businesses across the globe</p>
+                            <h2 className="page-main-title" style={{marginBottom: '0'}}>
+                                <span className="gradient-text">Success Starts Here 🌟</span>
+                                <span className="sub-title">Access to top-tier AI talent and businesses across the globe. 🌍</span>
+                            </h2>
                         </Row>
                     </Row>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>

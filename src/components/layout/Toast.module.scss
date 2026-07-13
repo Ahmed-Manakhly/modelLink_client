@@ -22,8 +22,8 @@
     padding: 15px;
     -webkit-border-radius: var(--border-radius-md);
     border-radius: var(--border-radius-md);
-    -webkit-box-shadow: 0 5px 20px hsla(0, 0%, 0%, 0.15);
-    box-shadow: 0 5px 20px hsla(0, 0%, 0%, 0.15);
+    -webkit-box-shadow: var(--glass-shadow);
+    box-shadow: var(--glass-shadow);
     -webkit-transform: translateX(-webkit-calc(-100% - 40px));
     -ms-transform: translateX(calc(-100% - 40px));
     transform: translateX(calc(-100% - 40px));

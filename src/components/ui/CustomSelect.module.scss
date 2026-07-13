@@ -21,7 +21,7 @@
             //     border-right: 1px solid var(--primary) !important;
             // }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
                 border-radius: 9px !important;
                 // border-right: 2.5px solid var(--primary) !important;
             }
@@ -46,7 +46,7 @@
 
             .open & {
                 border-color: var(--primary-color, #1a73e8);
-                box-shadow: 0 0 0 2px #ddd;
+                box-shadow: var(--glass-shadow);
             }
         }
 
@@ -54,7 +54,7 @@
             z-index: 60100;
             background: var(--primary-color, #1a73e8);
             border: 3px solid var(--primary-color, #1a73e8);
-            box-shadow: 4px 4px 12px #ddd;
+            box-shadow: var(--glass-shadow);
             max-height: none;
             overflow-y: visible;
         }
@@ -126,7 +126,7 @@
                 }
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
                 .selectedValue {
                     font-size: 11px !important;
                     padding: 8px 6px;
@@ -187,7 +187,7 @@
     background: var(--bg-3-color, #fff);
     border: 3px solid var(--border-color, #ddd);
     border-radius: 8px;
-    box-shadow: 4px 4px 12px var(--border-color, #ddd);
+    box-shadow: var(--glass-shadow);
     z-index: 99;
     max-height: 250px;
     overflow-y: auto;

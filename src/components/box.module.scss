@@ -4,7 +4,6 @@
 //----------------------------------
 
 .box_container {
-  margin-top: 50px;
   .___container {
     .__box:nth-child(1) {
       background: var(--gradient-brand);
@@ -160,7 +159,7 @@
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
     border: 3px solid var(--primary);
-    // box-shadow: .9px .9px 17px var(--cultured);
+    // box-shadow: var(--glass-shadow);
 
     &:hover { 
         background :transparent !important;

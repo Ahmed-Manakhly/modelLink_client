@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
+import GlobalWrapper from './layout/GlobalWrapper';
 import {cartActions} from '../store/Cart-slice' ;
 import {useDispatch} from 'react-redux';
 import Card from './Card' ;
-import classes from './PopularServices.module.scss' ;
 import { getModelMarketingFields } from '../lib/modelHelpers';
 //------------------
 import Carousel from 'react-multi-carousel';
@@ -37,18 +37,17 @@ function PopularServices({ models, title, viewAllLink }) {
         }
     };
     return (
-
-    <div className={classes.container}>
+    <GlobalWrapper className="global-section-spacing">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
-            <h2 className={classes["title"]}>{`${title ? title : 'Popular Services!'}`}</h2>
+            <h2 className="global-section-title">{`${title ? title : 'Popular Services!'}`}</h2>
             {viewAllLink && (
                 <Link to={viewAllLink} className="btn-glass-outline">
                     View all
                 </Link>
             )}
         </div>
-        <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={2500}  keyBoardControl swipeable
-            draggable   >
+        <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={2500} keyBoardControl swipeable
+            draggable itemClass="global-carousel-item">
             {models.map((ele,i)=>{
                 const m = getModelMarketingFields(ele);
                 return(
@@ -79,7 +78,7 @@ function PopularServices({ models, title, viewAllLink }) {
                 />
             )})}
         </Carousel>
-    </div>
+    </GlobalWrapper>
     )
 }
 

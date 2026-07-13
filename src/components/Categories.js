@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useEffect, useState } from 'react';
+import GlobalWrapper from './layout/GlobalWrapper';
 import { getCategoriesReq } from '../lib/loaders';
 import { mapParentCategoriesToHomeCards } from '../lib/categoryHelpers';
 
@@ -48,9 +49,9 @@ function Categories({ categoryCards }) {
     };
 
     return (
-        <div className={classes.container}>
-            <h2 className={classes['title']}>Models Categories</h2>
-            <Carousel responsive={responsive} showDots infinite keyBoardControl swipeable draggable className="filters" itemClass={classes.carouselItem}>
+        <GlobalWrapper className="global-section-spacing">
+            <h2 className="global-section-title">Models Categories</h2>
+            <Carousel responsive={responsive} showDots infinite keyBoardControl swipeable draggable className="filters" itemClass="global-carousel-item">
                 {parents.map((item, index) => (
                     <ParentCard
                         key={item.slug || index}
@@ -61,7 +62,7 @@ function Categories({ categoryCards }) {
                     />
                 ))}
             </Carousel>
-        </div>
+        </GlobalWrapper>
     );
 }
 

@@ -165,6 +165,31 @@
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.9) 0%, rgba(34, 211, 238, 0.5) 100%);
 }
 
+.btn-glass-danger {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.8) 0%, rgba(244, 67, 54, 0.4) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(244, 67, 54, 0.5);
+    border-radius: var(--radius-button);
+    transition: var(--transition-smooth);
+    color: var(--on-surface);
+    cursor: pointer;
+    padding: 8px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-glass-danger:hover {
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+    transform: translateY(-2px);
+    border-color: rgba(244, 67, 54, 0.8);
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.9) 0%, rgba(244, 67, 54, 0.5) 100%);
+}
+
 .btn-glass-outline {
     background: transparent;
     backdrop-filter: blur(12px);

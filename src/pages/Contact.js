@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import img from '../assets/Speech to text.svg';
+import img from '../assets/ai-face.png';
 import classes from './Contact.module.scss';
 import { vals } from '../constants/marketingData';
 import Val from '../components/Val';
 import { getAuthToken } from '../utility/tokenLoader';
 import { submitContactReq } from '../lib/supportRequests';
 import { uiActions } from '../store/UI-slice';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 
 function Contact() {
     const dispatch = useDispatch();
@@ -67,8 +68,8 @@ function Contact() {
 
     return (
         <>
-            <div className={classes.container}>
-                <div className={`  ${classes['contact__container']}`}>
+            <GlobalWrapper className="global-banner-spacing">
+                <div className={classes['contact__container']}>
                     <aside className={classes['contact__aside']}>
                         <div className={classes.secCon}>
                             <div className={classes['aside__image']}>
@@ -139,7 +140,7 @@ function Contact() {
                         </button>
                     </form>
                 </div>
-            </div>
+            </GlobalWrapper>
             <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
         </>
     );

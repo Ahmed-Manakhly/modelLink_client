@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import classes from './UpButton.module.scss'
+import GlobalWrapper from './GlobalWrapper';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 
 function UpButton({scroll}) {
@@ -11,9 +13,13 @@ function UpButton({scroll}) {
         });
     }
     return (
-        <button className={`btn-glass-primary ${scroll && classes.show} ${classes.up}`} onClick={goUpHandler}>
-            To Top
-        </button>
+        <div className={`${classes.up_container} ${scroll ? classes.show : ''}`}>
+            <GlobalWrapper className={classes.up_inner}>
+                <button className={`btn-glass-primary ${classes.up}`} onClick={goUpHandler} aria-label="To Top">
+                    <KeyboardArrowUpIcon />
+                </button>
+            </GlobalWrapper>
+        </div>
     )
 }
 

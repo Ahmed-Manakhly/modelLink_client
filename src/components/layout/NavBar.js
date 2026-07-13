@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Notifications from '../Notifications/Notifications'
 import Conversation from '../ConversationNew/Conversation'
+import GlobalWrapper from './GlobalWrapper';
 import { getCategoriesReq } from '../../lib/loaders';
 import { buildCategoriesList } from '../../lib/categoryHelpers';
 import {
@@ -104,7 +105,7 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
   }
   return (
     <nav className={classes["desktop-navigation-menu"]}>
-      <div className={classes["container"]}>
+      <GlobalWrapper>
         <ul className={classes["desktop-menu-category-list"]}>
           <SingleLink title='Home' to='/' />
           <MultipleLinkList listName='models' listItems={categoriesList} />
@@ -116,7 +117,7 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
               )
             })}
           </>}
-          {/* <SingleLink  title='ABOUT US' to='/about'/> */}
+          <SingleLink title='ABOUT US' to='/about' />
           <SingleLink title='contact us' to='/contact' />
           {isLoggedIn &&
             <div className={classes["header-user-actions"]}>
@@ -196,7 +197,7 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
             </div>
           }
         </ul>
-      </div>
+      </GlobalWrapper>
     </nav>
   )
 }

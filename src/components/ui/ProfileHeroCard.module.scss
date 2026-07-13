@@ -6,11 +6,6 @@
 // - inner row gap: 2rem; left column ~38%, right column flex-grow
 // - bottom margin: 5rem (page rhythm)
 
-.container {
-    width: 95%;
-    max-width: 1140px;
-    margin: 10px auto 5rem;
-}
 
 .card {
     border: var(--border-standard);
@@ -24,9 +19,6 @@
     align-items: flex-start;
     gap: 2rem;
     width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 10px;
 }
 
 .left {

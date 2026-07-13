@@ -79,7 +79,7 @@
 }
 //========================================================
 .secpro{
-  box-shadow: 5px 5px 10px var(--cultured);
+  box-shadow: var(--glass-shadow);
   border: 2px solid var(--cultured);
   display: flex ;
   align-items: center ;
@@ -236,7 +236,6 @@
             width: 100px ;
             height: 100px ;
             @extend %rad ;
-            border: 3.5px var(--primary) solid;
             img {
               top: 0;
               left: 0;

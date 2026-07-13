@@ -165,13 +165,13 @@ const RootLayout = ({ handleDeleteNotification , handleUpdateNotification , hand
             {showNotification && <Toast close={onCloseNotificationHandler} status={status} title={title} message={message} onAnimationEnd={onCloseNotificationHandler}/>}
             <div className={`overlay  ${(menuOpen || isLoading) && 'active'}`}  onClick={onCloseHandler} ></div>
             {isLoading && <LoadingSpinner/>}
-            <Topbar txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
+            <Topbar txt_1={'Connecting AI developers with buyers worldwide. 🌍'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
             <TopNavBar getSearch={getSearch}/>
             <NavBar handleUpdateNotification={handleUpdateNotification} handleReadAllNotifications={handleReadAllNotifications}
                 handleDeleteNotification={handleDeleteNotification} handleDeleteChat={handleDeleteChat} />
             <MobNav onClick={onClickHandler} txt_3={'sign in'} txt_4={'Join'} />
             <MobNavMenu menuOpen={menuOpen}  onClose={onCloseHandler} NavData={token? mobNavData_2:mobNavData}  
-            txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
+            txt_1={'Connecting AI developers with buyers worldwide. 🌍'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
             />
             <main >
                 <UpButton scroll={scroll} />

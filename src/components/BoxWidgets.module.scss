@@ -236,7 +236,7 @@ a.banner-btn_ {
       color: var(--bg-main);
       background: var(--primary) !important;
       border-color: var(--primary);
-      box-shadow: 0 0 20px var(--secondary-glow);
+      box-shadow: var(--glass-shadow);
     }
   }
 }
@@ -332,8 +332,8 @@ a.banner-btn_ {
   width: 170px;
   height: 170px;
   @extend %rad;
-  border: 3.5px var(--primary) solid;
   margin: 0 auto;
+  --avatar-border-width: 5px;
 
   // overflow: hidden;
   &:hover::after {

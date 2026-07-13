@@ -63,7 +63,7 @@
               width: 100px ;
               height: 100px ;
               @extend %rad ;
-              border: 3.5px var(--primary) solid;
+              --avatar-border-width: 5px;
               img {
                 top: 0;
                 left: 0;
@@ -142,7 +142,7 @@
         .__box_rightside {
           align-content: stretch;
           // border : 5px solid var(--cultured) ;
-          box-shadow: .9px .9px 17px var(--cultured);
+          box-shadow: var(--glass-shadow);
           width: 70% !important;
           // height: fit-content !important;
           padding: 5px 40px;
@@ -403,7 +403,7 @@
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
     border: 3px solid var(--primary);
-    // box-shadow: .9px .9px 17px var(--cultured);
+    // box-shadow: var(--glass-shadow);
   
     &:hover { 
         background :var(--cultured) !important;
@@ -456,7 +456,7 @@
   background-color: var(--white);
   border: 1px solid var(--cultured);
   border-radius: var(--border-radius-md);
-  box-shadow: 5px 5px 10px var(--cultured);
+  box-shadow: var(--glass-shadow);
 }
 
 .statusPaid,
@@ -502,7 +502,7 @@
 .assetCard {
   border: 1px solid var(--cultured);
   border-radius: var(--border-radius-md);
-  box-shadow: 5px 5px 10px var(--cultured);
+  box-shadow: var(--glass-shadow);
 }
 
 .assetLabel {

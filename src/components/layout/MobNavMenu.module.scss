@@ -2,7 +2,10 @@
 //-------------------------------
 
 .mobile-navigation-menu {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%), var(--bg-surface);
+    background: var(--bg-surface);
+    backdrop-filter: blur(16px);
+    background-image: none !important;
+    border-right: var(--border-standard);
     position: fixed;
     top: 0;
     left: -100%;
@@ -10,8 +13,8 @@
     max-width: 320px;
     height: 100vh;
     padding: 20px;
-    -webkit-box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1);
-            box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1);
+    -webkit-box-shadow: var(--glass-shadow);
+            box-shadow: var(--glass-shadow);
     overflow-y: scroll;
     -ms-scroll-chaining: none;
         overscroll-behavior: contain;
@@ -53,11 +56,19 @@
 }
 
 .menu-close-btn {
-    color: var(--eerie-black);
-    font-size: 22px;
+    color: var(--on-surface);
+    font-size: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    
+    &:hover {
+        color: var(--primary);
+    }
 }
 
-.menu-close-btn ion-icon { --ionicon-stroke-width: 50px; }
+.menu-close-btn ion-icon { --ionicon-stroke-width: 40px; }
 
 .mobile-menu-category-list { margin-bottom: 30px; }
 
@@ -147,8 +158,8 @@
     border-radius: var(--border-radius-md);
     padding: 0 15px;
     margin-left: 0;
-    -webkit-box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.05);
-    box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.05);
+    -webkit-box-shadow: var(--glass-shadow);
+    box-shadow: var(--glass-shadow);
 }
 
 .menu-bottom .submenu-category:not(:last-child) { border-bottom: 1px solid var(--cultured); }
@@ -173,14 +184,22 @@
 }
 
 .menu-social-container .social-link {
+    font-size: 20px;
+    padding: 5px;
     background: transparent;
     color: var(--sonic-silver);
-    font-size: 20px;
-    padding: 10px;
-    -webkit-border-radius: var(--border-radius-md);
-    border-radius: var(--border-radius-md);
-    border: 1px solid var(--border-glass);
-    &:hover { color: var(--primary); }
+    border: 1px solid var(--sonic-silver);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    transition: var(--transition-timing);
+    &:hover {
+        color: var(--primary);
+        border-color: var(--primary);
+    }
 }
 
 .header-alert-news{

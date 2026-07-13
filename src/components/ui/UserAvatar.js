@@ -33,8 +33,8 @@ const UserAvatar = ({ user, className, style }) => {
       <img
         src={process.env.PUBLIC_URL + '/favicon.svg'}
         alt="System Avatar"
-        className={className}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', ...style }}
+        className={`global-avatar ${className || ''}`}
+        style={style}
       />
     );
   }
@@ -46,15 +46,8 @@ const UserAvatar = ({ user, className, style }) => {
         src={`${FILES_BASE_API_URL}${user.avatar}`}
         alt="Avatar"
         crossOrigin="anonymous"
-        className={className}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          borderRadius: '50%',
-          transform: 'scale(1.02)',
-          ...style
-        }}
+        className={`global-avatar ${className || ''}`}
+        style={style}
       />
     );
   }
@@ -65,8 +58,8 @@ const UserAvatar = ({ user, className, style }) => {
     <img
       src={placeholderSrc}
       alt="Avatar Placeholder"
-      className={className}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', ...style }}
+      className={`global-avatar ${className || ''}`}
+      style={style}
     />
   );
 };

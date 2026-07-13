@@ -1,9 +1,9 @@
-@use '../index.scss' as * ;
+@use '../index.scss' as *;
 
 .showcase {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.05) 0%, rgba(34, 211, 238, 0.01) 100%);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.01) 100%);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.2);
     border-radius: var(--radius-card);
     overflow: hidden;
     transition: var(--transition-smooth);
@@ -15,7 +15,12 @@
     flex-direction: column;
 }
 
-.showcase:hover { box-shadow: 0 0 20px rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.4); background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(34, 211, 238, 0.02) 100%); transform: translateY(-3px); }
+.showcase:hover {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+    border-color: rgba(34, 211, 238, 0.5);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%);
+    transform: translateY(-4px);
+}
 
 .showcase-banner {
     position: relative;
@@ -37,12 +42,30 @@
     transition: transform var(--transition-timing);
 }
 
-.product-img.default { position: relative; z-index: 1; }
-.product-img.hover { position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; }
+.product-img.default {
+    position: relative;
+    z-index: 1;
+}
 
-.showcase:hover .product-img.hover { opacity: 1; }
-.showcase:hover .product-img.default { opacity: 0; }
-.showcase:hover .product-img { transform: scale(1.05); }
+.product-img.hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+}
+
+.showcase:hover .product-img.hover {
+    opacity: 1;
+}
+
+.showcase:hover .product-img.default {
+    opacity: 0;
+}
+
+.showcase:hover .product-img {
+    transform: scale(1.05);
+}
 
 .badges-container {
     position: absolute;
@@ -64,11 +87,29 @@
     letter-spacing: 0.5px;
 }
 
-.fdaBadge { background-color: var(--ocean-green); }
-.featuredBadge { background-color: #ffd700; color: #1a1a1a; }
-.categoryBadge { background-color: var(--primary); color: #111318; }
-.primaryBadge { background-color: #e0e0e0; color: #1a1a1a; }
-.versionBadge { background-color: rgba(17, 19, 24, 0.8); color: var(--on-surface-variant); }
+.fdaBadge {
+    background-color: var(--ocean-green);
+}
+
+.featuredBadge {
+    background-color: #ffd700;
+    color: #1a1a1a;
+}
+
+.categoryBadge {
+    background-color: var(--primary);
+    color: #111318;
+}
+
+.primaryBadge {
+    background-color: #e0e0e0;
+    color: #1a1a1a;
+}
+
+.versionBadge {
+    background-color: rgba(17, 19, 24, 0.8);
+    color: var(--on-surface-variant);
+}
 
 .showcase-actions {
     position: absolute;
@@ -82,7 +123,9 @@
     z-index: 3;
 }
 
-.showcase:hover .showcase-actions { transform: translateX(0); }
+.showcase:hover .showcase-actions {
+    transform: translateX(0);
+}
 
 .btn-action {
     background: var(--bg-surface);
@@ -121,8 +164,14 @@
     align-items: center;
     justify-content: center;
 }
-.carouselBtnLeft { left: 5px; }
-.carouselBtnRight { right: 5px; }
+
+.carouselBtnLeft {
+    left: 5px;
+}
+
+.carouselBtnRight {
+    right: 5px;
+}
 
 .carouselDots {
     position: absolute;
@@ -133,13 +182,17 @@
     gap: 4px;
     z-index: 10;
 }
+
 .carouselDot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
 }
-.carouselDotActive { background: var(--white); }
+
+.carouselDotActive {
+    background: var(--white);
+}
 
 /* Content Section */
 .showcase-content {
@@ -166,6 +219,7 @@
     color: var(--color-text-main);
     margin-bottom: 12px;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -174,9 +228,13 @@
     transition: color var(--transition-timing);
 }
 
-.showcase-title:hover { color: var(--color-primary); }
+.showcase-title:hover {
+    color: var(--color-primary);
+}
 
-.seller-strip { margin-bottom: 8px; }
+.seller-strip {
+    margin-bottom: 8px;
+}
 
 .rating-area {
     display: flex;
@@ -232,10 +290,12 @@
     margin-bottom: 15px;
     line-height: 1.5;
     display: -webkit-box;
+    line-clamp: 3;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    flex-grow: 1; /* Pushes footer down to align cards */
+    flex-grow: 1;
+    /* Pushes footer down to align cards */
 }
 
 .footer-row {

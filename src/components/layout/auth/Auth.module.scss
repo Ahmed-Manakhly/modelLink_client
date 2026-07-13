@@ -40,24 +40,16 @@
             background-position: center;
             backdrop-filter: blur(12px);
             border-radius: var(--radius-card) 0 0 var(--radius-card);
-            .section__text__p2 {
-                font-size: 1.75rem;
-                margin-bottom: 1rem;
-                color: var(--sonic-silver)  !important;
-                font-size: 1.2rem;
-                display: block;
-                border-left: var(--sonic-silver) solid 5px;
-                padding-left: 1rem;
-                }
+            // .section__text__p2 was removed, handled by global styles
         }
     }
 
-.gradientText {
-    background: var(--gradient-text);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+// .gradientText {
+//     background: var(--gradient-text);
+//     background-clip: text;
+//     -webkit-background-clip: text;
+//     -webkit-text-fill-color: transparent;
+// }
 // }
 
 .card {
@@ -212,7 +204,7 @@
 
 
 .contact-col {
-    // box-shadow: -4px -1px 12px rgba(0, 0, 0, 0.108), 1px 1px 12px #9d9d9d27;
+    // box-shadow: var(--glass-shadow);
     .container__2{
         display: flex;
         flex-direction: column;
@@ -382,15 +374,20 @@
     padding: 5px;
     background: transparent;
     color: var(--on-surface-variant);
+    border: 1px solid var(--on-surface-variant);
+    border-radius: 6px;
     transition: var(--transition-timing);
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 28px;
+    height: 28px;
 }
 
 .header-social-container .social-link:hover {
     background: transparent;
     color: var(--primary);
+    border-color: var(--primary);
 }
 
 a.email {

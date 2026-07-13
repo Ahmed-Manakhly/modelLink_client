@@ -1,4 +1,5 @@
 import React from 'react';
+import GlobalWrapper from '../layout/GlobalWrapper';
 import styles from './ProfileHeroCard.module.scss';
 
 /**
@@ -8,7 +9,7 @@ import styles from './ProfileHeroCard.module.scss';
  */
 const ProfileHeroCard = ({ avatar, leftInfo, children, className = '' }) => {
     return (
-        <section className={`${styles.container} ${className}`.trim()}>
+        <GlobalWrapper className={`global-banner-spacing ${className}`.trim()}>
             <div className={styles.card}>
                 <div className={styles.main}>
                     <div className={styles.left}>
@@ -18,7 +19,7 @@ const ProfileHeroCard = ({ avatar, leftInfo, children, className = '' }) => {
                     <div className={styles.right}>{children}</div>
                 </div>
             </div>
-        </section>
+        </GlobalWrapper>
     );
 };
 

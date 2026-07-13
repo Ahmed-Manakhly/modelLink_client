@@ -6,7 +6,7 @@ import { RiRobot2Line } from "react-icons/ri";
 
 const Box = ({title,img,text_1,text_2,actionTo ,title_2,content_1,title_3,content_2,closure, actionTitle , action}) => {
   return (
-    <section className={styles.box_container}>
+    <section className={`${styles.box_container} global-section-spacing`}>
       <div className={styles.___container}>
         <div className={styles.__box}>
           <div className={styles.container}>

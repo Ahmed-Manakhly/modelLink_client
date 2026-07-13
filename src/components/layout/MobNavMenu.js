@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import classes from './MobNavMenu.module.scss';
 import UserAvatar from '../ui/UserAvatar';
+import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock, FiHome, FiInfo, FiMail, FiLogOut } from 'react-icons/fi';
 
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
@@ -21,7 +22,7 @@ const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick
     <li className={classes["menu-category"]}>
       <button className={`${classes['accordion-menu']} ${isOpen && classes.active}`} onClick={() => { setIsOpen(prev => !prev) }}>
         <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
-          {img && <img src={img} alt={menuTitle} style={{width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />}
+          {img && <img src={img} alt={menuTitle} style={{width: menuTitle.toLowerCase() === 'ai models' ? '30px' : '24px', height: menuTitle.toLowerCase() === 'ai models' ? '30px' : '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />}
           <p className={classes["menu-title"]}>{menuTitle}</p>
         </div>
         <div>
@@ -42,10 +43,12 @@ const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick
   )
 }
 //-------------------------------------
-const SingleLink = ({ title, onClick, to }) => {
+const SingleLink = ({ title, onClick, to, icon }) => {
   return (
     <li className={classes["menu-category"]}>
-      <Link to={to} className={classes["menu-title"]} onClick={onClick} >{title}</Link>
+      <Link to={to} className={classes["menu-title"]} onClick={onClick} style={{display: 'flex', alignItems: 'center', gap: '15px'}} >
+          {icon} {title}
+      </Link>
     </li>
   )
 }
@@ -108,37 +111,37 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
     </li>
     <hr />
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/profileSettings`}>Profile Settings</Link>
+      <Link onClick={onClose} to={`/profileSettings`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiSettings /> Profile Settings</Link>
     </li>
 
     {role === 'DEVELOPER' &&
       <>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/dashboard-dev`} >My Dashboard</Link>
+          <Link onClick={onClose} to={`/dashboard-dev`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiGrid /> My Dashboard</Link>
         </li>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/reviews-dev`} >My Reviews</Link>
+          <Link onClick={onClose} to={`/reviews-dev`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiStar /> My Reviews</Link>
         </li>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/wallet`} >My Wallet</Link>
+          <Link onClick={onClose} to={`/wallet`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiCreditCard /> My Wallet</Link>
         </li>
       </>
     }
     {role === 'CLIENT' &&
       <li className={` ${styles.container_} ${styles['menu-category']} `}>
-        <Link onClick={onClose} to={`/orders-client`} >My Orders</Link>
+        <Link onClick={onClose} to={`/orders-client`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiPackage /> My Orders</Link>
       </li>
     }
     {(role === 'ADMIN' || role === 'EMPLOYEE') &&
       <li className={` ${styles.container_} ${styles['menu-category']} `}>
-        <Link onClick={onClose} to={`/admin`} >Admin Dashboard</Link>
+        <Link onClick={onClose} to={`/admin`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiShield /> Admin Dashboard</Link>
       </li>
     }
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/profile/${userID}`}>My Profile</Link>
+      <Link onClick={onClose} to={`/profile/${userID}`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiUser /> My Profile</Link>
     </li>
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/change-password`}>Change Password</Link>
+      <Link onClick={onClose} to={`/change-password`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiLock /> Change Password</Link>
     </li>
     <br />
     <hr />
@@ -164,7 +167,7 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
         {isLoggedIn && userActions}
         {/* </div> */}
 
-        <SingleLink title='Home' to='/' onClick={onClose} />
+        <SingleLink title='Home' to='/' onClick={onClose} icon={<FiHome />} />
         {/* {======================================} */}
         {categoriesList.map((item, index) => {
           return (
@@ -177,8 +180,8 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
           )
         })}
         {/* {======================================} */}
-        {/* <SingleLink  title='About Us' to='/about'/> */}
-        <SingleLink title='Contact Us' to='/contact' onClick={onClose} />
+        <SingleLink title='About Us' to='/about' onClick={onClose} icon={<FiInfo />} />
+        <SingleLink title='Contact Us' to='/contact' onClick={onClose} icon={<FiMail />} />
       </ul>
       <div className={classes["menu-bottom"]}>
         <ul className={classes["menu-social-container"]}>

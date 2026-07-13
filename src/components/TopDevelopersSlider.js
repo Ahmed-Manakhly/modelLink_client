@@ -1,7 +1,9 @@
-import classes from './PopularServices.module.scss' ;
+
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import UserProfileStrip from './UserProfileStrip';
+import GlobalWrapper from './layout/GlobalWrapper';
+import cardClasses from './Card.module.scss';
 
 function TopDevelopersSlider({ developers, title }) {
     const responsive = {
@@ -14,45 +16,23 @@ function TopDevelopersSlider({ developers, title }) {
     if (!developers || developers.length === 0) return null;
 
     return (
-        <div className={classes.container} style={{marginTop: '20px', marginBottom: '20px'}}>
-            <h2 className={classes["title"]}>{title ? title : 'Top AI Developers'}</h2>
-            <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={3000} keyBoardControl swipeable draggable>
+        <GlobalWrapper className="global-section-spacing">
+            <div>
+            <h2 className="global-section-title">{title ? title : 'Top AI Developers'}</h2>
+            <Carousel responsive={responsive} showDots infinite autoPlay autoPlaySpeed={3000} keyBoardControl swipeable draggable itemClass="global-carousel-item">
                 {developers.map((dev, i) => (
-                    <div key={dev.id || i} style={{ padding: '10px 15px', height: '100%' }}>
-                        <div style={{
-                            background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.03) 0%, rgba(34, 211, 238, 0.06) 100%)', 
-                            backdropFilter: 'blur(12px)',
-                            borderRadius: '15px', 
-                            padding: '20px 10px', 
-                            boxShadow: 'var(--glass-shadow)',
-                            height: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            border: '1px solid rgba(34, 211, 238, 0.1)',
-                            transition: 'var(--transition-smooth)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 15px rgba(34, 211, 238, 0.15)';
-                            e.currentTarget.style.borderColor = 'rgba(34, 211, 238, 0.3)';
-                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.03) 100%)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
-                            e.currentTarget.style.borderColor = 'rgba(34, 211, 238, 0.1)';
-                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(34, 211, 238, 0.03) 0%, rgba(34, 211, 238, 0.06) 100%)';
-                        }}
-                        >
-                            <UserProfileStrip 
-                                user={dev} 
-                                variant="public" 
-                                showViewProfileLink={true} 
-                                profileLinkTo={`/profile/${dev.id}`}
-                            />
-                        </div>
+                    <div key={dev.id || i} className={cardClasses.showcase} style={{ padding: '25px 20px', height: '100%', cursor: 'pointer' }} onClick={() => window.location.href = `/profile/${dev.id}`}>
+                        <UserProfileStrip 
+                            user={dev} 
+                            variant="public" 
+                            showViewProfileLink={true} 
+                            profileLinkTo={`/profile/${dev.id}`}
+                        />
                     </div>
                 ))}
             </Carousel>
-        </div>
+            </div>
+        </GlobalWrapper>
     );
 }
 export default TopDevelopersSlider;

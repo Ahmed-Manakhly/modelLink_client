@@ -20,7 +20,7 @@
     background-color: var(--cultured);
     overflow: hidden;
     border: var(--cultured) solid 2px;
-    box-shadow: 5px 5px 10px var(--sonic-silver);
+    box-shadow: var(--glass-shadow);
     &:hover {
       background: rgb(211, 203, 203);
       cursor: pointer;
@@ -82,7 +82,6 @@
           height: 50px ;
           // margin: 2px ;
           @extend %rad ;
-          border: 3px var(--primary) solid;
           overflow: hidden;
           &:hover::after {
               display: none;

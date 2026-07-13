@@ -9,11 +9,11 @@ function WarningModal({ warning, onClose, onAction }) {
       <div className={classes.con}>
         <div className={classes.msg}>{warning.message}</div>
         <div className={classes.actionBox}>
-          <button onClick={onClose} className={classes.close}>
+          <button onClick={onClose} className="btn-glass-outline">
             {warning.type === 'missing' ? 'Ok' : 'Close'}
           </button>
           {warning.type === 'action' &&
-            <button onClick={onAction?.bind(null, warning.id)} className={classes.action}>
+            <button onClick={onAction?.bind(null, warning.id)} className={warning.action.toLowerCase() === 'delete' ? "btn-glass-danger" : "btn-glass-primary"}>
               {warning.action}
             </button >
           }

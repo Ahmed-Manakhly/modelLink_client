@@ -25,15 +25,15 @@
         }
         .pages{
             .page{
-                background-color: var(--white);
-                color: var(--eerie-black);
+                background-color: rgba(255, 255, 255, 0.05);
+                color: var(--on-surface);
                 &:hover{
                     background-color: var(--primary);
-                    color: var(--white);
+                    color: var(--bg-main);
                 }
                 &.active{
                     background-color: var(--primary);
-                    color: var(--white);
+                    color: var(--bg-main);
                     border: none;
                 }
             }

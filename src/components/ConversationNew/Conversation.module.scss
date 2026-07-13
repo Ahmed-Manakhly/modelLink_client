@@ -13,18 +13,19 @@
   justify-content: flex-start;
   align-items: center;
   padding: 5px;
-  border: var(--cultured) solid 2px;
-  // box-shadow: 5px 5px 10px var(--cultured);
-  background-color: var(--on-surface);
-  &.active {
-    background-color: #6541f238;
+  border: 1px solid var(--border-glass);
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-md);
+  transition: all 0.3s ease;
+  &.active, &.unRead {
+    background-color: rgba(34, 211, 238, 0.05);
     border-color: var(--primary);
   }
-  &.active:hover {
-    background-color: #987ffb38;
+  &.active:hover, &.unRead:hover {
+    background-color: rgba(34, 211, 238, 0.1);
   }
   &:hover {
-    background: var(--cultured);
+    background: var(--bg-glassy-solid);
     cursor: pointer;
   }
   .conversation-con{
@@ -78,18 +79,27 @@
           width: 20px;
           height: 20px;
           @extend %rad ;
-          font-size: 12px;
-          color: #fe89a2ce;
+          font-size: 14px;
+          color: var(--sonic-silver);
           display: flex;
           justify-content: center;
           align-items: center;
           margin: 2px;
+          cursor: pointer;
+          transition: var(--transition-smooth);
+          &:hover {
+            color: var(--color-danger);
+            transform: scale(1.1);
+          }
         }
       }
       .row_1{
         .Col_1{
-          color: var(--sonic-silver);
-          font-size: 13px;
+          background: var(--gradient-text);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-size: 14px;
           font-weight: bold;
           white-space: nowrap;
           overflow: hidden;
@@ -101,7 +111,7 @@
           width: 20px;
           height: 20px;
           @extend %rad ;
-          background-color: var(--primary);
+          background-color: var(--color-success); color: var(--bg-main);
           font-style: italic;
           color: var(--on-surface);
           font-size: 12px;
@@ -123,7 +133,6 @@
       width: 35px ;
       height: 35px ;
       @extend %rad ;
-      border: 3px var(--primary) solid;
       overflow: hidden;
       &:hover::after {
           display: none;
@@ -143,7 +152,7 @@
           font-size:1.1rem;
           font-weight: 500;
           color: var(--on-surface);
-          background-color: var(--primary);
+          background-color: var(--color-success); color: var(--bg-main);
           top: 0;
           left: 0;
           position: absolute;

@@ -3,7 +3,15 @@ import Clinical_Decision_Support from '../assets/Clinical_Decision_Support.png'
 import Telemedicine  from '../assets/Telemedicine.png'
 import Pathology_and_Histopathology from '../assets/Pathology_and_Histopathology.png'
 import Genomics_and_Personalized_Medicine from '../assets/Genomics_and_Personalized_Medicine.png'
-// import Healthcare_Operations_Optimization from '../assets/Healthcare_Operations_Optimization.png'
+
+import svg1 from '../assets/svg_1.svg'
+import svg2 from '../assets/svg_2.svg'
+import svg3 from '../assets/svg_3.svg'
+import svg4 from '../assets/svg_4.svg'
+import svg5 from '../assets/svg_5.svg'
+import svg6 from '../assets/svg_6.svg'
+import svg7 from '../assets/svg_7.svg'
+import svg8 from '../assets/svg_8.svg'
 import pay_Per_Click from '../assets/pay_Per_Click.png'
 import delivery_truck from '../assets/delivery-truck.png'
 import price from '../assets/price.png'
@@ -21,40 +29,52 @@ import ico_doctor from '../assets/ico_doctor.png';
 export const vals = [
   {
       title : 'Access to Advanced Technologies',
-      img : ml_1,
+      img : svg1,
       description :
-      `ModelLink platforms bridge the gap between data providers and seekers. They offer access to cutting-edge AI models, algorithms, and solutions. For your users, this means having a wealth of AI capabilities at their fingertips, whether they’re developing new applications or seeking AI-driven insights.`,
+      `ModelLink platforms bridge the gap between data providers and seekers. They offer access to cutting-edge AI models, algorithms, and solutions. For your users, this means having a wealth of AI capabilities at their fingertips.`,
   },
   {
       title : 'Efficiency and Process Automation',
-      img : Efficiency_3,
+      img : svg2,
       description :
-      `AI simplifies tasks. Your users—whether developers, researchers, or domain experts—can focus on critical work while basic functions are seamlessly handled by AI. Efficiency gains lead to better outcomes and more time for impactful work`,
+      `AI simplifies tasks. Your users—whether developers, researchers, or domain experts—can focus on critical work while basic functions are seamlessly handled by AI. Efficiency gains lead to better outcomes.`,
   },
   {
       title : 'Cost Savings',
-      img : payment_2,
+      img : svg3,
       description :
-      `Implementing AI solutions through exchange platforms can be cost-effective. Users avoid reinventing the wheel and can leverage existing models, reducing development costs.`,
+      `Implementing AI solutions through exchange platforms can be cost-effective. Users avoid reinventing the wheel and can leverage existing models, reducing development costs across various domains.`,
   },
   {
       title : 'Accelerated Innovation',
-      img : Data_mining_4,
+      img : svg4,
       description :
-      `By democratizing access to diverse datasets and AI models, these platforms fuel innovation across industries. Think of it as a melting pot where ideas collide, leading to breakthroughs and novel applications. Your platform can be a catalyst for AI-driven advancements across every domain.`,
+      `By democratizing access to diverse datasets and AI models, these platforms fuel innovation across industries. Think of it as a melting pot where ideas collide, leading to breakthroughs and novel applications.`,
   },
   {
       title : 'Scalability and Flexibility',
-      img : solutions_5,
+      img : svg5,
       description :
-      `ModelLink platforms allow rapid deployment of solutions. Users can scale their projects without starting from scratch. Flexibility is key in a dynamic field like AI.`,
+      `ModelLink platforms allow rapid deployment of solutions. Users can scale their projects without starting from scratch. Flexibility is key in a dynamic field like AI, ensuring rapid adaptation.`,
   },
   {
       title : 'Collaboration and Knowledge Sharing',
-      img : ico_doctor,
+      img : svg6,
       description :
-      `These platforms foster a collaborative environment. Developers, companies, and domain experts share insights, code, and best practices. Collective learning accelerates progress.`,
+      `These platforms foster a collaborative environment. Developers, companies, and domain experts share insights, code, and best practices. Collective learning accelerates overall progress.`,
   },
+  {
+      title : 'Production-Ready Inference',
+      img : svg7,
+      description :
+      `Deploy sophisticated AI pipelines directly into your existing infrastructure. Our tested models ensure robust performance, eliminating the guesswork from integration and scaling.`,
+  },
+  {
+      title : 'Global AI Talent Network',
+      img : svg8,
+      description :
+      `Connect with verified machine learning engineers and researchers. ModelLink provides the marketplace infrastructure to safely commission bespoke models tailored to your exact business needs.`,
+  }
 ]
 export const popularCards = [
   {

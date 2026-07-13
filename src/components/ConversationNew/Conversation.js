@@ -53,9 +53,10 @@ const Conversation = ({ data, online, currentUserId, onRemove, to, isActive }) =
   const displayName = isDeletedAccount ? 'Deleted Account' : getCounterpartyDisplayName(userData);
   const profileLink = isDeletedAccount ? null : getCounterpartyProfileLink(userData);
   //=====================================================================================================================
+  const hasUnread = data?.participants?.find(p => p.userId === currentUserId)?.hasRead === false && data?.unReadMsg > 0;
   return (
     <>
-      <div className={`${classes["conversation"]} ${isActive ? classes["active"] : ''}`} >
+      <div className={`${classes["conversation"]} ${isActive ? classes["active"] : ''} ${hasUnread ? classes["unRead"] : ''}`} >
         <div className={`${classes["conversation-con"]}`} >
           {online && <div className={`${classes["online-dot"]}`}></div>}
           {profileLink ? (
@@ -77,10 +78,10 @@ const Conversation = ({ data, online, currentUserId, onRemove, to, isActive }) =
               <div className={classes["Col_1"]} >
                 <span title={displayName?.toUpperCase()}>{displayName?.toUpperCase()}</span>
               </div>
-              {data?.participants?.find(p => p.userId === currentUserId)?.hasRead === false && data?.unReadMsg > 0 && <div className={classes["Col_2"]}>
+              {hasUnread && <div className={classes["Col_2"]}>
                 <span>{data?.unReadMsg}</span>
               </div>}
-              {!(data?.participants?.find(p => p.userId === currentUserId)?.hasRead === false && data?.unReadMsg > 0) &&
+              {!hasUnread &&
                 <span className={classes["Col_3"]}>{format(data?.updatedAt)}</span>
               }
             </div>

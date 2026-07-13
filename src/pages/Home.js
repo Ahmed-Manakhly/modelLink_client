@@ -4,6 +4,8 @@ import PopularServices from '../components/PopularServices';
 import Val from '../components/Val'
 import Video from '../components/Video'
 import Box from '../components/Box'
+import marketingAboutUsImg from '../assets/marketing_about_us.png';
+import marketingJoinUsImg from '../assets/marketing_join_us.png';
 import img from '../assets/about.jpg'
 import { vals } from '../constants/marketingData';
 import banner from '../assets/ai-face.png'
@@ -130,7 +132,7 @@ function Home({ modelsUpdated, onModelsUpdated }) {
         <>
             <Header
                 // txt_1='The ModelLink'
-                txt_2='A digital marketplace for production-ready AI models'
+                txt_2='A digital marketplace for production-ready AI models 🚀'
                 txt_3='that facilitates the connection between AI developers'
                 banner={banner}
             />
@@ -155,27 +157,32 @@ function Home({ modelsUpdated, onModelsUpdated }) {
                     viewAllLink={`/models?categoryRel.slug=${encodeURIComponent(slug)}`}
                 />
             ))}
+            <Header
+                title_1={'Welcome to'}
+                title_2={'ModelLink!'}
+                txt_1={"A Vibrant Community for AI Developers"}
+                txt_3={"We're on a mission to make production-ready AI models accessible to everyone. Whether you're a seasoned developer or a domain expert, ModelLink is your go-to hub for AI innovation."}
+                banner={marketingAboutUsImg}
+                action={true}
+                actionTitle={"About Us"}
+                actionTo={"/about"}
+                reverse={true}
+            />
+
             <TopDevelopersSlider developers={developers} />
 
-            <Box title={'Welcome to ModelLink!'}
-                text_1={"At ModelLink, we're more than just a marketplace. We're a vibrant community where AI developers, researchers, and practitioners converge to build and deploy real-world AI solutions."}
-                text_2={"We're on a mission to make production-ready AI models accessible to everyone. Whether you're a seasoned developer or a domain expert, ModelLink is your go-to hub for AI innovation."}
-                img={img}
-            />
-            <Video />
-            <Box title={`It’s Your Time!`}
-                text_1={'Are you an AI developer with a groundbreaking model? Look no further! Our platform is your gateway to making a difference\n, Find a Real Opportunity for Your AI Model:'}
-                title_2={'Domain Expertise:'}
-                content_1={"Your AI model can drive real-world impact. Whether it's computer vision, NLP, predictive analytics, or specialized domain models, there's a global market of buyers ready for your solution."}
-                title_3={'Monetize Your Expertise:'}
-                content_2={"Don't just create — commercialize. Showcase your AI model to developers, companies, and institutions actively seeking production-ready solutions."}
-                closure={"Join us as we empower AI practitioners and accelerate the path from model to market."}
-                img={img_2}
+            <Header
+                title_1={'It’s Your'}
+                title_2={'Time!'}
+                txt_1={'Find a Real Opportunity for Your AI Model'}
+                txt_3={"Showcase your AI model to developers, companies, and institutions actively seeking production-ready solutions. Join us as we empower AI practitioners and accelerate the path from model to market."}
+                banner={marketingJoinUsImg}
                 action={true}
-                actionTo={'/auth?mode=signup'}
-                actionTitle={'Join Us Now'}
+                actionTitle={"Join Us Now"}
+                actionTo={"/auth?mode=signup"}
             />
             <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
+            <Video />
         </>
     )
 }

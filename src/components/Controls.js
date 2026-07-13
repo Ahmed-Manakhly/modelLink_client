@@ -17,32 +17,35 @@ import {
 } from '../utility/savedFilters';
 import FilterChips from './FilterChips';
 import CustomSelect from './ui/CustomSelect';
+import GlobalWrapper from './layout/GlobalWrapper';
 
 // import priceIcon from '../assets/price.png';
 // import deliveryIcon from '../assets/delivery-truck.png';
 // import ratingIcon from '../assets/Efficiency_3.png';
 
-const Card = ({ title, items, img, onClickLink, activeCat }) => (
-    <div className={classes['category-item']}>
-        <div className={classes['category-content-box']}>
-            <div className={classes['category-content-flex']}>
-                <h3 className={classes['category-item-title']}>{title}</h3>
+const Card = ({ title, items, img, onClickLink, activeCat }) => {
+    const isParentActive = items.some(item => item.title === activeCat);
+
+    return (
+        <div className={`${classes['category-item']} ${isParentActive ? classes['parent-active'] : ''}`}>
+            <h3 className={classes['category-item-title']}>{title}</h3>
+            <div className={classes['category-content-box']}>
+                {items.map((item, index) => (
+                    <button
+                        key={index}
+                        onClick={onClickLink?.bind(null, item?.title)}
+                        className={`${classes['category-btn']} ${activeCat === item?.title ? classes.active : ''}`}
+                    >
+                        {item?.title}
+                    </button>
+                ))}
             </div>
-            {items.map((item, index) => (
-                <button
-                    key={index}
-                    onClick={onClickLink?.bind(null, item?.title)}
-                    className={`${classes['category-btn']} ${activeCat === item?.title ? classes.active : ''}`}
-                >
-                    {item?.title}
-                </button>
-            ))}
+            <div className={classes['category-img-box']}>
+                <img src={img} alt={title} width="30" />
+            </div>
         </div>
-        <div className={classes['category-img-box']}>
-            <img src={img} alt={title} width="30" />
-        </div>
-    </div>
-);
+    );
+};
 
 const CardFilter = ({ title, items, img, onClickLink, activeControls }) => (
     <div className={classes['category-item']}>
@@ -118,7 +121,7 @@ function readControlsFromParams(searchParams) {
     };
 }
 
-function Controls({ filterOptions = {} }) {
+function Controls({ filterOptions = {}, children }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const [categoriesList, setCategoriesList] = useState([]);
     const [catFilter, setCatFilter] = useState(null);
@@ -139,6 +142,7 @@ function Controls({ filterOptions = {} }) {
     const [savedFilters, setSavedFilters] = useState([]);
     const [saveFilterName, setSaveFilterName] = useState('');
     const [selectedSavedFilter, setSelectedSavedFilter] = useState('');
+    const [showAdvanced, setShowAdvanced] = useState(false);
 
     const { modalities = [], bodyParts = [], features = [], metrics = [] } = filterOptions;
 
@@ -317,202 +321,258 @@ function Controls({ filterOptions = {} }) {
     };
 
     return (
-        <div className={classes.container}>
-            <h2 className={classes['title']}>You can search, or filter based on your interests</h2>
-            <Carousel responsive={responsive} showDots infinite keyBoardControl swipeable draggable className="filters" itemClass={classes.carouselItem}>
-                {categoriesList.map((item, index) => (
-                    <Card
-                        key={index}
-                        title={item.title}
-                        onClickLink={onClickCatFilter}
-                        items={item.items}
-                        img={item.img}
-                        activeCat={activeCat}
-                    />
-                ))}
-            </Carousel>
-
-            <div className={classes.savedFiltersHeader}>
-                <label className={classes['facet-field']}>
-                    <CustomSelect
-                        value={sort}
-                        onChange={(val) => {
-                            setSort(val);
-                            if (val !== '-sales') {
-                                setActiveControls((prev) => prev.filter((c) => c !== 'Best Seller'));
-                            } else {
-                                setActiveControls((prev) => prev.includes('Best Seller') ? prev : [...prev, 'Best Seller']);
-                            }
-                        }}
-                        options={SORT_OPTIONS.map(opt =>
-                            opt.value === ''
-                                ? { ...opt, label: 'Sort By: Default' }
-                                : opt
-                        )}
-                    />
-                </label>
-                <label className={classes['facet-field']}>
-                    <CustomSelect
-                        value={selectedSavedFilter}
-                        onChange={(val) => {
-                            if (val) handleLoadSavedFilter(val);
-                            else {
-                                setSelectedSavedFilter('');
-                                setSearchParams(new URLSearchParams());
-                            }
-                        }}
-                        options={[
-                            { value: '', label: 'Load Saved Preset...' },
-                            ...savedFilters.map(f => ({ value: f.name, label: f.name }))
-                        ]}
-                        placeholder="Load saved filter..."
-                    />
-                </label>
-                {selectedSavedFilter && (
-                    <button onClick={() => handleDeleteSavedFilter(selectedSavedFilter)} className={classes['delete-saved-btn']}>
-                        Delete Current Preset
-                    </button>
-                )}
-                <label className={`${classes['facet-field']} ${classes['facet-toggle']}`}>
-                    <input
-                        type="checkbox"
-                        checked={verifiedOnly}
-                        onChange={(e) => setVerifiedOnly(e.target.checked)}
-                    />
-                    <span>Verified developers only</span>
-                </label>
+        <GlobalWrapper className={`global-banner-spacing ${classes.discoveryContainer}`}>
+            <div className={classes.categoriesTopBar}>
+                <h2 className={classes.mainTitle}>
+                    <span className={classes.gradientText}>Discover Premium Production-Ready AI Models 🚀</span>
+                    <span className={classes.subTitle}>Explore, filter, and deploy the next generation of artificial intelligence. Tailored exactly to your workflow and industry needs. 🎯</span>
+                </h2>
+                <Carousel responsive={responsive} showDots infinite keyBoardControl swipeable draggable className="filters" itemClass={classes.carouselItem}>
+                    {categoriesList.map((item, index) => (
+                        <Card
+                            key={index}
+                            title={item.title}
+                            onClickLink={onClickCatFilter}
+                            items={item.items}
+                            img={item.img}
+                            activeCat={activeCat}
+                        />
+                    ))}
+                </Carousel>
             </div>
 
-            <div className={`${classes.advancedFilters} ${classes.open}`}>
-                <div className={classes.facets}>
-                    <label className={classes['facet-field']}>
-                        <span>Min Price ($)</span>
-                        <input
-                            type="number"
-                            placeholder="e.g. 50"
-                            value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
-                        />
-                    </label>
-                    <label className={classes['facet-field']}>
-                        <span>Max Price ($)</span>
-                        <input
-                            type="number"
-                            placeholder="e.g. 500"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
-                        />
-                    </label>
-                    <label className={classes['facet-field']} style={{ marginLeft: 'auto', textAlign: 'left' }}>
-                        <span>Modality</span>
-                        <CustomSelect
-                            value={modalityId}
-                            onChange={setModalityId}
-                            options={[
-                                { value: '', label: 'Any' },
-                                ...modalities.map(m => ({ value: m.id.toString(), label: m.name }))
-                            ]}
-                        />
-                    </label>
-                    <label className={classes['facet-field']} style={{ textAlign: 'left' }}>
-                        <span>Body Part</span>
-                        <CustomSelect
-                            value={bodyPartId}
-                            onChange={setBodyPartId}
-                            options={[
-                                { value: '', label: 'Any' },
-                                ...bodyParts.map(b => ({ value: b.id.toString(), label: b.name }))
-                            ]}
-                        />
-                    </label>
-                    <label className={`${classes['facet-field']} ${classes['facet-field-half']}`}>
-                        <span>Feature</span>
-                        <CustomSelect
-                            value={feature}
-                            onChange={setFeature}
-                            options={[
-                                { value: '', label: 'Any' },
-                                ...features.map(f => ({ value: f, label: f }))
-                            ]}
-                        />
-                    </label>
-                    <label className={`${classes['facet-field']} ${classes['facet-field-half']}`}>
-                        <span>Metric</span>
-                        <CustomSelect
-                            value={metric}
-                            onChange={setMetric}
-                            options={[
-                                { value: '', label: 'Any' },
-                                ...metrics.map(m => ({ value: m, label: m }))
-                            ]}
-                        />
-                    </label>
-                    <label className={classes['facet-field']}>
-                        <span>Delivery Time</span>
-                        <CustomSelect
-                            value={deliveryTime || ''}
-                            onChange={(val) => setDeliveryTime(val || null)}
-                            options={[
-                                { value: '', label: 'Any' },
-                                { value: 'Less Than Or Equal To 5 Days', label: '<= 5 Days' },
-                                { value: 'Greater Than Or Equal To 5 Days', label: '>= 5 Days' }
-                            ]}
-                        />
-                    </label>
-                    <label className={classes['facet-field']}>
-                        <span>Rating Filter</span>
-                        <CustomSelect
-                            value={highestRated ? 'Has Reviews' : ''}
-                            onChange={(val) => setHighestRated(val === 'Has Reviews')}
-                            options={[
-                                { value: '', label: 'Any' },
-                                { value: 'Has Reviews', label: 'Has Reviews' }
-                            ]}
-                        />
-                    </label>
-                    <label className={classes['facet-field']}>
-                        <span>FDA Status</span>
-                        <CustomSelect
-                            value={fda}
-                            onChange={setFda}
-                            options={[
-                                { value: '', label: 'Any' },
-                                { value: 'Cleared', label: 'Cleared' },
-                                { value: 'Pending', label: 'Pending' },
-                                { value: 'Not Required', label: 'Not Required' }
-                            ]}
-                        />
-                    </label>
-                </div>
-                <div className={classes.saveFilterFooter}>
-                    <input
-                        type="text"
-                        placeholder="Preset name (e.g., 'Cheap MRIs')"
-                        value={saveFilterName}
-                        onChange={(e) => setSaveFilterName(e.target.value)}
-                        className={classes['save-filter-input']}
-                    />
-                    <button onClick={handleSaveCurrentFilter} disabled={!saveFilterName.trim()} className={classes['save-filter-btn']}>
-                        Save Current Configuration
-                    </button>
-                </div>
-            </div>
+            <div className={classes.layoutGrid}>
+                <aside className={classes.sidebar}>
+                    <h3 className={classes.sidebarTitle}>Filters</h3>
+                    <div className={classes.facets}>
+                        <div className={classes.presetSection}>
+                            <label className={classes['facet-field']}>
+                                <span>Saved Presets</span>
+                                <CustomSelect
+                                    value={selectedSavedFilter}
+                                    onChange={(val) => {
+                                        if (val) handleLoadSavedFilter(val);
+                                        else {
+                                            setSelectedSavedFilter('');
+                                            setSearchParams(new URLSearchParams());
+                                        }
+                                    }}
+                                    options={[
+                                        { value: '', label: 'Load Saved Preset...' },
+                                        ...savedFilters.map(f => ({ value: f.name, label: f.name }))
+                                    ]}
+                                    placeholder="Load saved filter..."
+                                />
+                            </label>
+                            
+                            <div className={classes.saveFilterFooter}>
+                                <input
+                                    type="text"
+                                    placeholder="Preset name (e.g., 'Cheap MRIs')"
+                                    value={saveFilterName}
+                                    onChange={(e) => setSaveFilterName(e.target.value)}
+                                    className={classes['save-filter-input']}
+                                />
+                                <button onClick={handleSaveCurrentFilter} disabled={!saveFilterName.trim()} className={classes['save-filter-btn']}>
+                                    Save
+                                </button>
+                            </div>
+                            {selectedSavedFilter && (
+                                <button onClick={() => handleDeleteSavedFilter(selectedSavedFilter)} className={classes['delete-saved-btn']}>
+                                    Delete Preset
+                                </button>
+                            )}
+                        </div>
 
-            <div className={classes.filterActions}>
-                <FilterChips
-                    labelContext={filterOptions}
-                    currentParams={pendingParams}
-                    onRemoveChip={handleRemoveChip}
-                    onClearAllChips={clearAll}
-                >
-                    {pendingParams.toString() !== searchParams.toString() && (
-                        <button type="button" className={classes.applyLink} onClick={ApplyFilters}>
-                            Apply filters
+                        <div className={classes.priceSection}>
+                            <label className={classes['facet-field']}>
+                                <span>Price Range ($)</span>
+                                <div className={classes.priceInputs}>
+                                    <input
+                                        type="number"
+                                        placeholder="Min"
+                                        value={minPrice}
+                                        onChange={(e) => setMinPrice(e.target.value)}
+                                        min="0"
+                                    />
+                                    <span>-</span>
+                                    <input
+                                        type="number"
+                                        placeholder="Max"
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(e.target.value)}
+                                        min="0"
+                                    />
+                                </div>
+                                <div className={classes.dualRange}>
+                                    <input type="range" min="0" max="10000" step="50" value={minPrice || 0} onChange={(e) => setMinPrice(e.target.value)} className={classes.thumbLeft} />
+                                    <input type="range" min="0" max="10000" step="50" value={maxPrice || 10000} onChange={(e) => setMaxPrice(e.target.value)} className={classes.thumbRight} />
+                                    <div className={classes.sliderTrack}></div>
+                                    <div className={classes.sliderRange} style={{ left: `${Math.min(100, Math.max(0, (minPrice||0)/100))}%`, right: `${100 - Math.min(100, Math.max(0, (maxPrice||10000)/100))}%` }}></div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="button" className={classes.advancedFiltersBtn} onClick={() => setShowAdvanced(true)} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'}}>
+                            <ion-icon name="options-outline" style={{fontSize: '18px'}}></ion-icon> Advanced Filters
                         </button>
-                    )}
-                </FilterChips>
+                        
+                        <div className={classes.desktopApply}>
+                            {pendingParams.toString() !== searchParams.toString() && (
+                                <button type="button" className={classes.applyBtn} onClick={ApplyFilters}>
+                                    Apply filters
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </aside>
+
+                <main className={classes.mainContent}>
+                    <div className={classes.topUtilityBar}>
+                        <div className={classes.filterActions}>
+                            <FilterChips
+                                labelContext={filterOptions}
+                                currentParams={pendingParams}
+                                onRemoveChip={handleRemoveChip}
+                                onClearAllChips={clearAll}
+                            />
+                        </div>
+
+                        <div className={classes.utilityControls}>
+                            <label className={`${classes['facet-field']} ${classes['facet-toggle']}`}>
+                                <input
+                                    type="checkbox"
+                                    checked={verifiedOnly}
+                                    onChange={(e) => setVerifiedOnly(e.target.checked)}
+                                />
+                                <span>Verified developers only</span>
+                            </label>
+
+                            <label className={`${classes['facet-field']} ${classes.sortField}`}>
+                                <CustomSelect
+                                    value={sort}
+                                    onChange={(val) => {
+                                        setSort(val);
+                                        if (val !== '-sales') {
+                                            setActiveControls((prev) => prev.filter((c) => c !== 'Best Seller'));
+                                        } else {
+                                            setActiveControls((prev) => prev.includes('Best Seller') ? prev : [...prev, 'Best Seller']);
+                                        }
+                                    }}
+                                    options={SORT_OPTIONS.map(opt =>
+                                        opt.value === ''
+                                            ? { ...opt, label: 'Sort By: Default' }
+                                            : opt
+                                    )}
+                                />
+                            </label>
+                        </div>
+                    </div>
+
+                    {children}
+                </main>
             </div>
-        </div>
+
+            {showAdvanced && (
+                <div className={classes.modalOverlay} onClick={() => setShowAdvanced(false)}>
+                    <div className={classes.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={classes.modalHeader}>
+                            <h3>Advanced Filters</h3>
+                            <button className={classes.closeModalBtn} onClick={() => setShowAdvanced(false)}>×</button>
+                        </div>
+                        <div className={classes.modalBody}>
+                            <label className={classes['facet-field']}>
+                                <span>Modality</span>
+                                <CustomSelect
+                                    value={modalityId}
+                                    onChange={setModalityId}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        ...modalities.map(m => ({ value: m.id.toString(), label: m.name }))
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>Body Part</span>
+                                <CustomSelect
+                                    value={bodyPartId}
+                                    onChange={setBodyPartId}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        ...bodyParts.map(b => ({ value: b.id.toString(), label: b.name }))
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>Feature</span>
+                                <CustomSelect
+                                    value={feature}
+                                    onChange={setFeature}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        ...features.map(f => ({ value: f, label: f }))
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>Metric</span>
+                                <CustomSelect
+                                    value={metric}
+                                    onChange={setMetric}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        ...metrics.map(m => ({ value: m, label: m }))
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>Delivery Time</span>
+                                <CustomSelect
+                                    value={deliveryTime || ''}
+                                    onChange={(val) => setDeliveryTime(val || null)}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        { value: 'Less Than Or Equal To 5 Days', label: '<= 5 Days' },
+                                        { value: 'Greater Than Or Equal To 5 Days', label: '>= 5 Days' }
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>Rating Filter</span>
+                                <CustomSelect
+                                    value={highestRated ? 'Has Reviews' : ''}
+                                    onChange={(val) => setHighestRated(val === 'Has Reviews')}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        { value: 'Has Reviews', label: 'Has Reviews' }
+                                    ]}
+                                />
+                            </label>
+                            <label className={classes['facet-field']}>
+                                <span>FDA Status</span>
+                                <CustomSelect
+                                    value={fda}
+                                    onChange={setFda}
+                                    options={[
+                                        { value: '', label: 'Any' },
+                                        { value: 'Cleared', label: 'Cleared' },
+                                        { value: 'Pending', label: 'Pending' },
+                                        { value: 'Not Required', label: 'Not Required' }
+                                    ]}
+                                />
+                            </label>
+                        </div>
+                        <div className={classes.modalFooter}>
+                            {pendingParams.toString() !== searchParams.toString() && (
+                                <button type="button" className={classes.applyBtn} onClick={() => { ApplyFilters(); setShowAdvanced(false); }}>
+                                    Apply & Close
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </GlobalWrapper>
     );
 }
 

@@ -4,6 +4,8 @@ import ChatBox from "../components/ChatBoxNew/ChatBox";
 import Conversation from "../components/ConversationNew/Conversation";
 import Notifications from "../components/Notifications/Notifications";
 import WarningModal from '../components/layout/WarningModal'
+import GlobalWrapper from '../components/layout/GlobalWrapper';
+import CustomSelect from '../components/ui/CustomSelect';
 import { userChats, createChat, removeChat } from "../lib/ChatRequests";
 import { addMessage, getMessages, markMessagesAsReadReq } from "../lib/MessageRequests";
 import { userNotifications, removeNotification, updateNotification, readAllNotificationsReq } from "../lib/notificationsRequests";
@@ -14,6 +16,7 @@ import { uiActions } from '../store/UI-slice';
 import { realtimeActions } from '../store/realtimeSlice';
 import { RiRobot2Line } from "react-icons/ri";
 import { getAuthToken } from '../utility/tokenLoader';
+import aiFace from '../assets/ai-face.png';
 import { groupNotificationsByDay, NOTIFICATION_TYPE_OPTIONS, getNotificationType } from "../utility/chatHelpers";
 import { dedupeChatsByCounterparty } from "../utility/chatParticipantDisplay";
 
@@ -449,8 +452,9 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
   //====================================================================================================
   return (
 
-    <div className={classes["Chat"]}>
-      <div className={`${classes["tabsCon"]}`}>
+    <GlobalWrapper className="global-banner-spacing">
+      <div className={classes["Chat"]}>
+        <div className={`${classes["tabsCon"]}`}>
         <button onClick={() => { setShow('chats') }} className={`${show === 'chats' && classes["active"]}`} >Chats</button>
         <button onClick={() => { setShow('currentChat') }} className={`${show === 'currentChat' && classes["active"]}`} >Conversation</button>
         <button onClick={() => { setShow('notifications') }} className={`${show === 'notifications' && classes["active"]}`} >Notifications</button>
@@ -458,17 +462,16 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       {warning.show && <WarningModal onClose={closeModal} warning={warning} onAction={onAction} />}
       {/* Left Side */}
       <div className={`${classes["Left-side-chat"]} ${show === 'chats' && classes["show"]}`}>
-
-        <div className={classes["header-search-container"]}>
-          <input type="search" name="search" className={classes["search-field"]} placeholder="Search By Last Message..."
-            onChange={handleSChangeChat}
-            value={searchedValueChat} />
-          <button className={classes["search-btn"]} onClick={handleSChat}>
-            <ion-icon name="search-outline"></ion-icon>
-          </button>
-        </div>
-
         <div className={classes["Chat-container"]}>
+          <div className={classes["header-search-container"]}>
+            <input type="search" name="search" className={classes["search-field"]} placeholder="Search By Last Message..."
+              onChange={handleSChangeChat}
+              value={searchedValueChat} />
+            <button className={classes["search-btn"]} onClick={handleSChat}>
+              <ion-icon name="search-outline"></ion-icon>
+            </button>
+          </div>
+
           <div className={`${classes["Chat-list"]}`}>
             {(chats?.length > 0) && (filteredChats?.map((chat) => (
               <div
@@ -486,8 +489,8 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
             )))}
             {(filteredChats?.length === 0) &&
               <span className={`${classes["chatbox-empty-message"]}`}>
-                <RiRobot2Line className={classes.iconImg} />
-                <h1>No Chats available yet!</h1>
+                <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+                <h1 className={classes.gradientText}>No Chats available yet!</h1>
               </span>
             }
           </div>
@@ -507,49 +510,46 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
         />
       </div>
       <div className={`${classes["notification-right-side"]} ${show === 'notifications' && classes["show"]} `}>
-
-        <div className={classes["notification-toolbar"]}>
-          <div className={classes["toolbar-row"]}>
-            <select
-              className={classes["type-filter"]}
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              style={{ width: '100%', padding: '8px' }}
-            >
-              {NOTIFICATION_TYPE_OPTIONS.map((opt) => (
-                <option key={opt.value || 'all'} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+        <div className={classes["notification-container"]}>
+          <div className={classes["notification-toolbar"]}>
+            <div className={classes["toolbar-row"]}>
+              <div style={{ width: '100%' }}>
+                <CustomSelect
+                  options={NOTIFICATION_TYPE_OPTIONS}
+                  value={typeFilter}
+                  onChange={(val) => setTypeFilter(val)}
+                  placeholder="All Types"
+                />
+              </div>
+            </div>
+            <div className={classes["toolbar-row"]}>
+              <label className={classes["unread-toggle"]}>
+                <input
+                  type="checkbox"
+                  checked={showUnreadOnly}
+                  onChange={(e) => setShowUnreadOnly(e.target.checked)}
+                />
+                Unread only
+              </label>
+              <button
+                type="button"
+                className={classes["mark-all-read-btn"]}
+                onClick={handleReadAllNotifications}
+                disabled={!notifications?.some((n) => n.unRead)}
+              >
+                Mark all as read
+              </button>
+            </div>
           </div>
-          <div className={classes["toolbar-row"]}>
-            <label className={classes["unread-toggle"]}>
-              <input
-                type="checkbox"
-                checked={showUnreadOnly}
-                onChange={(e) => setShowUnreadOnly(e.target.checked)}
-              />
-              Unread only
-            </label>
-            <button
-              type="button"
-              className={classes["mark-all-read-btn"]}
-              onClick={handleReadAllNotifications}
-              disabled={!notifications?.some((n) => n.unRead)}
-            >
-              Mark all as read
+
+          <div className={classes["header-search-container"]}>
+            <input type="search" name="search" className={classes["search-field"]} placeholder="Search By Description..."
+              onChange={handleSChangeNo}
+              value={searchedValueNo} />
+            <button className={classes["search-btn"]} onClick={handleSNo}>
+              <ion-icon name="search-outline"></ion-icon>
             </button>
           </div>
-        </div>
-
-        <div className={classes["header-search-container"]}>
-          <input type="search" name="search" className={classes["search-field"]} placeholder="Search By Description..."
-            onChange={handleSChangeNo}
-            value={searchedValueNo} />
-          <button className={classes["search-btn"]} onClick={handleSNo}>
-            <ion-icon name="search-outline"></ion-icon>
-          </button>
-        </div>
-        <div className={classes["notification-container"]}>
           <div className={`${classes["notifi-list"]}`}>
             {(filteredNo?.length > 0) && groupNotificationsByDay(filteredNo).map((group) => (
               <div key={group.label}>
@@ -567,15 +567,16 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
             ))}
             {(filteredNo?.length === 0) &&
               <span className={`${classes["chatbox-empty-message"]}`}>
-                <RiRobot2Line className={classes.iconImg} />
-                <h1>{showUnreadOnly ? 'No unread notifications' : 'No notifications available yet!'}</h1>
+                <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+                <h1 className={classes.gradientText}>{showUnreadOnly ? 'No unread notifications' : 'No notifications available yet!'}</h1>
               </span>
             }
           </div>
         </div>
       </div>
     </div>
-  );
+  </GlobalWrapper>
+);
 };
 
 export default ChatNew;

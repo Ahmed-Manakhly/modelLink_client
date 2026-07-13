@@ -130,8 +130,8 @@ a {
 }
 
 .contact-col {
-    // box-shadow: -4px -1px 12px rgba(0, 0, 0, 0.108), 1px 1px 12px var(--sonic-silver)27;
-    // box-shadow: 5px 5px 10px var(--cultured);
+    // box-shadow: var(--glass-shadow);
+    // box-shadow: var(--glass-shadow);
     // border: 2px solid var(--cultured);
 
     @extend %rad15 ;
@@ -271,7 +271,7 @@ a {
         color: var(--on-surface);
         background: linear-gradient(to right, var(--primary) -20%, #16967ec6 20%, #16967f 40% ,  var(--primary) 150%) !important;
         border: solid 3px #fff !important;
-        // box-shadow: -4px -4px 18px #0099ffa9;
+        // box-shadow: var(--glass-shadow);
         transform: translatey(-2px);
         -webkit-transform: translatey(-2px);
         -moz-transform: translatey(-2px);

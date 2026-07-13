@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import classes from './MobNav.module.scss' ;
+import GlobalWrapper from './GlobalWrapper';
 import {Link} from 'react-router-dom' ;
 import {useSelector} from 'react-redux';
 import styles from './Topbar.module.scss' ;
@@ -12,13 +13,13 @@ function MobNav({onClick , txt_3 , txt_4}) {
   const msgCounter = useSelector(selectUnreadChats);
   const notCounter = useSelector(selectUnreadNotifications);
   const {role} = userData;
-  const pageActions = <>
+  const pageActions = <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
   <Link to="./auth?mode=signup" className={`btn-glass-outline`} >{txt_4}</Link>
   <Link to="./auth?mode=login" className={`btn-glass-primary`}>{txt_3}</Link>
-</>
+</div>
     return (
         <div className={classes["mobile-bottom-navigation"]}>
-
+          <GlobalWrapper className={classes["mobile-nav-inner"]}>
         <button className={classes["action-btn"]} onClick={onClick}>
           <ion-icon name="menu-outline"></ion-icon>
         </button>
@@ -48,6 +49,7 @@ function MobNav({onClick , txt_3 , txt_4}) {
           </div>
             }
             {!isLoggedIn && pageActions}
+          </GlobalWrapper>
       </div>
     )
 }

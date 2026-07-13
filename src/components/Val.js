@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
 import classes from './Val.module.scss';
+import GlobalWrapper from './layout/GlobalWrapper';
+import headerClasses from './layout/Header.module.scss';
 
 
 
 
-const Card = ({title , description , img})=>{
+const Card = ({ title, description, img }) => {
     return (
 
         <div className={classes["room__card"]}>
             <div className={classes["room__card__image"]}>
-                <img src={img} alt="product"/>
+                <img src={img} alt="product" />
             </div>
             <div className={classes["room__card__details"]}>
                 <h4>{title}</h4>
@@ -20,16 +22,20 @@ const Card = ({title , description , img})=>{
     )
 }
 
-function Val({products , title }) {
+function Val({ products, title }) {
     return (
-        <div className={`${classes["container"]}`}>
-            <h2 className={classes["title"]}>{title}</h2>
+        <GlobalWrapper className="global-section-spacing">
+            {title && (
+                <h1 className={headerClasses["banner-title"]} style={{ textAlign: 'left', marginBottom: '40px' }}>
+                    <span className={headerClasses["gradientText"]}>{title}</span>
+                </h1>
+            )}
             <div className={classes["room__grid"]}>
-                {products.map((ele,i)=>{
-                    return((<Card  key={i} title={ele.title} img={ele.img} description={ele.description}/>))
+                {products.map((ele, i) => {
+                    return ((<Card key={i} title={ele.title} img={ele.img} description={ele.description} />))
                 })}
             </div>
-        </div>
+        </GlobalWrapper>
     )
 }
 

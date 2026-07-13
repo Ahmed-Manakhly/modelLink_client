@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getAuthToken } from '../utility/tokenLoader';
 import { uiActions } from '../store/UI-slice';
-import { getOrderByIdReq } from '../lib/loaders';
+// import { getOrderByIdReq } from '../lib/loaders';
 import axios from 'axios';
 import { BASE_URL } from '../lib/api';
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
@@ -55,7 +55,7 @@ function Stripe() {
         };
 
         fetchOrder();
-    }, [orderId, token]);
+    }, [orderId, token, dispatch, navigate]);
 
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();

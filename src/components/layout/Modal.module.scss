@@ -14,7 +14,7 @@
     top: 5vh;
     background-color: var(--bg-modal);
     border-radius: 10px;
-    box-shadow: var(--shadow-modal);
+    box-shadow: var(--glass-shadow);
     z-index: var(--z-modal);
     max-width: min(480px, calc(100vw - 2rem));
     animation: slide-down 300ms ease-out forwards;

@@ -67,7 +67,7 @@
               width: 100px ;
               height: 100px ;
               @extend %rad ;
-              border: 3.5px var(--primary) solid;
+              --avatar-border-width: 5px;
               img {
                 top: 0;
                 left: 0;
@@ -144,7 +144,7 @@
           }
         }
         .__box_rightside {
-          box-shadow: 5px 5px 10px var(--cultured);
+          box-shadow: var(--glass-shadow);
           width: 70% !important;
           padding: 5px 40px;
           gap: 1rem;
@@ -370,7 +370,7 @@
     -o-transition: var(--transition-timing);
     transition: var(--transition-timing);
     border: 3px solid var(--primary);
-    // box-shadow: .9px .9px 17px var(--cultured);
+    // box-shadow: var(--glass-shadow);
   
     &:hover { 
         background :var(--cultured) !important;

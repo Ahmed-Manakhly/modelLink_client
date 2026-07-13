@@ -15,7 +15,7 @@
         background: var(--on-surface);
         padding: 15px 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        box-shadow: var(--glass-shadow);
 
         .search_bar_container {
             display: flex;
@@ -75,7 +75,7 @@
         background: var(--on-surface);
         padding: 15px 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        box-shadow: var(--glass-shadow);
         align-items: flex-end;
 
         .selections_container, .date_input_container, .status_container {

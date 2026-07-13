@@ -2,20 +2,43 @@
 
 
 
-.up {
-    position : fixed ;
-    bottom : 20px ; right : 20px ;
-    display : none;
+.up_container {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
     z-index: 50000000;
-    cursor : pointer;
+    display: none;
+    pointer-events: none;
     &.show {
-        display : block;
+        display: block;
+    }
+}
+
+.up_inner {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.up {
+    pointer-events: auto;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+
+    svg {
+        font-size: 28px;
     }
 }
 
 @media (max-width: 1024px) {
-    .up {
-    bottom: 5rem !important;
+    .up_container {
+        bottom: 5rem !important;
     }
 }
 

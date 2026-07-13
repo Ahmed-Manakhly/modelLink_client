@@ -9,23 +9,23 @@
 }
 //---------------------------
 .conversation {
-  &.active {
-    background-color: #6541f238;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid var(--border-glass);
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-md);
+  transition: all 0.3s ease;
+  &.active, &.unRead {
+    background-color: rgba(34, 211, 238, 0.05);
+    border-color: var(--primary);
   }
-  &.active:hover {
-    background-color: #987ffb38;
-  }
-  & {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0.25rem;
-    border: var(--cultured) solid 2px;
-    background-color: var(--white);
-    border-radius: var(--border-radius-md);
+  &.active:hover, &.unRead:hover {
+    background-color: rgba(34, 211, 238, 0.1);
   }
   &:hover {
-    background: var(--cultured);
+    background: var(--bg-glassy-solid);
     cursor: pointer;
   }
   .conversation-con{
@@ -59,18 +59,24 @@
           width: 20px;
           height: 20px;
           @extend %rad ;
-          font-size: 12px;
-          color: #fe89a2ce;
+          font-size: 14px;
+          color: var(--sonic-silver);
           display: flex;
           justify-content: center;
           align-items: center;
           margin: 2px;
+          cursor: pointer;
+          transition: var(--transition-smooth);
+          &:hover {
+            color: var(--color-danger);
+            transform: scale(1.1);
+          }
         }
       }
       .row_1{
         .Col_1{
-          color: var(--sonic-silver);
-          font-size: 18px;
+          color: var(--on-surface);
+          font-size: 16px;
           font-weight: bold;
         }
         .Col_2{
@@ -85,7 +91,6 @@
       width: 35px ;
       height: 35px ;
       @extend %rad ;
-      border: 3px var(--primary) solid;
       overflow: hidden;
       &:hover::after {
           display: none;

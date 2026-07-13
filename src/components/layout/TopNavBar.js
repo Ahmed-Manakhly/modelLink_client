@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { getTagsReq, getAllModelsReq } from '../../lib/loaders';
 import { uiActions } from '../../store/UI-slice';
 import { getRecentSearches, saveRecentSearch } from '../../utility/recentSearches';
-
+import GlobalWrapper from './GlobalWrapper';
 
 //------------------------------------
 function TopNavBar({ getSearch }) {
@@ -69,8 +69,8 @@ function TopNavBar({ getSearch }) {
     }
 
     // Default to 'Search Any' if no category is selected
-    const selectedCategory = (categoryIsInvalid || !searchByVal || searchByVal === "--Please Choose An Option--") 
-      ? "Search Any" 
+    const selectedCategory = (categoryIsInvalid || !searchByVal || searchByVal === "--Please Choose An Option--")
+      ? "Search Any"
       : searchByVal;
 
     const match = searchBy.find((item) => item.name === selectedCategory);
@@ -117,82 +117,85 @@ function TopNavBar({ getSearch }) {
 
   return (
     <div className={classes["header-main"]}>
-      <div className={classes["container"]}>
-        <Link to='/' className="brand-logo-text">
-          {/* <img src={logo} alt="ModelLink's logo" width='200'/> */}
-          Model<span>Link</span>
-        </Link>
-        <div className={classes["search_container"]} ref={searchWrapRef}>
+      <GlobalWrapper>
+        <div className={classes["topnavbar-flex"]}>
+          <Link to='/' className="brand-logo-text">
+            {/* <img src={logo} alt="ModelLink's logo" width='200'/> */}
+            Model<span>Link</span>
+          </Link>
+          <div className={classes["search_container"]} ref={searchWrapRef}>
 
-          {/* ======================================================= */}
-          {/* <p htmlFor="category" >Search By</p> */}
-          <div className={classes["select_container"]}>
-            <CustomSelect
-              options={searchBy.map(item => ({ label: item.name, value: item.name }))}
-              value={searchByVal}
-              onChange={(val) => categoryChangeHandler({ target: { value: val } })}
-              placeholder="--Please Choose An Option--"
-              isWeb={true}
-              flatRight={true}
-            />
-          </div>
-          {/* ======================================================= */}
-          <div className={classes["header-search-container"]}>
-            <input
-              type="search"
-              name="search"
-              className={classes["search-field"]}
-              placeholder={searchByVal?.startsWith('Exact') ? `Enter ${searchByVal.toLowerCase()}...` : "Search for any service or keyword..."}
-              onChange={handleSearchInput}
-              onFocus={handleSearchFocus}
-              onBlur={searchBlurHandler}
-              value={searchVal}
-            />
-            <button type="button" className={classes["search-btn"]} onClick={handleClick}>
-              <ion-icon name="search-outline"></ion-icon>
-            </button>
-            {showDropdown && (recentSearches.length > 0 || suggestions.length > 0) && (
-              <div className={classes.searchDropdown}>
-                {recentSearches.length > 0 && (
-                  <div className={classes.searchDropdownHeader}>
-                    Recent searches
-                  </div>
-                )}
-                {recentSearches.map((item, index) => (
-                  <button
-                    key={`recent-${index}`}
-                    type="button"
-                    onMouseDown={() => runSearch(item.field, item.value)}
-                    className={classes.searchDropdownItem}
-                  >
-                    {item.value}
-                  </button>
-                ))}
-                {suggestions.length > 0 && (
-                  <div className={classes.searchDropdownHeader}>
-                    Suggestions
-                  </div>
-                )}
-                {suggestions.map((item) => (
-                  <button
-                    key={`suggest-${item.id}`}
-                    type="button"
-                    onMouseDown={() => navigate(`/models/view/${item.id}`)}
-                    className={classes.searchDropdownItem}
-                  >
-                    {item.title}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+            {/* ======================================================= */}
+            {/* <p htmlFor="category" >Search By</p> */}
+            <div className={classes["select_container"]}>
+              <CustomSelect
+                options={searchBy.map(item => ({ label: item.name, value: item.name }))}
+                value={searchByVal}
+                onChange={(val) => categoryChangeHandler({ target: { value: val } })}
+                placeholder="--Please Choose An Option--"
+                isWeb={true}
+                flatRight={true}
+              />
+            </div>
+            {/* ======================================================= */}
+            <div className={classes["header-search-container"]}>
+              <input
+                type="search"
+                name="search"
+                className={classes["search-field"]}
+                placeholder={searchByVal?.startsWith('Exact') ? `Enter ${searchByVal.toLowerCase()}...` : "Search for any service or keyword..."}
+                onChange={handleSearchInput}
+                onFocus={handleSearchFocus}
+                onBlur={searchBlurHandler}
+                value={searchVal}
+              />
+              <button type="button" className={classes["search-btn"]} onClick={handleClick}>
+                <ion-icon name="search-outline"></ion-icon>
+              </button>
+              {showDropdown && (recentSearches.length > 0 || suggestions.length > 0) && (
+                <div className={classes.searchDropdown}>
+                  {recentSearches.length > 0 && (
+                    <div className={classes.searchDropdownHeader}>
+                      Recent searches
+                    </div>
+                  )}
+                  {recentSearches.map((item, index) => (
+                    <button
+                      key={`recent-${index}`}
+                      type="button"
+                      onMouseDown={() => runSearch(item.field, item.value)}
+                      className={classes.searchDropdownItem}
+                    >
+                      {item.value}
+                    </button>
+                  ))}
+                  {suggestions.length > 0 && (
+                    <div className={classes.searchDropdownHeader}>
+                      Suggestions
+                    </div>
+                  )}
+                  {suggestions.map((item) => (
+                    <button
+                      key={`suggest-${item.id}`}
+                      type="button"
+                      onMouseDown={() => navigate(`/models/view/${item.id}`)}
+                      className={classes.searchDropdownItem}
+                    >
+                      {item.title}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
+          </div>
         </div>
-      </div>
+      </GlobalWrapper>
       <div className={classes.trendingBar}>
-        <div className={`${classes.trendingInner}`}>
+        <GlobalWrapper>
+          <div className={classes.trendingInner}>
           <span className={classes.trendingLabel}>TRENDING: 🔥</span>
-          
+
           <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('left')}>
             <ion-icon name="chevron-back-outline"></ion-icon>
           </button>
@@ -210,6 +213,7 @@ function TopNavBar({ getSearch }) {
             <ion-icon name="chevron-forward-outline"></ion-icon>
           </button>
         </div>
+        </GlobalWrapper>
       </div>
     </div>
   )

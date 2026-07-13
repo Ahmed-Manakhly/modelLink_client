@@ -44,7 +44,7 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
           </span>
         )}
       </Col>
-      {file && <img src={URL.createObjectURL(file)} alt="avatar" />}
+      {file && <img src={URL.createObjectURL(file)} alt="avatar" className="global-avatar" />}
       {!file && <UserAvatar user={userData} />}
     </div>
   );

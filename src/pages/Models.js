@@ -158,17 +158,17 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
                 txt_3='You can search ,or filter based on your interests'
                 banner={banner}
             /> */}
-            <Controls filterOptions={filterOptions} />
-            <Services
-                models={models}
-                isLoading={isLoading}
-                title={isLoading ? 'Loading models...' : (models.length === 0 ? emptyStateTitle : availableTitle)}
-                pagination={pagination}
-                onPageChange={handlePageNumberChange}
-                onPageNext={handlePageNext}
-                onPagePrevious={handlePagePrevious}
-            />
-
+            <Controls filterOptions={filterOptions}>
+                <Services
+                    models={models}
+                    isLoading={isLoading}
+                    title={isLoading ? 'Loading models...' : (models.length === 0 ? emptyStateTitle : availableTitle)}
+                    pagination={pagination}
+                    onPageChange={handlePageNumberChange}
+                    onPageNext={handlePageNext}
+                    onPagePrevious={handlePagePrevious}
+                />
+            </Controls>
             <TopDevelopers />
 
             <Box title={`It’s Your Time!`}

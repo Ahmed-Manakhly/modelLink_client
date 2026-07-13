@@ -1,9 +1,10 @@
 import React from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import classes from '../ModelData.module.scss';
+import GlobalWrapper from './GlobalWrapper';
 
 const AppPageSection = ({ title, children, className = '' }) => (
-    <Container className={`my-5 justify-content-center ${className}`.trim()}>
+    <GlobalWrapper className={`global-banner-spacing justify-content-center ${className}`.trim()}>
         <Col className={`${classes['contact-col']} flex-fill w-100`}>
             <Row className="justify-content-md-center d-flex flex-column justify-content-center p-lg-4 align-items-stretch w-100">
                 {title && (
@@ -14,7 +15,7 @@ const AppPageSection = ({ title, children, className = '' }) => (
                 {children}
             </Row>
         </Col>
-    </Container>
+    </GlobalWrapper>
 );
 
 export default AppPageSection;

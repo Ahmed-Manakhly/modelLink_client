@@ -96,7 +96,7 @@
   .contact-col {
     @extend %rad15 ;
     @extend %tran ;
-    box-shadow: 5px 5px 10px var(--cultured);
+    box-shadow: var(--glass-shadow);
     border: 2px solid var(--cultured);
     width: 100%;
     padding: .2rem;
@@ -185,7 +185,7 @@
           width: 80px ;
           height: 80px ;
           @extend %rad ;
-          border: 3.5px var(--primary) solid;
+          --avatar-border-width: 5px;
           img {
             top: 0;
             left: 0;
