@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { getPublicDevelopersReq } from '../lib/loaders';
 import UserProfileStrip from '../components/UserProfileStrip';
+import cardClasses from '../components/Card.module.scss';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 
 const TopDevelopers = () => {
     const [developers, setDevelopers] = useState([]);
@@ -25,13 +27,19 @@ const TopDevelopers = () => {
     }, []);
 
     return (
-        <div style={{ minHeight: '80vh', backgroundColor: '#f4f7f6', padding: '40px 0' }}>
-            <Container>
-                <div className="text-center mb-5">
-                    <h2 style={{ fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase' }}>
-                        Top AI Developers
+        <GlobalWrapper className="global-section-spacing global-page-margin-top">
+            <div>
+                <div style={{ marginBottom: '40px' }}>
+                    <h2 className="page-main-title" style={{ textAlign: 'left', marginBottom: '1rem', marginTop: '0' }}>
+                        <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Top AI Developers</span>
                     </h2>
-                    <p className="text-muted">
+                    <p style={{
+                        color: 'var(--on-surface-variant)',
+                        fontSize: '1.1rem',
+                        maxWidth: '800px',
+                        lineHeight: '1.6',
+                        margin: '0'
+                    }}>
                         Discover and connect with verified, world-class developers building the future of AI.
                     </p>
                 </div>
@@ -58,19 +66,12 @@ const TopDevelopers = () => {
                     <Row className="g-4">
                         {developers.map((dev) => (
                             <Col xs={12} md={6} lg={4} xl={3} key={dev.id}>
-                                <div style={{ 
-                                    background: '#fff', 
-                                    borderRadius: '15px', 
-                                    padding: '20px 10px', 
-                                    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                                <div className={cardClasses.showcase} style={{ 
+                                    padding: '25px 20px', 
                                     height: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    border: '1px solid #eaeaea',
-                                    transition: 'transform 0.2s ease-in-out',
+                                    cursor: 'pointer'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                onClick={() => window.location.href = `/profile/${dev.id}`}
                                 >
                                     <UserProfileStrip 
                                         user={dev} 
@@ -83,8 +84,8 @@ const TopDevelopers = () => {
                         ))}
                     </Row>
                 )}
-            </Container>
-        </div>
+            </div>
+        </GlobalWrapper>
     );
 };
 

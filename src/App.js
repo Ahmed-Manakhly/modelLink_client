@@ -44,6 +44,7 @@ import { socket } from './hooks/useSocket';
 import { getMeReq } from './lib/loaders';
 
 import ChangePasswordPage from './pages/ChangePasswordPage';
+import PortalLayout from './pages/PortalLayout';
 function App() {
   const dispatch = useDispatch();
   const userId = useSelector(state => state.auth.userData)?.id
@@ -240,12 +241,6 @@ function App() {
               </div>
             </RouteErrorBoundary>
         },
-        { path: 'change-password', element: <RouteErrorBoundary>{isLoggedIn ? <ChangePasswordPage /> : <Navigate to="/auth?mode=login" />}</RouteErrorBoundary> },
-        { path: 'dashboard-dev', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole !== 'DEVELOPER' ? <Navigate to={userRole === 'ADMIN' || userRole === 'EMPLOYEE' ? '/admin' : '/'} /> : <DashboardDev />}</RouteErrorBoundary> },
-        { path: 'orders-client', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <Navigate to="/" /> : <OrdersClient />}</RouteErrorBoundary> },
-        { path: 'reviews-client', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <Navigate to="/reviews-dev" /> : <ReviewsClient />}</RouteErrorBoundary> },
-        { path: 'reviews-dev', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole !== 'DEVELOPER' ? <Navigate to="/" /> : <ReviewsDev />}</RouteErrorBoundary> },
-        { path: 'profileSettings', element: <RouteErrorBoundary>{isLoggedIn ? <ProfileSettings /> : <Navigate to="/auth?mode=login" />}</RouteErrorBoundary> },
         { path: 'profile/:id', element: <RouteErrorBoundary><ProfileDev onlineUsers={onlineUsers} /></RouteErrorBoundary> },
         { path: 'cart', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <Navigate to="/" /> : <CartPage />}</RouteErrorBoundary> },
         {
@@ -261,9 +256,20 @@ function App() {
           path: 'chat', element: <RouteErrorBoundary>{isLoggedIn ? <ChatNew onlineUsers={onlineUsers} onFeatchChats={onFeatchChats} notify={notify} onFeatchNotifications={onFeatchNotifications} />
             : <Navigate to="/auth?mode=login" />}</RouteErrorBoundary>
         },
-        { path: 'wallet', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <WalletPage /> : <Navigate to="/" />}</RouteErrorBoundary> },
-        { path: 'admin', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : !isPlatformStaff ? <Navigate to="/" replace /> : <AdminDashboard />}</RouteErrorBoundary> },
-        { path: 'admin/disputes', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : !isPlatformStaff ? <Navigate to="/" replace /> : <AdminDashboard />}</RouteErrorBoundary> },
+        {
+          element: <RouteErrorBoundary><PortalLayout /></RouteErrorBoundary>,
+          children: [
+            { path: 'change-password', element: <RouteErrorBoundary>{isLoggedIn ? <ChangePasswordPage /> : <Navigate to="/auth?mode=login" />}</RouteErrorBoundary> },
+            { path: 'dashboard-dev', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole !== 'DEVELOPER' ? <Navigate to={userRole === 'ADMIN' || userRole === 'EMPLOYEE' ? '/admin' : '/'} /> : <DashboardDev />}</RouteErrorBoundary> },
+            { path: 'orders-client', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <Navigate to="/" /> : <OrdersClient />}</RouteErrorBoundary> },
+            { path: 'reviews-client', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <Navigate to="/reviews-dev" /> : <ReviewsClient />}</RouteErrorBoundary> },
+            { path: 'reviews-dev', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole !== 'DEVELOPER' ? <Navigate to="/" /> : <ReviewsDev />}</RouteErrorBoundary> },
+            { path: 'profileSettings', element: <RouteErrorBoundary>{isLoggedIn ? <ProfileSettings /> : <Navigate to="/auth?mode=login" />}</RouteErrorBoundary> },
+            { path: 'wallet', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : userRole === 'DEVELOPER' ? <WalletPage /> : <Navigate to="/" />}</RouteErrorBoundary> },
+            { path: 'admin', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : !isPlatformStaff ? <Navigate to="/" replace /> : <AdminDashboard />}</RouteErrorBoundary> },
+            { path: 'admin/disputes', element: <RouteErrorBoundary>{!isLoggedIn ? <Navigate to="/auth?mode=login" /> : !isPlatformStaff ? <Navigate to="/" replace /> : <AdminDashboard />}</RouteErrorBoundary> },
+          ]
+        },
         { path: 'models/delete/:id', action: onDeletingModelAction },
         { path: '*', element: <RouteErrorBoundary><NotFoundPage /></RouteErrorBoundary> }
       ]

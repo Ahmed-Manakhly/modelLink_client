@@ -55,6 +55,11 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     }
     //----------------
     const closeModal = ()=>{
+        if (warning.cancelText === 'Logout') {
+            socket.emit("leavingRoom", userData?.id);
+            dispatch(authActions.onLoginOut());
+            navigate("/auth?mode=login", { replace: true });
+        }
         setWarning(prev => {
             return {...prev , show : false}
         })
@@ -115,7 +120,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
                 const now = new Date() ;
                 const tokenDuration = expiration.getTime() - now.getTime() ;
                 setTimeout(()=>{
-                    setWarning({show:true , type : 'action' , message : 'Your session will be expired in 5 seconds' , action :'Keep Me Login'}) ;
+                    setWarning({show:true , type : 'action' , message : 'Your Session Will Be Expired In 5 Seconds' , action :'Keep Me Login', cancelText: 'Logout'}) ;
                 },tokenDuration)
                 setTimeExtanded(false)
                 init = false
@@ -126,7 +131,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
                 }
                 const tokenDuration = getTokenDuration() ;
                 setTimeout(()=>{
-                    setWarning({show:true , type : 'action' , message : 'Your session will be expired in 5 seconds' , action :'Keep Me Login'}) ;
+                    setWarning({show:true , type : 'action' , message : 'Your Session Will Be Expired In 5 Seconds' , action :'Keep Me Login', cancelText: 'Logout'}) ;
                 },tokenDuration)
                 init = false
             }

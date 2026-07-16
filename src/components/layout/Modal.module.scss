@@ -12,6 +12,7 @@
 .modal {
     position: fixed;
     top: 5vh;
+    left: 50%;
     background-color: var(--bg-modal);
     border-radius: 10px;
     box-shadow: var(--glass-shadow);
@@ -27,23 +28,20 @@
 @media (max-width: 768px) {
     .modal {
         width: calc(100vw - 2rem);
-        left: 1rem;
-        right: 1rem;
     }
 }
 
 @media (min-width: 768px) {
     .modal {
         width: 45rem;
-        left: calc(50% - 22.5rem);
+        max-width: calc(100vw - 2rem);
     }
 }
 
 @media (min-width: 1000px) {
     .modal {
         width: 60rem;
-        left: calc(50% - 30rem);
-        max-width: min(60rem, calc(100vw - 2rem));
+        max-width: calc(100vw - 2rem);
     }
 }
 
@@ -52,10 +50,10 @@
 @keyframes slide-down {
     from {
         opacity: 0;
-        transform: translateY(-3rem);
+        transform: translate(-50%, -3rem);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate(-50%, 0);
     }
 }

@@ -55,6 +55,13 @@
   }
 }
 
+.room__card--blended {
+  background: var(--gradient-marketing-transparent), url('../assets/login-banner.png');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}
+
 .room__card__image {
   isolation: isolate;
   width: 120px;

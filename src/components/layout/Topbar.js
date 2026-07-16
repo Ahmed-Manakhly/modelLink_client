@@ -8,7 +8,7 @@ import classes from './Topbar.module.scss';
 // import { FILES_BASE_API_URL } from '../../lib/api'
 import { socket } from '../../hooks/useSocket';
 import UserAvatar from '../ui/UserAvatar';
-import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock } from 'react-icons/fi';
+import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock, FiLogOut } from 'react-icons/fi';
 import GlobalWrapper from './GlobalWrapper';
 
 
@@ -87,8 +87,11 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
             <Link to={`/change-password`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiLock /> Change Password</Link>
           </li>
           <hr />
-          <li className={` ${classes.item_2} ${classes['dropdown-item']}`} style={{ alignItems: 'center' }}>
-            <button onClick={logoutAction} className={`btn-glass-primary`} >{'Logout'}</button>
+          <li className={` ${classes.item_2} ${classes['dropdown-item']}`} style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={logoutAction} className="btn-glass-logout" style={{ width: '100%' }}>
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
           </li>
         </ul>
       </li>

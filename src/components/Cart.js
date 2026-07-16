@@ -26,7 +26,12 @@ function Cart() {
                 <div className={classes["product-container"]}>
                     <div className={classes["container"]}>
                         <div className={classes["product-main"]}>
-                            <h2 className={classes["title"]}>Your Cart</h2>
+                            <div className="text-center mb-5 mt-3">
+                                <h1 className="page-main-title" style={{ textAlign: 'center' }}>
+                                    <span className="gradient-text">Your Cart</span>
+                                    <span className="sub-title d-block mt-3">Ready to checkout? 🚀 Secure your AI models and accelerate your workflow!</span>
+                                </h1>
+                            </div>
                             {items.length === 0 ? (
                                 <div className="text-center py-5">
                                     <p>Your cart is empty.</p>
@@ -40,8 +45,9 @@ function Cart() {
                                         {items.map((ele) => {
                                             const m = getModelMarketingFields(ele, ele.versionId);
                                             return (
-                                                <div key={ele.cartKey || `${ele.id}-${ele.versionId}`}>
-                                                    <Card
+                                                <div key={ele.cartKey || `${ele.id}-${ele.versionId}`} className="w-100 d-flex flex-column h-100">
+                                                    <div className="flex-grow-1">
+                                                        <Card
                                                         sellerUser={ele?.developer}
                                                         id={ele.id}
                                                         category={m.category}
@@ -68,25 +74,30 @@ function Cart() {
                                                         cart={true}
                                                         userId={ele.developerId}
                                                     />
-                                                    <div className="d-flex justify-content-between align-items-center px-2 pb-3">
-                                                        <span className="text-muted small">
+                                                    <div className="text-center px-2 pb-3 mt-3">
+                                                        <div className="mb-2 text-muted small">
                                                             Version: {ele.versionLabel || m.version || 'Primary'}
-                                                        </span>
+                                                        </div>
                                                         <Link
                                                             to={`/models/view/${ele.id}${ele.versionId ? `?versionId=${ele.versionId}` : ''}`}
-                                                            className="btn btn-sm btn-outline-primary"
+                                                            className="btn-glass-primary btn-sm fw-bold px-4"
                                                             onClick={onClose}
                                                         >
                                                             View / Purchase
                                                         </Link>
                                                     </div>
+                                                    </div>
                                                 </div>
                                             );
                                         })}
                                     </div>
-                                    <div className="d-flex justify-content-end px-3 pb-4">
-                                        <strong>Subtotal: ${Number(totalAmount).toFixed(2)}</strong>
+                                    <div className={`d-flex justify-content-end align-items-center px-3 py-3 mt-4 ${classes.subtotalSection}`}>
+                                        <h5 className={`mb-0 fw-bold ${classes.subtotalAmount}`}>
+                                            <span className={`me-2 ${classes.subtotalLabel}`}>Subtotal:</span>
+                                            ${Number(totalAmount).toFixed(2)}
+                                        </h5>
                                     </div>
+                                    <div className="pb-4"></div>
                                 </>
                             )}
                         </div>

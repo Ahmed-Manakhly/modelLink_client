@@ -33,6 +33,7 @@
     height: 220px;
     overflow: hidden;
     position: relative;
+    background: var(--bg-surface);
 }
 
 .product-img {
@@ -271,9 +272,10 @@
 .tag {
     font-size: 10px;
     padding: 3px 8px;
-    background: rgba(99, 102, 241, 0.1);
+    background: var(--surface-glass);
+    border: 1px solid var(--border-glass);
     border-radius: 4px;
-    color: var(--primary);
+    color: var(--on-surface-variant);
     font-weight: 500;
 }
 

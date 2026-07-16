@@ -4,9 +4,9 @@ import classes from './Header.module.scss' ;
 
 import GlobalWrapper from './GlobalWrapper';
 
-function Header({txt_1, txt_2 , txt_3 , banner , actionTo , actionTitle , action, title_1, title_2, reverse}) {
+function Header({txt_1, txt_2 , txt_3 , banner , actionTo , actionTitle , action, title_1, title_2, reverse, className = ''}) {
     return (
-        <GlobalWrapper className="global-banner-spacing">
+        <GlobalWrapper className={`global-banner-spacing ${className}`}>
             <div className={`${classes["hero-container"]} ${reverse ? classes.reverse : ''}`}>
                 <div className={classes["banner-content"]}>
                 {txt_1 && <p className={classes["banner-subtitle"]}>{txt_1}</p>}

@@ -295,27 +295,32 @@ function WalletPage() {
     };
 
     return (
-        <Container className="py-5">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {warning.show && <WarningModal
                 warning={warning}
                 onAction={confirmWarningAction}
                 onClose={() => setWarning({ show: false, onAction: null, message: '', type: 'action', action: 'Confirm' })}
             />}
-            <h2>Developer Earnings Wallet</h2>
-            <p className="text-muted mb-4">
-                All balances and sale amounts shown here are <strong>after platform fees</strong> — your net earnings from each order.
-            </p>
+            
+            <div className="mb-2">
+                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
+                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Developer Earnings Wallet</span>
+                </h2>
+                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>
+                    All balances and sale amounts shown here are <strong style={{ color: 'var(--on-surface)' }}>after platform fees</strong> — your net earnings from each order.
+                </p>
+            </div>
 
-            <Card className="mb-4" id="stripe-setup">
-                <Card.Body className="p-4">
+            <div className="glass-container p-4 mb-2" id="stripe-setup">
+                <div className="d-flex flex-column gap-3">
                     <h5 className="mb-3">Stripe Setup</h5>
-                    <p className="text-muted small mb-3">
+                    <p className="mb-3" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
                         Connect Stripe to receive payouts. All three steps must be complete before requesting a withdrawal.
                     </p>
-                    <ul className="mb-3">
+                    <ul className="mb-3" style={{ color: 'var(--on-surface)' }}>
                         <li className={status.stripeAccountId ? 'text-success' : ''}>
                             {status.stripeAccountId ? '✓' : '○'} Account linked
-                            {status.stripeAccountId && <span className="text-muted small ms-2">({status.stripeAccountId})</span>}
+                            {status.stripeAccountId && <span className="ms-2" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>({status.stripeAccountId})</span>}
                         </li>
                         <li className={status.stripeDetailsSubmitted ? 'text-success' : ''}>
                             {status.stripeDetailsSubmitted ? '✓' : '○'} Details submitted
@@ -325,83 +330,91 @@ function WalletPage() {
                         </li>
                     </ul>
                     <div className="d-flex flex-wrap gap-2">
-                        <Button
-                            variant="primary"
+                        <button
+                            type="button"
+                            className="btn-glass-primary"
                             onClick={handleConnectStripe}
-                            disabled={connectLoading || status.payoutReady}
+                            disabled={connectLoading || status.payoutReady || (!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0))}
                         >
                             {connectLoading ? 'Loading…' : 'Connect with Stripe'}
-                        </Button>
+                        </button>
                         {isDemoStripeEnv && !status.payoutReady && (
-                            <Button
-                                variant="outline-secondary"
+                            <button
+                                type="button"
+                                className="btn-glass-outline"
                                 onClick={handleDemoComplete}
-                                disabled={connectLoading}
+                                disabled={connectLoading || (!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0))}
                             >
                                 Complete setup (demo)
-                            </Button>
+                            </button>
                         )}
                     </div>
                     {!status.payoutReady && (
-                        <p className="text-muted small mt-3 mb-0">
-                            Local QA: click <strong>Complete setup (demo)</strong> to enable payouts without real Stripe keys.
+                        <p className="mt-3 mb-0" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
+                            {(!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0)) ? (
+                                <>You don't have any earnings yet. Stripe setup will unlock once you make your first sale.</>
+                            ) : (
+                                <>Local QA: click <strong style={{ color: 'var(--on-surface)' }}>Complete setup (demo)</strong> to enable payouts without real Stripe keys.</>
+                            )}
                         </p>
                     )}
-                </Card.Body>
-            </Card>
-
-            <div className={`alert ${payoutReady ? 'alert-success' : 'alert-warning'} mb-4`}>
-                {payoutReady ? 'Payouts enabled — you can request a withdrawal.' : (
-                    <>Complete Stripe setup above to request payouts. <Link to="/wallet#stripe-setup">Go to setup</Link></>
-                )}
+                </div>
             </div>
 
-            <Row className="g-3 mb-4">
+            <div className="glass-container p-3 mb-2" style={{ 
+                borderLeft: `4px solid ${payoutReady ? 'var(--color-success)' : 'var(--color-warning)'}`,
+                background: payoutReady ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255, 193, 7, 0.05)'
+            }}>
+                <span style={{ color: payoutReady ? 'var(--color-success)' : 'var(--color-warning)', fontWeight: 600 }}>
+                    {payoutReady ? 'Payouts enabled — you can request a withdrawal.' : (
+                        <>Complete Stripe setup above to request payouts. <Link to="/wallet#stripe-setup" style={{ color: 'var(--primary)' }}>Go to setup</Link></>
+                    )}
+                </span>
+            </div>
+
+            <Row className="g-3 mb-2">
                 <Col md={4}>
-                    <Card className="text-white bg-primary">
-                        <Card.Body className="p-4">
-                            <h6 className="text-uppercase mb-2 text-white-50">Available Balance</h6>
-                            <h2 className="mb-0">
+                    <div className="glass-container p-4 h-100 d-flex flex-column justify-content-between" style={{ background: 'var(--bg-glassy-primary)', border: '1px solid rgba(34, 211, 238, 0.3)' }}>
+                        <div>
+                            <h6 className="text-uppercase mb-2" style={{ color: 'var(--primary)', letterSpacing: '1px', fontSize: '0.8rem' }}>Available Balance</h6>
+                            <h2 className="mb-0" style={{ color: 'var(--on-surface)', fontSize: '2.5rem', fontWeight: 700 }}>
                                 ${wallet ? Number(wallet.availableBalance).toFixed(2) : '0.00'}
                             </h2>
-                            <Button
-                                variant="light"
-                                className="mt-3 w-100 fw-bold"
-                                onClick={() => setShowPayoutModal(true)}
-                                disabled={!wallet || wallet.availableBalance <= 0 || !payoutReady}
-                            >
-                                Request Payout
-                            </Button>
-                        </Card.Body>
-                    </Card>
+                        </div>
+                        <button
+                            type="button"
+                            className="btn-glass-primary w-100 mt-4"
+                            onClick={() => setShowPayoutModal(true)}
+                            disabled={!wallet || wallet.availableBalance <= 0 || !payoutReady}
+                            style={{ border: 'none' }}
+                        >
+                            Request Payout
+                        </button>
+                    </div>
                 </Col>
 
                 <Col md={4}>
-                    <Card>
-                        <Card.Body className="p-4">
-                            <h6 className="text-muted">Pending Balance</h6>
-                            <h2 className="mb-0 text-warning">
-                                ${wallet ? Number(wallet.pendingBalance).toFixed(2) : '0.00'}
-                            </h2>
-                            <p className="text-muted mt-3 mb-0 small">
-                                Net earnings awaiting delivery confirmation (after platform fees).
-                            </p>
-                        </Card.Body>
-                    </Card>
+                    <div className="glass-container p-4 h-100 d-flex flex-column">
+                        <h6 className="text-uppercase mb-2" style={{ color: 'var(--on-surface-variant)', letterSpacing: '1px', fontSize: '0.8rem' }}>Pending Balance</h6>
+                        <h2 className="mb-0" style={{ color: 'var(--color-warning)', fontSize: '2.5rem', fontWeight: 700 }}>
+                            ${wallet ? Number(wallet.pendingBalance).toFixed(2) : '0.00'}
+                        </h2>
+                        <p className="mt-3 mb-0" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
+                            Net earnings awaiting delivery confirmation (after platform fees).
+                        </p>
+                    </div>
                 </Col>
 
                 <Col md={4}>
-                    <Card>
-                        <Card.Body className="p-4">
-                            <h6 className="text-muted">Total Lifetime Earnings</h6>
-                            <h2 className="mb-0 text-success">
-                                ${wallet ? Number(wallet.totalEarnings).toFixed(2) : '0.00'}
-                            </h2>
-                            <p className="text-muted mt-3 mb-0 small">
-                                All-time net earnings from delivered sales (after platform fees).
-                            </p>
-                        </Card.Body>
-                    </Card>
+                    <div className="glass-container p-4 h-100 d-flex flex-column">
+                        <h6 className="text-uppercase mb-2" style={{ color: 'var(--on-surface-variant)', letterSpacing: '1px', fontSize: '0.8rem' }}>Total Lifetime Earnings</h6>
+                        <h2 className="mb-0" style={{ color: 'var(--color-success)', fontSize: '2.5rem', fontWeight: 700 }}>
+                            ${wallet ? Number(wallet.totalEarnings).toFixed(2) : '0.00'}
+                        </h2>
+                        <p className="mt-3 mb-0" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
+                            All-time net earnings from delivered sales (after platform fees).
+                        </p>
+                    </div>
                 </Col>
             </Row>
 
@@ -413,6 +426,7 @@ function WalletPage() {
                         dataKey="transactions"
                         columns={getWalletTransactionColumns}
                         tableTitle="Transaction History Ledger"
+                        fluid={true}
                         defaultStatusArray={[]}
                         statusOptions={[]}
                         extraFilters={[
@@ -436,6 +450,7 @@ function WalletPage() {
                         dataKey="payouts"
                         columns={() => getMyPayoutColumns(handleCancelPayout)}
                         tableTitle="Payout Request History"
+                        fluid={true}
                         statusFilterParam="status"
                         defaultStatusArray={[]}
                         statusOptions={PAYOUT_STATUS_OPTIONS}
@@ -461,7 +476,7 @@ function WalletPage() {
                         </div>
                         <Form onSubmit={handlePayoutSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Payout Amount ($)</Form.Label>
+                                <Form.Label style={{ color: 'var(--on-surface)' }}>Payout Amount ($)</Form.Label>
                                 <Form.Control
                                     type="number"
                                     step="0.01"
@@ -470,32 +485,36 @@ function WalletPage() {
                                     onChange={(e) => setPayoutAmount(e.target.value)}
                                     max={wallet ? wallet.availableBalance : 0}
                                     required
+                                    style={{ background: 'var(--bg-main)', color: 'var(--on-surface)', border: 'var(--border-standard)' }}
                                 />
-                                <Form.Text className="text-muted">
+                                <Form.Text style={{ color: 'var(--on-surface-variant)' }}>
                                     Maximum withdrawable balance: ${wallet ? Number(wallet.availableBalance).toFixed(2) : '0.00'}
                                 </Form.Text>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Additional Notes (Optional)</Form.Label>
+                                <Form.Label style={{ color: 'var(--on-surface)' }}>Additional Notes (Optional)</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
                                     placeholder="Stripe/Bank details or notes"
                                     value={payoutNote}
                                     onChange={(e) => setPayoutNote(e.target.value)}
+                                    style={{ background: 'var(--bg-main)', color: 'var(--on-surface)', border: 'var(--border-standard)' }}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top">
-                                <Button variant="secondary" type="button" onClick={closePayoutModal}>
+                            <div className="d-flex justify-content-end gap-2 pt-3 border-top" style={{ borderColor: 'var(--border-glass) !important' }}>
+                                <button className="btn-glass-outline" type="button" onClick={closePayoutModal}>
                                     Close
-                                </Button>
-                                <Button type="submit" variant="primary">Submit Request</Button>
+                                </button>
+                                <button className="btn-glass-primary" type="submit">
+                                    Submit Request
+                                </button>
                             </div>
                         </Form>
                     </div>
                 </Modal>
             )}
-        </Container>
+        </div>
     );
 }
 

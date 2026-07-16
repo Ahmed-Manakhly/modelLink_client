@@ -2,17 +2,17 @@ import React from 'react';
 import { Table, Badge, Button } from 'react-bootstrap';
 import ModelViewSection from './ModelViewSection';
 
-const VersionHistoryPanel = ({ versions = [], selectedVersionId, onSelect, showInactive = false }) => {
+const VersionHistoryPanel = ({ versions = [], selectedVersionId, onSelect, showInactive = false, fluid = false }) => {
     if (!versions.length) return null;
 
     const rows = showInactive ? versions : versions.filter((v) => v.isActive !== false);
     if (!rows.length) return null;
 
     return (
-        <ModelViewSection title="Version History">
-            <div style={{ overflowX: 'auto', width: '100%' }}>
-                <Table striped bordered hover size="sm" className="mb-0 w-100">
-                    <thead>
+        <ModelViewSection title="Version History" fluid={fluid}>
+            <div className="mui-table-scroller w-100">
+                <Table variant="dark" bordered hover size="sm" className="mb-0 PageTable" style={{ minWidth: 'max-content', width: '100%', background: 'var(--surface-glass)', backdropFilter: 'blur(var(--glass-blur))', whiteSpace: 'nowrap' }}>
+                <thead>
                         <tr>
                             <th>Version</th>
                             <th>Price</th>
@@ -29,12 +29,12 @@ const VersionHistoryPanel = ({ versions = [], selectedVersionId, onSelect, showI
                             return (
                                 <tr
                                     key={v.id}
-                                    style={selected ? { background: '#e8f4fd' } : undefined}
+                                    style={selected ? { background: 'rgba(34, 211, 238, 0.1)' } : undefined}
                                     onClick={() => onSelect?.(v.id)}
                                 >
                                     <td>
                                         v{v.version}
-                                        {v.isPrimary && <Badge bg="primary" className="ms-1">Primary</Badge>}
+                                        {v.isPrimary && <span className="ms-2" style={{ display: 'inline-block', background: 'var(--surface-glass)', border: '1px solid var(--primary)', color: 'var(--primary)', padding: '4px 10px', borderRadius: '20px', fontWeight: 600, letterSpacing: '0.5px', fontSize: '12px', boxShadow: '0 0 8px rgba(34, 211, 238, 0.15)' }}>Primary</span>}
                                     </td>
                                     <td>${Number(v.price || 0).toFixed(2)}</td>
                                     <td>{v.deliveryTime ?? 'N/A'} day(s)</td>
@@ -42,17 +42,17 @@ const VersionHistoryPanel = ({ versions = [], selectedVersionId, onSelect, showI
                                     <td>{v.bodyPartRel?.name || '—'}</td>
                                     <td>
                                         {v.isActive === false
-                                            ? <Badge bg="secondary">Inactive</Badge>
-                                            : <Badge bg="success">Active</Badge>}
+                                            ? <span style={{ display: 'inline-block', background: 'transparent', border: '1px solid var(--border-glass)', color: 'var(--on-surface-variant)', padding: '6px 14px', borderRadius: '20px', fontWeight: 600, letterSpacing: '0.5px', fontSize: '12px' }}>Inactive</span>
+                                            : <span style={{ display: 'inline-block', background: 'transparent', border: '1px solid var(--color-success)', color: 'var(--color-success)', padding: '6px 14px', borderRadius: '20px', fontWeight: 600, letterSpacing: '0.5px', fontSize: '12px', boxShadow: '0 0 8px rgba(16, 185, 129, 0.2)' }}>Active</span>}
                                     </td>
                                     <td>
-                                        <Button
-                                            size="sm"
-                                            variant={selected ? 'primary' : 'outline-primary'}
+                                        <button
+                                            className={selected ? "btn-glass-primary" : "btn-glass-outline"}
+                                            style={{ padding: '4px 12px', fontSize: '0.85rem' }}
                                             onClick={(e) => { e.stopPropagation(); onSelect?.(v.id); }}
                                         >
                                             {selected ? 'Selected' : 'Select'}
-                                        </Button>
+                                        </button>
                                     </td>
                                 </tr>
                             );

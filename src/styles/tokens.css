@@ -190,6 +190,32 @@
     background: linear-gradient(135deg, rgba(244, 67, 54, 0.9) 0%, rgba(244, 67, 54, 0.5) 100%);
 }
 
+.btn-glass-logout {
+    background: transparent;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(239, 68, 68, 0.5); /* #EF4444 */
+    border-radius: var(--radius-button);
+    transition: var(--transition-smooth);
+    color: var(--color-danger, #EF4444);
+    cursor: pointer;
+    padding: 8px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-glass-logout:hover {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--on-surface);
+    border-color: rgba(239, 68, 68, 0.8);
+}
+
 .btn-glass-outline {
     background: transparent;
     backdrop-filter: blur(12px);
@@ -219,4 +245,13 @@
 .neon-icon {
     stroke: var(--primary);
     filter: drop-shadow(0 0 4px var(--primary-glow));
+}
+.btn-glass-primary:disabled, .btn-glass-outline:disabled, .btn-glass-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    background: var(--surface-glass);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--on-surface-variant);
 }

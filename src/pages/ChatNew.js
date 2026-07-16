@@ -148,9 +148,17 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
           if (list.some((m) => m.id === incoming.id)) return list;
           return [...list, incoming];
         });
-      }
 
-      setChatsUpdated(true);
+        // The user is actively viewing this chat, so mark the new message as read immediately
+        markMessagesAsReadReq(incomingConvId, token)
+          .catch(() => {})
+          .finally(() => {
+            setChatsUpdated(true);
+            onFeatchChats(true);
+          });
+      } else {
+        setChatsUpdated(true);
+      }
     };
 
     const handleTyping = ({ conversationId, fromUserId }) => {
@@ -452,7 +460,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
   //====================================================================================================
   return (
 
-    <GlobalWrapper className="global-banner-spacing">
+    <GlobalWrapper className="global-banner-spacing global-page-margin-top">
       <div className={classes["Chat"]}>
         <div className={`${classes["tabsCon"]}`}>
         <button onClick={() => { setShow('chats') }} className={`${show === 'chats' && classes["active"]}`} >Chats</button>

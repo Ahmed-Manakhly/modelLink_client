@@ -1,51 +1,73 @@
 
 .features__container {
     width: 100%;
-    max-width: 1140px;
-    margin: 0 auto 20px auto;
-    padding: 0 16px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background: var(--bg-main);
+    padding: 0;
+    margin: 0;
+    position: relative;
+    z-index: 50;
 
     .feature_box {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: var(--on-surface);
+        background: var(--bg-surface);
+        backdrop-filter: blur(var(--glass-blur, 20px));
+        border: var(--border-standard, 1px solid rgba(255, 255, 255, 0.08));
         padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: var(--glass-shadow);
+        margin: 0;
+        border-radius: var(--radius-card, 12px);
 
         .search_bar_container {
             display: flex;
             align-items: center;
-            background: #f4f6f8;
-            border-radius: 20px;
-            padding: 5px 15px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-input, 8px);
+            padding: 3px 15px;
             flex: 1;
             max-width: 400px;
+            transition: all 0.3s ease;
+
+            &:focus-within,
+            &:hover {
+                border-color: var(--primary, #22D3EE);
+                background: rgba(34, 211, 238, 0.05);
+            }
 
             .search_input {
                 border: none;
                 background: transparent;
-                padding: 8px;
+                padding: 8px 0;
                 width: 100%;
                 outline: none;
-                font-size: 14px;
+                font-size: 13px;
+                color: var(--on-surface-variant, #94A3B8);
+
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.3);
+                }
             }
 
             .search_button {
                 background: none;
                 border: none;
                 cursor: pointer;
-                color: #5DB8DD;
+                color: var(--primary, #22D3EE);
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                transition: transform 0.2s ease, filter 0.2s ease;
                 &:disabled {
-                    color: #ccc;
+                    color: rgba(255, 255, 255, 0.2);
                     cursor: not-allowed;
+                }
+                &:hover:not(:disabled) {
+                    transform: scale(1.1);
+                    filter: drop-shadow(0 0 5px var(--primary-glow, rgba(34, 211, 238, 0.5)));
                 }
             }
         }
@@ -56,13 +78,15 @@
             gap: 15px;
 
             .refreshButton {
-                font-size: 28px;
-                color: #5DB8DD;
+                font-size: 22px;
+                color: var(--primary, #22D3EE);
                 cursor: pointer;
                 display: flex;
                 transition: transform 0.3s;
+                opacity: 0.8;
                 &:hover {
                     transform: rotate(180deg);
+                    opacity: 1;
                 }
             }
         }
@@ -72,16 +96,29 @@
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        background: var(--on-surface);
+        background: var(--bg-surface);
+        backdrop-filter: blur(var(--glass-blur, 20px));
+        border: var(--border-standard, 1px solid rgba(255, 255, 255, 0.08));
         padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: var(--glass-shadow);
+        margin: 0 0 20px 0;
+        border-radius: var(--radius-card, 12px);
         align-items: flex-end;
 
         .selections_container, .date_input_container, .status_container {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+
+            input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+                accent-color: var(--color-success);
+            }
+        }
+
+        .status_container {
+            align-self: center;
         }
 
         .input_control, .date_Control {
@@ -91,19 +128,25 @@
 
             label {
                 font-size: 12px;
-                color: #666;
+                color: var(--on-surface-variant, #94A3B8);
                 font-weight: 600;
             }
 
             select, input[type="date"] {
                 padding: 8px 12px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: var(--radius-input, 8px);
                 outline: none;
-                font-size: 14px;
-                background: #f9f9f9;
-                &:focus {
-                    border-color: #5DB8DD;
+                font-size: 13px;
+                background: rgba(0, 0, 0, 0.2);
+                color: var(--on-surface-variant, #94A3B8);
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &:focus,
+                &:hover {
+                    border-color: var(--primary, #22D3EE);
+                    background: rgba(34, 211, 238, 0.05);
                 }
             }
         }
@@ -120,17 +163,56 @@
                 cursor: pointer;
                 font-weight: 600;
                 transition: 0.3s;
-                background: #5DB8DD;
+                background: linear-gradient(135deg, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0.4) 100%);
                 color: var(--on-surface);
 
                 &:hover {
-                    background: #4ca3c7;
+                    background: linear-gradient(135deg, rgba(34, 211, 238, 0.9) 0%, rgba(34, 211, 238, 0.5) 100%);
                 }
 
                 &:disabled {
-                    background: #ddd;
+                    background: rgba(255, 255, 255, 0.1);
                     cursor: not-allowed;
-                    color: #888;
+                    color: rgba(255, 255, 255, 0.3);
+                }
+            }
+        }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+
+            .selections_container,
+            .date_input_container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .selections_container .input_control,
+            .date_input_container .date_Control {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .selections_container select,
+            .date_input_container input[type="date"] {
+                width: 100%;
+            }
+
+            .status_container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .actions_container {
+                width: 100%;
+                margin-left: 0;
+                justify-content: space-between;
+                margin-top: 10px;
+
+                .action_button {
+                    flex: 1;
+                    text-align: center;
                 }
             }
         }

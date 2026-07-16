@@ -1,6 +1,7 @@
 import classes from './FeaturesBox.module.scss';
 import { FaSearch } from "react-icons/fa";
 import { IoRefreshCircle } from "react-icons/io5";
+import CustomSelect from '../ui/CustomSelect';
 
 const FeaturesBox = ({
     handleSubmit,
@@ -46,12 +47,14 @@ const FeaturesBox = ({
                             {selectConfig.map((option, index) => (
                                 <div key={index} className={classes.input_control}>
                                     {option.label && <label>{option.label}</label>}
-                                    <select value={option.value} onChange={(e) => option.onChange(e.target.value)}>
-                                        <option value="">{option.placeholder || 'Select...'}</option>
-                                        {option.options.map((opt, i) => (
-                                            <option key={i} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </select>
+                                    <CustomSelect
+                                        value={option.value}
+                                        onChange={(val) => option.onChange(val)}
+                                        options={[
+                                            { value: '', label: option.placeholder || 'Select...' },
+                                            ...option.options
+                                        ]}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -96,7 +99,7 @@ const FeaturesBox = ({
                                     type="button"
                                     onClick={option.onClick}
                                     disabled={option.disabled}
-                                    className={classes.action_button}
+                                    className={option.className ? option.className : classes.action_button}
                                 >
                                     {option.label}
                                 </button>

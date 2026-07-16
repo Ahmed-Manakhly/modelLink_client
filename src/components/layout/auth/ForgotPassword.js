@@ -179,8 +179,8 @@ const ForgotPassword = ( ) => {
             >
                 { isSubmitting? 'Submitting...' : "Change Password"}
             </button>
-            <Row className="mt-3">
-                <Link to="/auth?mode=login">Back to login</Link>
+            <Row className="mt-4 w-100 text-center">
+                <Link to="/auth?mode=login" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600' }}>&larr; Back to login</Link>
             </Row>
     </Col>
     )

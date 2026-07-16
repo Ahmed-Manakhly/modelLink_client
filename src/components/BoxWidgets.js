@@ -2,23 +2,25 @@ import React, { useRef } from "react";
 import { useSelector } from 'react-redux';
 import styles from "./BoxWidgets.module.scss";
 import { Link } from "react-router-dom";
-import { RiRobot2Line } from "react-icons/ri";
-import { GrRobot } from "react-icons/gr";
-import { FaRegMessage } from "react-icons/fa6";
-import { GoCodeReview } from "react-icons/go";
-import { FiShoppingCart } from "react-icons/fi";
-import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { Row, Col } from 'react-bootstrap';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import { 
+  FiCpu, 
+  FiShoppingCart, 
+  FiDollarSign, 
+  FiEye, 
+  FiMessageSquare, 
+  FiBell, 
+  FiCreditCard 
+} from "react-icons/fi";
 import getStarted from '../assets/getStarted.png';
-// import { FILES_BASE_API_URL } from '../lib/api';
 import ProfileHeroCard from './ui/ProfileHeroCard';
 import UserProfileStrip from './UserProfileStrip';
 import UserAvatar from './ui/UserAvatar';
 
 const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, totalOrders, totalSales = 0, totalViews = 0, msgCounter = 0, notCounter = 0, walletBalance, payoutReady = null }) => {
   const userData = useSelector(state => state.auth.userData) || {};
-  // eslint-disable-next-line
-  const { org_username, avatar, role } = userData;
+  const { org_username, role } = userData;
   const imgRef = useRef(null);
 
   const onFileChange = (e) => {
@@ -30,7 +32,7 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
   };
 
   const avatarNode = (
-    <div className={`${styles.imgCon} ${styles['menu-title']}`}>
+    <div className={styles.imgCon}>
       <Col xs={0} md lg className={`${styles.img_cover} d-flex flex-column align-items-left w-100`}>
         <input name="avatar" type="file" onChange={onFileChange} ref={imgRef} style={{ display: 'none' }} />
         {profile && (
@@ -71,24 +73,24 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
   };
 
   const profileRightContent = (
-    <div className={styles["widgets_container"]}>
-      <div className={styles["widget_1_con"]}>
-        <RiRobot2Line className={styles.iconImg} /><h4 className={styles.wel}>Welcome back !</h4>
+    <div className={styles.profileRightCon}>
+      <div className={styles.welcomeSection}>
+        <h2 className="page-main-title" style={{ margin: 0 }}>
+          <span className="gradient-text">Welcome back!</span>
+        </h2>
       </div>
-      <div className={styles["widget_2_con"]}>
-        <div className={styles["widget_1"]}>
-          <h1>{getWelcomeMessage()}</h1>
-          <img src={getStarted} alt="getStarted" className={styles["get_start"]} />
-        </div>
+      <div className="glass-container p-4 mt-3 text-center">
+        <h5 style={{ color: 'var(--on-surface-variant)', fontWeight: 500, marginBottom: '1.5rem' }}>{getWelcomeMessage()}</h5>
+        <img src={getStarted} alt="getStarted" style={{ maxWidth: '100%', height: 'auto', borderRadius: 'var(--radius-card)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.1))' }} />
       </div>
     </div>
   );
 
   if (profile) {
     return (
-      <ProfileHeroCard avatar={null} leftInfo={profileLeftInfo}>
-        {profileRightContent}
-      </ProfileHeroCard>
+      <div className="glass-container p-4 w-100 h-100">
+        {profileLeftInfo}
+      </div>
     );
   }
 
@@ -99,76 +101,115 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
           <div className={styles.__box_main}>
             <div className={styles.__box_leftside}>
               {avatarNode}
-              <Row className={styles.infoCon}>
+              <div className={styles.leftBtnWrapper}>
                 {role === 'DEVELOPER' && (
-                  <Link to="/models/new" className={styles["banner-btn"]}> {'Create Model'} </Link>
+                  <Link to="/models/new" className="btn-glass-primary w-100" style={{ textAlign: 'center', justifyContent: 'center' }}>
+                    Create Model
+                  </Link>
                 )}
-              </Row>
+              </div>
             </div>
+            
             <div className={styles.__box_rightside}>
-              <div className={styles["widgets_container"]}>
-                <div className={styles["widget_1_con"]}>
-                  <RiRobot2Line className={styles.iconImg} /><h4 className={styles.wel}>Welcome back !</h4>
-                </div>
-                <div className={styles["widget_2_con"]}>
-                  {role === 'DEVELOPER' && (
-                    <>
-                      <div className={styles["widget_1"]}>
-                        <h1>Total Models</h1>
-                        <GrRobot className={styles.iconImg} />
-                        <span>{totalModels}</span>
-                      </div>
-                      <div className={styles["widget_2"]}>
-                        <h1>Total Sales</h1>
-                        <FiShoppingCart className={styles.iconImg} />
-                        <span>{totalSales}</span>
-                      </div>
-                    </>
-                  )}
-                  {role !== 'DEVELOPER' && (
-                    <div className={styles["widget_2"]}>
-                      <h1>Total Orders</h1>
-                      <FiShoppingCart className={styles.iconImg} />
-                      <span>{totalOrders}</span>
-                    </div>
-                  )}
-                </div>
+              <div className={styles.welcomeSection} style={{ marginBottom: '1.5rem' }}>
+                <h2 className="page-main-title" style={{ margin: 0 }}>
+                  <span className="gradient-text">Welcome back!</span>
+                </h2>
+              </div>
+
+              <div className={styles.widgets_grid}>
                 {role === 'DEVELOPER' && (
-                  <div className={styles["widget_2_con"]}>
-                    <div className={styles["widget_1"]}>
-                      <h1>Total Views</h1>
-                      <GoCodeReview className={styles.iconImg} />
-                      <span>{totalViews}</span>
+                  <>
+                    <div className={styles.widgetCard} style={{ '--accent-color': 'var(--primary)' }}>
+                      <div className={styles.widgetHeader}>
+                        <span className={styles.widgetTitle}>Total Models</span>
+                        <div className={styles.widgetIconWrapper}>
+                          <FiCpu />
+                        </div>
+                      </div>
+                      <div className={styles.widgetValue}>{totalModels}</div>
                     </div>
-                    <div className={styles["widget_2"]}>
-                      <h1>Total Orders</h1>
-                      <FiShoppingCart className={styles.iconImg} />
-                      <span>{totalOrders}</span>
+
+                    <div className={styles.widgetCard} style={{ '--accent-color': '#10B981' }}>
+                      <div className={styles.widgetHeader}>
+                        <span className={styles.widgetTitle}>Total Sales</span>
+                        <div className={styles.widgetIconWrapper}>
+                          <FiDollarSign />
+                        </div>
+                      </div>
+                      <div className={styles.widgetValue}>{totalSales}</div>
                     </div>
+
+                    <div className={styles.widgetCard} style={{ '--accent-color': '#F59E0B' }}>
+                      <div className={styles.widgetHeader}>
+                        <span className={styles.widgetTitle}>Total Views</span>
+                        <div className={styles.widgetIconWrapper}>
+                          <FiEye />
+                        </div>
+                      </div>
+                      <div className={styles.widgetValue}>{totalViews}</div>
+                    </div>
+
+                    <div className={styles.widgetCard} style={{ '--accent-color': '#8B5CF6' }}>
+                      <div className={styles.widgetHeader}>
+                        <span className={styles.widgetTitle}>Total Orders</span>
+                        <div className={styles.widgetIconWrapper}>
+                          <FiShoppingCart />
+                        </div>
+                      </div>
+                      <div className={styles.widgetValue}>{totalOrders}</div>
+                    </div>
+                  </>
+                )}
+
+                {role !== 'DEVELOPER' && (
+                  <div className={styles.widgetCard} style={{ '--accent-color': '#8B5CF6' }}>
+                    <div className={styles.widgetHeader}>
+                      <span className={styles.widgetTitle}>Total Orders</span>
+                      <div className={styles.widgetIconWrapper}>
+                        <FiShoppingCart />
+                      </div>
+                    </div>
+                    <div className={styles.widgetValue}>{totalOrders}</div>
                   </div>
                 )}
-                <div className={styles["widget_3_con"]}>
-                  <div className={styles["widget_1"]}>
-                    <h1>Unread Messages</h1>
-                    <FaRegMessage className={styles.iconImg} />
-                    <span>{msgCounter}</span>
-                  </div>
-                  {role === 'DEVELOPER' ? (
-                    <Link to="/wallet" className={styles["widget_2"]}>
-                      <h1>Wallet Balance</h1>
-                      <span className={styles.walletBalance}>{walletBalance !== undefined ? `$${Number(walletBalance).toFixed(2)}` : '$0.00'}</span>
-                      {payoutReady === false && (
-                        <small style={{ display: 'block', fontSize: '10px', marginTop: '4px' }}>Stripe setup needed</small>
-                      )}
-                    </Link>
-                  ) : (
-                    <div className={styles["widget_2"]}>
-                      <h1>Notifications</h1>
-                      <GoCodeReview className={styles.iconImg} />
-                      <span>{notCounter}</span>
+
+                <div className={styles.widgetCard} style={{ '--accent-color': '#EC4899' }}>
+                  <div className={styles.widgetHeader}>
+                    <span className={styles.widgetTitle}>Unread Messages</span>
+                    <div className={styles.widgetIconWrapper}>
+                      <FiMessageSquare />
                     </div>
-                  )}
+                  </div>
+                  <div className={styles.widgetValue}>{msgCounter}</div>
                 </div>
+
+                {role === 'DEVELOPER' ? (
+                  <Link to="/wallet" className={styles.widgetCard} style={{ '--accent-color': '#10B981', textDecoration: 'none' }}>
+                    <div className={styles.widgetHeader}>
+                      <span className={styles.widgetTitle}>Wallet Balance</span>
+                      <div className={styles.widgetIconWrapper}>
+                        <FiCreditCard />
+                      </div>
+                    </div>
+                    <div className={`${styles.widgetValue} ${styles.walletValue}`}>
+                      {walletBalance !== undefined ? `$${Number(walletBalance).toFixed(2)}` : '$0.00'}
+                    </div>
+                    {payoutReady === false && (
+                      <span className={styles.stripeWarning}>Stripe setup needed</span>
+                    )}
+                  </Link>
+                ) : (
+                  <div className={styles.widgetCard} style={{ '--accent-color': '#EF4444' }}>
+                    <div className={styles.widgetHeader}>
+                      <span className={styles.widgetTitle}>Notifications</span>
+                      <div className={styles.widgetIconWrapper}>
+                        <FiBell />
+                      </div>
+                    </div>
+                    <div className={styles.widgetValue}>{notCounter}</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

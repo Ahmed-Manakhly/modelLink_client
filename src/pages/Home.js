@@ -135,6 +135,7 @@ function Home({ modelsUpdated, onModelsUpdated }) {
                 txt_2='A digital marketplace for production-ready AI models 🚀'
                 txt_3='that facilitates the connection between AI developers'
                 banner={banner}
+                className="global-page-margin-top"
             />
             <Categories categoryCards={topCategoryCards} />
             {featuredModels.length > 0 && (

@@ -29,8 +29,8 @@ const AdminTabLabel = ({ label, count = 0 }) => (
         {label}
         {count > 0 && (
             <span
-                className="badge rounded-pill bg-danger"
-                style={{ fontSize: '0.65rem', minWidth: '1.25rem' }}
+                className="badge rounded-pill"
+                style={{ fontSize: '0.65rem', minWidth: '1.25rem', backgroundColor: 'var(--color-danger)', color: 'var(--bg-main)', fontWeight: 700 }}
                 aria-label={`${count} pending`}
             >
                 {count > 99 ? '99+' : count}

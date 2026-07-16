@@ -150,7 +150,7 @@
         background: var(--color-success);
         border: 1px solid var(--border-glass);
         backdrop-filter: blur(12px);
-        color: var(--bg-main);
+        color: var(--bg-main, #0b0f19) !important;
         font-size: 12px;
         font-weight: var(--weight-500);
         line-height: 1;

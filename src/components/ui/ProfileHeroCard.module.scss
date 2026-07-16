@@ -8,15 +8,12 @@
 
 
 .card {
-    border: var(--border-standard);
     background-color: transparent;
-    border-radius: var(--radius-card);
-    padding: 25px 0;
 }
 
 .main {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 2rem;
     width: 100%;
 }
@@ -52,6 +49,14 @@
     flex: 1;
     min-width: 0;
     width: 62%;
+    background: var(--surface-glass);
+    backdrop-filter: blur(var(--glass-blur));
+    border: var(--border-standard);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 @media screen and (max-width: 768px) {

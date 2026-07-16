@@ -4,7 +4,8 @@ import FilterChips from '../components/FilterChips';
 import Val from '../components/Val'
 import Services from '../components/Services'
 import img_2 from '../assets/instructor-1x-v3.jpg'
-import Box from '../components/Box'
+import marketingOpportunityBanner from '../assets/marketing_opportunity_banner.png'
+import Header from '../components/layout/Header'
 import { vals } from '../constants/marketingData';
 // import banner from '../assets/banner_2.png'
 import { useDispatch } from 'react-redux';
@@ -171,17 +172,16 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
             </Controls>
             <TopDevelopers />
 
-            <Box title={`It’s Your Time!`}
-                text_1={'Are you an AI developer with a groundbreaking medical solution? Look no further! Our platform is your gateway to making a difference\n, Find a Real Opportunity for Your AI Model:'}
-                title_2={'Medical Expertise:'}
-                content_1={"Your AI model can drive real-world value across industries. Whether it's computer vision, NLP, predictive ML, or specialized domain models, there's a global buyer market ready for your innovation."}
-                title_3={'Monetize Your Expertise:'}
-                content_2={"Don't just create — commercialize. Showcase your AI model to developers, companies, and institutions actively seeking production-ready solutions."}
-                closure={"Join us as we empower AI practitioners and accelerate the path from model to market."}
-                img={img_2}
+            <Header
+                title_1={'It’s Your'}
+                title_2={'Time! 🚀'}
+                txt_1={'Find a Real Opportunity for Your AI Model'}
+                txt_3={"Showcase your AI model to developers, companies, and institutions actively seeking production-ready solutions. Join us as we empower AI practitioners and accelerate the path from model to market."}
+                banner={marketingOpportunityBanner}
                 action={true}
                 actionTo={'/auth?mode=signup'}
                 actionTitle={'Join Us Now'}
+                reverse={true}
             />
             <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
         </>

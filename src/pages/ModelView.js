@@ -5,6 +5,7 @@ import { uiActions } from '../store/UI-slice';
 import { getAuthToken } from '../utility/tokenLoader'
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 import ModelData from '../components/ModelData'
 import ModelDataTop from '../components/ModelDataTop'
 import ModelGallery from '../components/ModelGallery'
@@ -366,9 +367,14 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
         return all.filter((v) => v.isActive !== false);
     }, [model?.versions, isSeller, model?.status]);
 
+    const otherModels = useMemo(() => {
+        if (!models || !model?.id) return [];
+        return models.filter(m => parseInt(m.id, 10) !== parseInt(model.id, 10));
+    }, [models, model?.id]);
+
     //--------------------------------------------------
     return (
-        <>
+        <GlobalWrapper className="global-page-margin-top py-5">
             {(model && isLoggedIn && !isSeller) && (
                 <ChatCard userData={model?.developer} userId={model?.developerId} onlineUsers={onlineUsers} />
             )}
@@ -386,16 +392,20 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
                 modelCount={models.length}
             />
             <VersionHistoryPanel
+                fluid={true}
                 versions={model?.versions || []}
                 selectedVersionId={selectedVersionId}
                 onSelect={setSelectedVersionId}
                 showInactive={Boolean(isSeller && model?.status === 'DRAFT')}
             />
-            <MetricsComparisonTable versions={visibleVersions} />
-            <AssetDeliveryCallout hidden={isSeller && model?.status === 'DRAFT'} />
+            <div className="mt-5 pt-3 w-100">
+                <MetricsComparisonTable fluid={true} versions={visibleVersions} />
+            </div>
+            <AssetDeliveryCallout fluid={true} hidden={isSeller && model?.status === 'DRAFT'} />
             <ModelData formTitle={''} model={model} selectedVersionId={selectedVersionId} />
             {isSeller && (
                 <DashboardDataSection
+                    fluid={true}
                     getData={(query) => getOrdersByModelReq(id, typeof query === 'string' ? query : '', { 'Authorization': `Bearer ${token}` })}
                     contentType="orders"
                     columns={getOrderColumns()}
@@ -404,6 +414,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             )}
             {isBuyer && (
                 <DashboardDataSection
+                    fluid={true}
                     getData={(query) => getOrdersByModelReq(id, `?clientId=${thisUserId}` + ((query && typeof query === 'string') ? '&' + query.replace('?', '') : ''), { 'Authorization': `Bearer ${token}` })}
                     contentType="orders"
                     columns={getOrderColumns()}
@@ -411,12 +422,12 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
                 />
             )}
             {!isLoggedIn && (
-                <Box sx={{ textAlign: 'center', padding: '40px 20px', margin: '30px 0', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e4e5e7' }}>
-                    <h4 style={{ color: '#3665B9', marginBottom: '10px', fontWeight: 'bold' }}>Want to connect or purchase?</h4>
-                    <p style={{ color: '#6c757d', marginBottom: '20px', fontSize: '15px' }}>
+                <Box className="glass-container" sx={{ textAlign: 'center', padding: '40px 20px', margin: '30px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h4 className="gradient-text mb-2" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Want to connect or purchase?</h4>
+                    <p style={{ color: 'var(--on-surface-variant)', marginBottom: '25px', fontSize: '15px' }}>
                         Please log in to message the developer and place orders on this model.
                     </p>
-                    <Link to="/auth?mode=login" className="btn btn-primary" style={{ backgroundColor: '#5DB8DD', border: 'none', padding: '10px 25px', fontWeight: 'bold' }}>
+                    <Link to="/auth?mode=login" className="btn-glass-primary" style={{ padding: '10px 25px' }}>
                         Log In Now
                     </Link>
                 </Box>
@@ -424,8 +435,12 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             {reviews.length > 0 && (
                 <FeedbackList rev={reviews} formTitle='Reviews for this model' versionMap={reviewVersionMap} />
             )}
-            <PopularServices models={models.slice(0, 10)} title='More Models Made By This Developer' />
-        </>
+            {otherModels.length > 0 && (
+                <div className="mt-5 pt-3 w-100">
+                    <PopularServices fluid={true} models={otherModels.slice(0, 10)} title={<span className="gradient-text">More Models Made By This Developer</span>} titleClassName="page-main-title m-0" />
+                </div>
+            )}
+        </GlobalWrapper>
     )
 }
 

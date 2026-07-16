@@ -8,29 +8,49 @@
   -o-border-radius: 50%;
 }
 //---------------------------
-.conversation {
-    position : fixed ;
-    bottom : 25px ; 
-    left : 100px ;
+.chat_container {
+    position: fixed;
+    bottom: 25px;
+    left: 0;
+    right: 0;
     z-index: 60000;
-    cursor : pointer;
+    pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+    .chat_container {
+        bottom: 5rem !important;
+    }
+}
+
+.chat_inner {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+}
+
+.conversation {
+    pointer-events: auto;
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
-    background-color: var(--cultured);
+    background: var(--bg-surface, #111318);
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-radius: var(--radius-card, 12px);
     overflow: hidden;
-    border: var(--cultured) solid 2px;
-    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
     &:hover {
-      background: rgb(211, 203, 203);
+      background: var(--bg-surface, #111318);
       cursor: pointer;
       .conversation-con .online-dot {
-        border: rgb(211, 203, 203) solid 2.5px;
+        border: var(--bg-main) solid 2px;
       }
     }
     .conversation-con{
       display: flex;
-      padding: 5px;
+      padding: 10px 20px;
       width: 100% !important;
       align-items: center;
       justify-content: space-between;
@@ -38,15 +58,15 @@
       position: relative;
         .online-dot {
           display: block;
-          background-color: var(--ocean-green);
+          background-color: var(--color-success);
           border-radius: 50%;
           position: absolute;
-          left: 43px;
-          top: 8px;
-          width: 18px;
-          height: 18px;
+          left: 55px;
+          top: 11px;
+          width: 14px;
+          height: 14px;
           z-index: 2;
-          border: var(--cultured) solid 2.5px;
+          border: var(--bg-main) solid 2px;
         }
         .info-box{
           width: 100% !important  ;
@@ -56,7 +76,10 @@
           align-items: center;
           .row_1{
             span{
-              color: var(--sonic-silver);
+              background: var(--gradient-text);
+              background-clip: text;
+              -webkit-background-clip: text;
+              color: transparent;
               font-weight: 900;
               font-size: 21px;
               display: flex;
@@ -78,8 +101,9 @@
         }
         .imgCon{
           position: relative;
-          width: 75px ;
+          width: 50px ;
           height: 50px ;
+          flex-shrink: 0;
           // margin: 2px ;
           @extend %rad ;
           overflow: hidden;

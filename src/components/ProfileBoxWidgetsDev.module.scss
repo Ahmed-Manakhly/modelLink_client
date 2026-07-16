@@ -9,6 +9,17 @@
   -o-border-radius: 50%;
 }
 
+.inputLabel {
+    color: var(--on-surface-variant);
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    padding-left: 2px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: block;
+}
+
 .widget_1_con {
   display: flex;
   justify-content: center;
@@ -21,13 +32,12 @@
     display: block;
     font-size: 35px;
     font-weight: 800;
-    color: var(--sonic-silver);
+    color: var(--primary);
   }
 
   h4.wel {
     font-size: 25px;
     font-weight: 700;
-    color: var(--sonic-silver);
   }
 }
 
@@ -98,12 +108,14 @@
 }
 
 .user {
-  border-left: 10px solid var(--cultured);
-  background-color: rgba(238, 238, 238, 0.278);
+  background: var(--surface-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  border: var(--border-standard);
+  border-left: 4px solid var(--primary);
   outline: none !important;
-  color: var(--sonic-silver);
+  color: var(--on-surface);
   padding: 15px !important;
-  border-radius: 4px;
+  border-radius: var(--radius-card);
   width: 100% !important;
   max-height: 250px !important;
   display: block !important;

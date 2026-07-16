@@ -13,6 +13,8 @@ import { submitReviewReq } from '../lib/reviewRequests';
 import { Alert, Button, Form } from 'react-bootstrap';
 import Modal from '../components/layout/Modal';
 import WarningModal from '../components/layout/WarningModal';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
+import classes from './OrderView.module.scss';
 
 function OrderView({ refresh }) {
     const navigate = useNavigate();
@@ -303,26 +305,26 @@ function OrderView({ refresh }) {
     };
 
     return (
-        <>
+        <GlobalWrapper className={`py-5 my-3 mb-5 ${classes.pageWrapper}`}>
             {warning.show && <WarningModal
                 warning={warning}
                 onAction={confirmWarningAction}
                 onClose={() => setWarning({ show: false, onAction: null, message: '', type: 'action', action: 'Confirm' })}
             />}
             {showPayBanner && (
-                <Alert variant="success" className="mx-3 mt-4 mb-0">
-                    <Alert.Heading className="h5 mb-2">Order created — payment required</Alert.Heading>
-                    <p className="mb-3">
-                        Your order is pending until payment is completed. Use the green{' '}
-                        <strong>Proceed to Pay</strong> button below to checkout securely.
+                <div className={`mb-4 p-4 rounded ${classes.paymentBanner}`}>
+                    <h5 className={`mb-2 ${classes.bannerTitle}`}>Order created — payment required</h5>
+                    <p className={`mb-3 ${classes.bannerText}`}>
+                        Your order is pending until payment is completed. Use the{' '}
+                        <strong className={classes.bannerHighlight}>Proceed to Pay</strong> button below to checkout securely.
                     </p>
                     <Link
                         to={`/stripe?orderId=${order.id}`}
-                        className="btn btn-success fw-bold"
+                        className="btn-glass-primary fw-bold"
                     >
                         Proceed to Pay (${Number(order.purchasePrice || 0).toFixed(2)})
                     </Link>
-                </Alert>
+                </div>
             )}
             <OrderBoxWidgets
                 order={order}
@@ -357,19 +359,19 @@ function OrderView({ refresh }) {
 
             {showDisputeModal && (
                 <Modal onClose={closeDisputeModal}>
-                    <div className="p-4">
-                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <div className={`p-4 ${classes.modalContent}`}>
+                        <div className={`d-flex justify-content-between align-items-center mb-3 pb-2 ${classes.modalHeader}`}>
                             <h5 className="mb-0">Open Agreement Dispute</h5>
                             <button
                                 type="button"
-                                className="btn-close"
+                                className="btn-close btn-close-white"
                                 aria-label="Close"
                                 onClick={closeDisputeModal}
                             />
                         </div>
                         <Form onSubmit={handleDisputeSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Reason for Dispute (min 20 characters)</Form.Label>
+                                <Form.Label className={classes.formLabel}>Reason for Dispute (min 20 characters)</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={4}
@@ -378,25 +380,26 @@ function OrderView({ refresh }) {
                                     onChange={(e) => setDisputeReason(e.target.value)}
                                     minLength={20}
                                     required
+                                    className={classes.formTextarea}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top">
-                                <Button variant="secondary" type="button" onClick={closeDisputeModal}>
+                            <div className={`d-flex justify-content-end gap-2 pt-3 ${classes.modalFooter}`}>
+                                <button type="button" className="btn-glass-outline" onClick={closeDisputeModal}>
                                     Cancel
-                                </Button>
-                                <Button
+                                </button>
+                                <button
                                     type="submit"
-                                    variant="danger"
+                                    className="btn-glass-danger"
                                     disabled={isDisputeSubmitting}
                                 >
                                     {isDisputeSubmitting ? 'Submitting…' : 'File Dispute'}
-                                </Button>
+                                </button>
                             </div>
                         </Form>
                     </div>
                 </Modal>
             )}
-        </>
+        </GlobalWrapper>
     );
 }
 

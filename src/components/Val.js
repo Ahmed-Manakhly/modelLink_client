@@ -6,10 +6,14 @@ import headerClasses from './layout/Header.module.scss';
 
 
 
-const Card = ({ title, description, img }) => {
+const Card = ({ title, description, img, index }) => {
+    const cardClass = index % 2 !== 0 
+        ? `${classes["room__card"]} ${classes["room__card--blended"]}` 
+        : classes["room__card"];
+
     return (
 
-        <div className={classes["room__card"]}>
+        <div className={cardClass}>
             <div className={classes["room__card__image"]}>
                 <img src={img} alt="product" />
             </div>
@@ -32,7 +36,7 @@ function Val({ products, title }) {
             )}
             <div className={classes["room__grid"]}>
                 {products.map((ele, i) => {
-                    return ((<Card key={i} title={ele.title} img={ele.img} description={ele.description} />))
+                    return ((<Card key={i} index={i} title={ele.title} img={ele.img} description={ele.description} />))
                 })}
             </div>
         </GlobalWrapper>

@@ -13,7 +13,7 @@ function OrdersClient() {
     const navigate = useNavigate();
     const token = getAuthToken();
     const dispatch = useDispatch();
-    const { msgCounter, notCounter } = useOutletContext();
+    const { msgCounter = 0, notCounter = 0 } = useOutletContext() || {};
 
     const [totalOrders, setTotalOrders] = useState(0);
 

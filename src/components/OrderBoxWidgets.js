@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./OrderBoxWidgets.module.scss";
 import { Link } from "react-router-dom";
 import { RiRobot2Line } from "react-icons/ri";
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import imgHolder from '../assets/imgHolder.jpg';
 import { FILES_BASE_API_URL, createAPI } from '../lib/api';
 import { getAuthToken } from '../utility/tokenLoader';
@@ -90,7 +90,7 @@ const OrderBoxWidgets = ({
         <button
           type="button"
           onClick={() => handleAssetDownload(asset)}
-          className="btn btn-success btn-sm w-100 fw-bold"
+          className="btn-glass-primary btn-sm w-100 fw-bold"
         >
           Download {type === 'DOCKER_IMAGE' ? 'Docker Image' : 'Model Asset File'}
         </button>
@@ -99,7 +99,7 @@ const OrderBoxWidgets = ({
 
     if (type === 'HUGGINGFACE_URL' && value) {
       return (
-        <a href={value} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm w-100">
+        <a href={value} target="_blank" rel="noopener noreferrer" className="btn-glass-outline btn-sm w-100">
           Open Hugging Face URL
         </a>
       );
@@ -111,7 +111,7 @@ const OrderBoxWidgets = ({
           <button
             type="button"
             onClick={() => handleAssetDownload(asset)}
-            className="btn btn-success btn-sm w-100 fw-bold"
+            className="btn-glass-primary btn-sm w-100 fw-bold"
           >
             Download API Endpoint Package
           </button>
@@ -124,11 +124,11 @@ const OrderBoxWidgets = ({
               {isRevealed ? value : '••••••••••••••••'}
             </div>
             <div className="d-flex gap-2">
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setRevealedAssets((prev) => ({ ...prev, [asset.id]: !prev[asset.id] }))}>
+              <button type="button" className="btn-glass-outline btn-sm" onClick={() => setRevealedAssets((prev) => ({ ...prev, [asset.id]: !prev[asset.id] }))}>
                 {isRevealed ? 'Hide' : 'Reveal'}
               </button>
               {isRevealed && (
-                <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => handleCopyValue(value)}>
+                <button type="button" className="btn-glass-primary btn-sm" onClick={() => handleCopyValue(value)}>
                   Copy
                 </button>
               )}
@@ -141,15 +141,15 @@ const OrderBoxWidgets = ({
     if (type === 'LICENSE_KEY' && value) {
       return (
         <div>
-          <div className="bg-light p-2 rounded mb-2" style={{ fontSize: '13px', fontFamily: 'monospace', wordBreak: 'break-all' }}>
+          <div className="p-2 rounded mb-2" style={{ fontSize: '13px', fontFamily: 'monospace', wordBreak: 'break-all', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-glass)' }}>
             {isRevealed ? value : '••••••••••••••••'}
           </div>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setRevealedAssets((prev) => ({ ...prev, [asset.id]: !prev[asset.id] }))}>
+            <button type="button" className="btn-glass-outline btn-sm" onClick={() => setRevealedAssets((prev) => ({ ...prev, [asset.id]: !prev[asset.id] }))}>
               {isRevealed ? 'Hide' : 'Reveal'}
             </button>
             {isRevealed && (
-              <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => handleCopyValue(value)}>
+              <button type="button" className="btn-glass-primary btn-sm" onClick={() => handleCopyValue(value)}>
                 Copy
               </button>
             )}
@@ -206,8 +206,13 @@ const OrderBoxWidgets = ({
   };
 
   return (
-    <Container className="py-4">
-      <h2 className={styles.pageTitle}>Agreement Details</h2>
+    <div className="py-4 w-100">
+      <div className="mb-5">
+        <h1 className="page-main-title m-0">
+          <span className="gradient-text">Agreement Details 🤝</span>
+          <span className="sub-title d-block mt-3">Secure transaction record for Order #{order?.id || 'Pending'}</span>
+        </h1>
+      </div>
 
       <div className={styles.___container}>
         <div className={styles.__box_main}>
@@ -215,7 +220,7 @@ const OrderBoxWidgets = ({
           <div className={styles.__box_leftside}>
             <div className={styles["widget_1_con"]}>
               <RiRobot2Line className={styles.iconImg} />
-              <h4 className={styles.title_}>The Model Details</h4>
+              <h4>The Model Details</h4>
             </div>
             <div className={styles["widget_11_con"]}>
               <Col xs={0} md lg className={`${styles.img_cover} d-flex flex-column align-items-left w-100`} >
@@ -223,9 +228,9 @@ const OrderBoxWidgets = ({
                 {!order?.img && <img src={imgHolder} alt="Model Cover" />}
               </Col>
             </div>
-            <Row className={styles.infoCon_}>
-              <Link to={`/models/view/${order?.aiModelId}`} className={styles["banner-btn"]}> VIEW MODEL </Link>
-            </Row>
+            <div className="w-100 mt-3 d-flex justify-content-center">
+              <Link to={`/models/view/${order?.aiModelId}`} className="btn-glass-primary w-100 text-center" style={{maxWidth: '250px'}}> View Model </Link>
+            </div>
           </div>
 
           {/* Right: Technical Metadata details */}
@@ -233,14 +238,22 @@ const OrderBoxWidgets = ({
             <Col xs={0} md lg className={`${styles["controlCon-1"]} d-flex flex-column align-items-left w-100 gap-3 p-3`}>
               <h5 className={styles.sectionHeading}>Model Metadata</h5>
               <Row className="w-100">
-                <Col md={6}>
-                  <p><strong>Title:</strong> {order?.title || order?.aiModelData?.title || 'N/A'}</p>
-                  <p><strong>Version:</strong> {versionLabel || order?.versionName || (order?.versionId ? `#${order.versionId}` : 'Primary Version')}</p>
-                  <p><strong>Price:</strong> ${Number(order?.purchasePrice || order?.aiModelData?.price || 0).toFixed(2)}</p>
-                </Col>
-                <Col md={6}>
-                  <p><strong>Model ID:</strong> {order?.aiModelId || 'N/A'}</p>
-                  <p><strong>Order ID:</strong> {order?.id || 'N/A'}</p>
+                <Col md={12}>
+                  <div className="d-flex justify-content-between border-bottom pb-2 mb-2" style={{borderColor: 'var(--border-glass) !important'}}>
+                    <strong>Title:</strong> <span>{order?.title || order?.aiModelData?.title || 'N/A'}</span>
+                  </div>
+                  <div className="d-flex justify-content-between border-bottom pb-2 mb-2" style={{borderColor: 'var(--border-glass) !important'}}>
+                    <strong>Version:</strong> <span>{versionLabel || order?.versionName || (order?.versionId ? `#${order.versionId}` : 'Primary Version')}</span>
+                  </div>
+                  <div className="d-flex justify-content-between border-bottom pb-2 mb-2" style={{borderColor: 'var(--border-glass) !important'}}>
+                    <strong>Price:</strong> <span>${Number(order?.purchasePrice || order?.aiModelData?.price || 0).toFixed(2)}</span>
+                  </div>
+                  <div className="d-flex justify-content-between border-bottom pb-2 mb-2" style={{borderColor: 'var(--border-glass) !important'}}>
+                    <strong>Model ID:</strong> <span>{order?.aiModelId || 'N/A'}</span>
+                  </div>
+                  <div className="d-flex justify-content-between pb-2 mb-2">
+                    <strong>Order ID:</strong> <span>{order?.id || 'N/A'}</span>
+                  </div>
                 </Col>
               </Row>
               <hr />
@@ -254,7 +267,7 @@ const OrderBoxWidgets = ({
           <div className={styles.__box_leftside}>
             <div className={styles["widget_1_con"]}>
               <RiRobot2Line className={styles.iconImg} />
-              <h4 className={styles.title_}>Seller Data</h4>
+              <h4>Seller Data</h4>
             </div>
             <div className={styles["widget_11_con"]}>
               <UserProfileStrip
@@ -277,28 +290,28 @@ const OrderBoxWidgets = ({
                 <h3 className={getStatusClass(status)}>
                   {status}
                 </h3>
-                <p className="text-muted small mt-1 mb-0">Created on {new Date(order?.createdAt).toLocaleDateString()}</p>
+                <p className={styles.dateText}>Created on {new Date(order?.createdAt).toLocaleDateString()}</p>
               </div>
 
               {order?.dispute && (
-                <div className="border rounded p-3 mt-3 bg-light">
+                <div className={styles.infoBox}>
                   <h6 className="mb-2">Dispute Details</h6>
-                  <p className="mb-1"><strong>Status:</strong> {order.dispute.status}</p>
-                  <p className="mb-1"><strong>Reason:</strong> {order.dispute.reason || '—'}</p>
-                  <p className="mb-1"><strong>Opened:</strong> {order.dispute.createdAt ? new Date(order.dispute.createdAt).toLocaleDateString() : '—'}</p>
-                  <p className="mb-1"><strong>Opened By:</strong> {partyDisplayName(order.dispute.openedBy, 'Unknown')}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Status:</strong> {order.dispute.status}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Reason:</strong> {order.dispute.reason || '—'}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Opened:</strong> {order.dispute.createdAt ? new Date(order.dispute.createdAt).toLocaleDateString() : '—'}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Opened By:</strong> {partyDisplayName(order.dispute.openedBy, 'Unknown')}</p>
                   {order.dispute.resolution && (
-                    <p className="mb-0"><strong>Resolution:</strong> {order.dispute.resolution}</p>
+                    <p className={`${styles.infoText} mb-0`}><strong>Resolution:</strong> {order.dispute.resolution}</p>
                   )}
                 </div>
               )}
 
               {isAdmin && order?.transaction && (
-                <div className="border rounded p-3 mt-3">
+                <div className={styles.infoBox}>
                   <h6 className="mb-2">Transaction Breakdown</h6>
-                  <p className="mb-1"><strong>Gross:</strong> ${Number(order.transaction.grossAmount || 0).toFixed(2)} {order.transaction.currency || 'USD'}</p>
-                  <p className="mb-1"><strong>Platform Fee:</strong> ${Number(order.transaction.platformFee || 0).toFixed(2)}</p>
-                  <p className="mb-0"><strong>Developer Payout:</strong> ${Number(order.transaction.developerPayout || 0).toFixed(2)}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Gross:</strong> ${Number(order.transaction.grossAmount || 0).toFixed(2)} {order.transaction.currency || 'USD'}</p>
+                  <p className={`${styles.infoText} mb-1`}><strong>Platform Fee:</strong> ${Number(order.transaction.platformFee || 0).toFixed(2)}</p>
+                  <p className={`${styles.infoText} mb-0`}><strong>Developer Payout:</strong> ${Number(order.transaction.developerPayout || 0).toFixed(2)}</p>
                 </div>
               )}
 
@@ -307,37 +320,37 @@ const OrderBoxWidgets = ({
                 {/* Buyer (Client) Actions */}
                 {isBuyer && status === 'PENDING' && (
                   <>
-                    <Link to={`/stripe?orderId=${order.id}`} className={`btn btn-success py-2 fw-bold text-white text-center w-100 ${styles.actionBtn}`}>
+                    <Link to={`/stripe?orderId=${order.id}`} className={`btn-glass-primary py-2 fw-bold text-center w-100 ${styles.actionBtn}`}>
                       Proceed to Pay (${Number(order.purchasePrice).toFixed(2)})
                     </Link>
-                    <button onClick={cancelOrderHandler} className={`btn btn-outline-danger py-2 w-100 ${styles.actionBtn}`}>
+                    <button onClick={cancelOrderHandler} className={`btn-glass-danger py-2 w-100 ${styles.actionBtn}`}>
                       Cancel Order
                     </button>
                   </>
                 )}
 
                 {isBuyer && (status === 'PAID' || status === 'DELIVERED') && !order?.dispute && (
-                  <button onClick={openDisputeHandler} className={`btn btn-warning py-2 fw-bold w-100 ${styles.actionBtn}`}>
+                  <button onClick={openDisputeHandler} className={`btn-glass-outline py-2 fw-bold w-100 ${styles.actionBtn}`} style={{borderColor: 'var(--color-warning)', color: 'var(--color-warning)'}}>
                     Open Dispute / Request Refund
                   </button>
                 )}
 
                 {/* Developer (Seller) Actions */}
                 {isSeller && status === 'PAID' && (
-                  <button onClick={confirmOrdeerHandler} className={`btn btn-primary py-2 fw-bold text-white w-100 ${styles.actionBtn} ${styles.primaryActionBtn}`}>
+                  <button onClick={confirmOrdeerHandler} className={`btn-glass-primary py-2 fw-bold w-100 ${styles.actionBtn}`}>
                     Confirm Delivery
                   </button>
                 )}
 
                 {/* Shared / Admin Operations */}
                 {isAdmin && (status === 'PAID' || status === 'DELIVERED') && (
-                  <button onClick={refundOrderHandler} className={`btn btn-outline-danger py-2 w-100 ${styles.actionBtn}`}>
+                  <button onClick={refundOrderHandler} className={`btn-glass-danger py-2 w-100 ${styles.actionBtn}`}>
                     Refund Order
                   </button>
                 )}
 
                 {isAdmin && status === 'DISPUTED' && (
-                  <button onClick={resolveDisputeHandler} className={`btn btn-danger py-2 fw-bold w-100 ${styles.actionBtn}`}>
+                  <button onClick={resolveDisputeHandler} className={`btn-glass-danger py-2 fw-bold w-100 ${styles.actionBtn}`}>
                     Resolve Dispute
                   </button>
                 )}
@@ -351,7 +364,7 @@ const OrderBoxWidgets = ({
           <div className={styles.__box_leftside}>
             <div className={styles["widget_1_con"]}>
               <RiRobot2Line className={styles.iconImg} />
-              <h4 className={styles.title_}>Buyer Data</h4>
+              <h4>Buyer Data</h4>
             </div>
             <div className={styles["widget_11_con"]}>
               <UserProfileStrip
@@ -393,7 +406,7 @@ const OrderBoxWidgets = ({
           </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

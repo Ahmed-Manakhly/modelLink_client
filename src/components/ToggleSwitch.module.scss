@@ -7,51 +7,46 @@
         -webkit-appearance: none !important;
         appearance: none !important;
         &:checked + div {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0.4) 100%);
+            border-color: var(--primary);
+            box-shadow: 0 0 8px var(--primary-glow, rgba(34, 211, 238, 0.5));
         }
         & { appearance: none; }
         &:checked + div {
             .circle {
-                left: calc(100% - 28px);
-                // background-color: var(--primary);
-                .on {
-                    display: block;
-                }
-                .off {
-                    display: none;
-                }
+                left: calc(100% - 16px);
+                background-color: var(--bg-main, #000);
+                .on { display: block; }
+                .off { display: none; }
             }
         }
     }
     div {
-        margin-top: 10px;
-        background-color: var(--cultured);
-        width: 68px;
-        height: 32px;
-        @extend %rad ;
-        @extend %tran ;
+        margin-top: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--on-surface-variant, #94A3B8);
+        width: 36px;
+        height: 20px;
+        border-radius: 10px;
+        transition: 0.3s;
         position: relative;
         cursor: pointer;
         .circle {
             font-weight: 900;
-            background-color: var(--on-surface);
-            width: 26px;
-            height: 26px;
+            background-color: var(--on-surface, #E2E8F0);
+            width: 14px;
+            height: 14px;
             position: absolute;
-            @extend %rad50 ;
-            top : 2.5px;
+            border-radius: 50%;
+            top : 2px;
             left: 2px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
-            @extend %tran ;
-            .on {
-                display: none;
-            }
-            .off {
-                display: block;
-            }
+            color: transparent;
+            transition: 0.3s;
+            .on { display: none; }
+            .off { display: none; }
         }
     }
 }

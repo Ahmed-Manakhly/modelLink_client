@@ -678,14 +678,14 @@ div[dir] {
 .PageTable {
   width: 95%;
   margin: 5rem auto;
-  border: 2px solid var(--cultured);
-  background-color: rgba(238, 238, 238, 0.278);
-  padding: 1rem;
-  border-radius: var(--border-radius-md);
-  -webkit-border-radius: var(--border-radius-md);
-  -moz-border-radius: var(--border-radius-md);
-  -ms-border-radius: var(--border-radius-md);
-  -o-border-radius: var(--border-radius-md);
+  border: var(--border-standard, 1px solid rgba(255, 255, 255, 0.08));
+  background: transparent;
+  padding: 0;
+  border-radius: var(--radius-card, 12px);
+  -webkit-border-radius: var(--radius-card, 12px);
+  -moz-border-radius: var(--radius-card, 12px);
+  -ms-border-radius: var(--radius-card, 12px);
+  -o-border-radius: var(--radius-card, 12px);
 }
 
 .tableWrapper {
@@ -761,6 +761,7 @@ div[dir] {
       outline: none !important;
       border: none;
       color: var(--sonic-silver);
+      background: transparent !important;
       padding: 0px !important;
       margin: 0 !important;
       border-radius: 15px;
@@ -774,12 +775,24 @@ div[dir] {
   .react-international-phone-country-selector-dropdown {
     outline: none !important;
     border: 2px solid var(--cultured);
+    background: var(--bg-surface) !important;
     border-radius: 15px;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     -ms-border-radius: 15px;
     -o-border-radius: 15px;
     padding: 12px;
+    color: var(--on-surface, #E2E8F0) !important;
+
+    li {
+      background: transparent !important;
+      color: var(--on-surface, #E2E8F0) !important;
+
+      &:hover,
+      &.react-international-phone-country-selector-dropdown-active {
+        background: rgba(34, 211, 238, 0.1) !important;
+      }
+    }
   }
 }
 
@@ -822,27 +835,33 @@ div[dir] {
 /* ========================================================
    Global Page Titles
    ======================================================== */
+
+
+.gradient-text {
+  background: var(--gradient-text, linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  line-height: 1.2;
+}
+
 .page-main-title {
   text-align: left;
   margin-bottom: 30px;
   font-weight: 700;
-  
+
   .gradient-text {
-      font-size: clamp(2rem, 4vw, 3rem);
-      background: var(--gradient-text, linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: block;
-      margin-bottom: 10px;
-      line-height: 1.2;
+    font-size: clamp(2rem, 4vw, 3rem);
+    display: block;
+    margin-bottom: 10px;
   }
-  
-    .sub-title {
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
-      color: var(--on-surface-variant, var(--sonic-silver));
-      font-weight: 500;
-      line-height: 1.5;
+
+  .sub-title {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--on-surface-variant, var(--sonic-silver));
+    font-weight: 500;
+    line-height: 1.5;
   }
 }
 
@@ -850,16 +869,11 @@ div[dir] {
   text-align: center;
   margin-bottom: 30px;
   font-weight: 700;
-  
+
   .gradient-text {
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      background: var(--gradient-text, linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: block;
-      margin-bottom: 10px;
-      line-height: 1.2;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    display: block;
+    margin-bottom: 10px;
   }
 }
 
@@ -879,51 +893,184 @@ div[dir] {
     padding: 0 10px;
   }
 }
+
 .global-banner-spacing {
-    padding-top: 20px;
-    padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.global-page-margin-top {
+  padding-top: 40px !important;
+}
+
+/* Reusable class for pages that need to clear the global sticky navbar (e.g. Dashboard, Profile) */
+.global-page-top-clearance {
+  padding-top: 40px !important;
 }
 
 /* Standardized Section Headers */
 .global-section-title {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: var(--on-surface);
-    margin-bottom: 30px;
-    letter-spacing: -0.5px;
-    text-transform: capitalize;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+  text-transform: capitalize;
+}
+
+/* Standardized Read-Only Field (like feedback message) */
+.global-read-only-field {
+  background: var(--surface-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  border: var(--border-standard);
+  border-left: 4px solid var(--primary);
+  color: var(--on-surface);
+  padding: 15px !important;
+  border-radius: var(--radius-card);
+  width: 100%;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80px;
+  transition: var(--transition-smooth);
+
+  &:hover {
+    border-color: rgba(34, 211, 238, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+  }
 }
 
 @media (max-width: 1024px) {
-    .global-section-title {
-        font-size: 2.2rem;
-        margin-bottom: 20px;
-    }
+  .global-section-title {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
 }
 
 /* Standardized Carousel Item Gaps */
 .global-carousel-item {
-    padding: 0 10px;
-    display: flex;
-    align-items: stretch;
+  padding: 0 10px;
+  display: flex;
+  align-items: stretch;
 }
 
 /* Standardized Section Spacing */
 .global-section-spacing {
-    margin-top: 80px;
-    margin-bottom: 80px;
+  margin-top: 80px;
+  margin-bottom: 80px;
 }
 
 .global-section-spacing-top {
-    padding-top: 80px;
+  padding-top: 80px;
 }
 
 @media (max-width: 1024px) {
-    .global-section-spacing {
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
-    .global-section-spacing-top {
-        padding-top: 50px;
-    }
+  .global-section-spacing {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .global-section-spacing-top {
+    padding-top: 50px;
+  }
+}
+
+.table-action-icon {
+  color: var(--primary, #5DB8DD);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--primary-glow, #22D3EE);
+    transform: scale(1.1);
+  }
+
+  &.delete:hover {
+    color: var(--color-error, #ef4444);
+  }
+}
+
+
+.MuiDataGrid-root .MuiDataGrid-columnHeaders,
+.MuiDataGrid-root .MuiDataGrid-columnHeadersInner,
+.MuiDataGrid-root .MuiDataGrid-columnHeaderTitleContainer,
+.MuiDataGrid-root .MuiDataGrid-columnHeader,
+.MuiDataGrid-root .MuiDataGrid-filler {
+  background-color: var(--bg-surface, #1e293b) !important;
+  color: var(--on-surface, #E2E8F0) !important;
+  border-bottom: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08)) !important;
+}
+
+.table-responsive,
+.table-responsive-sm,
+.table-responsive-md,
+.table-responsive-lg,
+.table-responsive-xl {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+
+  table {
+    white-space: nowrap;
+    min-width: max-content;
+  }
+}
+
+/* ========================================================
+   Horizontal Table Scroll Wrapper (Neural Midnight)
+   Used in VersionHistoryPanel and MetricsComparisonTable.
+   ======================================================== */
+.mui-table-scroller {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // CRITICAL: The global @media (max-width: 480px) .PageTable rule
+  // applies display:flex + overflow:hidden to any .PageTable element.
+  // That kills the table layout and makes this scroll wrapper useless.
+  // Override it here at all breakpoints so the table stays a proper table.
+  table,
+  .PageTable {
+    display: table !important;
+    overflow: visible !important;
+    min-width: max-content !important;
+    width: 100% !important;
+    flex-direction: unset !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+  }
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
 }

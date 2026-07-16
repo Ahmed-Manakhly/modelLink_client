@@ -107,7 +107,10 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
       <h6 style={{color: 'var(--sonic-silver)', marginTop: '5px'}}>{role}</h6>
     </li>
     <li style={{padding: '10px 20px 25px 20px'}}>
-        <button onClick={logoutAction} className={`btn-glass-outline`} style={{width: '100%'}}>{'Logout'}</button>
+        <button onClick={logoutAction} className="btn-glass-logout" style={{width: '100%'}}>
+          <FiLogOut />
+          <span>Logout</span>
+        </button>
     </li>
     <hr />
     <li className={` ${styles.container_} ${styles['menu-category']} `}>

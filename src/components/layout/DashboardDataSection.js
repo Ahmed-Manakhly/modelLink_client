@@ -29,6 +29,8 @@ const DashboardDataSection = ({
     extraFilters = null,
     enableBulkSelection = false,
     bulkActions = null,
+    fluid = false,
+    hideTitle = false,
 }) => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
@@ -281,12 +283,14 @@ const DashboardDataSection = ({
         {
             label: 'Reset Filters',
             onClick: handleRefresh,
-            disabled: false
+            disabled: false,
+            className: 'btn-glass-outline'
         },
         {
             label: 'Apply Filters',
             onClick: () => applyFiltersHandler(1),
-            disabled: false
+            disabled: false,
+            className: 'btn-glass-primary'
         }
     ];
 
@@ -400,7 +404,7 @@ const DashboardDataSection = ({
     };
 
     return (
-        <AppPageSection title={tableTitle}>
+        <AppPageSection title={hideTitle ? null : tableTitle} fluid={fluid}>
             {warning.show && <WarningModal onClose={closeModal} warning={warning} onAction={onAction} />}
 
             <FeaturesBox
@@ -431,18 +435,20 @@ const DashboardDataSection = ({
                 </div>
             )}
 
-            <PageTable
-                isLoading={isLoading}
-                data={data}
-                columns={finalColumns}
-                error={error}
-                skeletonCols={skeletonCols ?? (contentType === 'models' ? 6 : 5)}
-                skeletonRows={skeletonRows}
-                emptyState={emptyState}
-                enableSelection={enableBulkSelection}
-                rowSelectionModel={selectedRowIds}
-                onRowSelectionModelChange={(ids) => setSelectedRowIds(ids)}
-            />
+            <div className="mt-4">
+                <PageTable
+                    isLoading={isLoading}
+                    data={data}
+                    columns={finalColumns}
+                    error={error}
+                    skeletonCols={skeletonCols ?? (contentType === 'models' ? 6 : 5)}
+                    skeletonRows={skeletonRows}
+                    emptyState={emptyState}
+                    enableSelection={enableBulkSelection}
+                    rowSelectionModel={selectedRowIds}
+                    onRowSelectionModelChange={(ids) => setSelectedRowIds(ids)}
+                />
+            </div>
 
             <BottomFeaturesBox
                 pagination={pagination}

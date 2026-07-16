@@ -14,12 +14,13 @@
     background: var(--gradient-marketing);
     border-radius: var(--radius-card);
     box-sizing: border-box;
+    min-height: 400px;
 }
 
 .achievment__container {
     display: grid;
-    grid-template-columns: 40% 60%;
-    gap: 3rem;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
     align-items: center;
 }
 
@@ -144,9 +145,9 @@
 }
 
 .team__mem:hover {
-    border-color: rgba(34, 211, 238, 0.3);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 
 }
 .team__mem__img{
@@ -159,18 +160,20 @@
     display: block;
     object-fit: cover ;
     width: 100%;
-    // height: 150%;
-    filter: saturate(0);
     margin: auto;
     border-radius: 15px;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     -ms-border-radius: 15px;
     -o-border-radius: 15px;
+    background-color: transparent;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: var(--transition-timing);
 }
 
 .team__mem:hover img {
-    filter: saturate(1);
+    filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.4));
 }
 
 .team__mem__info * {
@@ -189,18 +192,40 @@
     right: -100%;
     display: flex;
     flex-direction: column;
-    background-color: var(--on-surface);
+    background: rgba(15, 23, 42, 0.95); /* Dark solid BG */
+    backdrop-filter: blur(12px);
+    border-left: var(--border-standard);
+    border-top: var(--border-standard);
+    border-bottom: var(--border-standard);
     border-radius: 1rem 0 0 1rem;
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     transition: var(--transition-timing);
     -webkit-transition: var(--transition-timing);
     -moz-transition: var(--transition-timing);
     -ms-transition: var(--transition-timing);
     -o-transition: var(--transition-timing);
+    padding: 0.5rem;
 }
 
-.team__mem__social a {
-    padding: 1rem;
+.team__social__link {
+    font-size: 16px;
+    padding: 5px;
+    background: transparent;
+    color: var(--sonic-silver);
+    border: 1px solid var(--sonic-silver);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 4px 0;
+    transition: var(--transition-timing);
+}
+
+.team__social__link:hover {
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 .team__mem:hover .team__mem__social {

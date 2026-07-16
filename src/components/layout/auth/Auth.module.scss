@@ -355,9 +355,16 @@
         }
     }
     .error-text {
-        font-size: 12px;
+        border-left: 4px solid var(--color-danger);
+        background-color: rgba(239, 68, 68, 0.05);
         color: var(--color-danger);
-        margin-top: 1px;
+        padding: 10px 15px !important;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-top: 5px;
+        height: auto;
+        display: flex;
+        align-items: center;
     }
     p{
         margin-bottom: .3rem;

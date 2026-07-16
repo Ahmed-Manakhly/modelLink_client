@@ -43,8 +43,9 @@
       position: absolute;
       left: 25px;
       top: 10px;
-      width: 11px;
-      height: 11px;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--bg-surface);
       z-index: 2;
     }
     .info-box{
@@ -111,10 +112,11 @@
           width: 20px;
           height: 20px;
           @extend %rad ;
-          background-color: var(--color-success); color: var(--bg-main);
-          font-style: italic;
-          color: var(--on-surface);
-          font-size: 12px;
+          background-color: var(--color-success); 
+          color: var(--bg-main, #0b0f19) !important;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 11px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -151,12 +153,11 @@
       .UserHolder{
           font-size:1.1rem;
           font-weight: 500;
-          color: var(--on-surface);
-          background-color: var(--color-success); color: var(--bg-main);
+          background-color: var(--color-success); 
+          color: var(--bg-main);
           top: 0;
           left: 0;
           position: absolute;
-          display: block;
           width: 100%;
           height: 100%;
           @extend %rad ;

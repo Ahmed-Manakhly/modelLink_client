@@ -19,7 +19,7 @@ const isPhoneValid = (phone) => {
     }
 };
 
-const FormProfile = ({onUpdateProfileAction  , isChanged}) => {
+const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
 
     const userData = useSelector(state => state.auth.userData) || {};
     const { role ,first_name , org_name , last_name , org_phone,country:userCountry,org_desc} = userData;
@@ -32,8 +32,10 @@ const FormProfile = ({onUpdateProfileAction  , isChanged}) => {
         const org_phone_r = ((org_phone && !isEditing.org_phone) || (!org_phone && phoneIsValid )|| (org_phone && isEditing.org_phone && phoneIsValid))? 1:0
         const org_desc_r = ((org_desc && !isEditing.org_desc) || (!org_desc && desc )|| (org_desc && isEditing.org_desc && desc))? 1:0
 
-        setRate((((first_name_r+last_name_r+org_name_r+org_phone_r+org_desc_r) / 5)*100).toFixed(0))
-    })
+        const newRate = (((first_name_r+last_name_r+org_name_r+org_phone_r+org_desc_r) / 5)*100).toFixed(0);
+        setRate(newRate);
+        if (onRateChange) onRateChange(newRate);
+    });
 
     const [phone, setPhone] = useState(org_phone || '');
     const [country, setCountry] = useState({ name: userCountry || '' });
@@ -94,19 +96,9 @@ const FormProfile = ({onUpdateProfileAction  , isChanged}) => {
     const phoneClasses = phoneIsInValid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
 
     return(
-        <Container>
-            <section className={`${classes.secpro} w-100`}>
-            <Container  className={`g-5 p-md-3 gap-5  justify-content-center ${classes['theMain']}`}>
-                <Row className={`d-flex flex-column justify-content-center ms-lg-5 me-lg-5 ps-lg-5 pe-lg-5 ${classes['container_con']}`}>
-                    <div className={classes["container"]}>
-                        <h2 className={classes["title"]}>{`Completion Rate: ${rate}%`}</h2>
-                    </div>
-                    <div className={`${classes['progressLineOut']}`}>
-                        <div className={`${classes['progressLineIn']}`} style={{width : `${rate}%`}}>
-                        </div>
-                    </div>
-                </Row>
-                <Col  className={`${classes["contact-col"]} flex-fill`}>
+        <div className="w-100">
+            <section className="w-100">
+                <div className={`${classes["contact-col"]} w-100`}>
                     <Form method='post'>
                         <Row className={`justify-content-md-center d-flex flex-column justify-content-center  p-lg-4 align-items-center`}>
                             <Row >
@@ -190,19 +182,18 @@ const FormProfile = ({onUpdateProfileAction  , isChanged}) => {
                             </Row>
                             <Row >
                                 <Col xs={0} md lg  className={`${classes["form-actions"]} `}>
-                                    <button disabled={!formIsValid||isSubmitting} className={`${classes["feature-btn"]} `}
+                                    <button disabled={!formIsValid||isSubmitting} className="btn-glass-primary w-100" style={{ padding: '12px', fontSize: '1rem' }}
                                         onClick={handelSubmit} type="submit">{isSubmitting?'Updating...':"Update"}</button>
                                 </Col>
                                 <Col xs={0} md lg  className={`${classes["form-actions"]} `}>
-                                    <button type="button" onClick={cancelHandler} className={`${classes["cancel-btn"]} `}>Cancel</button>
+                                    <button type="button" onClick={cancelHandler} className="btn-glass-danger w-100" style={{ padding: '12px', fontSize: '1rem' }}>Cancel</button>
                                 </Col>
                             </Row>
                         </Row>
                     </Form>
-                </Col>
-            </Container>
+                </div>
             </section>
-        </Container>
+        </div>
     )
 }
 export default FormProfile

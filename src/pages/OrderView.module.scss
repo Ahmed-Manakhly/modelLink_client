@@ -1,0 +1,51 @@
+.pageWrapper {
+    min-height: 80vh;
+    padding-bottom: 100px;
+}
+
+.paymentBanner {
+    background: var(--surface-glass);
+    border: 1px solid var(--primary);
+    backdrop-filter: blur(10px);
+}
+
+.bannerTitle {
+    color: var(--primary);
+}
+
+.bannerText {
+    color: var(--on-surface);
+}
+
+.bannerHighlight {
+    color: var(--primary);
+}
+
+.modalContent {
+    color: var(--on-surface);
+}
+
+.modalHeader {
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.formLabel {
+    color: var(--on-surface-variant);
+}
+
+.formTextarea {
+    background-color: var(--surface-glass) !important;
+    border: 1px solid var(--border-glass) !important;
+    color: var(--on-surface) !important;
+    
+    &:focus {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-color: var(--primary) !important;
+        color: var(--on-surface) !important;
+        box-shadow: 0 0 0 0.25rem rgba(34, 211, 238, 0.25) !important;
+    }
+}
+
+.modalFooter {
+    border-top: 1px solid var(--border-glass);
+}

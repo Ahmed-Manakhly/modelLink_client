@@ -202,11 +202,11 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
                     <div className={`${classes["info"]}`}>
                       {profileLink ? (
                         <Link className={`${classes["name"]} ${classes["gradientText"]}`} to={profileLink}>
-                          <span title={displayName}>{displayName?.length > 15 ? displayName.slice(0, 15) + '...' : displayName}</span>
+                          <span title={displayName}>{displayName?.length > 15 ? displayName.toUpperCase().slice(0, 15) + '...' : displayName?.toUpperCase()}</span>
                         </Link>
                       ) : (
                         <span className={`${classes["name"]} ${classes["gradientText"]}`} title={displayName}>
-                          {displayName?.length > 15 ? displayName.slice(0, 15) + '...' : displayName}
+                          {displayName?.length > 15 ? displayName.toUpperCase().slice(0, 15) + '...' : displayName?.toUpperCase()}
                         </span>
                       )}
 

@@ -9,7 +9,7 @@ import { getModelMarketingFields } from '../lib/modelHelpers';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-function PopularServices({ models, title, viewAllLink }) {
+function PopularServices({ models, title, viewAllLink, titleClassName = 'global-section-title', fluid = false }) {
     const dispatch = useDispatch();
     const onAddProduct =(id, versionId)=> {
         const item = models.find((item)=>item.id === id)
@@ -36,10 +36,13 @@ function PopularServices({ models, title, viewAllLink }) {
             items: 1
         }
     };
+    const Wrapper = fluid ? 'div' : GlobalWrapper;
     return (
-    <GlobalWrapper className="global-section-spacing">
+    <Wrapper className={fluid ? "w-100 mb-5" : "global-section-spacing"}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
-            <h2 className="global-section-title">{`${title ? title : 'Popular Services!'}`}</h2>
+            {title !== null && (
+                <h2 className={titleClassName}>{title || 'Popular Services!'}</h2>
+            )}
             {viewAllLink && (
                 <Link to={viewAllLink} className="btn-glass-outline">
                     View all
@@ -78,7 +81,7 @@ function PopularServices({ models, title, viewAllLink }) {
                 />
             )})}
         </Carousel>
-    </GlobalWrapper>
+    </Wrapper>
     )
 }
 

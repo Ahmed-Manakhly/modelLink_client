@@ -1,24 +1,26 @@
 import classes from './About.module.scss' ;
 import img from "../assets/Content team.svg" ;
-import img_1 from "../assets/userHolder.jpg" ;
-import img_2 from "../assets/userHolder.jpg" ;
-import img_3 from "../assets/userHolder.jpg" ;
-import img_4 from "../assets/userHolder.jpg" ;
-import img_5 from "../assets/userHolder.jpg" ;
-import img_6 from "../assets/userHolder.jpg" ;
-import img_7 from "../assets/userHolder.jpg" ;
-import img_8 from "../assets/userHolder.jpg" ;
+import img_1 from "../assets/team_placeholder.svg" ;
+import img_2 from "../assets/team_placeholder.svg" ;
+import img_3 from "../assets/team_placeholder.svg" ;
+import img_4 from "../assets/team_placeholder.svg" ;
+import img_5 from "../assets/team_placeholder.svg" ;
+import img_6 from "../assets/team_placeholder.svg" ;
+import img_7 from "../assets/team_placeholder.svg" ;
+import img_8 from "../assets/team_placeholder.svg" ;
 import {Link} from 'react-router-dom' ;
 import GlobalWrapper from '../components/layout/GlobalWrapper';
 import { FiTarget, FiLayers, FiGlobe } from 'react-icons/fi';
-// import img_9 from "../assets/tm9.jpg" ;
-// import img_10 from "../assets/tm10.jpg" ;
+import Header from '../components/layout/Header';
+import Val from '../components/Val';
+import { vals } from '../constants/marketingData';
+import marketingJoinUsImg from '../assets/robot-mascot.png';
 
 //----------------------------------------
 function About() {
     return (
         <>
-            <GlobalWrapper className="global-banner-spacing">
+            <GlobalWrapper className="global-banner-spacing global-page-margin-top">
             <section className={classes["about__achievment"]}>
             <div className={classes["achievment__container"]}>
                     <div className={classes["achievment__left"]}>
@@ -52,11 +54,12 @@ function About() {
             </div>
             </section>
             </GlobalWrapper>
+            <GlobalWrapper className="global-section-spacing">
             <section className={classes["team"]}>
                 <h2 className="page-main-title" style={{textAlign: 'center', marginBottom: '40px'}}>
                     <span className="gradient-text">Meet Our Team 🤝</span>
                 </h2>
-                <div className={` ${classes["team__container"]} ${classes['container']}`}>
+                <div className={classes["team__container"]}>
 
                     <article className={classes["team__mem"]}>
                         <div className={classes["team__mem__img"]}>
@@ -67,9 +70,20 @@ function About() {
                             <p>CEO</p>
                         </div>
                         <div className={classes["team__mem__social"]}>
-                            <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                            <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                            <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                            <Link to="/" className={classes["team__social__link"]}>
+                                <ion-icon name="logo-facebook"></ion-icon>
+                            </Link>
+                            <Link to="/" className={classes["team__social__link"]}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                                </svg>
+                            </Link>
+                            <Link to="/" className={classes["team__social__link"]}>
+                                <ion-icon name="logo-instagram"></ion-icon>
+                            </Link>
+                            <Link to="/" className={classes["team__social__link"]}>
+                                <ion-icon name="logo-linkedin"></ion-icon>
+                            </Link>
                         </div>
                     </article>
             <article className={classes["team__mem"]}>
@@ -81,9 +95,20 @@ function About() {
                     <p>AI Developer</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
             <article className={classes["team__mem"]}>
@@ -95,9 +120,20 @@ function About() {
                     <p>Backend Developer</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
 
@@ -110,9 +146,20 @@ function About() {
                     <p>Software Engineer</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
 
@@ -125,9 +172,20 @@ function About() {
                     <p>Operation Manager</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
 
@@ -140,9 +198,20 @@ function About() {
                     <p>Frontend Developer</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
 
@@ -155,9 +224,20 @@ function About() {
                     <p>team leader</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
 
@@ -170,13 +250,39 @@ function About() {
                     <p>Account Manager</p>
                 </div>
                 <div className={classes["team__mem__social"]}>
-                    <Link to="/https://instagram.com" ><ion-icon name="logo-instagram"></ion-icon></Link>
-                    <Link to="/https://facebook.com" ><ion-icon name="logo-facebook"></ion-icon></Link>
-                    <Link to="/https://twitter.com" ><ion-icon name="logo-twitter"></ion-icon></Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </Link>
+                    <Link to="/" className={classes["team__social__link"]}>
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </Link>
                 </div>
             </article>
         </div>
     </section>
+    </GlobalWrapper>
+
+    <Header
+        title_1={'Join the'}
+        title_2={'Ecosystem'}
+        txt_1={''}
+        txt_3={"Access a growing repository of specialized AI models tested for performance and security. Distribute your AI creations to a global audience with seamless integration and licensing."}
+        banner={marketingJoinUsImg}
+        action={true}
+        actionTo={'/auth?mode=signup'}
+        actionTitle={'Get Started Now'}
+        reverse={true}
+    />
+    
+    <Val products={vals} title={'Why Choose ModelLink?'} />
 </>
     )
 }

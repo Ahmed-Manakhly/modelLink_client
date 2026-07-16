@@ -321,7 +321,7 @@ function Controls({ filterOptions = {}, children }) {
     };
 
     return (
-        <GlobalWrapper className={`global-banner-spacing ${classes.discoveryContainer}`}>
+        <GlobalWrapper className={`global-banner-spacing global-page-margin-top ${classes.discoveryContainer}`}>
             <div className={classes.categoriesTopBar}>
                 <h2 className={classes.mainTitle}>
                     <span className={classes.gradientText}>Discover Premium Production-Ready AI Models 🚀</span>

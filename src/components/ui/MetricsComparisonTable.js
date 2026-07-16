@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Table } from 'react-bootstrap';
 import ModelViewSection from './ModelViewSection';
 
-const MetricsComparisonTable = ({ versions = [] }) => {
+const MetricsComparisonTable = ({ versions = [], fluid = false }) => {
     const activeVersions = versions.filter((v) => v.isActive !== false);
 
     const { metricNames, matrix } = useMemo(() => {
@@ -25,9 +25,9 @@ const MetricsComparisonTable = ({ versions = [] }) => {
     if (!activeVersions.length) return null;
 
     return (
-        <ModelViewSection title="Metrics Comparison">
-            <div style={{ overflowX: 'auto', width: '100%' }}>
-                <Table striped bordered size="sm" className="mb-0 w-100">
+        <ModelViewSection title="Metrics Comparison" fluid={fluid}>
+            <div className="mui-table-scroller mt-5 pt-3 w-100">
+                <Table variant="dark" bordered hover size="sm" className="mb-0 PageTable" style={{ minWidth: 'max-content', width: '100%', background: 'var(--surface-glass)', backdropFilter: 'blur(var(--glass-blur))', whiteSpace: 'nowrap' }}>
                     <thead>
                         <tr>
                             <th>Metric</th>
@@ -54,7 +54,9 @@ const MetricsComparisonTable = ({ versions = [] }) => {
                                                 <>
                                                     {cell.value}%
                                                     {cell.metricsUrl && (
-                                                        <> {' '}<a href={cell.metricsUrl} target="_blank" rel="noreferrer">Details</a></>
+                                                        <div className="mt-1">
+                                                            <a href={cell.metricsUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontSize: '13px', textDecoration: 'underline' }}>Details</a>
+                                                        </div>
                                                     )}
                                                 </>
                                             ) : '—'}

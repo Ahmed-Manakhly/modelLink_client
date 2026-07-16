@@ -358,11 +358,11 @@
                     &::-webkit-slider-thumb {
                         pointer-events: all;
                         -webkit-appearance: none;
-                        width: 16px;
-                        height: 16px;
+                        width: 12px;
+                        height: 12px;
                         border-radius: 50%;
                         background-color: var(--bg-main);
-                        border: 3px solid var(--primary);
+                        border: 2px solid var(--primary);
                         cursor: pointer;
                         box-shadow: var(--glass-shadow);
                     }
@@ -469,7 +469,7 @@
                 width: 16px;
                 height: 16px;
                 cursor: pointer;
-                accent-color: var(--primary);
+                accent-color: var(--color-success);
             }
         }
     }

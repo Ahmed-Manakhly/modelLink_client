@@ -72,18 +72,21 @@ const FeedbackForm = ({ formTitle, avatar, orgUsername, thisUserRole, firstName,
 
 
   return (
-    <Container>
-      <h2 className={styles["title"]}>{formTitle}</h2>
-      <Container className={`${styles.secpro}`}>
-        <form onSubmit={handleSubmit} className={`${styles["contact-col"]} `} >
-          <Row xs={0} md lg className={`${styles["stars-con"]}`} >
-            <Col className={`${styles["stars-con-2"]}`} >
+    <div className={`mb-5 pb-5 w-100 ${styles.feedbackWrapper}`}>
+      <div className="mb-4">
+        <h2 className="page-main-title m-0">
+          <span className="gradient-text">{formTitle}</span>
+        </h2>
+      </div>
+      <div className={`glass-container py-4 mb-5 ${styles.secpro}`}>
+        <form onSubmit={handleSubmit} className={`${styles["contact-col"]} w-100`} >
+          <Row className={`${styles["stars-con"]} w-100`} >
+            <Col className={`${styles["stars-con-2"]} d-flex flex-row`} >
               {[1, 2, 3, 4, 5].map((star) => (
                 <Col
-                  className={`${styles.star}`}
+                  className={`${styles.star} ${star <= rating ? styles.starActive : ''}`}
                   key={star}
                   onClick={() => handleRatingClick(star)}
-                  style={{ color: star <= rating ? '#ffc107' : '#e4e5e9', cursor: 'pointer' }}
                 >
                   ★
                 </Col>
@@ -103,24 +106,26 @@ const FeedbackForm = ({ formTitle, avatar, orgUsername, thisUserRole, firstName,
                   {!firstName && <h3 className={styles.title_} >{orgUsername?.toUpperCase()?.slice(0, 9)}</h3>}
                   <h6 className={styles.info}>{thisUserRole ? thisUserRole : ''}</h6>
                 </div>
+                <div className="mt-4 w-100 d-flex justify-content-center">
+                  <button disabled={!formIsValid || isSubmitting} className="btn-glass-primary px-4 py-2 fw-bold w-100" type="submit">
+                    {isSubmitting ? 'submitting...' : 'Submit Review'}
+                  </button>
+                </div>
               </div>
             </Col>
-            <Col xs={0} md lg className={`${descClasses}`} >
-              <label htmlFor='desc'>Your Feedback</label>
+            <Col xs={0} md lg className={`${descClasses} d-flex flex-column`} >
               <textarea id='desc' name="desc" cols="30" rows="7" placeholder="Leave your review here..." required
-                onChange={descChangeHandler} onBlur={descBlurHandler} value={reviewText} />
+                onChange={descChangeHandler} onBlur={descBlurHandler} value={reviewText} 
+                className="mb-2 w-100" />
+              <label htmlFor='desc' className="align-self-start mt-2">Your Feedback</label>
               {descIsInvalid && <p className={styles['error-text']}>Your Feedback Must Not Be Empty</p>}
             </Col>
           </Row>
 
-          <Row className={`${styles["form-actions"]} `}>
-            <Col xs={0} md lg  >
-              <button disabled={!formIsValid || isSubmitting} className={`${styles["feature-btn"]} `} type="submit">{isSubmitting ? 'submitting...' : 'Submit Review'}</button>
-            </Col>
-          </Row>
+
         </form>
-      </Container>
-    </Container>
+      </div>
+    </div>
   );
 };
 

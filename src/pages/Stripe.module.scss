@@ -1,0 +1,87 @@
+.successIcon {
+    color: var(--primary);
+}
+
+.successTitle {
+    font-weight: 800;
+    font-family: var(--font-primary, "Poppins", sans-serif);
+    color: var(--primary);
+}
+
+.successText {
+    color: var(--on-surface-variant);
+}
+
+.checkoutHeader {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 2rem;
+}
+
+.checkoutTitle {
+    color: var(--primary);
+}
+
+.checkoutSubtitle {
+    color: var(--on-surface);
+}
+
+.demoWarning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.orderSummary {
+    border-left: 5px solid var(--primary);
+    background: var(--surface-glass);
+}
+
+.summaryTitle {
+    font-weight: 700;
+    color: var(--on-surface);
+}
+
+.summaryItem {
+    color: var(--on-surface);
+}
+
+.summaryPrice {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.sectionTitle {
+    font-weight: 700;
+    color: var(--on-surface);
+}
+
+.formLabel {
+    color: var(--on-surface);
+}
+
+.formInput {
+    background: var(--surface-glass) !important;
+    border: 1px solid var(--border-glass) !important;
+    color: var(--on-surface) !important;
+
+    &:focus {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-color: var(--primary) !important;
+        color: var(--on-surface) !important;
+    }
+}
+
+.securityNote {
+    color: var(--on-surface);
+}
+
+.payButton {
+    border: none;
+    border-radius: 10px;
+}

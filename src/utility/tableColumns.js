@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import ToggleSwitch from '../components/ToggleSwitch';
 import { FILES_BASE_API_URL } from '../lib/api';
 import { Box, Chip } from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import { Link } from "react-router-dom";
 import UserProfileStrip from '../components/UserProfileStrip';
+import { FaRegFaceAngry, FaRegFaceFrown, FaRegFaceMeh, FaRegFaceSmile, FaRegFaceLaughBeam } from "react-icons/fa6";
 
 export const getModelColumns = (handleDelete, handleStatusChange, isAdmin = false, handleFeaturedChange = null) => {
     const cols = [
@@ -36,9 +37,9 @@ export const getModelColumns = (handleDelete, handleStatusChange, isAdmin = fals
         {
             field: "status", headerName: "Status", flex: 0.40,
             renderCell: (params) => {
-                let color = '#fff';
-                let bg = '#e74c3c'; // Red for draft
-                if (params?.row?.status === 'PUBLISHED') bg = '#2ecc71'; // Green for published
+                let color = 'var(--bg-main, #000)';
+                let bg = 'var(--color-danger, #e74c3c)'; // Red for draft
+                if (params?.row?.status === 'PUBLISHED') bg = 'var(--color-success, #2ecc71)'; // Green for published
                 if (params?.row?.status === 'ARCHIVED' || params?.row?.deletedAt) bg = 'gray';
 
                 return (
@@ -46,7 +47,7 @@ export const getModelColumns = (handleDelete, handleStatusChange, isAdmin = fals
                         <Chip
                             label={params?.row?.deletedAt ? 'SOFT DELETED' : params?.row?.status}
                             size="small"
-                            sx={{ backgroundColor: bg, color, fontSize: '0.7rem' }}
+                            sx={{ backgroundColor: bg, color, fontSize: '0.7rem', fontWeight: 'bold', minWidth: '95px' }}
                         />
                         {handleStatusChange && !params?.row?.deletedAt && (
                             <ToggleSwitch
@@ -95,13 +96,13 @@ export const getModelColumns = (handleDelete, handleStatusChange, isAdmin = fals
                     ) : (
                         <>
                             <Link to={"/models/view/" + params?.row?.id} style={{ textDecoration: "none" }}>
-                                <VisibilityIcon style={{ textDecoration: "none", color: '#5DB8DD' }} title="view" />
+                                <VisibilityOutlinedIcon className="table-action-icon view" titleAccess="view" />
                             </Link>
                             <Link to={"/models/edit/" + params?.row?.id} style={{ textDecoration: "none" }}>
-                                <BorderColorIcon style={{ color: '#5DB8DD' }} title="edit" />
+                                <EditOutlinedIcon className="table-action-icon edit" titleAccess="edit" />
                             </Link>
                             <div onClick={() => handleDelete(params?.row?.id)}>
-                                <DeleteIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="delete" />
+                                <DeleteOutlineIcon className="table-action-icon delete" titleAccess="delete" />
                             </div>
                         </>
                     )}
@@ -165,10 +166,10 @@ export const getOrderColumns = () => [
         renderCell: (params) => {
             const status = params?.row?.status || (params?.row?.isCompleted ? 'PAID' : 'PENDING');
             const disputeStatus = params?.row?.dispute?.status;
-            let color = 'orange';
-            if (status === 'PAID' || status === 'DELIVERED') color = 'green';
-            if (status === 'CANCELLED' || status === 'REFUNDED') color = 'red';
-            if (status === 'DISPUTED') color = '#e74c3c';
+            let color = 'var(--color-warning, #FFC107)';
+            if (status === 'PAID' || status === 'DELIVERED') color = 'var(--color-success, #10B981)';
+            if (status === 'CANCELLED' || status === 'REFUNDED') color = 'var(--color-danger, #F44336)';
+            if (status === 'DISPUTED') color = 'var(--color-danger, #F44336)';
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <p style={{ fontWeight: 'bold', color, margin: 0 }}>{status}</p>
@@ -181,7 +182,7 @@ export const getOrderColumns = () => [
         field: "view", headerName: "View Order", flex: 0.25,
         renderCell: (params) => (
             <Link to={"/order/view/" + params?.row?.id} style={{ textDecoration: "none" }}>
-                <VisibilityIcon style={{ textDecoration: "none", color: '#5DB8DD' }} title="view order" />
+                <VisibilityOutlinedIcon className="table-action-icon view" titleAccess="view order" />
             </Link>
         )
     },
@@ -189,7 +190,7 @@ export const getOrderColumns = () => [
         field: "viewModel", headerName: "View Model", flex: 0.25,
         renderCell: (params) => (
             <Link to={"/models/view/" + params?.row?.aiModelId} style={{ textDecoration: "none" }}>
-                <VisibilityIcon style={{ textDecoration: "none", color: '#5DB8DD' }} title="view model" />
+                <VisibilityOutlinedIcon className="table-action-icon view" titleAccess="view model" />
             </Link>
         )
     }
@@ -255,9 +256,9 @@ export const getAdminUserColumns = (handleSuspend, handleReactivate) => [
         field: 'actions', headerName: 'Actions', flex: 0.18,
         renderCell: (params) => (
             params?.row?.isActive ? (
-                <button className="btn btn-danger btn-sm" onClick={() => handleSuspend(params.row.id)}>Suspend</button>
+                <button className="btn-glass-danger py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleSuspend(params.row.id)}>Suspend</button>
             ) : (
-                <button className="btn btn-success btn-sm" onClick={() => handleReactivate(params.row.id)}>Reactivate</button>
+                <button className="btn-glass-primary py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleReactivate(params.row.id)}>Reactivate</button>
             )
         )
     }
@@ -281,7 +282,7 @@ export const getAdminPayoutColumns = (handleApprove, handleReject) => [
         renderCell: (params) => {
             const status = params?.row?.status;
             const colors = { PAID: '#2ecc71', PENDING: '#ffc107', REJECTED: '#e74c3c' };
-            return <Chip label={status} size="small" sx={{ backgroundColor: colors[status] || '#6c757d', color: status === 'PENDING' ? '#000' : '#fff', fontSize: '0.7rem' }} />;
+            return <Chip label={status} size="small" sx={{ backgroundColor: colors[status] || '#6c757d', color: (status === 'PENDING' || status === 'PAID') ? 'var(--bg-main)' : '#fff', fontSize: '0.7rem', fontWeight: 600 }} />;
         }
     },
     {
@@ -295,8 +296,8 @@ export const getAdminPayoutColumns = (handleApprove, handleReject) => [
         field: 'actions', headerName: 'Actions', flex: 0.2,
         renderCell: (params) => params?.row?.status === 'PENDING' ? (
             <Box display="flex" gap="4px">
-                <button className="btn btn-success btn-sm" onClick={() => handleApprove(params.row.id)}>Approve</button>
-                <button className="btn btn-danger btn-sm" onClick={() => handleReject(params.row.id)}>Reject</button>
+                <button className="btn-glass-primary py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleApprove(params.row.id)}>Approve</button>
+                <button className="btn-glass-danger py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleReject(params.row.id)}>Reject</button>
             </Box>
         ) : null
     }
@@ -338,8 +339,8 @@ export const getAdminDisputeColumns = (handleResolve) => [
         field: 'actions', headerName: 'Actions', flex: 0.25,
         renderCell: (params) => params?.row?.status === 'OPEN' ? (
             <Box display="flex" gap="4px">
-                <button className="btn btn-info btn-sm text-white" onClick={() => handleResolve(params.row.id, 'REFUND_CLIENT')}>Refund Buyer</button>
-                <button className="btn btn-success btn-sm" onClick={() => handleResolve(params.row.id, 'RELEASE_TO_DEVELOPER')}>Release to Developer</button>
+                <button className="btn-glass-outline py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleResolve(params.row.id, 'REFUND_CLIENT')}>Refund Buyer</button>
+                <button className="btn-glass-primary py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleResolve(params.row.id, 'RELEASE_TO_DEVELOPER')}>Release to Developer</button>
             </Box>
         ) : null
     }
@@ -383,15 +384,15 @@ export const getAdminVerificationColumns = (handleApprove, handleReject) => [
         renderCell: (params) => {
             const status = params?.row?.status;
             const colors = { APPROVED: '#2ecc71', PENDING: '#ffc107', REJECTED: '#e74c3c' };
-            return <Chip label={status} size="small" sx={{ backgroundColor: colors[status] || '#6c757d', color: status === 'PENDING' ? '#000' : '#fff', fontSize: '0.7rem' }} />;
+            return <Chip label={status} size="small" sx={{ backgroundColor: colors[status] || '#6c757d', color: (status === 'PENDING' || status === 'APPROVED') ? 'var(--bg-main)' : '#fff', fontSize: '0.7rem', fontWeight: 600 }} />;
         }
     },
     {
         field: 'actions', headerName: 'Actions', flex: 0.2,
         renderCell: (params) => (params?.row?.status === 'PENDING' && params?.row?.documentUrl) ? (
             <Box display="flex" gap="4px">
-                <button className="btn btn-success btn-sm" onClick={() => handleApprove(params.row.id)}>Approve</button>
-                <button className="btn btn-danger btn-sm" onClick={() => handleReject(params.row.id)}>Reject</button>
+                <button className="btn-glass-primary py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleApprove(params.row.id)}>Approve</button>
+                <button className="btn-glass-danger py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => handleReject(params.row.id)}>Reject</button>
             </Box>
         ) : null
     }
@@ -466,14 +467,33 @@ export const getClientReviewColumns = () => [
     {
         field: 'AiModel', headerName: 'Model', flex: 0.25,
         renderCell: (params) => (
-            <Link to={`/models/view/${params?.row?.aiModelId}`}>
+            <Link to={`/models/view/${params?.row?.aiModelId}`} style={{ textDecoration: 'none', color: 'var(--primary)' }}>
                 {params?.row?.AiModel?.title || `Model #${params?.row?.aiModelId}`}
             </Link>
         ),
     },
     {
-        field: 'star', headerName: 'Rating', flex: 0.1,
-        renderCell: (params) => <span>{params?.row?.star} ★</span>,
+        field: 'star', headerName: 'Rating', flex: 0.15,
+        renderCell: (params) => {
+            const rating = params?.row?.star || 0;
+            if (!rating) return <span>—</span>;
+            const labels = [
+                { label: "Poor!", color: "var(--color-danger)", icon: <FaRegFaceAngry /> },
+                { label: "Bad!", color: "var(--color-warning)", icon: <FaRegFaceFrown /> },
+                { label: "Okay!", color: "var(--color-warning)", icon: <FaRegFaceMeh /> },
+                { label: "Good!", color: "var(--color-success)", icon: <FaRegFaceSmile /> },
+                { label: "Great!", color: "var(--color-success)", icon: <FaRegFaceLaughBeam /> },
+            ];
+            const data = labels[rating - 1] || labels[0];
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 600, color: '#FFD700' }}>{rating} ★</span>
+                    <span style={{ fontWeight: 600, color: data.color, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        {data.label} {data.icon}
+                    </span>
+                </div>
+            );
+        },
     },
     {
         field: 'desc', headerName: 'Review', flex: 0.35,
@@ -486,7 +506,7 @@ export const getClientReviewColumns = () => [
     {
         field: 'orderId', headerName: 'Order', flex: 0.15,
         renderCell: (params) => (
-            <Link to={`/order/view/${params?.row?.orderId}`}>#{params?.row?.orderId}</Link>
+            <Link to={`/order/view/${params?.row?.orderId}`} style={{ textDecoration: 'none', color: 'var(--primary)' }}>#{params?.row?.orderId}</Link>
         ),
     },
 ];
@@ -495,7 +515,7 @@ export const getDeveloperReviewColumns = () => [
     {
         field: 'AiModel', headerName: 'Model', flex: 0.2,
         renderCell: (params) => (
-            <Link to={`/models/view/${params?.row?.aiModelId}`}>
+            <Link to={`/models/view/${params?.row?.aiModelId}`} style={{ textDecoration: 'none', color: 'var(--primary)' }}>
                 {params?.row?.AiModel?.title || `Model #${params?.row?.aiModelId}`}
             </Link>
         ),
@@ -509,8 +529,27 @@ export const getDeveloperReviewColumns = () => [
         )
     },
     {
-        field: 'star', headerName: 'Rating', flex: 0.1,
-        renderCell: (params) => <span>{params?.row?.star} ★</span>,
+        field: 'star', headerName: 'Rating', flex: 0.15,
+        renderCell: (params) => {
+            const rating = params?.row?.star || 0;
+            if (!rating) return <span>—</span>;
+            const labels = [
+                { label: "Poor!", color: "var(--color-danger)", icon: <FaRegFaceAngry /> },
+                { label: "Bad!", color: "var(--color-warning)", icon: <FaRegFaceFrown /> },
+                { label: "Okay!", color: "var(--color-warning)", icon: <FaRegFaceMeh /> },
+                { label: "Good!", color: "var(--color-success)", icon: <FaRegFaceSmile /> },
+                { label: "Great!", color: "var(--color-success)", icon: <FaRegFaceLaughBeam /> },
+            ];
+            const data = labels[rating - 1] || labels[0];
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 600, color: '#FFD700' }}>{rating} ★</span>
+                    <span style={{ fontWeight: 600, color: data.color, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        {data.label} {data.icon}
+                    </span>
+                </div>
+            );
+        },
     },
     {
         field: 'desc', headerName: 'Review', flex: 0.35,
@@ -534,9 +573,10 @@ export const getWalletTransactionColumns = () => [
                 label={params?.row?.type}
                 size="small"
                 sx={{
-                    backgroundColor: params?.row?.type === 'SALE' ? '#2ecc71' : '#0d6efd',
-                    color: '#fff',
+                    backgroundColor: params?.row?.type === 'SALE' ? 'var(--color-success)' : 'var(--primary)',
+                    color: 'var(--bg-main, #0b0f19)',
                     fontSize: '0.7rem',
+                    fontWeight: 600,
                 }}
             />
         ),
@@ -544,7 +584,10 @@ export const getWalletTransactionColumns = () => [
     {
         field: 'amount', headerName: 'Amount', flex: 0.15,
         renderCell: (params) => (
-            <span className={params?.row?.type === 'SALE' ? 'text-success' : 'text-danger'}>
+            <span style={{ 
+                color: params?.row?.type === 'SALE' ? 'var(--color-success)' : 'var(--color-error)',
+                fontWeight: 600
+            }}>
                 {params?.row?.type === 'SALE' ? '+' : '-'}${Number(params?.row?.amount || 0).toFixed(2)}
             </span>
         ),
@@ -572,8 +615,9 @@ export const getMyPayoutColumns = (onCancel) => [
                     size="small"
                     sx={{
                         backgroundColor: colors[status] || '#6c757d',
-                        color: status === 'PENDING' ? '#000' : '#fff',
+                        color: (status === 'PENDING' || status === 'PAID') ? 'var(--bg-main)' : '#fff',
                         fontSize: '0.7rem',
+                        fontWeight: 600
                     }}
                 />
             );
@@ -592,7 +636,7 @@ export const getMyPayoutColumns = (onCancel) => [
         field: 'actions', headerName: 'Action', flex: 0.2,
         renderCell: (params) => (
             params?.row?.status === 'PENDING' ? (
-                <button className="btn btn-outline-danger btn-sm" onClick={() => onCancel(params.row.id)}>
+                <button className="btn-glass-danger py-1 px-3" style={{ fontSize: '0.8rem' }} onClick={() => onCancel(params.row.id)}>
                     Cancel
                 </button>
             ) : null

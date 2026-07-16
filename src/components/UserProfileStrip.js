@@ -34,6 +34,7 @@ const UserProfileStrip = ({
     truncateName = false,
     partyContactVisible = false,
     partyContactFallbackName = '',
+    minimal = false,
 }) => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
@@ -77,72 +78,74 @@ const UserProfileStrip = ({
             </div>
 
             {/* 2. LEFT ALIGNED INFO SECTION */}
-            <div className={styles.leftSection}>
-                {showOrgName && (
-                    <h6 className={styles.info__}>
-                        <FaBuilding style={{ color: '#5DB8DD' }} />
-                        <span>Organization:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.org_name}</span>
-                    </h6>
-                )}
-                {user.role && (
-                    <h6 className={styles.info__}>
-                        <FaIdBadge style={{ color: '#5DB8DD' }} />
-                        <span>Role:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.role}</span>
-                    </h6>
-                )}
-                {showVerifiedAt && (
-                    <h6 className={styles.info__}>Verified since <span style={{ fontWeight: 'normal' }}>{formatVerifiedDate(resolvedVerifiedAt)}</span></h6>
-                )}
-                {user.country && (
-                    <h6 className={styles.info__}>
-                        <FaLocationDot style={{ color: '#5DB8DD' }} />
-                        {'From '}<span style={{ fontWeight: 'normal' }}>{user.country}</span>
-                    </h6>
-                )}
-                {showMemberSince && user.createdAt && (
-                    <h6 className={styles.info__}>
-                        <FaUserAlt style={{ color: '#5DB8DD' }} />
-                        {'Member since '}<span style={{ fontWeight: 'normal' }}>{formatMemberDate(user.createdAt)}</span>
-                    </h6>
-                )}
-                {showEmail && (
-                    <h6 className={styles.info__}>
-                        <MdEmail style={{ color: '#5DB8DD', fontSize: '17.5px' }} />
-                        <span style={{ fontWeight: 'normal' }}>{user.email}</span>
-                    </h6>
-                )}
-                {showPhone && (
-                    <h6 className={styles.info__}>
-                        <FaPhone style={{ color: '#5DB8DD' }} />
-                        <span style={{ fontWeight: 'normal' }}>{user.org_phone}</span>
-                    </h6>
-                )}
-                {!isLoggedIn && (user.email || user.org_phone) && (
-                    <h6 className={styles.info__} style={{ fontSize: '13px', opacity: 0.8, color: '#f74040' }}>
-                        <i>Log in to view contact details</i>
-                    </h6>
-                )}
-                {variant === 'owner-settings' && (user.email || user.org_phone) && (
-                    <h6 className={styles.info__} style={{ fontSize: '12px', opacity: 0.7 }}>
-                        Edit contact details in the form below
-                    </h6>
-                )}
-                {showPublicCounts && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '8px', fontSize: '13px', fontWeight: 600 }}>
-                        {modelCount != null && (
-                            <span>{modelCount} {modelCount === 1 ? 'Model' : 'Models'}</span>
-                        )}
-                        {totalOrders != null && (
-                            <span>{totalOrders} {totalOrders === 1 ? 'Order' : 'Orders'}</span>
-                        )}
-                    </div>
-                )}
-                {showModelCount && (
-                    <h6 className={styles.info__}>
-                        {modelCount} {modelCount === 1 ? 'model' : 'models'} by this developer
-                    </h6>
-                )}
-            </div>
+            {!minimal && (
+                <div className={styles.leftSection}>
+                    {showOrgName && (
+                        <h6 className={styles.info__}>
+                            <FaBuilding style={{ color: '#5DB8DD' }} />
+                            <span>Organization:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.org_name}</span>
+                        </h6>
+                    )}
+                    {user.role && (
+                        <h6 className={styles.info__}>
+                            <FaIdBadge style={{ color: '#5DB8DD' }} />
+                            <span>Role:</span> <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{user.role}</span>
+                        </h6>
+                    )}
+                    {showVerifiedAt && (
+                        <h6 className={styles.info__}>Verified since <span style={{ fontWeight: 'normal' }}>{formatVerifiedDate(resolvedVerifiedAt)}</span></h6>
+                    )}
+                    {user.country && (
+                        <h6 className={styles.info__}>
+                            <FaLocationDot style={{ color: '#5DB8DD' }} />
+                            {'From '}<span style={{ fontWeight: 'normal' }}>{user.country}</span>
+                        </h6>
+                    )}
+                    {showMemberSince && user.createdAt && (
+                        <h6 className={styles.info__}>
+                            <FaUserAlt style={{ color: '#5DB8DD' }} />
+                            {'Member since '}<span style={{ fontWeight: 'normal' }}>{formatMemberDate(user.createdAt)}</span>
+                        </h6>
+                    )}
+                    {showEmail && (
+                        <h6 className={styles.info__}>
+                            <MdEmail style={{ color: '#5DB8DD', fontSize: '17.5px' }} />
+                            <span style={{ fontWeight: 'normal' }}>{user.email}</span>
+                        </h6>
+                    )}
+                    {showPhone && (
+                        <h6 className={styles.info__}>
+                            <FaPhone style={{ color: '#5DB8DD' }} />
+                            <span style={{ fontWeight: 'normal' }}>{user.org_phone}</span>
+                        </h6>
+                    )}
+                    {!isLoggedIn && (user.email || user.org_phone) && (
+                        <h6 className={styles.info__} style={{ fontSize: '13px', opacity: 0.8, color: '#f74040' }}>
+                            <i>Log in to view contact details</i>
+                        </h6>
+                    )}
+                    {variant === 'owner-settings' && (user.email || user.org_phone) && (
+                        <h6 className={styles.info__} style={{ fontSize: '12px', opacity: 0.7 }}>
+                            Edit contact details in the form below
+                        </h6>
+                    )}
+                    {showPublicCounts && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '8px', fontSize: '13px', fontWeight: 600 }}>
+                            {modelCount != null && (
+                                <span>{modelCount} {modelCount === 1 ? 'Model' : 'Models'}</span>
+                            )}
+                            {totalOrders != null && (
+                                <span>{totalOrders} {totalOrders === 1 ? 'Order' : 'Orders'}</span>
+                            )}
+                        </div>
+                    )}
+                    {showModelCount && (
+                        <h6 className={styles.info__}>
+                            {modelCount} {modelCount === 1 ? 'model' : 'models'} by this developer
+                        </h6>
+                    )}
+                </div>
+            )}
 
             {/* 3. CENTERED BUTTONS SECTION */}
             {showViewProfileLink && profileLinkTo && (

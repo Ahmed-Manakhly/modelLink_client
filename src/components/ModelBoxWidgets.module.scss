@@ -27,14 +27,14 @@
         // margin: auto;
         // margin-bottom: 5rem;
         margin: 0 auto;
-        padding: 0 35px;
+        padding: 0;
         background-color: transparent;
         display: flex;
         align-items: flex-start;
         gap: 1rem;
 
         .__box_leftside {
-          width: 35% !important;
+          width: calc(30% - 0.5rem) !important;
           padding: 22PX !important;
           // height: fit-content;
           .widget_1_con{
@@ -127,25 +127,25 @@
               }
             }
           }
-          &{
-            border : 2px solid var(--cultured) ;
-            background-color: rgba(238, 238, 238, 0.278);
-            background-color: rgba(238, 238, 238, 0.94);
-            width: 30% !important;
+          & {
+            background: var(--surface-glass);
+            backdrop-filter: blur(var(--glass-blur));
+            border: var(--border-standard);
+            box-shadow: var(--glass-shadow);
+            width: calc(30% - 0.5rem) !important;
             height: fit-content !important;
             display: flex;
             flex-direction: column;
-            // align-items: flex-start;
-            border-radius: 10px;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            -ms-border-radius: 10px;
-            -o-border-radius: 10px;
+            border-radius: var(--radius-card);
+            -webkit-border-radius: var(--radius-card);
+            -moz-border-radius: var(--radius-card);
+            -ms-border-radius: var(--radius-card);
+            -o-border-radius: var(--radius-card);
           }
         }
         .__box_rightside {
           box-shadow: var(--glass-shadow);
-          width: 70% !important;
+          width: calc(70% - 0.5rem) !important;
           padding: 5px 40px;
           gap: 1rem;
           display: flex;

@@ -85,53 +85,63 @@ const ChangePassword = () => {
     }
 
     return (
-        <Col className={`d-flex flex-column justify-content-center p-lg-4 align-items-center w-100`}>
-            <Row xs={1} className={`${currentPassClasses} d-flex flex-column align-items-center w-100`}>
-                <label htmlFor="currentPassword">Current Password</label>
-                <input 
-                    type="password" 
-                    placeholder="Current Password"
-                    name="currentPassword" 
-                    id='currentPassword'
-                    onChange={currentPassChangeHandler} 
-                    onBlur={currentPassBlurHandler} 
-                />
+        <Col className={`${classes['contact-col']} d-flex flex-column justify-content-start w-100`}>
+            <Row className="gy-3">
+                <Col md={12} lg={6} className={`${currentPassClasses} d-flex flex-column align-items-start`}>
+                    <label htmlFor="currentPassword" style={{ textAlign: 'left', width: '100%' }}>Current Password</label>
+                    <input 
+                        type="password" 
+                        placeholder="Current Password"
+                        name="currentPassword" 
+                        id='currentPassword'
+                        onChange={currentPassChangeHandler} 
+                        onBlur={currentPassBlurHandler}
+                        style={{ width: '100%' }}
+                    />
+                </Col>
             </Row>
 
-            <Row xs={1} className={`${newPassClasses} d-flex flex-column align-items-center w-100 mt-3`}>
-                <label htmlFor="newPassword">Your New Password</label>
-                <input 
-                    type="password" 
-                    placeholder="New Password" 
-                    name="newPassword" 
-                    id='newPassword'
-                    onChange={newPassChangeHandler} 
-                    onBlur={newPassBlurHandler} 
-                />
-                {newPassIsInvalid && <p className={classes['error-text']}>Password must be at least 12 characters long, including at least one uppercase letter, one lowercase letter, one digit, and one special character.</p>}
+            <Row className="gy-3 mt-2">
+                <Col md={12} lg={6} className={`${newPassClasses} d-flex flex-column align-items-start`}>
+                    <label htmlFor="newPassword" style={{ textAlign: 'left', width: '100%' }}>Your New Password</label>
+                    <input 
+                        type="password" 
+                        placeholder="New Password" 
+                        name="newPassword" 
+                        id='newPassword'
+                        onChange={newPassChangeHandler} 
+                        onBlur={newPassBlurHandler} 
+                        style={{ width: '100%' }}
+                    />
+                    {newPassIsInvalid && <p className={classes['error-text']} style={{ textAlign: 'left' }}>Password must be at least 12 characters long, including at least one uppercase letter, one lowercase letter, one digit, and one special character.</p>}
+                </Col>
+
+                <Col md={12} lg={6} className={`${confirmPassClasses} d-flex flex-column align-items-start`}>
+                    <label htmlFor="newPasswordConfirm" style={{ textAlign: 'left', width: '100%' }}>Confirm Your New Password</label>
+                    <input 
+                        type="password" 
+                        placeholder="Confirm New Password" 
+                        name="newPasswordConfirm" 
+                        id='newPasswordConfirm'
+                        onChange={confirmPassChangeHandler} 
+                        onBlur={confirmPassBlurHandler} 
+                        style={{ width: '100%' }}
+                    />
+                    {confirmPassIsInvalid && <p className={classes['error-text']} style={{ textAlign: 'left' }}>Your password does not match</p>}
+                </Col>
             </Row>
 
-            <Row xs={1} className={`${confirmPassClasses} d-flex flex-column align-items-center w-100 mt-3`}>
-                <label htmlFor="newPasswordConfirm">Confirm Your New Password</label>
-                <input 
-                    type="password" 
-                    placeholder="Confirm New Password" 
-                    name="newPasswordConfirm" 
-                    id='newPasswordConfirm'
-                    onChange={confirmPassChangeHandler} 
-                    onBlur={confirmPassBlurHandler} 
-                />
-                {confirmPassIsInvalid && <p className={classes['error-text']}>Your password does not match</p>}
-            </Row>
-
-            <button
-                onClick={handleSubmit}
-                type="button"
-                disabled={!formIsValid || isSubmitting}
-                className={`${classes['form-btn']} d-flex flex-column align-items-center w-100 mt-4`}
-            >
-                {isSubmitting ? 'Submitting...' : 'Change Password'}
-            </button>
+            <div className="mt-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <button
+                    onClick={handleSubmit}
+                    type="button"
+                    disabled={!formIsValid || isSubmitting}
+                    className="btn-glass-primary"
+                    style={{ minWidth: '200px' }}
+                >
+                    {isSubmitting ? 'Submitting...' : 'Change Password'}
+                </button>
+            </div>
         </Col>
     );
 }

@@ -68,27 +68,29 @@ function Contact() {
 
     return (
         <>
-            <GlobalWrapper className="global-banner-spacing">
+            <GlobalWrapper className="global-banner-spacing global-page-margin-top">
                 <div className={classes['contact__container']}>
                     <aside className={classes['contact__aside']}>
                         <div className={classes.secCon}>
                             <div className={classes['aside__image']}>
                                 <img src={img} alt="contact us" />
                             </div>
-                            <h2>Contact Us</h2>
-                            <p>learn more about us and awesome services we can provide.</p>
+                            <h2 className="page-main-title" style={{ textAlign: 'left', marginBottom: '1rem', marginTop: '0' }}>
+                                <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Contact Us 📩</span>
+                            </h2>
+                            <p>We'd love to hear from you! Whether you have a question about our AI platform, models, or anything else, our team is ready to answer all your questions.</p>
                             <ul className={classes['contact__details']}>
                                 <li>
-                                    <i className={` ${classes['uil-phone-times']} ${classes['uil']}`}></i>
+                                    <ion-icon name="call-outline"></ion-icon>
                                     <h5>+201015000008</h5>
                                 </li>
                                 <li>
-                                    <i className={`${classes['uil-envelope']} ${classes['uil']}`}></i>
+                                    <ion-icon name="mail-outline"></ion-icon>
                                     <h5>Support@modellink.com</h5>
                                 </li>
                                 <li>
-                                    <i className={`${classes['uil-map-marker']} ${classes['uil']}`}></i>
-                                    <h5>Egypt /USA</h5>
+                                    <ion-icon name="location-outline"></ion-icon>
+                                    <h5>Global Operations 🌍 (Egypt / USA)</h5>
                                 </li>
                             </ul>
                         </div>
@@ -133,10 +135,12 @@ function Contact() {
                         />
                         <button
                             type="submit"
-                            className={classes['banner-btn']}
+                            className="btn-glass-primary"
+                            style={{ width: '100%', padding: '15px', fontSize: '15px', gap: '10px' }}
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? 'Sending…' : 'Send Message'}
+                            {!isSubmitting && <ion-icon name="paper-plane-outline" style={{ fontSize: '18px' }}></ion-icon>}
                         </button>
                     </form>
                 </div>

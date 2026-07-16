@@ -1,9 +1,19 @@
 import React, { useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box, ThemeProvider, createTheme } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import TableRowSkeleton from '../TableRowSkeleton';
 import EmptyState from '../EmptyState';
 import { normalizeGridColumns, dataGridShellSx } from '../../utility/gridColumns';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#0A0C10',
+      paper: '#111318',
+    },
+  },
+});
 
 function PageTable({
     isLoading,
@@ -61,24 +71,26 @@ function PageTable({
             {!isLoading && !error && data?.length > 0 && (
                 <Box width="100%" sx={dataGridShellSx}>
                     {titleBlock}
-                    <DataGrid
-                        rows={data}
-                        columns={resolvedColumns}
-                        components={{ Toolbar: GridToolbar }}
-                        getRowId={(row) => row.id}
-                        hideFooter={!paginated}
-                        disableRowSelectionOnClick
-                        checkboxSelection={enableSelection}
-                        onRowSelectionModelChange={onRowSelectionModelChange}
-                        rowSelectionModel={rowSelectionModel}
-                        pagination={paginated}
-                        hideFooterPagination={!paginated}
-                        initialState={paginated ? { pagination: { paginationModel: { pageSize } } } : undefined}
-                        pageSizeOptions={[5, 10, 25, 50]}
-                        autoHeight
-                        getRowHeight={() => 'auto'}
-                        sx={{ width: '100%', minWidth: 0 }}
-                    />
+                    <ThemeProvider theme={darkTheme}>
+                        <DataGrid
+                            rows={data}
+                            columns={resolvedColumns}
+                            components={{ Toolbar: GridToolbar }}
+                            getRowId={(row) => row.id}
+                            hideFooter={!paginated}
+                            disableRowSelectionOnClick
+                            checkboxSelection={enableSelection}
+                            onRowSelectionModelChange={onRowSelectionModelChange}
+                            rowSelectionModel={rowSelectionModel}
+                            pagination={paginated}
+                            hideFooterPagination={!paginated}
+                            initialState={paginated ? { pagination: { paginationModel: { pageSize } } } : undefined}
+                            pageSizeOptions={[5, 10, 25, 50]}
+                            autoHeight
+                            getRowHeight={() => 'auto'}
+                            sx={{ ...dataGridShellSx, width: '100%', minWidth: 0 }}
+                        />
+                    </ThemeProvider>
                 </Box>
             )}
         </section>

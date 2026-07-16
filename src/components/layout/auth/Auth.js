@@ -50,8 +50,8 @@ const Auth = () => {
     //-------------------------------------------------------------------
     return (
         <Modal onClose={onClose} >
-            <Row md={2} xs={1} lg={3} className={` justify-content-center w-100 ${classes.mainRow}`}>
-                <Col className={`${classes['contact-col']} ${classes['contact-col2']} d-flex flex-column `}>
+            <Row lg={2} xs={1} className={` justify-content-center w-100 ${classes.mainRow}`}>
+                <Col className={`order-2 order-lg-1 d-none d-lg-flex ${classes['contact-col']} ${classes['contact-col2']} flex-column `}>
                     <Row className=' d-flex flex-column '>
                         <div className="brand-logo-text" style={{ marginBottom: '20px' }}>
                             Model<span>Link</span>
@@ -92,8 +92,11 @@ const Auth = () => {
                     </ul>
                 </Col>
 
-                <Col className={`${classes["contact-col"]} flex-fill`}>
-                    <AuthCard title={isLogin ? "Sign in to your account" : isSignup ? "Create a new account" : ''} />
+                <Col className={`order-1 order-lg-2 ${classes["contact-col"]} flex-fill`}>
+                    <div className="d-flex d-lg-none brand-logo-text justify-content-start mb-4 mt-2">
+                        Model<span>Link</span>
+                    </div>
+                    <AuthCard title={isLogin ? "Sign In To Your Account" : isSignup ? "Create A New Account" : isForgotPassword ? "Reset Your Password" : ''} />
                     {(!isLogin && !isForgotPassword) &&
                         <Row className={'d-flex flex-column justify-content-center ms-lg-5 me-lg-5 ps-lg-5 pe-lg-5'}>
                             <div className={`${classes['progressLineOut']}`}>
@@ -130,6 +133,32 @@ const Auth = () => {
                                 </Row>
                             </div>
                         ) : null}
+                    </div>
+                    <div className="d-flex d-lg-none justify-content-start mt-5 mb-2">
+                        <ul className={classes["header-social-container"]}>
+                            <li>
+                                <Link to="/" className={classes["social-link"]}>
+                                    <ion-icon name="logo-facebook"></ion-icon>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/" className={classes["social-link"]}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                                    </svg>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/" className={classes["social-link"]}>
+                                    <ion-icon name="logo-instagram"></ion-icon>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/" className={classes["social-link"]}>
+                                    <ion-icon name="logo-linkedin"></ion-icon>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </Col>
             </Row>

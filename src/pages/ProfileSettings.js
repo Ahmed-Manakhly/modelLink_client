@@ -1,8 +1,7 @@
 /* eslint-disable */
+import { Row, Col } from 'react-bootstrap';
 import BoxWidgets from '../components/BoxWidgets';
 import FormProfile from '../components/FormProfile';
-import Val from '../components/Val'
-import { vals } from '../constants/marketingData';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { useState, useEffect } from 'react';
@@ -18,6 +17,7 @@ function ProfileSettings() {
     const dispatch = useDispatch();
     const [file, setFile] = useState();
     const [isChanged, setIsChanged] = useState(false);
+    const [completionRate, setCompletionRate] = useState(0);
     const userData = useSelector(state => state.auth.userData) || {};
     const { id, role } = userData;
     let avatar = null
@@ -136,19 +136,41 @@ function ProfileSettings() {
     }
     //==============================================
     return (
-        <>
-            <BoxWidgets profile={true} HandelFileChange={HandelFileChange} file={file} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="mb-2">
+                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
+                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Welcome back!</span>
+                </h2>
+                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>Make sure to complete your profile below 👇</p>
+            </div>
 
-            {role === 'DEVELOPER' && (() => {
-                const hasDoc = Boolean(verification?.documentUrl);
-                const isApproved = verification?.status === 'APPROVED';
-                const isRejected = verification?.status === 'REJECTED';
-                const isAwaiting = verification?.status === 'PENDING' && hasDoc;
-                // Show upload form when: never submitted, empty PENDING (legacy), or rejected
-                const canSubmit = !verification || (!hasDoc && !isApproved) || isRejected;
+            <div style={{ marginBottom: '1rem' }}>
+                <h3 className="mb-3">
+                    <span className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                        Completion Rate: {completionRate}%
+                    </span>
+                </h3>
+                <div style={{ background: 'var(--surface-glass)', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ background: 'var(--gradient-text, linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%))', width: `${completionRate}%`, height: '100%', transition: 'width 0.3s ease' }}></div>
+                </div>
+            </div>
 
-                return (
-                    <div className="container my-4 p-4" style={{ backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+            <Row className="g-4 align-items-stretch">
+                <Col xs={12} lg={6}>
+                    <BoxWidgets profile={true} HandelFileChange={HandelFileChange} file={file} />
+                </Col>
+                {role === 'DEVELOPER' && (
+                    <Col xs={12} lg={6}>
+                        {(() => {
+                            const hasDoc = Boolean(verification?.documentUrl);
+                            const isApproved = verification?.status === 'APPROVED';
+                            const isRejected = verification?.status === 'REJECTED';
+                            const isAwaiting = verification?.status === 'PENDING' && hasDoc;
+                            // Show upload form when: never submitted, empty PENDING (legacy), or rejected
+                            const canSubmit = !verification || (!hasDoc && !isApproved) || isRejected;
+
+                            return (
+                                <div className="p-4 glass-container w-100 h-100" style={{ color: 'var(--on-surface)' }}>
                         <h4 style={{ color: 'var(--primary)', fontWeight: 700 }}>Developer Identity Verification</h4>
 
                         {/* APPROVED */}
@@ -189,27 +211,38 @@ function ProfileSettings() {
                                         : 'Submit an official PDF document or image proving your developer or organization credentials to unlock full marketplace publishing privileges.'}
                                 </p>
                                 <div className="mb-3">
-                                    <label className="form-label">Upload Document (PDF, PNG, JPG)</label>
+                                    <label className="form-label" style={{ color: 'var(--on-surface-variant)' }}>Upload Document (PDF, PNG, JPG)</label>
                                     <input
                                         type="file"
                                         className="form-control"
                                         accept=".pdf,.png,.jpg,.jpeg"
                                         onChange={(e) => setVerifDoc(e.target.files[0])}
                                         required
+                                        style={{
+                                            background: 'rgba(255, 255, 255, 0.03)',
+                                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                                            color: 'var(--on-surface)',
+                                            borderRadius: 'var(--radius-input, 8px)',
+                                            padding: '10px'
+                                        }}
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary" style={{ backgroundColor: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                                <button type="submit" className="btn-glass-primary">
                                     {isRejected ? 'Re-Submit Verification' : 'Submit Verification'}
                                 </button>
                             </form>
                         )}
-                    </div>
-                );
-            })()}
+                                </div>
+                            );
+                        })()}
+                    </Col>
+                )}
+            </Row>
 
-            <FormProfile onUpdateProfileAction={onUpdateProfileAction?.bind(null, file ? file : null)} isChanged={isChanged} />
-            <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
-        </>
+            <div className="mt-4">
+                <FormProfile onUpdateProfileAction={onUpdateProfileAction?.bind(null, file ? file : null)} isChanged={isChanged} onRateChange={setCompletionRate} />
+            </div>
+        </div>
     )
 }
 

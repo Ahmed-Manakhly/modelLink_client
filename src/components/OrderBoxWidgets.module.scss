@@ -21,8 +21,7 @@
       .__box_main {
         width: 100%;
         margin: 0 auto;
-        padding: 0 35px;
-        width: 100%;
+        padding: 0;
         background-color: transparent;
         display: flex;
         align-items: flex-start;
@@ -44,13 +43,14 @@
               display: block;
               font-size: 25px;
               font-weight: 800;
-              color: var(--sonic-silver);
+              color: var(--primary);
             }
-            h4.wel{
-              font-size: 15px;
-              font-weight: 700;
-              color: var(--sonic-silver);
-          }
+            h4 {
+              margin: 0;
+              font-size: 1.2rem;
+              font-weight: 600;
+              color: var(--on-surface);
+            }
           }
           .widget_11_con{
             display: flex;
@@ -124,9 +124,9 @@
             }
           }
           &{
-            border : 2px solid var(--cultured) ;
-            background-color: rgba(238, 238, 238, 0.278);
-            background-color: rgba(238, 238, 238, 0.94);
+            border : 1px solid var(--border-glass) ;
+            background-color: var(--surface-glass);
+            backdrop-filter: blur(var(--glass-blur));
             width: 30% !important;
             height: fit-content !important;
             display: flex;
@@ -141,8 +141,10 @@
         }
         .__box_rightside {
           align-content: stretch;
-          // border : 5px solid var(--cultured) ;
           box-shadow: var(--glass-shadow);
+          background-color: var(--surface-glass);
+          border: 1px solid var(--border-glass);
+          backdrop-filter: blur(var(--glass-blur));
           width: 70% !important;
           // height: fit-content !important;
           padding: 5px 40px;
@@ -445,6 +447,26 @@
   font-size: var(--text-md);
 }
 
+.dateText {
+  color: var(--on-surface);
+  font-size: var(--fs-8);
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+.infoText {
+  color: var(--on-surface);
+  font-size: var(--fs-7);
+}
+
+.infoBox {
+  background-color: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
 .iconPrimary {
   color: var(--primary);
 }
@@ -453,8 +475,8 @@
   padding: 1rem;
   margin-bottom: 1rem;
   text-align: center;
-  background-color: var(--white);
-  border: 1px solid var(--cultured);
+  background-color: transparent;
+  border: 1px solid var(--border-glass);
   border-radius: var(--border-radius-md);
   box-shadow: var(--glass-shadow);
 }
@@ -500,7 +522,8 @@
 }
 
 .assetCard {
-  border: 1px solid var(--cultured);
+  background: transparent !important;
+  border: 1px solid var(--border-glass) !important;
   border-radius: var(--border-radius-md);
   box-shadow: var(--glass-shadow);
 }
@@ -517,7 +540,9 @@
   font-size: var(--fs-7);
   font-family: var(--font-mono);
   word-break: break-all;
-  background: var(--cultured);
+  background: var(--surface-glass);
+  color: var(--on-surface);
+  border: 1px solid var(--border-glass);
   padding: 0.5rem;
   border-radius: var(--border-radius-sm);
   margin-bottom: 0.5rem;
@@ -527,8 +552,8 @@
   text-align: center;
   padding: 2rem 1rem;
   color: var(--sonic-silver);
-  background-color: var(--white);
-  border: 1px dashed var(--cultured);
+  background-color: transparent;
+  border: 1px dashed var(--border-glass);
   border-radius: var(--border-radius-md);
 }
 

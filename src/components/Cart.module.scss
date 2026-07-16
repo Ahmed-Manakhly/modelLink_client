@@ -7,19 +7,20 @@
     height: 70vh;
     margin: auto;
     @extend %out ;
-    background-image: url('../assets/cart-banner.png');
+    background: var(--gradient-marketing-transparent), url('../assets/cart-banner.png');
     background-size: cover;
-    box-shadow:  -5px -9px 2rem rgba(0,0,0,0.75) , inset 5px 3px 2rem rgba(158, 154, 154, 0.75);
+    background-position: center;
+    box-shadow: var(--glass-shadow);
     overflow: auto;
 }
 
 %out {
-    border: 3px var(--primary) solid;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-card, 15px);
+    -webkit-border-radius: var(--radius-card, 15px);
+    -moz-border-radius: var(--radius-card, 15px);
+    -ms-border-radius: var(--radius-card, 15px);
+    -o-border-radius: var(--radius-card, 15px);
 }
 
 //-------------------------------------------------------
@@ -33,7 +34,7 @@
     grid-template-columns: 1fr;
     gap: 25px;
     justify-content: center;
-    justify-items: center;
+    justify-items: stretch;
 }
 
 @media (min-width: 600px) {
@@ -61,4 +62,22 @@
     .product-grid {  
         grid-template-columns: repeat(3, 1fr); 
     }
+}
+
+.cartSubtitle {
+    color: var(--on-surface-variant);
+}
+
+.subtotalSection {
+    border-top: 1px solid var(--border-glass);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.subtotalAmount {
+    color: var(--primary);
+    font-family: var(--font-primary);
+}
+
+.subtotalLabel {
+    color: var(--on-surface-variant);
 }

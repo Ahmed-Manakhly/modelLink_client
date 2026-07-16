@@ -1,11 +1,7 @@
-/* eslint-disable */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classes from './ModelGallery.module.scss';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { FILES_BASE_API_URL } from '../lib/api';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import CloseIcon from '@mui/icons-material/Close';
 import imgHolder from '../assets/imgHolder.jpg';
 
 const ModelGallery = ({ images = [], alt = 'Model Gallery' }) => {
@@ -13,68 +9,61 @@ const ModelGallery = ({ images = [], alt = 'Model Gallery' }) => {
     const safeImages = (images || []).filter(Boolean);
     const mainSrc = safeImages[mainIndex];
 
-    const responsive = {
-        desktop: { breakpoint: { max: 3000, min: 1024 }, items: 5 },
-        tablet: { breakpoint: { max: 1024, min: 464 }, items: 4 },
-        mobile: { breakpoint: { max: 464, min: 0 }, items: 3 }
-    };
-
     const selectImage = (src, idx) => {
         setMainIndex(idx);
     };
 
     return (
-        <Container>
-            <div className={classes.galleryContainer}>
-                <div className={classes.mainImageWrapper}>
-                    {mainSrc ? (
-                        <img
-                            src={mainSrc.startsWith('http') ? mainSrc : FILES_BASE_API_URL + mainSrc}
-                            alt={`${alt} - main`}
-                            crossOrigin="anonymous"
-                            className={classes.mainImage}
-                        />
-                    ) : (
-                        <img src={imgHolder} alt="No image" className={classes.mainImage} />
-                    )}
-                    {safeImages.length > 1 && (
-                        <div className={classes.counter}>
-                            {mainIndex + 1} / {safeImages.length}
-                        </div>
-                    )}
-                </div>
-
-                {safeImages.length > 1 && (
-                    <Carousel
-                        responsive={responsive}
-                        showDots={false}
-                        infinite={false}
-                        keyBoardControl
-                        swipeable
-                        draggable
-                        containerClass={classes.thumbnailTrack}
-                        itemClass={classes.thumbnailItem}
-                        customLeftArrow={<button className={classes.customArrow}>‹</button>}
-                        customRightArrow={<button className={classes.customArrow}>›</button>}
-                    >
-                        {safeImages.map((src, idx) => (
-                            <div
-                                key={idx}
-                                className={`${classes.thumbnailWrapper} ${idx === mainIndex ? classes.active : ''}`}
-                                onClick={() => selectImage(src, idx)}
-                            >
-                                <img
-                                    src={src.startsWith('http') ? src : FILES_BASE_API_URL + src}
-                                    alt={`${alt} - thumb ${idx}`}
-                                    crossOrigin="anonymous"
-                                    className={classes.thumbnail}
-                                />
+        <div className="w-100">
+            <Row className={`${classes.galleryContainer} g-2 g-md-3`}>
+                {/* Main Image Column */}
+                <Col md={9} className="mb-2 mb-md-0 px-1 px-md-3">
+                    <div className={classes.mainImageWrapper}>
+                        {mainSrc ? (
+                            <img
+                                src={mainSrc.startsWith('http') ? mainSrc : FILES_BASE_API_URL + mainSrc}
+                                alt={`${alt} - main`}
+                                crossOrigin="anonymous"
+                                className={classes.mainImage}
+                            />
+                        ) : (
+                            <img src={imgHolder} alt="No image" className={classes.mainImage} />
+                        )}
+                        {safeImages.length > 0 && (
+                            <div className={classes.counter}>
+                                {mainIndex + 1} / {safeImages.length}
                             </div>
-                        ))}
-                    </Carousel>
-                )}
-            </div>
-        </Container>
+                        )}
+                    </div>
+                </Col>
+
+                {/* Vertical Thumbnails Column */}
+                <Col md={3} className="d-flex flex-column">
+                    <div className={classes.thumbnailTrackVertical}>
+                        {safeImages.length > 0 ? (
+                            safeImages.map((src, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`${classes.thumbnailWrapper} ${idx === mainIndex ? classes.active : ''}`}
+                                    onClick={() => selectImage(src, idx)}
+                                >
+                                    <img
+                                        src={src.startsWith('http') ? src : FILES_BASE_API_URL + src}
+                                        alt={`${alt} - thumb ${idx}`}
+                                        crossOrigin="anonymous"
+                                        className={classes.thumbnail}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div className={`${classes.thumbnailWrapper} ${classes.active}`}>
+                                <img src={imgHolder} alt="No image thumb" className={classes.thumbnail} />
+                            </div>
+                        )}
+                    </div>
+                </Col>
+            </Row>
+        </div>
     );
 };
 

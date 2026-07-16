@@ -120,19 +120,19 @@ function DashboardDev() {
     return (
         <>
             {verificationLoaded && !isVerified && (
-                <div className="alert alert-warning d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                    <span>
+                <div className="alert alert-warning glass-container d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 p-3" style={{ borderLeft: '4px solid #F59E0B', background: 'rgba(245, 158, 11, 0.05)' }}>
+                    <span style={{ color: 'var(--on-surface)' }}>
                         ⚠️ Your identity is not yet verified. Verify to unlock model publishing.
                     </span>
-                    <Link to="/profileSettings" className="btn btn-sm btn-outline-dark">
+                    <Link to="/profileSettings" className="btn-glass-outline" style={{ fontSize: '0.85rem', padding: '6px 12px' }}>
                         Complete Verification →
                     </Link>
                 </div>
             )}
             {userData.role === 'DEVELOPER' && !payoutReady && (
-                <div className="alert alert-info mb-3">
+                <div className="alert alert-info glass-container mb-4 p-3" style={{ borderLeft: '4px solid var(--primary)', background: 'rgba(34, 211, 238, 0.05)', color: 'var(--on-surface)' }}>
                     Complete Stripe setup to request payouts.{' '}
-                    <Link to="/wallet#stripe-setup">Set up Stripe on your wallet page →</Link>
+                    <Link to="/wallet#stripe-setup" className="gradient-text" style={{ fontWeight: 600 }}>Set up Stripe on your wallet page →</Link>
                 </div>
             )}
 
@@ -158,6 +158,7 @@ function DashboardDev() {
                 onDataLoaded={(count) => setTotalModels(count)}
                 skeletonCols={6}
                 skeletonRows={5}
+                fluid={true}
                 emptyState={{
                     title: "You haven't published any models yet",
                     subtitle: 'Upload your first AI model to start earning.',
@@ -178,6 +179,7 @@ function DashboardDev() {
                 skeletonCols={5}
                 skeletonRows={5}
                 defaultStatusArray={[]}
+                fluid={true}
                 statusOptions={[
                     { value: 'PENDING', label: 'Pending' },
                     { value: 'PAID', label: 'Paid' },

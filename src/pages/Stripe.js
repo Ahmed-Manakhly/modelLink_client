@@ -8,6 +8,7 @@ import axios from 'axios';
 import { BASE_URL } from '../lib/api';
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
 import { FaCreditCard, FaLock, FaCheckCircle } from 'react-icons/fa';
+import classes from './Stripe.module.scss';
 
 function Stripe() {
     const [searchParams] = useSearchParams();
@@ -106,13 +107,19 @@ function Stripe() {
     if (paymentSuccess) {
         return (
             <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
-                <Card className="text-center p-5 shadow-lg" style={{ maxWidth: '500px', borderRadius: '20px', border: 'none' }}>
-                    <Card.Body>
-                        <FaCheckCircle className="text-success mb-4 animate-bounce" size={80} />
-                        <h2 className="mb-3" style={{ fontWeight: 800, color: 'var(--primary)' }}>Payment Successful!</h2>
-                        <p className="text-muted">Stripe has confirmed the transaction. Unlocking asset downloads now...</p>
-                    </Card.Body>
-                </Card>
+                <div className="glass-container text-center p-5 shadow-lg" style={{ maxWidth: '500px', width: '100%', borderRadius: '15px' }}>
+                    <div className="p-3">
+                        <svg width="0" height="0">
+                            <linearGradient id="successIconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop stopColor="var(--primary)" offset="0%" />
+                                <stop stopColor="var(--on-surface)" offset="100%" />
+                            </linearGradient>
+                        </svg>
+                        <FaCheckCircle className={`mb-4 animate-bounce ${classes.successIcon}`} size={80} style={{ fill: 'url(#successIconGradient)' }} />
+                        <h2 className={`mb-3 gradient-text ${classes.successTitle}`}>Payment Successful!</h2>
+                        <p className={classes.successText}>Stripe has confirmed the transaction. Unlocking asset downloads now...</p>
+                    </div>
+                </div>
             </Container>
         );
     }
@@ -120,62 +127,53 @@ function Stripe() {
     return (
         <Container className="py-5 d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
             {order && (
-                <Card className="shadow-lg overflow-hidden" style={{ maxWidth: '650px', width: '100%', borderRadius: '20px', border: 'none' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', color: '#fff', padding: '2rem' }}>
-                        <h3 className="mb-1 fw-bold">Stripe Checkout</h3>
-                        <p className="mb-0 text-white-50 small">Secure professional B2B order settlement</p>
+                <div className="glass-container shadow-lg overflow-hidden" style={{ maxWidth: '650px', width: '100%', borderRadius: '15px' }}>
+                    <div className={classes.checkoutHeader}>
+                        <h3 className={`mb-1 fw-bold ${classes.checkoutTitle}`}>Stripe Checkout</h3>
+                        <p className={`mb-0 small ${classes.checkoutSubtitle}`}>Secure professional B2B order settlement</p>
                     </div>
 
-                    <Card.Body className="p-4">
-                        <div
-                            style={{
-                                backgroundColor: '#fff3cd',
-                                color: '#856404',
-                                border: '1px solid #ffc107',
-                                borderRadius: '6px',
-                                padding: '8px 14px',
-                                fontSize: '0.875rem',
-                                marginBottom: '16px',
-                                textAlign: 'center'
-                            }}
-                        >
+                    <div className="p-4">
+                        <div className={classes.demoWarning}>
                             Demo Mode — Payments are simulated. No real card is charged.
                         </div>
 
-                        <div className="mb-4 p-3 rounded bg-light" style={{ borderLeft: '5px solid #2a5298' }}>
-                            <h6 className="mb-1 text-muted text-uppercase small" style={{ fontWeight: 700 }}>Order Summary</h6>
-                            <h5 className="mb-1" style={{ fontWeight: 700 }}>{order.title || 'AI Model Order'}</h5>
+                        <div className={`mb-4 p-3 rounded ${classes.orderSummary}`}>
+                            <h6 className={`mb-1 text-uppercase small ${classes.summaryTitle}`}>Order Summary</h6>
+                            <h5 className={`mb-1 ${classes.summaryTitle}`}>{order.title || 'AI Model Order'}</h5>
                             <div className="d-flex justify-content-between align-items-center mt-2">
-                                <span className="text-muted">Total Purchase Price</span>
-                                <span className="fw-bold text-primary" style={{ fontSize: '1.25rem' }}>
+                                <span className={classes.summaryItem}>Total Purchase Price</span>
+                                <span className={`fw-bold ${classes.summaryPrice}`}>
                                     ${Number(order.purchasePrice).toFixed(2)}
                                 </span>
                             </div>
                         </div>
 
                         <Form onSubmit={handlePaymentSubmit}>
-                            <h6 className="mb-3 text-muted text-uppercase small" style={{ fontWeight: 700 }}>Credit Card Details</h6>
+                            <h6 className={`mb-3 text-uppercase small ${classes.sectionTitle}`}>Credit Card Details</h6>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className="small fw-semibold">Cardholder Name</Form.Label>
+                                <Form.Label className={`small fw-semibold ${classes.formLabel}`}>Cardholder Name</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Jane Doe"
                                     value={cardName}
                                     onChange={(e) => setCardName(e.target.value)}
                                     required
+                                    className={classes.formInput}
                                 />
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label className="small fw-semibold">Card Number</Form.Label>
+                                <Form.Label className={`small fw-semibold ${classes.formLabel}`}>Card Number</Form.Label>
                                 <div className="input-group">
-                                    <span className="input-group-text"><FaCreditCard /></span>
+                                    <span className={`input-group-text ${classes.formInput}`}><FaCreditCard /></span>
                                     <Form.Control
                                         type="text"
                                         value={cardNumber}
                                         onChange={(e) => setCardNumber(e.target.value)}
                                         required
+                                        className={classes.formInput}
                                     />
                                 </div>
                             </Form.Group>
@@ -183,44 +181,45 @@ function Stripe() {
                             <Row className="mb-4">
                                 <Col md={6}>
                                     <Form.Group>
-                                        <Form.Label className="small fw-semibold">Expiration Date</Form.Label>
+                                        <Form.Label className={`small fw-semibold ${classes.formLabel}`}>Expiration Date</Form.Label>
                                         <Form.Control
                                             type="text"
                                             value={expiry}
                                             onChange={(e) => setExpiry(e.target.value)}
                                             required
+                                            className={classes.formInput}
                                         />
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
                                     <Form.Group>
-                                        <Form.Label className="small fw-semibold">CVC / CVV</Form.Label>
+                                        <Form.Label className={`small fw-semibold ${classes.formLabel}`}>CVC / CVV</Form.Label>
                                         <Form.Control
                                             type="password"
                                             value={cvc}
                                             onChange={(e) => setCvc(e.target.value)}
                                             maxLength={4}
                                             required
+                                            className={classes.formInput}
                                         />
                                     </Form.Group>
                                 </Col>
                             </Row>
 
-                            <div className="d-flex justify-content-center align-items-center text-muted mb-4 small">
-                                <FaLock className="me-2 text-success" />
+                            <div className={`d-flex justify-content-center align-items-center mb-4 small ${classes.securityNote}`}>
+                                <FaLock className={`me-2 ${classes.successIcon}`} />
                                 Guaranteed 256-bit SSL encrypted connection through Stripe gateway.
                             </div>
 
                             <Button
                                 type="submit"
-                                className="w-100 py-3 fw-bold text-uppercase"
-                                style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', border: 'none', borderRadius: '10px' }}
+                                className={`w-100 py-3 fw-bold text-uppercase btn-glass-primary ${classes.payButton}`}
                             >
                                 Confirm & Pay ${Number(order.purchasePrice).toFixed(2)}
                             </Button>
                         </Form>
-                    </Card.Body>
-                </Card>
+                    </div>
+                </div>
             )}
         </Container>
     );

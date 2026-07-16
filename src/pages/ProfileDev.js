@@ -12,8 +12,7 @@ import PageTableSec from '../components/layout/PageTableSec'
 import { getOrderColumns } from '../utility/tableColumns';
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 import ChatCard from '../components/ChatCard'
-// import { Box } from "@mui/material";
-// import { Col  } from 'react-bootstrap'
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 // import {getAuthToken} from '../utility/tokenLoader'
 
 
@@ -122,11 +121,18 @@ function ProfileDev({ onlineUsers }) {
     }, [userUpdated, user, dispatch, id, token, isOwnProfile])
     //----------------------------------------------------------
     return (
-        <>
+        <div style={{ paddingTop: '20px' }}>
             {!token && user?.role === 'DEVELOPER' && (
-                <div className="alert alert-info mx-auto my-3" style={{ maxWidth: '1140px', width: '95%' }}>
-                    <Link to="/auth?mode=login">Sign in</Link> to message this developer.
-                </div>
+                <GlobalWrapper>
+                    <div className="glass-container p-3 mb-4 w-100" style={{ 
+                        borderLeft: '4px solid var(--primary)',
+                        background: 'rgba(34, 211, 238, 0.05)' // primary with low opacity
+                    }}>
+                        <span style={{ color: 'var(--primary)', fontWeight: 500 }}>
+                            <Link to="/auth?mode=login" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Sign in</Link> to message this developer.
+                        </span>
+                    </div>
+                </GlobalWrapper>
             )}
             {user?.role === 'DEVELOPER' && isLoggedIn && !isOwnProfile && (
                 <ChatCard onlineUsers={onlineUsers} userData={user} userId={user?.id} />
@@ -136,9 +142,30 @@ function ProfileDev({ onlineUsers }) {
                 modelCount={user.role === 'DEVELOPER' ? models.length : undefined}
                 totalOrders={user.role === 'DEVELOPER' ? user.total_orders : undefined}
             />
-            {user.role === 'DEVELOPER' && <PopularServices models={models.slice(0, 10)} title='Models Uploaded By This Developer' />}
-            {user.role === 'CLIENT' && isOwnProfile && <PageTableSec data={orders} columns={getOrderColumns()} tableTitle={'Order History'} />}
-        </>
+            {user.role === 'DEVELOPER' && (
+                <div style={{ marginTop: '2rem' }}>
+                    <PopularServices 
+                        models={models.slice(0, 10)} 
+                        title='Models Uploaded By This Developer' 
+                        titleClassName="page-main-title gradient-text"
+                    />
+                </div>
+            )}
+            {user.role === 'CLIENT' && isOwnProfile && (
+                <div style={{ marginTop: '2rem' }}>
+                    <GlobalWrapper>
+                        <h2 className="page-main-title gradient-text mb-4" style={{ textAlign: 'left' }}>
+                            Order History
+                        </h2>
+                    </GlobalWrapper>
+                    <PageTableSec 
+                        data={orders} 
+                        columns={getOrderColumns()} 
+                        tableTitle={null}
+                    />
+                </div>
+            )}
+        </div>
     )
 }
 
