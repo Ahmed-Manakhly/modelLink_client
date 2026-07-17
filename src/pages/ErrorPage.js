@@ -11,6 +11,8 @@ import Toast from '../components/layout/Toast' ;
 import LoadingSpinner from '../components/layout/LoadingSpinner' ;
 //-----------------------------------------
 import {useState , useEffect} from 'react'
+import { createAPI } from '../lib/api';
+const API = createAPI();
 import { Link } from 'react-router-dom';
 import { RiRobot2Line } from "react-icons/ri";
 import styles from './ErrorPage.module.scss';
@@ -25,14 +27,16 @@ import { footerCategoriesData , mobNavData , mobNavData_2} from '../constants/ma
 import WarningModal from '../components/layout/WarningModal'
 import { socket } from '../hooks/useSocket';
 
-let init = true
+let warningTimeoutId = null;
+let expireTimeoutId = null;
+const SESSION_MINUTES = 45;
 
 const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification , handleUpdateNotification , chats , checkOnlineStatus , handleDeleteChat , getSearch,
     onClickLink}) => {
     //----------------------------------------
     const [menuOpen , setMenuOpen]=useState(false) ;
     const [warning,setWarning] = useState({show:false , type : '' , message : '' , action : ''}) ;
-    const [timeExtanded,setTimeExtanded] = useState(false) ;
+    const [sessionKey,setSessionKey] = useState(0) ;
 
     const onClickHandler = ()=>{
         setMenuOpen(true)
@@ -48,20 +52,45 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     const isLoading = useSelector(state => state.ui.isLoading)
     //----------------------------------------
 
-    const onAction = ()=>{
-        setTimeExtanded(true)
-        init = true
-        closeModal();
-    }
-    //----------------
-    const closeModal = ()=>{
-        if (warning.cancelText === 'Logout') {
+    const onAction = async ()=>{
+        try {
+            const currentToken = getAuthToken();
+            if (!currentToken || currentToken === 'EXPIRED') throw new Error("No token");
+
+            const response = await API.get(`auth/refresh-token`, {
+                headers: { Authorization: `Bearer ${currentToken}` }
+            });
+            
+            const resData = response.data;
+            const newToken = resData.token;
+            
+            localStorage.setItem('token', newToken);
+            let userDataStorage = safeParseStorage('userData');
+            if (userDataStorage) {
+                userDataStorage.token = newToken;
+                localStorage.setItem('userData', JSON.stringify(userDataStorage));
+                dispatch(authActions.onLogin(userDataStorage));
+            }
+
+            const expiration = new Date();
+            expiration.setMinutes(expiration.getMinutes() + SESSION_MINUTES);
+            localStorage.setItem('expiration', expiration.toISOString());
+
+            setSessionKey(prev => prev + 1);
+            setWarning(prev => ({ ...prev, show: false }));
+        } catch (error) {
+            console.error("Session refresh failed:", error);
             socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut());
             navigate("/auth?mode=login", { replace: true });
+            setWarning(prev => ({...prev, show: false}));
         }
+    }
+    //----------------
+    const closeModal = () => {
+        // Just hide the modal! Do NOT forcefully log out.
         setWarning(prev => {
-            return {...prev , show : false}
+            return { ...prev, show: false }
         })
     }
     //----------------------------------------
@@ -72,12 +101,6 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     const dispatch = useDispatch();
     //----------------------------------------
     let token = getAuthToken() ;
-
-    useEffect(()=>{
-        if(timeExtanded){
-            token = getAuthToken() ;
-        }
-    },[timeExtanded])
     //----------------------------------CART DATA
     useEffect(()=>{
         if(token){
@@ -98,59 +121,51 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     window.addEventListener('scroll', scrollHandler)
 
     useEffect(() => {
-        if(!token){
-            return ;
-        }
-        //-----------------------------------------------------
-        if(token === 'EXPIRED' && !timeExtanded) {
-            socket.emit("leavingRoom", userData?.id);
-            dispatch(authActions.onLoginOut())
-            navigate("/auth?mode=login",{replace :true});
-            // console.log('EXPIRED')
-        }
-        if(token && init  ){
-            if(timeExtanded){
-                const storedUserData = safeParseStorage('userData');
-                if (storedUserData) {
-                    dispatch(authActions.onLogin(storedUserData))
-                }
-                const expiration = new Date();
-                expiration.setMinutes(expiration.getMinutes() + 40) ;
-                localStorage.setItem('expiration' , expiration.toISOString()) ;
-                const now = new Date() ;
-                const tokenDuration = expiration.getTime() - now.getTime() ;
-                setTimeout(()=>{
-                    setWarning({show:true , type : 'action' , message : 'Your Session Will Be Expired In 5 Seconds' , action :'Keep Me Login', cancelText: 'Logout'}) ;
-                },tokenDuration)
-                setTimeExtanded(false)
-                init = false
-            }else if(token !== 'EXPIRED'){
-                const storedUserData = safeParseStorage('userData');
-                if (storedUserData) {
-                    dispatch(authActions.onLogin(storedUserData))
-                }
-                const tokenDuration = getTokenDuration() ;
-                setTimeout(()=>{
-                    setWarning({show:true , type : 'action' , message : 'Your Session Will Be Expired In 5 Seconds' , action :'Keep Me Login', cancelText: 'Logout'}) ;
-                },tokenDuration)
-                init = false
-            }
-        }
-    }, [token  , navigate , dispatch , init ,timeExtanded ,userData ]);
-    //----------------------------------------
-    useEffect(()=>{
-        if(warning.show === true){
+        if(!token) return;
 
-                if(!timeExtanded){
-                    setTimeout(()=>{
-                        closeModal();
-                        init = true;
-                    },5000)
-                }else{
-                    return
-                }
+        if (token === 'EXPIRED') {
+            socket.emit("leavingRoom", userData?.id);
+            dispatch(authActions.onLoginOut());
+            navigate("/auth?mode=login", { replace: true });
+            return;
         }
-    },[warning.show , timeExtanded])
+
+        const storedUserData = safeParseStorage('userData');
+        if (storedUserData && storedUserData.id !== userData?.id) {
+            dispatch(authActions.onLogin(storedUserData));
+        }
+
+        const tokenDuration = getTokenDuration();
+        if (tokenDuration <= 0) {
+            socket.emit("leavingRoom", userData?.id);
+            dispatch(authActions.onLoginOut());
+            navigate("/auth?mode=login", { replace: true });
+            return;
+        }
+
+        const warningTime = Math.max(0, tokenDuration - 300000);
+        
+        if (warningTimeoutId) clearTimeout(warningTimeoutId);
+        warningTimeoutId = setTimeout(() => {
+            setWarning({ show: true, type: 'action', message: 'Your Session Will Be Expired Soon', action: 'Keep Me Login', cancelText: 'Close' });
+        }, warningTime);
+
+        if (expireTimeoutId) clearTimeout(expireTimeoutId);
+        expireTimeoutId = setTimeout(() => {
+            socket.emit("leavingRoom", userData?.id);
+            dispatch(authActions.onLoginOut());
+            navigate("/auth?mode=login", { replace: true });
+            setWarning(prev => ({...prev, show: false}));
+        }, tokenDuration);
+
+        return () => {
+            if (warningTimeoutId) clearTimeout(warningTimeoutId);
+            if (expireTimeoutId) clearTimeout(expireTimeoutId);
+        };
+    }, [token, sessionKey, navigate, dispatch, userData?.id]);
+    //----------------------------------------
+    // Removed the secondary auto-logout useEffect entirely since expireTimeoutId now handles it!
+    //----------------------------------------
     //----------------------------------------
 
     return <>

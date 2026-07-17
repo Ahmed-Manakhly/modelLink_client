@@ -3,11 +3,11 @@ import { deleteModelReq } from './modelRequests';
 
 const API = createAPI();
 
-const authUrl    = 'auth';
-const loginUrl   = `${authUrl}/login`;
-const signupUrl  = `${authUrl}/register`;
+const authUrl = 'auth';
+const loginUrl = `${authUrl}/login`;
+const signupUrl = `${authUrl}/register`;
 
-const loginRequest  = (data) => API.post(loginUrl, data);
+const loginRequest = (data) => API.post(loginUrl, data);
 const signupRequest = (data) => API.post(signupUrl, data);
 
 

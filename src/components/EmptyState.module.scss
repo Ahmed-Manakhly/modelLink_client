@@ -27,16 +27,3 @@
     line-height: 1.5;
 }
 
-.action {
-    padding: 0.5rem 1.5rem;
-    background: var(--primary, #5DB8DD);
-    color: var(--on-surface);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-
-    &:hover {
-        opacity: 0.85;
-    }
-}
