@@ -1,7 +1,7 @@
-import Header from '../components/layout/Header';
-import Val from '../components/Val'
-import { vals } from '../constants/marketingData';
-import banner from '../assets/banner_3.png'
+// import Header from '../components/layout/Header';
+// import Val from '../components/Val'
+// import { vals } from '../constants/marketingData';
+// import banner from '../assets/banner_3.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { getAuthToken } from '../utility/tokenLoader'
@@ -11,6 +11,7 @@ import FormActions from '../components/FormActions'
 import ProfileCompletionGuard from '../components/ProfileCompletionGuard';
 import { createModelReq } from '../lib/modelRequests';
 import { getVerificationMeReq } from '../lib/verificationRequests';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 import { socket } from '../hooks/useSocket';
 
 function CreateModel() {
@@ -98,19 +99,19 @@ function CreateModel() {
     };
     //==========================================================================================
     return (
-        <>
-            <Header
-                // txt_1='The ModelLink'
-                txt_2=' Be part of something bigger'
-                txt_3=" Share your insights. Together, we're advancing the frontier of production AI."
-                banner={banner}
-            />
-            {/* <Categories/> */}
+        <GlobalWrapper className="mt-4">
+            <div className="mb-4">
+                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
+                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Create a New Model 🚀</span>
+                </h2>
+                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>Be part of something bigger. Share your insights. Together, we're advancing the frontier of production AI.</p>
+            </div>
             <ProfileCompletionGuard>
-                <FormActions formTitle={'Create a New Model'} onCreatingModelAction={onCreatingModelAction} />
+                <div className="w-100 h-100 p-0 m-0">
+                    <FormActions onCreatingModelAction={onCreatingModelAction} formTitle="" />
+                </div>
             </ProfileCompletionGuard>
-            <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
-        </>
+        </GlobalWrapper>
     )
 }
 

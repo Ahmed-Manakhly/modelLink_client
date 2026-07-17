@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getAuthToken } from '../utility/tokenLoader';
 import { uiActions } from '../store/UI-slice';
 import { getAllUsersReq, updateUserReq, deleteUserReq, getAuditLogsReq, getSettingsReq, updateSettingsReq, getAllTransactionsReq, getWebhookEventsReq, getAdminPendingCountsReq } from '../lib/adminRequests';
 import { getAllPayoutsReq, approvePayoutReq, rejectPayoutReq } from '../lib/payoutRequests';
 import { getDisputesReq, resolveDisputeReq } from '../lib/disputeRequests';
 import { getAllVerificationsReq, approveVerificationReq, rejectVerificationReq } from '../lib/verificationRequests';
-import { Container, Tabs, Tab, Button, Form } from 'react-bootstrap';
+import { Tabs, Tab, Form } from 'react-bootstrap';
 import Modal from '../components/layout/Modal';
 import DashboardDataSection from '../components/layout/DashboardDataSection';
 import { getAllModelsReq, deleteModelReq, updateModelStatusReq, restoreModelReq, bulkUpdateModelsReq } from '../lib/loaders';
@@ -23,6 +23,8 @@ import {
 } from '../utility/tableColumns';
 import WarningModal from '../components/layout/WarningModal';
 import AdminTaxonomySection from '../components/admin/AdminTaxonomySection';
+import CustomSelect from '../components/ui/CustomSelect';
+import classes from './AdminDashboard.module.scss';
 
 const AdminTabLabel = ({ label, count = 0 }) => (
     <span className="d-inline-flex align-items-center gap-2">
@@ -43,6 +45,13 @@ function AdminDashboard() {
     const token = getAuthToken();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [activeTab, setActiveTab] = useState(() => {
+        if (location.pathname.includes('/admin/disputes')) return 'disputes';
+        return 'models';
+    });
+
     const userData = useSelector(state => state.auth.userData) || {};
     const isAdminRole = userData.role === 'ADMIN';
 
@@ -144,6 +153,7 @@ function AdminDashboard() {
     }, [token, dispatch]);
 
     const handleTabSelect = (key) => {
+        setActiveTab(key);
         if (key === 'settings' && !settingsLoaded) {
             loadSettings();
         }
@@ -484,231 +494,242 @@ function AdminDashboard() {
     ];
 
     return (
-        <Container className="py-5">
+        <div className="w-100">
             {warning.show && <WarningModal
                 warning={warning}
                 onAction={confirmWarningAction}
                 onClose={() => setWarning({ show: false, onAction: null, message: '', type: 'action', action: 'Confirm' })}
             />}
-            <h2>Administration Dashboard</h2>
+            <h2 className="gradient-text mb-4" style={{ fontWeight: 700 }}>🛡️ Administration Dashboard</h2>
 
-            <Tabs defaultActiveKey="models" id="admin-dashboard-tabs" className="mb-4" onSelect={handleTabSelect} unmountOnExit={true}>
-                {/* All Models Management */}
-                <Tab eventKey="models" title="All Models">
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.models}
-                            getData={loadAllModels}
-                            deleteData={handleDeleteModel}
-                            updateData={handleUpdateModelStatus}
-                            contentType="models"
-                            columns={(handleDelete, handleStatusChange) => getModelColumns(handleDelete, handleStatusChange, true, handleFeaturedChange)}
-                            tableTitle="Manage All Models"
-                            isAdmin={true}
-                            enableBulkSelection={true}
-                            bulkActions={modelBulkActions}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="users" title="Users & Accounts">
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.users}
-                            getData={loadAllUsers}
-                            contentType="users"
-                            dataKey="users"
-                            columns={() => getAdminUserColumns(handleSuspendUser, handleReactivateUser)}
-                            tableTitle="Users & Accounts"
-                            statusFilterParam="isActive"
-                            defaultStatusArray={[]}
-                            statusOptions={[
-                                { value: 'true', label: 'Active' },
-                                { value: 'false', label: 'Suspended' },
-                            ]}
-                            extraFilters={[
-                                {
-                                    param: 'role',
-                                    label: 'Role',
-                                    placeholder: 'All Roles',
-                                    options: [
-                                        { value: 'CLIENT', label: 'Client' },
-                                        { value: 'DEVELOPER', label: 'Developer' },
-                                        { value: 'ADMIN', label: 'Admin' },
-                                    ],
-                                },
-                                {
-                                    param: 'isVerified',
-                                    label: 'Verified',
-                                    placeholder: 'All',
-                                    options: [
-                                        { value: 'true', label: 'Yes' },
-                                        { value: 'false', label: 'No' },
-                                    ],
-                                },
-                            ]}
-                            emptyState={{
-                                title: 'No users found',
-                                subtitle: 'Try adjusting your role, status, or verified filters.',
-                            }}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="payouts" title={<AdminTabLabel label="Payout Approvals" count={pendingCounts.payouts} />}>
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.payouts}
-                            getData={loadAllPayouts}
-                            contentType="payouts"
-                            dataKey="payouts"
-                            columns={() => getAdminPayoutColumns(handleApprovePayout, handleOpenPayoutReject)}
-                            tableTitle="Payout Approvals"
-                            defaultStatusArray={['PENDING', 'PAID', 'REJECTED']}
-                            statusOptions={[
-                                { value: 'PENDING', label: 'Pending' },
-                                { value: 'PAID', label: 'Paid' },
-                                { value: 'REJECTED', label: 'Rejected' },
-                            ]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="disputes" title={<AdminTabLabel label="Disputes Center" count={pendingCounts.disputes} />}>
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.disputes}
-                            getData={loadAllDisputes}
-                            contentType="disputes"
-                            dataKey="disputes"
-                            columns={() => getAdminDisputeColumns(handleOpenDisputeResolve)}
-                            tableTitle="Disputes"
-                            defaultStatusArray={['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED']}
-                            statusOptions={[
-                                { value: 'OPEN', label: 'Open' },
-                                { value: 'UNDER_REVIEW', label: 'Under Review' },
-                                { value: 'RESOLVED', label: 'Resolved' },
-                                { value: 'REJECTED', label: 'Rejected' },
-                            ]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="verifications" title={<AdminTabLabel label="Developer Verifications" count={pendingCounts.verifications} />}>
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.verifications}
-                            getData={loadAllVerifications}
-                            contentType="verifications"
-                            dataKey="verifications"
-                            columns={() => getAdminVerificationColumns(handleApproveVerification, handleOpenVerifReject)}
-                            tableTitle="Developer Verifications"
-                            defaultStatusArray={['PENDING', 'APPROVED', 'REJECTED']}
-                            statusOptions={[
-                                { value: 'PENDING', label: 'Pending' },
-                                { value: 'APPROVED', label: 'Approved' },
-                                { value: 'REJECTED', label: 'Rejected' },
-                            ]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="transactions" title="Transactions">
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.transactions}
-                            getData={loadAllTransactions}
-                            contentType="transactions"
-                            dataKey="transactions"
-                            columns={getAdminTransactionColumns}
-                            tableTitle="Transactions"
-                            defaultStatusArray={[]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="auditLogs" title="Audit Logs">
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.auditLogs}
-                            getData={loadAllAuditLogs}
-                            contentType="auditLogs"
-                            dataKey="logs"
-                            columns={getAdminAuditLogColumns}
-                            tableTitle="Audit Logs"
-                            defaultStatusArray={[]}
-                            extraFilters={[
-                                {
-                                    param: 'actionType',
-                                    label: 'Action Type',
-                                    placeholder: 'All actions',
-                                    options: [
-                                        { value: 'CREATE_USER', label: 'Create User' },
-                                        { value: 'UPDATE_USER', label: 'Update User' },
-                                        { value: 'SUSPEND_USER', label: 'Suspend User' },
-                                        { value: 'RESOLVE_DISPUTE', label: 'Resolve Dispute' },
-                                        { value: 'UPDATE_SETTINGS', label: 'Update Settings' },
-                                    ],
-                                },
-                            ]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="webhooks" title={<AdminTabLabel label="Webhook Events" count={pendingCounts.webhooks} />}>
-                    <div>
-                        <DashboardDataSection
-                            key={refreshKeys.webhooks}
-                            getData={loadAllWebhooks}
-                            contentType="webhooks"
-                            dataKey="webhooks"
-                            columns={getAdminWebhookColumns}
-                            tableTitle="Webhook Events"
-                            defaultStatusArray={[]}
-                        />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="taxonomy" title="Taxonomy">
-                    <AdminTaxonomySection token={token} />
-                </Tab>
-
-                {/* Platform Settings */}
-                <Tab eventKey="settings" title="Platform Settings">
-                    <div>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Platform Fee (%)</Form.Label>
-                            <Form.Control
-                                type="number"
-                                min={1}
-                                max={50}
-                                value={platformFeeValue}
-                                onChange={(e) => setPlatformFeeValue(e.target.value)}
-                                readOnly={!isAdminRole}
+            <div className={classes.adminTabsContainer}>
+                <Tabs activeKey={activeTab} id="admin-dashboard-tabs" className="mb-4" onSelect={handleTabSelect} unmountOnExit={true}>
+                    {/* All Models Management */}
+                    <Tab eventKey="models" title="All Models">
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.models}
+                                getData={loadAllModels}
+                                deleteData={handleDeleteModel}
+                                updateData={handleUpdateModelStatus}
+                                contentType="models"
+                                columns={(handleDelete, handleStatusChange) => getModelColumns(handleDelete, handleStatusChange, true, handleFeaturedChange)}
+                                tableTitle="Manage All Models"
+                                isAdmin={true}
+                                enableBulkSelection={true}
+                                bulkActions={modelBulkActions}
                             />
-                            <Form.Text className="text-muted">
-                                Percentage retained from each order (1–50). Current default: 20%.
-                            </Form.Text>
-                        </Form.Group>
-                        {isAdminRole && (
-                            <Button
-                                variant="primary"
-                                onClick={handleSavePlatformFee}
-                                disabled={!settingsLoaded}
-                            >
-                                Save Platform Fee
-                            </Button>
-                        )}
-                    </div>
-                </Tab>
-            </Tabs>
+                        </div>
+                    </Tab>
+
+                    {/* Users Management */}
+                    <Tab eventKey="users" title="👥 Users & Accounts">
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.users}
+                                getData={loadAllUsers}
+                                contentType="users"
+                                dataKey="users"
+                                columns={() => getAdminUserColumns(handleSuspendUser, handleReactivateUser)}
+                                tableTitle="Users & Accounts"
+                                statusFilterParam="isActive"
+                                defaultStatusArray={[]}
+                                statusOptions={[
+                                    { value: 'true', label: 'Active' },
+                                    { value: 'false', label: 'Suspended' },
+                                ]}
+                                extraFilters={[
+                                    {
+                                        param: 'role',
+                                        label: 'Role',
+                                        placeholder: 'All Roles',
+                                        options: [
+                                            { value: 'CLIENT', label: 'Client' },
+                                            { value: 'DEVELOPER', label: 'Developer' },
+                                            { value: 'ADMIN', label: 'Admin' },
+                                        ],
+                                    },
+                                    {
+                                        param: 'isVerified',
+                                        label: 'Verified',
+                                        placeholder: 'All',
+                                        options: [
+                                            { value: 'true', label: 'Yes' },
+                                            { value: 'false', label: 'No' },
+                                        ],
+                                    },
+                                ]}
+                                emptyState={{
+                                    title: 'No users found',
+                                    subtitle: 'Try adjusting your role, status, or verified filters.',
+                                }}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Payouts Management */}
+                    <Tab eventKey="payouts" title={<AdminTabLabel label="💰 Payout Approvals" count={pendingCounts.payouts} />}>
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.payouts}
+                                getData={loadAllPayouts}
+                                contentType="payouts"
+                                dataKey="payouts"
+                                columns={() => getAdminPayoutColumns(handleApprovePayout, handleOpenPayoutReject)}
+                                tableTitle="Payout Approvals"
+                                defaultStatusArray={['PENDING', 'PAID', 'REJECTED']}
+                                statusOptions={[
+                                    { value: 'PENDING', label: 'Pending' },
+                                    { value: 'PAID', label: 'Paid' },
+                                    { value: 'REJECTED', label: 'Rejected' },
+                                ]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Disputes Management */}
+                    <Tab eventKey="disputes" title={<AdminTabLabel label="⚖️ Disputes Center" count={pendingCounts.disputes} />}>
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.disputes}
+                                getData={loadAllDisputes}
+                                contentType="disputes"
+                                dataKey="disputes"
+                                columns={() => getAdminDisputeColumns(handleOpenDisputeResolve)}
+                                tableTitle="Disputes"
+                                defaultStatusArray={['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED']}
+                                statusOptions={[
+                                    { value: 'OPEN', label: 'Open' },
+                                    { value: 'UNDER_REVIEW', label: 'Under Review' },
+                                    { value: 'RESOLVED', label: 'Resolved' },
+                                    { value: 'REJECTED', label: 'Rejected' },
+                                ]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Verifications Management */}
+                    <Tab eventKey="verifications" title={<AdminTabLabel label="✅ Developer Verifications" count={pendingCounts.verifications} />}>
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.verifications}
+                                getData={loadAllVerifications}
+                                contentType="verifications"
+                                dataKey="verifications"
+                                columns={() => getAdminVerificationColumns(handleApproveVerification, handleOpenVerifReject)}
+                                tableTitle="Developer Verifications"
+                                defaultStatusArray={['PENDING', 'APPROVED', 'REJECTED']}
+                                statusOptions={[
+                                    { value: 'PENDING', label: 'Pending' },
+                                    { value: 'APPROVED', label: 'Approved' },
+                                    { value: 'REJECTED', label: 'Rejected' },
+                                ]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Transactions Read-Only */}
+                    <Tab eventKey="transactions" title="💳 Transactions">
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.transactions}
+                                getData={loadAllTransactions}
+                                contentType="transactions"
+                                dataKey="transactions"
+                                columns={getAdminTransactionColumns}
+                                tableTitle="Transactions"
+                                defaultStatusArray={[]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Audit Logs Read-Only */}
+                    <Tab eventKey="auditLogs" title="📜 Audit Logs">
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.auditLogs}
+                                getData={loadAllAuditLogs}
+                                contentType="auditLogs"
+                                dataKey="logs"
+                                columns={getAdminAuditLogColumns}
+                                tableTitle="Audit Logs"
+                                defaultStatusArray={[]}
+                                extraFilters={[
+                                    {
+                                        param: 'actionType',
+                                        label: 'Action Type',
+                                        placeholder: 'All actions',
+                                        options: [
+                                            { value: 'CREATE_USER', label: 'Create User' },
+                                            { value: 'UPDATE_USER', label: 'Update User' },
+                                            { value: 'SUSPEND_USER', label: 'Suspend User' },
+                                            { value: 'RESOLVE_DISPUTE', label: 'Resolve Dispute' },
+                                            { value: 'UPDATE_SETTINGS', label: 'Update Settings' },
+                                        ],
+                                    },
+                                ]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Webhook Events Read-Only */}
+                    <Tab eventKey="webhooks" title={<AdminTabLabel label="🔗 Webhook Events" count={pendingCounts.webhooks} />}>
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.webhooks}
+                                getData={loadAllWebhooks}
+                                contentType="webhooks"
+                                dataKey="webhooks"
+                                columns={getAdminWebhookColumns}
+                                tableTitle="Webhook Events"
+                                defaultStatusArray={[]}
+                            />
+                        </div>
+                    </Tab>
+
+                    {/* Taxonomy Management */}
+                    <Tab eventKey="taxonomy" title="🏷️ Taxonomy">
+                        <AdminTaxonomySection token={token} />
+                    </Tab>
+
+                    {/* Platform Settings */}
+                    <Tab eventKey="settings" title="⚙️ Platform Settings">
+                        <div>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Platform Fee (%)</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    min={1}
+                                    max={50}
+                                    value={platformFeeValue}
+                                    onChange={(e) => setPlatformFeeValue(e.target.value)}
+                                    disabled={!settingsLoaded}
+                                    style={{ backgroundColor: 'var(--bg-main, #0a0a0a)', color: 'var(--on-surface, #e2e8f0)', border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}
+                                />
+                                <Form.Text style={{ color: 'var(--on-surface-muted, #a0aec0)' }}>
+                                    Percentage retained from each order (1–50). Current default: 20%.
+                                </Form.Text>
+                            </Form.Group>
+                            {isAdminRole && (
+                                <button type="button"
+                                    className="btn-glass-primary"
+                                    onClick={handleSavePlatformFee}
+                                    disabled={!settingsLoaded}
+                                >
+                                    Save Platform Fee
+                                </button>
+                            )}
+                        </div>
+                    </Tab>
+                </Tabs>
+            </div>
 
             {/* Payout Rejection Modal */}
             {showPayoutRejectModal && (
                 <Modal onClose={() => setShowPayoutRejectModal(false)}>
                     <div className="p-4">
-                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                            <h5 className="mb-0">Reject Payout Request</h5>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                            <h5 className="mb-0 gradient-text">Reject Payout Request</h5>
                             <button
                                 type="button"
                                 className="btn-close"
@@ -725,13 +746,14 @@ function AdminDashboard() {
                                     value={payoutRejectReason}
                                     onChange={(e) => setPayoutRejectReason(e.target.value)}
                                     required
+                                    style={{ backgroundColor: 'var(--bg-main, #0a0a0a)', color: 'var(--on-surface, #e2e8f0)', border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top mt-3">
-                                <Button variant="secondary" type="button" onClick={() => setShowPayoutRejectModal(false)}>
+                            <div className="d-flex justify-content-end gap-2 pt-3 mt-3" style={{ borderTop: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                                <button type="button" className="btn-glass-logout" onClick={() => setShowPayoutRejectModal(false)}>
                                     Cancel
-                                </Button>
-                                <Button type="submit" variant="danger">Reject Request</Button>
+                                </button>
+                                <button type="submit" className="btn-glass-danger">Reject Request</button>
                             </div>
                         </Form>
                     </div>
@@ -742,8 +764,8 @@ function AdminDashboard() {
             {showVerifRejectModal && (
                 <Modal onClose={() => setShowVerifRejectModal(false)}>
                     <div className="p-4">
-                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                            <h5 className="mb-0">Reject Developer Verification</h5>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                            <h5 className="mb-0 gradient-text">Reject Developer Verification</h5>
                             <button
                                 type="button"
                                 className="btn-close"
@@ -760,13 +782,14 @@ function AdminDashboard() {
                                     value={verifRejectReason}
                                     onChange={(e) => setVerifRejectReason(e.target.value)}
                                     required
+                                    style={{ backgroundColor: 'var(--bg-main, #0a0a0a)', color: 'var(--on-surface, #e2e8f0)', border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top mt-3">
-                                <Button variant="secondary" type="button" onClick={() => setShowVerifRejectModal(false)}>
+                            <div className="d-flex justify-content-end gap-2 pt-3 mt-3" style={{ borderTop: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                                <button type="button" className="btn-glass-logout" onClick={() => setShowVerifRejectModal(false)}>
                                     Cancel
-                                </Button>
-                                <Button type="submit" variant="danger">Reject Request</Button>
+                                </button>
+                                <button type="submit" className="btn-glass-danger">Reject Request</button>
                             </div>
                         </Form>
                     </div>
@@ -777,8 +800,8 @@ function AdminDashboard() {
             {showDisputeResolveModal && (
                 <Modal onClose={() => setShowDisputeResolveModal(false)}>
                     <div className="p-4">
-                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                            <h5 className="mb-0">Resolve Dispute</h5>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                            <h5 className="mb-0 gradient-text">Resolve Dispute</h5>
                             <button
                                 type="button"
                                 className="btn-close"
@@ -789,14 +812,14 @@ function AdminDashboard() {
                         <Form onSubmit={handleDisputeResolveSubmit}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Resolution</Form.Label>
-                                <Form.Select
+                                <CustomSelect
                                     value={disputeResolution}
-                                    onChange={(e) => setDisputeResolution(e.target.value)}
-                                    required
-                                >
-                                    <option value="REFUND_CLIENT">Refund Buyer (REFUND_CLIENT)</option>
-                                    <option value="RELEASE_TO_DEVELOPER">Release to Developer (RELEASE_TO_DEVELOPER)</option>
-                                </Form.Select>
+                                    onChange={(val) => setDisputeResolution(val)}
+                                    options={[
+                                        { value: 'REFUND_CLIENT', label: 'Refund Buyer (REFUND_CLIENT)' },
+                                        { value: 'RELEASE_TO_DEVELOPER', label: 'Release to Developer (RELEASE_TO_DEVELOPER)' }
+                                    ]}
+                                />
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Resolution Notes (required)</Form.Label>
@@ -807,19 +830,20 @@ function AdminDashboard() {
                                     onChange={(e) => setDisputeResolveNotes(e.target.value)}
                                     placeholder="Explain the resolution decision for audit purposes."
                                     required
+                                    style={{ backgroundColor: 'var(--bg-main, #0a0a0a)', color: 'var(--on-surface, #e2e8f0)', border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top mt-3">
-                                <Button variant="secondary" type="button" onClick={() => setShowDisputeResolveModal(false)}>
+                            <div className="d-flex justify-content-end gap-2 pt-3 mt-3" style={{ borderTop: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))' }}>
+                                <button type="button" className="btn-glass-logout" onClick={() => setShowDisputeResolveModal(false)}>
                                     Cancel
-                                </Button>
-                                <Button type="submit" variant="primary">Confirm Resolution</Button>
+                                </button>
+                                <button type="submit" className="btn-glass-primary">Confirm Resolution</button>
                             </div>
                         </Form>
                     </div>
                 </Modal>
             )}
-        </Container>
+        </div>
     );
 }
 

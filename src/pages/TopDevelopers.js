@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { getPublicDevelopersReq } from '../lib/loaders';
 import UserProfileStrip from '../components/UserProfileStrip';
 import cardClasses from '../components/Card.module.scss';

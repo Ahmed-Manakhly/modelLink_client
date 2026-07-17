@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { getAuthToken } from '../../utility/tokenLoader';
 import { createAssetReq, updateAssetReq } from '../../lib/versionRequests';
 
@@ -52,28 +52,28 @@ const VersionAssetsPanel = ({ version, onAssetsChanged, assetsLocked = false }) 
     };
 
     return (
-        <Row className="w-100 mb-5 d-flex flex-column gap-3">
-            <h4 style={{ textAlign: 'left', color: 'red', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+        <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
+            <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
                 Delivery assets for v{version.version}
-                <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
                     {assetsLocked
                         ? 'Locked — this version has paid or delivered orders. Create a new version to ship updated delivery files.'
                         : 'Clients who purchase this version receive these assets. Changes apply to future orders on this version only.'}
                 </span>
             </h4>
             {error && (
-                <p style={{ color: '#c0392b', fontSize: '14px', margin: 0 }}>{error}</p>
+                <p className="error-text" style={{ fontSize: '14px', margin: 0 }}>{error}</p>
             )}
             {ASSET_TYPES.map(({ type, label, placeholder }) => {
                 const existing = getAsset(type);
                 return (
-                    <Col xs={12} key={type} style={{ border: '1px solid #eee', borderRadius: '8px', padding: '12px', opacity: assetsLocked ? 0.75 : 1 }}>
+                    <Col xs={12} key={type} style={{ border: '1px solid var(--border-glass)', borderRadius: '8px', padding: '12px', opacity: assetsLocked ? 0.75 : 1, background: 'var(--bg-surface)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                             <strong>{label}</strong>
-                            <span style={{ fontSize: '12px', color: '#666' }}>{type}</span>
+                            <span style={{ fontSize: '12px', color: 'var(--on-surface-variant)' }}>{type}</span>
                         </div>
                         <p style={{ fontSize: '13px', marginBottom: '8px' }}>
-                            Current: <code>{maskValue(existing?.decryptedValue)}</code>
+                            Current: <code style={{ color: 'var(--primary)' }}>{maskValue(existing?.decryptedValue)}</code>
                         </p>
                         <Form.Group className="d-flex gap-2 flex-wrap">
                             <Form.Control
@@ -82,16 +82,17 @@ const VersionAssetsPanel = ({ version, onAssetsChanged, assetsLocked = false }) 
                                 value={drafts[type] ?? ''}
                                 disabled={assetsLocked}
                                 onChange={(e) => setDrafts((prev) => ({ ...prev, [type]: e.target.value }))}
+                                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
                             />
-                            <Button
+                            <button
                                 type="button"
-                                variant="outline-primary"
-                                size="sm"
+                                className="btn-glass-outline btn-sm"
                                 disabled={assetsLocked || !(drafts[type] ?? '').trim() || saving === type}
                                 onClick={() => handleSave(type)}
+                                style={{ padding: '6px 12px' }}
                             >
                                 {saving === type ? 'Saving…' : existing ? 'Update' : 'Add'}
-                            </Button>
+                            </button>
                         </Form.Group>
                     </Col>
                 );

@@ -12,7 +12,7 @@ import {
     completeStripeConnectDemoReq,
 } from '../lib/stripeConnectRequests';
 import { getMeReq } from '../lib/loaders';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import WarningModal from '../components/layout/WarningModal';
 import Modal from '../components/layout/Modal';
 import DashboardDataSection from '../components/layout/DashboardDataSection';
@@ -114,6 +114,7 @@ function WalletPage() {
         }
         loadWallet();
         loadConnectStatus();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     useEffect(() => {

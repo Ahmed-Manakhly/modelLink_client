@@ -10,7 +10,7 @@ import { getData, getOrderByIdReq, getReviewByOrderReq } from '../lib/loaders';
 import { confirmOrderReq, cancelOrderReq, refundOrderReq } from '../lib/orderRequests';
 import { createDisputeReq } from '../lib/disputeRequests';
 import { submitReviewReq } from '../lib/reviewRequests';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Modal from '../components/layout/Modal';
 import WarningModal from '../components/layout/WarningModal';
 import GlobalWrapper from '../components/layout/GlobalWrapper';

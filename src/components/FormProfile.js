@@ -6,7 +6,7 @@ import { PhoneInput  } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import {Container , Row , Col  } from 'react-bootstrap'
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import {useEffect , useState } from 'react' ;
 import { useSelector } from 'react-redux';
 
@@ -110,7 +110,7 @@ const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
                                         {(fNameInputIsInvalid )&& <p className={classes['error-text']}>Your First Name must not be empty</p>}
                                     </>}
                                     {(first_name&&!isEditing.first_name)&&
-                                        <p>{first_name} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,first_name:true}})}}/></p>
+                                        <p>{first_name} <EditOutlinedIcon style={{color: 'var(--primary)', cursor: 'pointer'}} titleAccess="edit" onClick={()=>{setEditing((prev)=>{return{...prev,first_name:true}})}}/></p>
                                     }
                                 </Col>
                                 <Col xs={0} md lg className={`${lNameClasses} d-flex flex-column align-items-left w-100`} >
@@ -121,7 +121,7 @@ const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
                                         {(lNameInputIsInvalid )&& <p className={classes['error-text']}>Your Last Name must not be empty</p>}
                                     </>}
                                     {(last_name&&!isEditing.last_name)&&
-                                        <p>{last_name} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,last_name:true}})}}/></p>
+                                        <p>{last_name} <EditOutlinedIcon style={{color: 'var(--primary)', cursor: 'pointer'}} titleAccess="edit" onClick={()=>{setEditing((prev)=>{return{...prev,last_name:true}})}}/></p>
                                     }
                                 </Col>
                             </Row>
@@ -135,7 +135,7 @@ const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
                                         {(orgNameInputIsInvalid )&& <p className={classes['error-text']}>Your Organization Name must not be empty</p>}
                                     </>}
                                     {(org_name&&!isEditing.org_name)&&
-                                        <p>{org_name} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_name:true}})}}/></p>
+                                        <p>{org_name} <EditOutlinedIcon style={{color: 'var(--primary)', cursor: 'pointer'}} titleAccess="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_name:true}})}}/></p>
                                     }
                                 </Col>
                             </Row>
@@ -163,7 +163,7 @@ const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
                                     onChange={orgnameInputChangeHandler} onBlur={orgnameInputBlurHandler} value={country.name?country.name:''}/>
                                     </>}
                                     {(org_phone&&!isEditing.org_phone)&&
-                                        <p>{userCountry} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_phone:true}})}}/></p>
+                                        <p>{userCountry} <EditOutlinedIcon style={{color: 'var(--primary)', cursor: 'pointer'}} titleAccess="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_phone:true}})}}/></p>
                                     }
                                 </Col>
                             </Row>
@@ -176,7 +176,7 @@ const FormProfile = ({onUpdateProfileAction  , isChanged, onRateChange}) => {
                                         {desInputIsInvalid && <p className={classes['error-text']}>Your Description Must Not Be Empty</p>}
                                     </>}
                                     {((org_desc !== '') &&!isEditing.org_desc)&&
-                                        <p>{org_desc} <BorderColorIcon style={{color: '#5DB8DD', cursor: 'pointer'}} title="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_desc:true}})}}/></p>
+                                        <p>{org_desc} <EditOutlinedIcon style={{color: 'var(--primary)', cursor: 'pointer'}} titleAccess="edit" onClick={()=>{setEditing((prev)=>{return{...prev,org_desc:true}})}}/></p>
                                     }
                                 </Col>
                             </Row>

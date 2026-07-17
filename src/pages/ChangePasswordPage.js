@@ -1,8 +1,7 @@
 import { Form, Link } from 'react-router-dom';
 import classes from '../components/layout/auth/Auth.module.scss';
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import ChangePassword from '../components/layout/auth/ChangePassword';
-import aiFace from '../assets/ai-face.png';
 
 function AuthCard({ title }) {
     return (

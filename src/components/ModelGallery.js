@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classes from './ModelGallery.module.scss';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { FILES_BASE_API_URL } from '../lib/api';
 import imgHolder from '../assets/imgHolder.jpg';
 
@@ -27,7 +27,7 @@ const ModelGallery = ({ images = [], alt = 'Model Gallery' }) => {
                                 className={classes.mainImage}
                             />
                         ) : (
-                            <img src={imgHolder} alt="No image" className={classes.mainImage} />
+                            <img src={imgHolder} alt="Unavailable" className={classes.mainImage} />
                         )}
                         {safeImages.length > 0 && (
                             <div className={classes.counter}>
@@ -57,7 +57,7 @@ const ModelGallery = ({ images = [], alt = 'Model Gallery' }) => {
                             ))
                         ) : (
                             <div className={`${classes.thumbnailWrapper} ${classes.active}`}>
-                                <img src={imgHolder} alt="No image thumb" className={classes.thumbnail} />
+                                <img src={imgHolder} alt="Unavailable thumbnail" className={classes.thumbnail} />
                             </div>
                         )}
                     </div>

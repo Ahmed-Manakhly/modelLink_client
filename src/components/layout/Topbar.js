@@ -70,11 +70,16 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
               </li>
             </>
           )}
-          {role === 'CLIENT' &&
-            <li className={` ${classes.item_2}  ${classes['dropdown-item']}`}>
-              <Link to={`/orders-client`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiPackage /> My Orders</Link>
-            </li>
-          }
+          {role === 'CLIENT' && (
+            <>
+              <li className={` ${classes.item_2}  ${classes['dropdown-item']}`}>
+                <Link to={`/orders-client`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiPackage /> My Orders</Link>
+              </li>
+              <li className={` ${classes.item_2}  ${classes['dropdown-item']}`}>
+                <Link to={`/reviews-client`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiStar /> My Reviews</Link>
+              </li>
+            </>
+          )}
           {(role === 'ADMIN' || role === 'EMPLOYEE') &&
             <li className={` ${classes.item_2}  ${classes['dropdown-item']}`}>
               <Link to={`/admin`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiShield /> Admin Dashboard</Link>

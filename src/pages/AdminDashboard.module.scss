@@ -1,0 +1,38 @@
+.adminTabsContainer {
+    :global(.nav-tabs) {
+        border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+
+        :global(.nav-item) {
+            margin-bottom: -1px;
+        }
+
+        :global(.nav-link) {
+            color: var(--text-color, #a0aec0);
+            border: 1px solid transparent;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            transition: all 0.2s ease-in-out;
+            background: transparent;
+
+            &:hover {
+                color: var(--on-surface, #e2e8f0);
+                border-color: transparent;
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+
+            &:global(.active) {
+                color: var(--primary, #06b6d4);
+                background-color: var(--surface-light, rgba(20, 20, 25, 0.7));
+                border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+                border-bottom-color: var(--bg-main, #0a0a0a);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+        }
+    }
+}

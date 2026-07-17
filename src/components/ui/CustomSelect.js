@@ -18,7 +18,7 @@ const CustomSelect = ({ options, value, onChange, placeholder = "Select an optio
     }, []);
 
     // Find selected option
-    const rawSelectedOption = options.find(opt => opt.value === value)?.label || placeholder;
+    const rawSelectedOption = options.find(opt => String(opt.value) === String(value) || opt.label === value)?.label || placeholder;
     const selectedOption = typeof rawSelectedOption === 'string' && rawSelectedOption.length > 40
         ? rawSelectedOption.slice(0, 40) + "..."
         : rawSelectedOption;

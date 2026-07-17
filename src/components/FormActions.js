@@ -5,12 +5,12 @@ import { useNavigate, Form as RouterForm, useNavigation } from 'react-router-dom
 import useInput from '../hooks/Use-Input';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import ToggleSwitch from './ToggleSwitch';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import DeleteIcon from '@mui/icons-material/Delete';
-import imgHolder from '../assets/imgHolder.jpg';
+// import DeleteIcon from '@mui/icons-material/Delete';
+import imgHolder from '../assets/modelPlaceholder.png';
 import { FILES_BASE_API_URL } from '../lib/api';
 import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
 import { isMedicalSubcategory } from '../lib/categoryHelpers';
@@ -19,7 +19,7 @@ import { createVersionReq } from '../lib/versionRequests';
 import { getAuthToken } from '../utility/tokenLoader';
 import VersionAssetsPanel from './ui/VersionAssetsPanel';
 import Modal from './layout/Modal';
-import { Button as BsButton } from 'react-bootstrap';
+// import { Button as BsButton } from 'react-bootstrap';
 
 const getAssetFromVersion = (version, type) =>
     version?.assets?.find((a) => a.type === type)?.decryptedValue || '';
@@ -356,7 +356,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const val = e.target.value;
         setTagInput(val);
         if (val.trim().length > 1) {
-            getTagsReq(val.trim(), 10).then(res => setTagSuggestions(res.data?.data?.tags || [])).catch(() => {});
+            getTagsReq(val.trim(), 10).then(res => setTagSuggestions(res.data?.data?.tags || [])).catch(() => { });
         } else {
             setTagSuggestions([]);
         }
@@ -366,7 +366,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const val = e.target.value;
         featureChangeHandler(e);
         if (val.trim().length > 1) {
-            getFeaturesReq(val.trim(), 10).then(res => setFeatureSuggestions(res.data?.data?.features || [])).catch(() => {});
+            getFeaturesReq(val.trim(), 10).then(res => setFeatureSuggestions(res.data?.data?.features || [])).catch(() => { });
         } else {
             setFeatureSuggestions([]);
         }
@@ -376,12 +376,12 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const val = e.target.value;
         metricChangeHandler(e);
         if (val.trim().length > 1) {
-            getMetricsReq(val.trim(), 10).then(res => setMetricSuggestions(res.data?.data?.metrics || [])).catch(() => {});
+            getMetricsReq(val.trim(), 10).then(res => setMetricSuggestions(res.data?.data?.metrics || [])).catch(() => { });
         } else {
             setMetricSuggestions([]);
         }
     };
-        const addTag = () => {
+    const addTag = () => {
         const trimmed = tagInput.trim();
         if (trimmed && !tags.includes(trimmed)) {
             setTags([...tags, trimmed]);
@@ -612,31 +612,33 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const classesName = getClasses(hookInvalid);
         const onChange = wrapChange(hookChange);
         const onSelectChange = wrapSelectChange(hookChange);
+
+        const hasValue = name === 'categoryId' ? (thisModel?.categoryId || thisModel?.categoryRel || thisModel?.category) : thisModel?.[name];
+        const displayValue = name === 'categoryId' ? (thisModel?.categoryRel?.name || thisModel?.category || thisModel?.categoryId) : thisModel?.[name];
+
         return (
-            <Row xs={0} md lg className={`${classesName} d-flex flex-column align-items-left w-100`} >
+            <div className={`${classesName} d-flex flex-column align-items-left w-100 mb-3`} >
                 <label htmlFor={name}>{label}</label>
-                {(!thisModel?.[name] || (thisModel?.[name] && isEditing[setEditingField])) && <>
+                {(!hasValue || (hasValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
                         <CustomSelect
                             options={options.map(item => ({ label: item.name, value: String(item.id ?? item.name) }))}
-                            value={hookValue !== '' ? hookValue : (thisModel?.[name] || '')}
+                            value={hookValue !== '' ? hookValue : (name === 'categoryId' ? (thisModel?.categoryId || thisModel?.categoryRel?.id || thisModel?.category || '') : (thisModel?.[name] || ''))}
                             onChange={onSelectChange}
                             placeholder={`--Please Choose ${label}--`}
-                            isWeb={true}
+
                         />
                     ) : (
                         type === 'textarea' ?
-                        <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} /> :
-                        <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                            <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} /> :
+                            <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
                     )}
                     {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
                 </>}
-                {(thisModel?.[name] && !isEditing[setEditingField]) &&
-                    <p>{name === 'categoryId'
-                        ? (thisModel?.categoryRel?.name || thisModel?.[name])
-                        : thisModel?.[name]} <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                {(hasValue && !isEditing[setEditingField]) &&
+                    <p>{displayValue} <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
                 }
-            </Row>
+            </div>
         );
     };
 
@@ -645,7 +647,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const onChange = wrapChange(hookChange);
         const onSelectChange = wrapSelectChange(hookChange);
         return (
-            <Row xs={0} md lg className={`${classesName} d-flex flex-column align-items-left w-100`} >
+            <div className={`${classesName} d-flex flex-column align-items-left w-100 mb-3`} >
                 <label htmlFor={name}>{label}</label>
                 {(!thisValue || (thisValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
@@ -654,7 +656,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                             value={hookValue !== '' ? hookValue : (thisValue || '')}
                             onChange={onSelectChange}
                             placeholder={`--Please Choose ${label}--`}
-                            isWeb={true}
+
                         />
                     ) : type === 'textarea' ? (
                         <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} />
@@ -664,37 +666,37 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                     {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
                 </>}
                 {(thisValue && !isEditing[setEditingField]) &&
-                    <p>{thisValue} <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                    <p>{thisValue} <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
                 }
-            </Row>
+            </div>
         );
     };
 
     return (
-        <Container>
+        <div className="w-100 m-0 p-0">
             <section className={`${classes.secpro} w-100`}>
                 <h2 className={classes["title"]}>{formTitle}</h2>
-                <Container className={`g-5 p-0 gap-5 justify-content-center`}>
+                <div className={`g-5 p-0 gap-5 justify-content-center w-100 m-0`}>
                     <Col className={`${classes["contact-col"]} flex-fill`}>
                         <RouterForm method='post'>
-                            <Row className={`justify-content-md-center d-flex flex-column justify-content-center p-lg-4 align-items-center`}>
+                            <Row className={`justify-content-md-center d-flex flex-column justify-content-center align-items-center`}>
 
                                 {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
-                                <Row className="w-100 mb-5" style={{ gap: '20px' }}>
+                                <Row className="w-100 mb-4 glass-container p-4" style={{ gap: '20px' }}>
                                     {/* LEFT: GALLERY UX */}
                                     <Col xs={12} lg={5} className="d-flex flex-column gap-3">
-                                        <h4 style={{ textAlign: 'left', color: 'var(--primary)' }}>Model Gallery</h4>
-                                        <div className={`${classes.img_cover} d-flex flex-column align-items-center w-100`} style={{ minHeight: '300px', background: '#f5f5f5', borderRadius: '15px', position: 'relative', overflow: 'hidden', padding: '0' }} >
+                                        <h4 className="gradient-text" style={{ textAlign: 'left', marginBottom: '15px' }}>Model Gallery</h4>
+                                        <div className={`${classes.img_cover} d-flex flex-column align-items-center w-100`} style={{ minHeight: '300px', background: 'var(--gradient-marketing)', border: '1px solid var(--border-glass)', borderRadius: '15px', position: 'relative', overflow: 'hidden', padding: '0' }} >
                                             <input name='cover' type="file" onChange={handleEditMainViewerImage} ref={imgRef} style={{ display: 'none' }} accept="image/*" />
-                                            <span style={{ position: 'absolute', top: 10, right: 10, background: '#fff', padding: '5px', borderRadius: '50%', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
-                                                <BorderColorIcon style={{ color: '#5DB8DD', cursor: 'pointer' }} title="Upload Main Cover" onClick={() => imgRef.current.click()} />
+                                            <span style={{ position: 'absolute', top: 10, right: 10, background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '5px', borderRadius: '50%', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
+                                                <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="Upload Main Cover" onClick={() => imgRef.current.click()} />
                                             </span>
                                             <img src={selectedGalleryImage} alt="Model Main Viewer" style={{ width: '100%', height: '400px', objectFit: 'contain' }} />
                                         </div>
 
                                         <div className="w-100" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
                                             <div onClick={() => setSelectedImageKey('cover')}
-                                                 style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                                                style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
                                                 <img src={getCoverPreviewSrc()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="cover thumb" />
                                             </div>
                                             {galleryImages.map((img, idx) => (
@@ -709,7 +711,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     <div onClick={(e) => { e.stopPropagation(); removeUploadedGalleryFile(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
                                                 </div>
                                             ))}
-                                            <div onClick={() => galleryInputRef.current?.click()} style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: '2px dashed #ccc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>
+                                            <div onClick={() => galleryInputRef.current?.click()} style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: '2px dashed #ccc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}>
                                                 <AddPhotoAlternateIcon />
                                             </div>
                                         </div>
@@ -723,7 +725,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                     {/* RIGHT: CORE DETAILS */}
                                     <Col xs={12} lg={6} className="d-flex flex-column gap-3">
-                                        <h4 style={{ textAlign: 'left', color: 'var(--primary)' }}>Core Identity</h4>
+                                        <h4 className="gradient-text" style={{ textAlign: 'left', marginBottom: '15px' }}>Core Identity</h4>
                                         <Row>
                                             <Col xs={12}>
                                                 {renderInputRow('Model Name', 'title', title, title, modelNameChangeHandler, modelNameBlurHandler, modelNameIsInvalid, 'title', 'title')}
@@ -735,28 +737,28 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                 {renderVersionInputRow('Model Price (USD)', 'price', selectedVersion?.price, price, priceChangeHandler, priceBlurHandler, priceIsInvalid, 'price', 'price', 'number', '10.00')}
                                             </Col>
                                             <Col xs={12}>
-                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                                <div className={`${getClasses(false)} d-flex flex-column align-items-left w-100 mb-3`} >
                                                     <label htmlFor='status'>Status</label>
                                                     <div style={{ width: '100%', marginTop: '5px' }}>
-                                                    <CustomSelect
-                                                        options={[{label: 'DRAFT', value: 'DRAFT'}, {label: 'PUBLISHED', value: 'PUBLISHED'}, {label: 'SUSPENDED', value: 'SUSPENDED'}]}
-                                                        value={status}
-                                                        onChange={(val) => handelStatusChange({ target: { value: val } })}
-                                                        placeholder="Select Status"
-                                                        isWeb={true}
-                                                    />
+                                                        <CustomSelect
+                                                            options={[{ label: 'DRAFT', value: 'DRAFT' }, { label: 'PUBLISHED', value: 'PUBLISHED' }, { label: 'SUSPENDED', value: 'SUSPENDED' }]}
+                                                            value={status}
+                                                            onChange={(val) => handelStatusChange({ target: { value: val } })}
+                                                            placeholder="Select Status"
+
+                                                        />
                                                     </div>
-                                                </Row>
+                                                </div>
                                             </Col>
                                         </Row>
                                     </Col>
                                 </Row>
 
                                 {/* SECTION 2: PUBLIC SPECIFICATIONS / VERSIONS */}
-                                <Row className="w-100 mb-5 d-flex flex-column gap-3">
-                                    <h4 style={{ textAlign: 'left', color: 'var(--primary)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+                                <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
+                                    <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
                                         {thisModel ? 'Version specifications' : 'Initial version (v1.0.0)'}
-                                        <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                                        <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
                                             {thisModel
                                                 ? 'Select a version to edit its public specs. Use Add new version for v2+.'
                                                 : 'Public specs and delivery assets for your first version. After save you can add more versions on Edit.'}
@@ -775,19 +777,19 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                         value={selectedVersionId != null ? String(selectedVersionId) : ''}
                                                         onChange={handleVersionSelect}
                                                         placeholder="Select version to edit"
-                                                        isWeb={true}
+
                                                     />
                                                 </Row>
                                             </Col>
                                             <Col xs={12} md={6} className="mb-3">
-                                                <BsButton type="button" variant="outline-primary" onClick={() => {
+                                                <button type="button" className="btn-glass-outline" onClick={() => {
                                                     setNewVersionCode('');
                                                     setNewVersionPrice(price || String(selectedVersion?.price || ''));
                                                     setAddVersionError('');
                                                     setShowAddVersionModal(true);
                                                 }}>
                                                     Add new version
-                                                </BsButton>
+                                                </button>
                                             </Col>
                                         </Row>
                                     )}
@@ -797,7 +799,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                 <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
                                                     <label htmlFor="version">Version</label>
                                                     <p style={{ margin: 0, fontWeight: 600 }}>1.0.0</p>
-                                                    <span style={{ fontSize: '13px', color: '#666' }}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
+                                                    <span style={{ fontSize: '13px', color: 'var(--on-surface-variant)' }}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
                                                 </Row>
                                             ) : (
                                                 renderVersionInputRow('Version', 'version', selectedVersion?.version, version, versionChangeHandler, versionBlurHandler, versionIsInvalid, 'version', 'version', 'text', '1.0.0')
@@ -808,7 +810,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                         </Col>
                                     </Row>
                                     {showMedicalFields && (
-                                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>
+                                        <p style={{ fontSize: '14px', color: 'var(--on-surface-variant)', marginBottom: '8px' }}>
                                             Technical specs — optional fields for medical AI listings (modality, anatomy, regulatory).
                                         </p>
                                     )}
@@ -855,43 +857,43 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     />
                                 )}
                                 {!thisModel && (
-                                <Row className="w-100 mb-5 d-flex flex-column gap-3">
-                                    <h4 style={{ textAlign: 'left', color: 'red', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
-                                        Delivery assets (v1.0.0)
-                                        <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
-                                            At least one field is required (API endpoint, Docker image, download link, license key, or Hugging Face URL).
-                                        </span>
-                                    </h4>
-                                    {assetWarning && (
-                                        <p className={classes['error-text']}>Add at least one delivery asset before submitting.</p>
-                                    )}
-                                    <Row>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Endpoint URL', 'endpointUrl', getAsset('API_ENDPOINT'), endpointUrl, endpointUrlChangeHandler, endpointUrlBlurHandler, endpointUrlIsInvalid, 'endpointUrl', 'endpointUrl', 'url', 'https://api.example.com')}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Docker Image', 'dockerImage', getAsset('DOCKER_IMAGE'), dockerImage, dockerImageChangeHandler, dockerImageBlurHandler, dockerImageIsInvalid, 'dockerImage', 'dockerImage', 'text', 'docker.io/your/image:tag')}
-                                        </Col>
+                                    <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
+                                        <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
+                                            Delivery assets (v1.0.0)
+                                            <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                                                At least one field is required (API endpoint, Docker image, download link, license key, or Hugging Face URL).
+                                            </span>
+                                        </h4>
+                                        {assetWarning && (
+                                            <p className={classes['error-text']}>Add at least one delivery asset before submitting.</p>
+                                        )}
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('Endpoint URL', 'endpointUrl', getAsset('API_ENDPOINT'), endpointUrl, endpointUrlChangeHandler, endpointUrlBlurHandler, endpointUrlIsInvalid, 'endpointUrl', 'endpointUrl', 'url', 'https://api.example.com')}
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('Docker Image', 'dockerImage', getAsset('DOCKER_IMAGE'), dockerImage, dockerImageChangeHandler, dockerImageBlurHandler, dockerImageIsInvalid, 'dockerImage', 'dockerImage', 'text', 'docker.io/your/image:tag')}
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('Download Link', 'downloadLink', getAsset('DOWNLOAD_LINK'), downloadLink, downloadLinkChangeHandler, downloadLinkBlurHandler, downloadLinkIsInvalid, 'downloadLink', 'downloadLink', 'url', 'https://...')}
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('License Key', 'licenseKey', getAsset('LICENSE_KEY'), licenseKey, licenseKeyChangeHandler, licenseKeyBlurHandler, licenseKeyIsInvalid, 'licenseKey', 'licenseKey')}
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                {renderVersionInputRow('HuggingFace URL', 'huggingFaceUrl', getAsset('HUGGINGFACE_URL'), huggingFaceUrl, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler, huggingFaceUrlIsInvalid, 'huggingFaceUrl', 'huggingFaceUrl', 'url', 'https://huggingface.co/...')}
+                                            </Col>
+                                        </Row>
                                     </Row>
-                                    <Row>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Download Link', 'downloadLink', getAsset('DOWNLOAD_LINK'), downloadLink, downloadLinkChangeHandler, downloadLinkBlurHandler, downloadLinkIsInvalid, 'downloadLink', 'downloadLink', 'url', 'https://...')}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('License Key', 'licenseKey', getAsset('LICENSE_KEY'), licenseKey, licenseKeyChangeHandler, licenseKeyBlurHandler, licenseKeyIsInvalid, 'licenseKey', 'licenseKey')}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('HuggingFace URL', 'huggingFaceUrl', getAsset('HUGGINGFACE_URL'), huggingFaceUrl, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler, huggingFaceUrlIsInvalid, 'huggingFaceUrl', 'huggingFaceUrl', 'url', 'https://huggingface.co/...')}
-                                        </Col>
-                                    </Row>
-                                </Row>
                                 )}
 
                                 {/* SECTION 4: DYNAMIC METADATA */}
-                                <Col className="mt-4 w-100">
-                                    <h4 style={{ textAlign: 'left', color: 'var(--primary)', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
+                                <Col className="w-100 glass-container p-4 mb-4">
+                                    <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
                                     {/* TAGS */}
                                     <Row>
                                         <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
@@ -915,7 +917,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     )}
                                                 </Col>
                                                 <Col>
-                                                    <button type="button" onClick={addTag} className={classes['feature-btn']}>Add Tag</button>
+                                                    <button type="button" onClick={addTag} className="btn-glass-outline mt-2 w-100">Add Tag</button>
                                                 </Col>
                                             </Row>
                                             <Row className={classes.f_list}>
@@ -946,7 +948,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     )}
                                                 </Col>
                                                 <Col>
-                                                    <button type="button" onClick={addFeature} className={classes['feature-btn']}>Add Feature</button>
+                                                    <button type="button" onClick={addFeature} className="btn-glass-outline mt-2 w-100">Add Feature</button>
                                                 </Col>
                                             </Row>
                                             {featuresIsInValid && featuresRequired && <p className={classes['error-text']}>Set at least one Feature</p>}
@@ -983,7 +985,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     <input type='text' placeholder="URL (Optional)" onChange={metricUrlChangeHandler} value={metricUrl} />
                                                 </Col>
                                                 <Col xs={12} md={2}>
-                                                    <button type="button" onClick={addMetric} className={classes['feature-btn']} style={{ width: '100%', padding: '10px' }}>Add</button>
+                                                    <button type="button" onClick={addMetric} className="btn-glass-outline mt-2 w-100" style={{ padding: '10px' }}>Add Metric</button>
                                                 </Col>
                                             </Row>
                                             <Row className={classes.f_list} style={{ flexDirection: 'column', gap: '10px' }}>
@@ -1001,61 +1003,64 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     </Row>
                                 </Col>
 
-                                <Row className="w-100 mt-4">
-                                    {imgWarning && <p className={classes['error-text']} style={{ textAlign: 'center' }}>Please Select a cover Image</p>}
-                                    <Col xs={6} className={classes["form-actions"]}>
-                                        <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className={classes["feature-btn"]} type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
-                                    </Col>
-                                    <Col xs={6} className={classes["form-actions"]}>
-                                        <button type="button" onClick={cancelHandler} className={classes["cancel-btn"]}>Cancel</button>
-                                    </Col>
-                                </Row>
+                                {imgWarning && <p className={classes['error-text']} style={{ textAlign: 'center' }}>Please Select a cover Image</p>}
+                                <div className="w-100 mt-4 d-flex justify-content-between m-0 p-0">
+                                    <div style={{ width: '48%' }}>
+                                        <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className="btn-glass-primary w-100" style={{ padding: '12px', fontSize: '1rem' }} type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
+                                    </div>
+                                    <div style={{ width: '48%' }}>
+                                        <button type="button" onClick={cancelHandler} className="btn-glass-danger w-100" style={{ padding: '12px', fontSize: '1rem' }}>Cancel</button>
+                                    </div>
+                                </div>
                             </Row>
                         </RouterForm>
                     </Col>
-                </Container>
+                </div>
             </section>
             {showAddVersionModal && (
                 <Modal onClose={closeAddVersionModal}>
-                    <div className="p-4">
-                        <div className="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                            <h5 className="mb-0">Add New Version</h5>
-                            <button type="button" className="btn-close" aria-label="Close" onClick={closeAddVersionModal} />
+                    <div className="p-4" style={{ background: 'var(--bg-surface)', borderRadius: '15px' }}>
+                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-glass)' }}>
+                            <h5 className="mb-0 gradient-text">Add New Version</h5>
+                            <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={closeAddVersionModal} />
                         </div>
                         <Form onSubmit={handleAddVersionSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Version (semver)</Form.Label>
+                                <Form.Label style={{ color: 'var(--on-surface-variant)' }}>Version (semver)</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="1.1.0"
                                     value={newVersionCode}
                                     onChange={(e) => setNewVersionCode(e.target.value)}
                                     required
+                                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Price (USD)</Form.Label>
+                                <Form.Label style={{ color: 'var(--on-surface-variant)' }}>Price (USD)</Form.Label>
                                 <Form.Control
                                     type="number"
                                     min={10}
-                                    step={1}
+                                    placeholder="10"
                                     value={newVersionPrice}
                                     onChange={(e) => setNewVersionPrice(e.target.value)}
                                     required
+                                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
                                 />
                             </Form.Group>
-                            {addVersionError && <p className="text-danger small">{addVersionError}</p>}
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top">
-                                <BsButton variant="secondary" type="button" onClick={closeAddVersionModal}>Close</BsButton>
-                                <BsButton type="submit" variant="primary" disabled={addVersionLoading}>
-                                    {addVersionLoading ? 'Creating…' : 'Create Version'}
-                                </BsButton>
+                            <div className="d-flex justify-content-end gap-2 mt-4">
+                                <button type="button" className="btn-glass-danger" onClick={closeAddVersionModal} style={{ padding: '8px 16px' }}>
+                                    Close
+                                </button>
+                                <button type="submit" className="btn-glass-primary" disabled={addVersionLoading} style={{ padding: '8px 16px' }}>
+                                    {addVersionLoading ? 'Creating...' : 'Create Version'}
+                                </button>
                             </div>
                         </Form>
                     </div>
                 </Modal>
             )}
-        </Container>
+        </div>
     );
 };
 

@@ -14,7 +14,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { realtimeActions } from '../store/realtimeSlice';
-import { RiRobot2Line } from "react-icons/ri";
 import { getAuthToken } from '../utility/tokenLoader';
 import aiFace from '../assets/ai-face.png';
 import { groupNotificationsByDay, NOTIFICATION_TYPE_OPTIONS, getNotificationType } from "../utility/chatHelpers";
@@ -68,14 +67,14 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
   useEffect(() => {
     if (contact) {
       setShow('currentChat')
-    }
-  }, [contact])
-
-  useEffect(() => {
-    if (linkTo === 'notification') {
+    } else if (linkTo === 'notification') {
       setShow('notifications')
+    } else {
+      setShow('chats')
+      setCurrentChat(null)
+      setMessages(null)
     }
-  }, [linkTo])
+  }, [contact, linkTo])
 
   useEffect(() => {
     let list = notifications;
@@ -202,6 +201,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       socket.off('messages_read', handleMessagesRead);
       if (typingClearRef.current) clearTimeout(typingClearRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat?.id, onFeatchChats, user?.id]);
   //========================================
   useEffect(() => {
@@ -223,6 +223,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       getChats();
       setChatsUpdated(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, chatsUpdated]);
   //============================================================
   useEffect(() => {
@@ -243,6 +244,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       getNotifications();
       setNotificationsUpdated(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, notificationsUpdated, showUnreadOnly, token]);
   //============================================================
   useEffect(() => {
@@ -273,6 +275,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       setCurrentChatUpdate(true);
       setShow('currentChat');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, contact, user?.id]);
   //====================================================================================================
   useEffect(() => {
@@ -299,6 +302,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
       }
       setCurrentChatUpdate(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChatUpdate, currentChat?.id, onFeatchChats])
   //============================================================================= actions
 

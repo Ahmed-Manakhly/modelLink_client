@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import classes from '../ModelData.module.scss';
-import GlobalWrapper from './GlobalWrapper';
 
 const AppPageSection = ({ title, children, className = '', fluid = false }) => {
     return (

@@ -17,12 +17,6 @@ import delivery_truck from '../assets/delivery-truck.png'
 import price from '../assets/price.png'
 import chat_bot from '../assets/chat_bot.png'
 //--------------------
-import payment_2 from '../assets/payment_2.png';
-import ml_1 from '../assets/ml_1.png';
-import Efficiency_3 from '../assets/Efficiency_3.png';
-import Data_mining_4 from '../assets/Data-mining_4.png';
-import solutions_5 from '../assets/solutions_5.png';
-import ico_doctor from '../assets/ico_doctor.png';
 
 
 

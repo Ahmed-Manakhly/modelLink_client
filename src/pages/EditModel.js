@@ -1,8 +1,8 @@
 /* eslint-disable */
-import Header from '../components/layout/Header';
-import Val from '../components/Val'
-import { vals } from '../constants/marketingData';
-import banner from '../assets/banner_4.png'
+// import Header from '../components/layout/Header';
+// import Val from '../components/Val'
+// import { vals } from '../constants/marketingData';
+// import banner from '../assets/banner_4.png'
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
@@ -15,6 +15,7 @@ import { getData, getModelByIdReq } from '../lib/loaders';
 import { updateModelReq } from '../lib/modelRequests';
 import { socket } from '../hooks/useSocket';
 import { getVerificationMeReq } from '../lib/verificationRequests';
+import GlobalWrapper from '../components/layout/GlobalWrapper';
 
 
 
@@ -136,27 +137,27 @@ function EditModel() {
         dispatch(uiActions.showNotification(false));
     };
     return (
-        <>
-            <Header
-                // txt_1='The ModelLink'
-                txt_2=' Getting New Ideas is always amazing'
-                txt_3=" Share your insights. Together, we're advancing the frontier of production AI."
-                banner={banner}
-            />
-            {/* <Categories/> */}
+        <GlobalWrapper className="mt-4">
+            <div className="mb-4">
+                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
+                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Modify Your Model 🔨</span>
+                </h2>
+                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>Getting New Ideas is always amazing. Keep your model up to date.</p>
+            </div>
             <ProfileCompletionGuard>
                 {Object.keys(model).length > 0 && (
-                    <FormActions
-                        formTitle={'Modify Your Model'}
-                        thisModel={model}
-                        onCreatingModelAction={onUpdatingModelAction}
-                        onModelReload={reloadModel}
-                        preferredVersionId={preferredVersionId}
-                    />
+                    <div className="w-100 h-100 p-0 m-0">
+                        <FormActions
+                            thisModel={model}
+                            onCreatingModelAction={onUpdatingModelAction}
+                            onModelReload={reloadModel}
+                            preferredVersionId={preferredVersionId}
+                            formTitle=""
+                        />
+                    </div>
                 )}
             </ProfileCompletionGuard>
-            <Val products={vals} title={'A growing collection of production-ready AI models at your fingertips'} />
-        </>
+        </GlobalWrapper>
     )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Badge, Button } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ModelViewSection from './ModelViewSection';
 
 const VersionHistoryPanel = ({ versions = [], selectedVersionId, onSelect, showInactive = false, fluid = false }) => {

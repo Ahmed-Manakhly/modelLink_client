@@ -6,7 +6,7 @@ import { uiActions } from '../store/UI-slice';
 // import { getOrderByIdReq } from '../lib/loaders';
 import axios from 'axios';
 import { BASE_URL } from '../lib/api';
-import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { FaCreditCard, FaLock, FaCheckCircle } from 'react-icons/fa';
 import classes from './Stripe.module.scss';
 
