@@ -276,13 +276,13 @@
     -webkit-overflow-scrolling: touch;
     box-shadow: inset 15px 0px 20px -10px var(--bg-surface), inset -15px 0px 20px -10px var(--bg-surface);
 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
     /* Hide scrollbar for a cleaner look */
     &::-webkit-scrollbar {
         display: none;
     }
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 }
 
 .scrollBtn {

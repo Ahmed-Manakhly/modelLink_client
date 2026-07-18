@@ -19,10 +19,10 @@ function TopNavBar({ getSearch }) {
   const searchWrapRef = useRef(null);
   const debounceRef = useRef(null);
   const tagsScrollRef = useRef(null);
-  const { hasError: categoryIsInvalid, valueIsValid: categoryIsValid, value: searchByVal,
+  const { hasError: categoryIsInvalid,  value: searchByVal,
     valueChangeHandler: categoryChangeHandler } = useInput(value => value.trim() !== '' && value.trim() !== "--Search By--");
 
-  const { hasError: searchIsInvalid, valueIsValid: searchIsValid, value: searchVal,
+  const { hasError: searchIsInvalid,  value: searchVal,
     valueChangeHandler: searchChangeHandler, inputBlurHandler: searchBlurHandler, reset } = useInput(value => value.trim() !== '' && value.trim() !== "");
 
   const [dynamicTags, setDynamicTags] = useState([]);

@@ -205,7 +205,7 @@ function ProfileSettings() {
                         {/* Upload / re-submit form */}
                         {canSubmit && (
                             <form onSubmit={handleVerificationSubmit} className="mt-3">
-                                <p className="text-muted">
+                                <p style={{ color: 'var(--on-surface-variant)' }}>
                                     {isRejected
                                         ? 'Re-submit a corrected document to try again.'
                                         : 'Submit an official PDF document or image proving your developer or organization credentials to unlock full marketplace publishing privileges.'}
@@ -214,18 +214,23 @@ function ProfileSettings() {
                                     <label className="form-label" style={{ color: 'var(--on-surface-variant)' }}>Upload Document (PDF, PNG, JPG)</label>
                                     <input
                                         type="file"
-                                        className="form-control"
+                                        id="verification-file-input"
                                         accept=".pdf,.png,.jpg,.jpeg"
                                         onChange={(e) => setVerifDoc(e.target.files[0])}
-                                        required
-                                        style={{
-                                            background: 'rgba(255, 255, 255, 0.03)',
-                                            border: '1px solid rgba(255, 255, 255, 0.08)',
-                                            color: 'var(--on-surface)',
-                                            borderRadius: 'var(--radius-input, 8px)',
-                                            padding: '10px'
-                                        }}
+                                        style={{ display: 'none' }}
                                     />
+                                    <div className="d-flex align-items-center gap-3 mt-2">
+                                        <button 
+                                            type="button" 
+                                            className="btn-glass-primary"
+                                            onClick={() => document.getElementById('verification-file-input').click()}
+                                        >
+                                            Choose File
+                                        </button>
+                                        <span style={{ color: 'var(--on-surface-variant)' }}>
+                                            {verifDoc ? verifDoc.name : 'No file chosen'}
+                                        </span>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn-glass-primary">
                                     {isRejected ? 'Re-Submit Verification' : 'Submit Verification'}

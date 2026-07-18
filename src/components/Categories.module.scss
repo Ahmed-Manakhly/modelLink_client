@@ -20,17 +20,17 @@
     border-radius: var(--radius-card);
     transition: var(--transition-smooth);
 
+    scroll-snap-align: start;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
     &:hover {
         border-color: rgba(34, 211, 238, 0.5);
         background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.02) 100%);
         box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
         transform: translateY(-4px);
     }
-
-    scroll-snap-align: start;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
 
     // Force carousel items to stretch equally
     :global(.react-multi-carousel-track) {

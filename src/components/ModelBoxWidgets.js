@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./ModelBoxWidgets.module.scss";
 import { useNavigate ,Link } from "react-router-dom";
 import { RiRobot2Line } from "react-icons/ri";
-import {Container , Row , Col  } from 'react-bootstrap'
+import { Row , Col  } from 'react-bootstrap'
 import { getModelMarketingFields } from '../lib/modelHelpers';
 import UserProfileStrip from './UserProfileStrip';
 

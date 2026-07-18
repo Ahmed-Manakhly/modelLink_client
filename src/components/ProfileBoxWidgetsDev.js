@@ -2,13 +2,14 @@ import React from "react";
 import styles from "./ProfileBoxWidgetsDev.module.scss";
 import { RiRobot2Line } from "react-icons/ri";
 import { Row, Col } from 'react-bootstrap';
-import { FILES_BASE_API_URL } from '../lib/api';
+// import { FILES_BASE_API_URL } from '../lib/api';
 import ProfileHeroCard from './ui/ProfileHeroCard';
 import UserProfileStrip, { getDisplayName } from './UserProfileStrip';
 import { useSelector } from 'react-redux';
 
 const ProfileBoxWidgetsDev = ({ user, modelCount, totalOrders }) => {
     const {
+        // eslint-disable-next-line
         org_username, avatar, first_name, org_name,
         last_name, org_desc,
     } = user || {};

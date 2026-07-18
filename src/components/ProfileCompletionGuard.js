@@ -24,7 +24,7 @@ const ProfileCompletionGuard = ({ children }) => {
                 </p>
                 <button
                     onClick={() => navigate('/profileSettings')}
-                    style={{ padding: '0.5rem 1.5rem', cursor: 'pointer', background: 'var(--primary, #5DB8DD)', color: '#fff', border: 'none', borderRadius: '6px' }}
+                    className="btn-glass-primary mt-3"
                 >
                     Go to Profile Settings
                 </button>

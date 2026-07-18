@@ -1,5 +1,5 @@
 import classes from './ModelData.module.scss';
-import { Container, Row, Col, Badge } from 'react-bootstrap'
+import { Badge } from 'react-bootstrap'
 import { getModelMarketingFields, getModelRating } from '../lib/modelHelpers';//getVersionById
 
 // const formatDate = (value) => {

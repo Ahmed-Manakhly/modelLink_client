@@ -312,7 +312,7 @@ function WalletPage() {
                 </p>
             </div>
 
-            <div className="glass-container p-4 mb-2" id="stripe-setup">
+            <div className="glass-container p-4 mb-2" id="stripe-setup" style={{ scrollMarginTop: '100px' }}>
                 <div className="d-flex flex-column gap-3">
                     <h5 className="mb-3">Stripe Setup</h5>
                     <p className="mb-3" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
@@ -335,30 +335,22 @@ function WalletPage() {
                             type="button"
                             className="btn-glass-primary"
                             onClick={handleConnectStripe}
-                            disabled={connectLoading || status.payoutReady || (!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0))}
+                            disabled={connectLoading}
                         >
                             {connectLoading ? 'Loading…' : 'Connect with Stripe'}
                         </button>
-                        {isDemoStripeEnv && !status.payoutReady && (
-                            <button
-                                type="button"
-                                className="btn-glass-outline"
-                                onClick={handleDemoComplete}
-                                disabled={connectLoading || (!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0))}
-                            >
-                                Complete setup (demo)
-                            </button>
-                        )}
+                        <button
+                            type="button"
+                            className="btn-glass-outline"
+                            onClick={handleDemoComplete}
+                            disabled={connectLoading}
+                        >
+                            Complete setup (demo)
+                        </button>
                     </div>
-                    {!status.payoutReady && (
-                        <p className="mt-3 mb-0" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
-                            {(!wallet || (wallet.availableBalance <= 0 && wallet.pendingBalance <= 0)) ? (
-                                <>You don't have any earnings yet. Stripe setup will unlock once you make your first sale.</>
-                            ) : (
-                                <>Local QA: click <strong style={{ color: 'var(--on-surface)' }}>Complete setup (demo)</strong> to enable payouts without real Stripe keys.</>
-                            )}
-                        </p>
-                    )}
+                    <p className="mt-3 mb-0" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem' }}>
+                        You can choose to securely connect your live Stripe account to receive actual payouts, or use the <strong>Demo setup</strong> to simulate the flow instantly.
+                    </p>
                 </div>
             </div>
 

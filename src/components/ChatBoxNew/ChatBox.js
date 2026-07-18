@@ -9,7 +9,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { FILES_BASE_API_URL } from '../../lib/api'
 import { IoImagesOutline } from "react-icons/io5";
 import { IoSend } from "react-icons/io5";
-import { RiRobot2Line } from "react-icons/ri";
+// import { RiRobot2Line } from "react-icons/ri";
 import { Link } from 'react-router-dom'
 import { getAuthToken } from '../../utility/tokenLoader'
 import { buildChatDisplayItems, getMessageReceipt } from '../../utility/chatHelpers';

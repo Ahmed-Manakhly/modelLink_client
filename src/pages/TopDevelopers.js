@@ -58,7 +58,7 @@ const TopDevelopers = () => {
 
                 {!loading && !error && developers.length === 0 && (
                     <div className="text-center py-5">
-                        <h4 className="text-muted">No developers found at the moment.</h4>
+                        <h4 style={{ color: 'var(--primary)', fontWeight: 'var(--weight-700)', fontSize: 'var(--text-xl)' }}>No developers found at the moment.</h4>
                     </div>
                 )}
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styles from "./BoxWidgets.module.scss";
 import { Link } from "react-router-dom";
 import { Row, Col } from 'react-bootstrap';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { 
   FiCpu, 
   FiShoppingCart, 
@@ -14,13 +14,13 @@ import {
   FiCreditCard 
 } from "react-icons/fi";
 import getStarted from '../assets/getStarted.png';
-import ProfileHeroCard from './ui/ProfileHeroCard';
+// import ProfileHeroCard from './ui/ProfileHeroCard';
 import UserProfileStrip from './UserProfileStrip';
 import UserAvatar from './ui/UserAvatar';
 
 const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, totalOrders, totalSales = 0, totalViews = 0, msgCounter = 0, notCounter = 0, walletBalance, payoutReady = null }) => {
   const userData = useSelector(state => state.auth.userData) || {};
-  const { org_username, role } = userData;
+  const { role } = userData;
   const imgRef = useRef(null);
 
   const onFileChange = (e) => {
@@ -37,9 +37,9 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
         <input name="avatar" type="file" onChange={onFileChange} ref={imgRef} style={{ display: 'none' }} />
         {profile && (
           <span>
-            <BorderColorIcon
+            <EditOutlinedIcon
               className={styles.img_ico}
-              style={{ color: '#5DB8DD', cursor: 'pointer' }}
+              style={{ color: 'var(--primary)', cursor: 'pointer' }}
               title="edit"
               onClick={handleImgClick}
             />
@@ -72,6 +72,7 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
     }
   };
 
+  // eslint-disable-next-line
   const profileRightContent = (
     <div className={styles.profileRightCon}>
       <div className={styles.welcomeSection}>
