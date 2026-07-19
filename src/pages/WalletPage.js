@@ -33,9 +33,9 @@ const PAYOUT_STATUS_OPTIONS = [
     { value: 'CANCELLED', label: 'Cancelled' },
 ];
 
-const isDemoStripeEnv =
-    process.env.REACT_APP_MARKETPLACE_DEMO === 'true'
-    || process.env.NODE_ENV !== 'production';
+// const isDemoStripeEnv =
+//     process.env.REACT_APP_MARKETPLACE_DEMO === 'true'
+//     || process.env.NODE_ENV !== 'production';
 
 function WalletPage() {
     const token = getAuthToken();
@@ -302,7 +302,7 @@ function WalletPage() {
                 onAction={confirmWarningAction}
                 onClose={() => setWarning({ show: false, onAction: null, message: '', type: 'action', action: 'Confirm' })}
             />}
-            
+
             <div className="mb-2">
                 <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
                     <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Developer Earnings Wallet</span>
@@ -354,7 +354,7 @@ function WalletPage() {
                 </div>
             </div>
 
-            <div className="glass-container p-3 mb-2" style={{ 
+            <div className="glass-container p-3 mb-2" style={{
                 borderLeft: `4px solid ${payoutReady ? 'var(--color-success)' : 'var(--color-warning)'}`,
                 background: payoutReady ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255, 193, 7, 0.05)'
             }}>

@@ -35,7 +35,7 @@ function Cart() {
                             {items.length === 0 ? (
                                 <div className="text-center py-5">
                                     <p>Your cart is empty.</p>
-                                    <Link to="/models" className="btn btn-primary" onClick={onClose}>
+                                    <Link to="/models" className="btn-glass-primary" onClick={onClose}>
                                         Browse Models
                                     </Link>
                                 </div>
