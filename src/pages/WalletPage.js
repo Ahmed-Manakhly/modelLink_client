@@ -33,9 +33,6 @@ const PAYOUT_STATUS_OPTIONS = [
     { value: 'CANCELLED', label: 'Cancelled' },
 ];
 
-// const isDemoStripeEnv =
-//     process.env.REACT_APP_MARKETPLACE_DEMO === 'true'
-//     || process.env.NODE_ENV !== 'production';
 
 function WalletPage() {
     const token = getAuthToken();
@@ -156,22 +153,43 @@ function WalletPage() {
     );
 
     const handleConnectStripe = async () => {
+        let isRedirecting = false;
         try {
             setConnectLoading(true);
             const res = await onboardStripeConnectReq(token);
             const url = res.data?.data?.url;
             if (url) {
+                isRedirecting = true;
                 window.location.href = url;
             }
         } catch (error) {
-            dispatch(uiActions.notificationDataChanged({
-                status: 'error',
-                title: 'Stripe Connect',
-                message: error.response?.data?.message || error.message || 'Could not start onboarding',
-            }));
-            dispatch(uiActions.showNotification(true));
+            const errorMsg = error.response?.data?.message || error.message || 'Could not start onboarding';
+            if (errorMsg.includes('Stripe Connect is not yet activated')) {
+                setWarning({
+                    show: true,
+                    type: 'missing',
+                    cancelText: 'Got it',
+                    message: (
+                        <div style={{ textAlign: 'left', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                            <h4 style={{ color: '#ff6b6b', marginBottom: '15px', fontWeight: 'bold' }}>Platform Verification Required</h4>
+                            <p>Real Stripe Connect requires the platform owner to verify their business identity (KYC) on the Stripe Dashboard before the Connect API is unlocked.</p>
+                            <p style={{ marginTop: '10px' }}>This is a live deployment prerequisite. For development and portfolio testing, please use the <strong style={{ color: '#14f1d9' }}>Complete Setup (Demo)</strong> button instead.</p>
+                            <p style={{ marginTop: '10px', fontSize: '0.85rem', color: '#888' }}>The demo path simulates the exact same database state and instantly unlocks your wallet payouts.</p>
+                        </div>
+                    ),
+                });
+            } else {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Stripe Connect',
+                    message: errorMsg,
+                }));
+                dispatch(uiActions.showNotification(true));
+            }
         } finally {
-            setConnectLoading(false);
+            if (!isRedirecting) {
+                setConnectLoading(false);
+            }
         }
     };
 

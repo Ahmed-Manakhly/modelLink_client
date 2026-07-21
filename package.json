@@ -16,6 +16,8 @@
     "@popperjs/core": "^2.11.8",
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "@stripe/react-stripe-js": "^6.8.0",
+    "@stripe/stripe-js": "^9.10.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.1",
     "@testing-library/react": "^16.0.1",

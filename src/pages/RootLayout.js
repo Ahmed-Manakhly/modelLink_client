@@ -121,15 +121,35 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
     let token = useLoaderData();
     //----------------------------------CART DATA
     useEffect(() => {
-        if (token) {
-            if (userData?.role === 'CLIENT') {
-                const cartItems = safeParseStorage('cartItems');
-                if (cartItems) {
-                    dispatch(cartActions.onSetCart(cartItems))
+        // Hydrate cart for ALL users (Guests, Clients, etc)
+        const cartItems = safeParseStorage('cartItems');
+        if (cartItems && cartItems.length > 0) {
+            const fetchCartModels = async () => {
+                try {
+                    const ids = cartItems.map(i => i.id).filter(id => !!id).join(',');
+                    if (!ids) return;
+                    const res = await API.get(`aiModel?id=${ids}`);
+                    const models = res?.data?.data?.models || [];
+                    
+                    // Rebuild cart items exactly based on retrieved models + requested versionIds
+                    const hydratedItems = [];
+                    cartItems.forEach(cartItem => {
+                        const model = models.find(m => String(m.id) === String(cartItem.id));
+                        if (model) {
+                            // Make sure to attach the requested versionId to the model so onSetCart processes it properly
+                            hydratedItems.push({ ...model, versionId: cartItem.versionId });
+                        }
+                    });
+                    dispatch(cartActions.onSetCart(hydratedItems));
+                } catch (err) {
+                    console.error("Failed to sync cart data from DB:", err);
                 }
-            }
+            };
+            fetchCartModels();
+        } else {
+            dispatch(cartActions.onSetCart([]));
         }
-    }, [token, dispatch, userData?.role])
+    }, [dispatch])
     //----------------------------------------
     const navigate = useNavigate();
     const [scroll, setScroll] = useState(false)

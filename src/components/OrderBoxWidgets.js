@@ -4,7 +4,7 @@ import styles from "./OrderBoxWidgets.module.scss";
 import { Link } from "react-router-dom";
 import { RiRobot2Line } from "react-icons/ri";
 import { Row, Col, Card } from 'react-bootstrap';
-import imgHolder from '../assets/imgHolder.jpg';
+import imgHolder from '../assets/modelPlaceholder.png';
 import { FILES_BASE_API_URL, createAPI } from '../lib/api';
 import { getAuthToken } from '../utility/tokenLoader';
 import { uiActions } from '../store/UI-slice';
@@ -141,7 +141,7 @@ const OrderBoxWidgets = ({
     if (type === 'LICENSE_KEY' && value) {
       return (
         <div>
-          <div className="p-2 rounded mb-2" style={{ fontSize: '13px', fontFamily: 'monospace', wordBreak: 'break-all', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-glass)' }}>
+          <div className={styles.monoBlock}>
             {isRevealed ? value : '••••••••••••••••'}
           </div>
           <div className="d-flex gap-2">

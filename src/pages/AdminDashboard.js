@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAuthToken } from '../utility/tokenLoader';
 import { uiActions } from '../store/UI-slice';
-import { getAllUsersReq, updateUserReq, deleteUserReq, getAuditLogsReq, getSettingsReq, updateSettingsReq, getAllTransactionsReq, getWebhookEventsReq, getAdminPendingCountsReq } from '../lib/adminRequests';
+import { getAllUsersReq, updateUserReq, deleteUserReq, getAuditLogsReq, getSettingsReq, updateSettingsReq, getAllTransactionsReq, getWebhookEventsReq, getAdminPendingCountsReq, getAllOrdersReq } from '../lib/adminRequests';
 import { getAllPayoutsReq, approvePayoutReq, rejectPayoutReq } from '../lib/payoutRequests';
 import { getDisputesReq, resolveDisputeReq } from '../lib/disputeRequests';
 import { getAllVerificationsReq, approveVerificationReq, rejectVerificationReq } from '../lib/verificationRequests';
@@ -20,6 +20,7 @@ import {
     getAdminTransactionColumns,
     getAdminAuditLogColumns,
     getAdminWebhookColumns,
+    getOrderColumns,
 } from '../utility/tableColumns';
 import WarningModal from '../components/layout/WarningModal';
 import AdminTaxonomySection from '../components/admin/AdminTaxonomySection';
@@ -63,6 +64,7 @@ function AdminDashboard() {
         disputes: 0,
         verifications: 0,
         transactions: 0,
+        orders: 0,
         auditLogs: 0,
         webhooks: 0,
     });
@@ -129,6 +131,7 @@ function AdminDashboard() {
     const loadAllDisputes = React.useCallback((query) => getDisputesReq(query, token), [token]);
     const loadAllVerifications = React.useCallback((query) => getAllVerificationsReq(query, token), [token]);
     const loadAllTransactions = React.useCallback((query) => getAllTransactionsReq(query, token), [token]);
+    const loadAllOrders = React.useCallback((query) => getAllOrdersReq(query, token), [token]);
     const loadAllAuditLogs = React.useCallback((query) => getAuditLogsReq(query, token), [token]);
     const loadAllWebhooks = React.useCallback((query) => getWebhookEventsReq(query, token), [token]);
 
@@ -643,6 +646,21 @@ function AdminDashboard() {
                         </div>
                     </Tab>
 
+                    {/* Orders Read-Only */}
+                    <Tab eventKey="orders" title="📦 Orders">
+                        <div>
+                            <DashboardDataSection
+                                key={refreshKeys.orders}
+                                getData={loadAllOrders}
+                                contentType="orders"
+                                dataKey="orders"
+                                columns={getOrderColumns}
+                                tableTitle="All Orders"
+                                defaultStatusArray={[]}
+                            />
+                        </div>
+                    </Tab>
+
                     {/* Audit Logs Read-Only */}
                     <Tab eventKey="auditLogs" title="📜 Audit Logs">
                         <div>
@@ -662,8 +680,11 @@ function AdminDashboard() {
                                         options: [
                                             { value: 'CREATE_USER', label: 'Create User' },
                                             { value: 'UPDATE_USER', label: 'Update User' },
-                                            { value: 'SUSPEND_USER', label: 'Suspend User' },
-                                            { value: 'RESOLVE_DISPUTE', label: 'Resolve Dispute' },
+                                            { value: 'DELETE_USER', label: 'Delete/Suspend User' },
+                                            { value: 'APPROVE_DEVELOPER,REJECT_DEVELOPER', label: 'Verify Developer' },
+                                            { value: 'APPROVE_PAYOUT,REJECT_PAYOUT', label: 'Payout Approvals' },
+                                            { value: 'RESOLVE_DISPUTE_REFUND,RESOLVE_DISPUTE_RELEASE', label: 'Resolve Dispute' },
+                                            { value: 'STRIPE_WEBHOOK_RECEIVED,STRIPE_WEBHOOK_PROCESSED', label: 'Stripe Webhooks' },
                                             { value: 'UPDATE_SETTINGS', label: 'Update Settings' },
                                         ],
                                     },

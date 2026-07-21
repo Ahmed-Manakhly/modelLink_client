@@ -254,3 +254,19 @@
     /* Do not override background entirely to glass so it remains visible */
     filter: grayscale(0.5);
 }
+
+/* --- Global Input Placeholders --- */
+::placeholder {
+    color: var(--on-surface-variant) !important;
+    opacity: 0.6 !important;
+}
+
+::-webkit-input-placeholder {
+    color: var(--on-surface-variant) !important;
+    opacity: 0.6 !important;
+}
+
+:-ms-input-placeholder {
+    color: var(--on-surface-variant) !important;
+    opacity: 0.6 !important;
+}

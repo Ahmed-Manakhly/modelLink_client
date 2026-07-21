@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classes from './ModelGallery.module.scss';
 import { Row, Col } from 'react-bootstrap';
 import { FILES_BASE_API_URL } from '../lib/api';
-import imgHolder from '../assets/imgHolder.jpg';
+import imgHolder from '../assets/modelPlaceholder.png';
 
 const ModelGallery = ({ images = [], alt = 'Model Gallery' }) => {
     const [mainIndex, setMainIndex] = useState(0);

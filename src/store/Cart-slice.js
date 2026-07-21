@@ -52,7 +52,8 @@ const cartInitialState = {
 };
 
 const persistCart = (items) => {
-    localStorage.setItem('cartItems', JSON.stringify(items));
+    const keys = items.map(i => ({ id: i.id, versionId: i.versionId }));
+    localStorage.setItem('cartItems', JSON.stringify(keys));
 };
 
 const cartReducer = createSlice({
@@ -84,10 +85,12 @@ const cartReducer = createSlice({
             persistCart(state.items);
         },
         onSetCart(state, action) {
-            const items = (action.payload || []).map(normalizeLegacyItem);
+            const items = (action.payload || []).map(item => buildCartLine(item, item.versionId));
             state.items = items;
             state.quantity = items.length;
             state.totalAmount = computeTotalAmount(items);
+            // We intentionally DO NOT persistCart here, so we don't accidentally overwrite 
+            // the user's cart with an empty array if hydration fails or loads slowly.
         },
     },
 });

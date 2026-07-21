@@ -4,7 +4,7 @@ import { FILES_BASE_API_URL } from '../lib/api'
 import {Link} from 'react-router-dom' ;
 import {getAuthToken} from '../utility/tokenLoader'
 import { useSelector } from 'react-redux';
-import imgHolder from '../assets/imgHolder.jpg'
+import imgHolder from '../assets/modelPlaceholder.png'
 
 import { socket } from '../hooks/useSocket';
 import UserChip from './ui/UserChip';

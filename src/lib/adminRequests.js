@@ -56,6 +56,10 @@ export const getWebhookEventsReq = (query = '', token) => {
     return API.get(withQuery('admin/webhooks', query), { headers: authHeaders(token) });
 };
 
+export const getAllOrdersReq = (query = '', token) => {
+    return API.get(withQuery('orders', query), { headers: authHeaders(token) });
+};
+
 export const getAdminPendingCountsReq = (token) => {
     return API.get('admin/pending-counts', { headers: authHeaders(token) });
 };

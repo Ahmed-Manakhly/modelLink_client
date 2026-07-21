@@ -418,6 +418,17 @@ export const getAdminTransactionColumns = () => [
     {
         field: 'developerPayout', headerName: 'Developer Payout', minWidth: 150,
         renderCell: (params) => <span>${Number(params?.row?.developerPayout || 0).toFixed(2)}</span>
+    },
+    {
+        field: 'actions', headerName: 'Actions', minWidth: 150,
+        renderCell: (params) => {
+            const orderId = params?.row?.orderId || params?.row?.order?.id;
+            return orderId ? (
+                <Link to={"/order/view/" + orderId} style={{ textDecoration: "none" }}>
+                    <VisibilityOutlinedIcon className="table-action-icon view" titleAccess="view order" />
+                </Link>
+            ) : <span className="text-muted">—</span>;
+        }
     }
 ];
 
