@@ -7,7 +7,7 @@ import SignupFormStep2 from './SignupFormStep2';
 import AccountRoleForm from './AccountRoleForm';
 import ForgotPassword from './ForgotPassword';
 // import logo from '../../../assets/robot-mascot.png'
-import aiFace from '../../../assets/ai-face.png'
+import { RiRobot2Line } from "react-icons/ri";
 import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap'
 
@@ -64,7 +64,7 @@ const Auth = () => {
                         </Row>
                     </Row>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                        <img src={aiFace} alt="AI Face" style={{ width: '400px', height: '220px', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.2))', transform: 'translateX(-70px)' }} />
+                        <RiRobot2Line style={{ fontSize: '150px', color: 'var(--primary)', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.4))' }} />
                     </div>
                     <ul className={classes["header-social-container"]}>
                         <li>

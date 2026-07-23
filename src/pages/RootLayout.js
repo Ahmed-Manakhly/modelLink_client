@@ -20,7 +20,7 @@ import { authActions } from '../store/authSlice';
 import { cartActions } from '../store/Cart-slice';
 import { uiActions } from '../store/UI-slice';
 import UpButton from '../components/layout/UpButton'
-import { footerCategoriesData, mobNavData, mobNavData_2 } from '../constants/marketingData'
+import { footerCategoriesData, mobNavData, mobNavData_2, footerNavData } from '../constants/marketingData'
 import WarningModal from '../components/layout/WarningModal'
 import { socket } from '../hooks/useSocket';
 import {
@@ -223,7 +223,7 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
                 <ScrollRestoration />
                 <Outlet context={{ msgCounter, notCounter }} />
             </main>
-            <Footer footerNavData={mobNavData_2} footerCategoriesData={footerCategoriesData} />
+            <Footer footerNavData={footerNavData} footerCategoriesData={footerCategoriesData} />
         </>
     )
 };

@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import classes from './NavBar.module.scss';
 import { FaCode } from "react-icons/fa";
 import { GrOrganization } from "react-icons/gr";
+import { FiHome, FiInfo, FiMail, FiGlobe } from "react-icons/fi";
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Notifications from '../Notifications/Notifications'
 import Conversation from '../ConversationNew/Conversation'
 import GlobalWrapper from './GlobalWrapper';
+import { RiRobot2Line } from "react-icons/ri";
 import { getCategoriesReq } from '../../lib/loaders';
 import { buildCategoriesList } from '../../lib/categoryHelpers';
 import {
@@ -20,10 +22,13 @@ import {
 } from '../../store/realtimeSlice';
 
 //-------------------------------------
-const SingleLink = ({ title, to }) => {
+const SingleLink = ({ title, to, icon }) => {
   return (
     <li className={classes["menu-category"]}>
-      <Link to={to} className={classes["menu-title"]}>{title}</Link>
+      <Link to={to} className={classes["menu-title"]} style={{display: 'flex', alignItems: 'center', gap: '5px'}}>
+        {icon && <span style={{fontSize: '1.2rem', display: 'flex', color: 'var(--on-surface-variant)'}}>{icon}</span>}
+        {title}
+      </Link>
     </li>
   )
 }
@@ -39,7 +44,11 @@ const MultipleLink = ({ categoryTitle, to, subCategory, categoryImg }) => {
       })}
       <li className={`${classes["panel-list-item"]}   ${classes["img-con"]}`}>
         <Link to='/'>
-          <img src={categoryImg} alt={categoryTitle} className={categoryTitle === 'AI Models' ? classes["img-ai"] : ""} />
+          {categoryTitle === 'AI Models' ? (
+            <RiRobot2Line className={classes["img-ai"]} style={{ fontSize: '60px', color: 'var(--primary)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.4))' }} />
+          ) : (
+            <img src={categoryImg} alt={categoryTitle} />
+          )}
         </Link>
       </li>
     </ul>
@@ -107,7 +116,7 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
     <nav className={classes["desktop-navigation-menu"]}>
       <GlobalWrapper>
         <ul className={classes["desktop-menu-category-list"]}>
-          <SingleLink title='Home' to='/' />
+          <SingleLink title='Home' to='/' icon={<FiHome />} />
           <MultipleLinkList listName='models' listItems={categoriesList} />
           {!isLoggedIn && <>
 
@@ -117,8 +126,9 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
               )
             })}
           </>}
-          <SingleLink title='ABOUT US' to='/about' />
-          <SingleLink title='contact us' to='/contact' />
+          <SingleLink title='ABOUT US' to='/about' icon={<FiInfo />} />
+          <SingleLink title='contact us' to='/contact' icon={<FiMail />} />
+          <SingleLink title='Site Directory' to='/directory' icon={<FiGlobe />} />
           {isLoggedIn &&
             <div className={classes["header-user-actions"]}>
               {role === 'CLIENT' &&

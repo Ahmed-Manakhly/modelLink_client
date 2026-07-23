@@ -32,6 +32,7 @@ const SignupFormStep2 = ( {stepData}) => {
     const [verified, setVerified] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [rest, setRest] = useState(false);
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const [otpMessage, setOtpMessage] = useState({content : '' , error : false});
     //------------------------------------ init validation
     const {hasError : orgNameInputIsInvalid , valueIsValid : orgName,
@@ -43,7 +44,7 @@ const SignupFormStep2 = ( {stepData}) => {
     const isSubmitting = navigation.state === 'submitting' ;
     //------------------------------------------------------form valid
     let formIsValid = false
-    if(orgName && phoneIsValid && verified){
+    if(orgName && phoneIsValid && verified && termsAccepted){
         formIsValid = true;
     }
     const orgName1Classes = orgNameInputIsInvalid? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}` ;
@@ -138,6 +139,22 @@ const SignupFormStep2 = ( {stepData}) => {
                     ${classes['otp-text']} ${otpMessage.error && classes['otp-text-error']}
                 `} >{!otpMessage.error && <IoMdCheckmarkCircle/>}{otpMessage.content}</p>}
             </div>
+            {/* {===================================} */}
+            <Row className="w-100 mb-3 mt-3" style={{ padding: '0 10px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        checked={termsAccepted} 
+                        onChange={(e) => setTermsAccepted(e.target.checked)} 
+                        style={{ cursor: 'pointer', width: 'auto', marginTop: '2px' }}
+                    />
+                    <label htmlFor="terms" style={{ display: 'flex', flexDirection: 'column', color: 'var(--on-surface-variant)', fontSize: '0.9rem', margin: 0, cursor: 'pointer', lineHeight: '1.4' }}>
+                        <span>I agree to the</span>
+                        <Link to="/policy?tab=terms" target="_blank" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Terms and Conditions</Link>
+                    </label>
+                </div>
+            </Row>
             {/* {===================================} */}
             <Row className={`${classes["actions"]}  d-flex  align-items-center w-100 m-0`}>
                 <Link to={`?role=${role}&step=1`} className={`${classes['form-btn']} ${classes["actions__"]}  d-flex flex-column align-items-left w-50`}>Previous</Link>

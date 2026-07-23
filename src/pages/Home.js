@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { useEffect, useState, useCallback } from 'react';
 import TopDevelopersSlider from '../components/TopDevelopersSlider';
+import { SiteSEO } from '../lib/seo';
 
 const OVERALL_TRENDING_QUERY = '?status=PUBLISHED&sort=-sales,-views&limit=10&';
 const FEATURED_MODELS_QUERY = '?status=PUBLISHED&featured=true&sort=-avgRating,-sales&limit=6&';
@@ -127,6 +128,12 @@ function Home({ modelsUpdated, onModelsUpdated }) {
 
     return (
         <>
+            <SiteSEO
+                title="AI Model Marketplace"
+                description="ModelLink is a digital marketplace for production-ready AI models. Discover, purchase, and deploy AI solutions built by expert developers across computer vision, NLP, clinical AI, and more."
+                keywords="AI marketplace, buy AI models, machine learning, deep learning, computer vision, NLP, clinical AI, generative AI, model deployment"
+                path="/"
+            />
             <Header
                 // txt_1='The ModelLink'
                 txt_2='A digital marketplace for production-ready AI models 🚀'

@@ -23,7 +23,7 @@ import {authActions} from '../store/authSlice' ;
 import {cartActions} from '../store/Cart-slice' ;
 import {uiActions} from '../store/UI-slice' ;
 import UpButton from '../components/layout/UpButton'
-import { footerCategoriesData , mobNavData , mobNavData_2} from '../constants/marketingData'
+import { footerCategoriesData , mobNavData , mobNavData_2, footerNavData} from '../constants/marketingData'
 import WarningModal from '../components/layout/WarningModal'
 import { socket } from '../hooks/useSocket';
 
@@ -203,12 +203,15 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             <main className={styles['container']}>
                 <UpButton scroll={scroll} />
                 <ScrollRestoration/>
-                <Link to={'/'} className={styles._headding}>
-                    <RiRobot2Line className={styles.iconImg} />
-                    Something went wrong!
+                <Link to={'/'} className={styles._headding} style={{ textDecoration: 'none' }}>
+                    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                        <RiRobot2Line className={styles.iconImg} style={{ fontSize: '180px', marginBottom: '20px', color: 'var(--primary)', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.4))' }} />
+                    </div>
+                    <br/>
+                    <span style={{ fontSize: '2rem', color: 'var(--main-color)' }}>Something went wrong!</span>
                 </Link>
             </main>
-        <Footer footerNavData={mobNavData_2} footerCategoriesData={footerCategoriesData}   onClickLink={onClickLink} />
+        <Footer footerNavData={footerNavData} footerCategoriesData={footerCategoriesData}   onClickLink={onClickLink} />
     </>
 } ;
 export default ErrorPage ;

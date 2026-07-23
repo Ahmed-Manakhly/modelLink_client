@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { realtimeActions } from '../store/realtimeSlice';
 import { getAuthToken } from '../utility/tokenLoader';
-import aiFace from '../assets/ai-face.png';
+import { RiRobot2Line } from "react-icons/ri";
 import { groupNotificationsByDay, NOTIFICATION_TYPE_OPTIONS, getNotificationType } from "../utility/chatHelpers";
 import { dedupeChatsByCounterparty } from "../utility/chatParticipantDisplay";
 
@@ -501,7 +501,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
             )))}
             {(filteredChats?.length === 0) &&
               <span className={`${classes["chatbox-empty-message"]}`}>
-                <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+                <RiRobot2Line className={classes.aiFaceIcon} style={{ fontSize: '100px', color: 'var(--primary)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.4))', marginBottom: '20px' }} />
                 <h1 className={classes.gradientText}>No Chats available yet!</h1>
               </span>
             }
@@ -579,7 +579,7 @@ const ChatNew = ({ onlineUsers, onFeatchChats, notify, onFeatchNotifications }) 
             ))}
             {(filteredNo?.length === 0) &&
               <span className={`${classes["chatbox-empty-message"]}`}>
-                <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+                <RiRobot2Line className={classes.aiFaceIcon} style={{ fontSize: '100px', color: 'var(--primary)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.4))', marginBottom: '20px' }} />
                 <h1 className={classes.gradientText}>{showUnreadOnly ? 'No unread notifications' : 'No notifications available yet!'}</h1>
               </span>
             }

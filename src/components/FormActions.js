@@ -1,7 +1,7 @@
 /* eslint-disable */
 import classes from './FormActions.module.scss';
 import CustomSelect from './ui/CustomSelect';
-import { useNavigate, Form as RouterForm, useNavigation } from 'react-router-dom';
+import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
 import useInput from '../hooks/Use-Input';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -679,8 +679,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                 <div className={`g-5 p-0 gap-5 justify-content-center w-100 m-0`}>
                     <Col className={`${classes["contact-col"]} flex-fill`}>
                         <RouterForm method='post'>
-                            <Row className={`justify-content-md-center d-flex flex-column justify-content-center align-items-center`}>
-
+                            <div className="d-flex flex-column justify-content-center align-items-center w-100">
                                 {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
                                 <Row className="w-100 mb-4 glass-container p-4" style={{ gap: '20px' }}>
                                     {/* LEFT: GALLERY UX */}
@@ -1004,15 +1003,24 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                 </Col>
 
                                 {imgWarning && <p className={classes['error-text']} style={{ textAlign: 'center' }}>Please Select a cover Image</p>}
-                                <div className="w-100 mt-4 d-flex justify-content-between m-0 p-0">
-                                    <div style={{ width: '48%' }}>
+                                <div className="w-100 mt-4 d-flex flex-column flex-md-row justify-content-between gap-3 m-0 p-0">
+                                    <div className="flex-grow-1">
                                         <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className="btn-glass-primary w-100" style={{ padding: '12px', fontSize: '1rem' }} type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
                                     </div>
-                                    <div style={{ width: '48%' }}>
+                                    <div className="flex-grow-1">
                                         <button type="button" onClick={cancelHandler} className="btn-glass-danger w-100" style={{ padding: '12px', fontSize: '1rem' }}>Cancel</button>
                                     </div>
                                 </div>
-                            </Row>
+                                <div className="w-100 mt-3 d-flex flex-wrap align-items-center" style={{ gap: '4px', fontSize: '0.85rem', color: 'var(--on-surface-variant)' }}>
+                                    <span>Publishing this model means you agree to the</span>
+                                    <Link to="/policy?tab=terms" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Developer Terms</Link>
+                                    <span>,</span>
+                                    <Link to="/policy?tab=content" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Content Policy</Link>
+                                    <span>, and</span>
+                                    <Link to="/policy?tab=licensing" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Licensing Rules</Link>
+                                    <span>.</span>
+                                </div>
+                            </div>
                         </RouterForm>
                     </Col>
                 </div>

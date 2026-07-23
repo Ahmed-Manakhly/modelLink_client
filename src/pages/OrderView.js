@@ -318,12 +318,22 @@ function OrderView({ refresh }) {
                         Your order is pending until payment is completed. Use the{' '}
                         <strong className={classes.bannerHighlight}>Proceed to Pay</strong> button below to checkout securely.
                     </p>
-                    <Link
-                        to={`/stripe?orderId=${order.id}`}
-                        className="btn-glass-primary fw-bold"
-                    >
-                        Proceed to Pay (${Number(order.purchasePrice || 0).toFixed(2)})
-                    </Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <Link
+                            to={`/stripe?orderId=${order.id}`}
+                            className="btn-glass-primary fw-bold"
+                            style={{ width: 'fit-content' }}
+                        >
+                            Proceed to Pay (${Number(order.purchasePrice || 0).toFixed(2)})
+                        </Link>
+                        <div className="d-flex flex-wrap align-items-center" style={{ gap: '4px', fontSize: '0.85rem', color: 'var(--on-surface-variant)' }}>
+                            <span>By completing this purchase you agree to the</span>
+                            <Link to="/policy?tab=terms" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Terms</Link>
+                            <span>and</span>
+                            <Link to="/policy?tab=refunds" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Refund Policy</Link>
+                            <span>.</span>
+                        </div>
+                    </div>
                 </div>
             )}
             <OrderBoxWidgets

@@ -38,6 +38,8 @@ import ReviewsDev from './pages/ReviewsDev';
 import ForgotPassword from './components/layout/auth/ForgotPassword';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import NotFoundPage from './pages/NotFoundPage';
+import PolicyPage from './pages/PolicyPage';
+import SitemapPage from './pages/SitemapPage';
 import { useEffect, useState, useCallback } from 'react'
 import useSocket from './hooks/useSocket';
 import { socket } from './hooks/useSocket';
@@ -232,6 +234,8 @@ function App() {
         { index: true, element: <RouteErrorBoundary><Home modelsUpdated={modelsUpdated} onModelsUpdated={onModelsUpdated} /></RouteErrorBoundary> },
         { path: 'contact', element: <RouteErrorBoundary><Contact /></RouteErrorBoundary> },
         { path: 'about', element: <RouteErrorBoundary><About /></RouteErrorBoundary> },
+        { path: 'policy', element: <RouteErrorBoundary><PolicyPage /></RouteErrorBoundary> },
+        { path: 'directory', element: <RouteErrorBoundary><SitemapPage /></RouteErrorBoundary> },
         {
           path: 'auth', element: <RouteErrorBoundary><AuthPage /></RouteErrorBoundary>, action: onLoginAction, errorElement:
             <RouteErrorBoundary>

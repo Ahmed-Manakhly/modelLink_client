@@ -1,13 +1,10 @@
 /* eslint-disable */
 import Controls from '../components/Controls';
-import FilterChips from '../components/FilterChips';
 import Val from '../components/Val'
 import Services from '../components/Services'
-import img_2 from '../assets/instructor-1x-v3.jpg'
 import marketingOpportunityBanner from '../assets/marketing_opportunity_banner.png'
 import Header from '../components/layout/Header'
 import { vals } from '../constants/marketingData';
-// import banner from '../assets/banner_2.png'
 import { useDispatch } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { useEffect, useState, useCallback } from 'react';
@@ -16,6 +13,7 @@ import { getData, getAllModelsReq, getFiltersReq, getCategoriesReq } from '../li
 import { searchBy } from '../utility/Consts';
 import { buildModelsApiPath } from '../utility/marketplaceFilters';
 import TopDevelopers from './TopDevelopers';
+import { ModelsSEO } from '../lib/seo';
 
 
 function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
@@ -153,6 +151,7 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
 
     return (
         <>
+            <ModelsSEO />
             {/* <Header
                 txt_1='The ModelLink'
                 txt_2='Find the right AI models, right away'

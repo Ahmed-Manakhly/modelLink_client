@@ -16,6 +16,7 @@ import pay_Per_Click from '../assets/pay_Per_Click.png'
 import delivery_truck from '../assets/delivery-truck.png'
 import price from '../assets/price.png'
 import chat_bot from '../assets/chat_bot.png'
+import { FiFileText, FiShield, FiDollarSign, FiHelpCircle, FiInfo, FiUser, FiPackage, FiStar, FiSettings, FiGrid, FiCreditCard, FiMail, FiBriefcase, FiUsers, FiGlobe, FiMap } from 'react-icons/fi';
 //--------------------
 
 
@@ -408,32 +409,36 @@ export const mobNavData_2 = [
 ]
 //---------------------
 export const footerNavData = [
-  {title:'Popular Categories', links : [
-    {title:'title-1',to:'/'},
-    {title:'title-2',to:'/'},
-    {title:'title-3',to:'/'},
-    {title:'title-4',to:'/'},
-    {title:'title-5',to:'/'},
+  {title:'For Clients', links : [
+    {title:'How ModelLink Works',to:'/about', icon: <FiInfo />},
+    {title:'Client Access',to:'/auth?mode=signup&role=client', icon: <FiUser />},
+    {title:'My Orders',to:'/orders-client', icon: <FiPackage />},
+    {title:'My Reviews',to:'/reviews-client', icon: <FiStar />},
+    {title:'Profile Settings',to:'/profileSettings', icon: <FiSettings />},
+    {title:'Support',to:'/contact', icon: <FiHelpCircle />},
   ]},
-  {title:'Products', links : [
-    {title:'title-1',to:'/'},
-    {title:'title-2',to:'/'},
-    {title:'title-3',to:'/'},
-    {title:'title-4',to:'/'},
-    {title:'title-5',to:'/'},
+  {title:'For Developers', links : [
+    {title:'Developer Portal',to:'/auth?mode=signup&role=developer', icon: <FiGrid />},
+    {title:'My Dashboard',to:'/dashboard-dev', icon: <FiGrid />},
+    {title:'My Wallet',to:'/wallet', icon: <FiCreditCard />},
+    {title:'My Reviews',to:'/reviews-dev', icon: <FiStar />},
+    {title:'Profile Settings',to:'/profileSettings', icon: <FiSettings />},
   ]},
-  {title:'Community', links : [
-    {title:'About Us',to:'/'},
-    {title:'Careers',to:'/'},
-    {title:'Press',to:'/'},
-    {title:'Partners',to:'/'},
+  {title:'Legal & Policies', links : [
+    {title:'Terms & Conditions',to:'/policy?tab=terms', icon: <FiFileText />},
+    {title:'Privacy Policy',to:'/policy?tab=privacy', icon: <FiShield />},
+    {title:'Refund Policy',to:'/policy?tab=refunds', icon: <FiDollarSign />},
+    {title:'How to Approach',to:'/policy?tab=approach', icon: <FiHelpCircle />},
   ]},
-  {title:'Services', links : [
-    {title:'title-1',to:'/'},
-    {title:'title-2',to:'/'},
-    {title:'title-3',to:'/'},
-    {title:'title-4',to:'/'},
-    {title:'title-5',to:'/'},
+  {title:'Company', links : [
+    {title:'About Us',to:'/about', icon: <FiInfo />},
+    {title:'Contact Us',to:'/contact', icon: <FiMail />},
+    {title:'Careers',to:'/about', icon: <FiBriefcase />},
+    {title:'Partnerships',to:'/contact', icon: <FiUsers />},
+  ]},
+  {title:'Resources', links : [
+    {title:'Site Directory',to:'/directory', icon: <FiGlobe />},
+    {title:'XML Sitemap',to:'/sitemap.xml', icon: <FiMap />},
   ]},
 ]
 //----------------------------------------

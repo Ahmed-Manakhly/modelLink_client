@@ -22,15 +22,15 @@ const Box = ({title,img,text_1,text_2,actionTo ,title_2,content_1,title_3,conten
               <strong className={styles.__strong}>
               {text_2}
               </strong>
-              <h1 className={styles._headding2}>
+              <h2 className={styles._headding2}>
               {title_2}
-              </h1>
+              </h2>
               <p className={styles.__content}>
                 {content_1}
               </p>
-              <h1 className={styles._headding2}>
+              <h2 className={styles._headding2}>
               {title_3}
-              </h1>
+              </h2>
               <p className={styles.__content}>
                 {content_2}
               </p>

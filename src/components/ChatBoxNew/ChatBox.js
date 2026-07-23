@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import { getAuthToken } from '../../utility/tokenLoader'
 import { buildChatDisplayItems, getMessageReceipt } from '../../utility/chatHelpers';
 import { socket } from '../../hooks/useSocket';
-import aiFace from '../../assets/ai-face.png';
+import { RiRobot2Line } from "react-icons/ri";
 import UserProfileStrip from '../UserProfileStrip';
 import {
   getCounterpartyDisplayName,
@@ -351,7 +351,7 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
           </>
         ) : (
           <span className={`${classes["chatbox-empty-message"]}`}>
-            <img src={aiFace} alt="AI Face" className={classes.aiFaceIcon} />
+            <RiRobot2Line className={classes.aiFaceIcon} style={{ fontSize: '100px', color: 'var(--primary)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.4))', marginBottom: '20px' }} />
             <h1 className={classes.gradientText}>Tap on a chat to start conversation...</h1>
           </span>
         )}

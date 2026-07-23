@@ -1,6 +1,4 @@
 import { FILES_BASE_API_URL } from './api';
-import chat_bot from '../assets/ai-face.png';
-
 export const MEDICAL_PARENT_SLUGS = new Set([
     'medical-imaging',
     'clinical-decision-support',
@@ -13,7 +11,7 @@ export const MEDICAL_PARENT_SLUGS = new Set([
 /** Static first entry — always shown before fetched parent categories */
 export const allModelsCategory = {
     title: 'AI Models',
-    img: chat_bot,
+    img: '',
     to: '/',
     items: [{ title: 'All Models', to: '/models' }],
 };
@@ -26,6 +24,7 @@ export function mapDbCategoriesToNavShape(categories, filesBaseUrl = FILES_BASE_
 
     return categories.map((parent) => ({
         title: parent.name,
+        slug: parent.slug,
         img: parent.svg ? `${filesBaseUrl}${parent.svg}` : '',
         to: '/',
         items: (parent.children || []).map((child) => ({

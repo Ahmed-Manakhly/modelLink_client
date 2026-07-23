@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import classes from './MobNavMenu.module.scss';
 import UserAvatar from '../ui/UserAvatar';
-import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock, FiHome, FiInfo, FiMail, FiLogOut } from 'react-icons/fi';
+import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock, FiHome, FiInfo, FiMail, FiLogOut, FiGlobe } from 'react-icons/fi';
 
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/authSlice';
 import { uiActions } from '../../store/UI-slice';
 import styles from './Topbar.module.scss';
-import chat_bot from '../../assets/ai-face.png';
+import { RiRobot2Line } from "react-icons/ri";
 // import {FILES_BASE_API_URL} from '../../lib/api'
 import { getCategoriesReq } from '../../lib/loaders';
 import { buildCategoriesList } from '../../lib/categoryHelpers';
@@ -22,8 +22,12 @@ const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick
     <li className={classes["menu-category"]}>
       <button className={`${classes['accordion-menu']} ${isOpen && classes.active}`} onClick={() => { setIsOpen(prev => !prev) }}>
         <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
-          {img && <img src={img} alt={menuTitle} style={{width: menuTitle.toLowerCase() === 'ai models' ? '30px' : '24px', height: menuTitle.toLowerCase() === 'ai models' ? '30px' : '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />}
-          <p className={classes["menu-title"]}>{menuTitle}</p>
+          {menuTitle.toLowerCase() === 'ai models' ? (
+            <RiRobot2Line style={{fontSize: '24px', color: '#e6e6e6'}} />
+          ) : (
+            img && <img src={img} alt={menuTitle} style={{width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />
+          )}
+          <p className={classes["menu-title"]} style={{marginBottom: 0}}>{menuTitle}</p>
         </div>
         <div>
           {!isOpen && <ion-icon name="add-outline" className={classes["add-icon"]}></ion-icon>}
@@ -82,7 +86,7 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
   //---------------------------------
   const pageActions = <>
     <div style={{display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
-      <img src={chat_bot} alt="AI Avatar" style={{width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3.5px solid var(--primary)'}} />
+      <RiRobot2Line style={{width: '90px', height: '90px', color: 'var(--primary)', filter: 'drop-shadow(0 0 10px rgba(34, 211, 238, 0.4))', borderRadius: '50%', border: '3.5px solid var(--primary)', padding: '10px'}} />
     </div>
     <div style={{display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px'}}>
       <Link onClick={onClose} to="./auth?mode=login" className={`btn-glass-primary`} style={{textAlign: 'center'}}>{txt_3}</Link>
@@ -185,6 +189,7 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
         {/* {======================================} */}
         <SingleLink title='About Us' to='/about' onClick={onClose} icon={<FiInfo />} />
         <SingleLink title='Contact Us' to='/contact' onClick={onClose} icon={<FiMail />} />
+        <SingleLink title='Site Directory' to='/directory' onClick={onClose} icon={<FiGlobe />} />
       </ul>
       <div className={classes["menu-bottom"]}>
         <ul className={classes["menu-social-container"]}>
@@ -210,11 +215,17 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
           </li>
         </ul>
         <br />
-        <div className={classes["header-alert-news"]}>
-          <p >
+        <div className={classes["header-alert-news"]} style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+          <p style={{ margin: 0 }}>
             <b >{txt_1}</b>{' '}
             {txt_2}
           </p>
+          <div style={{ display: 'flex', gap: '15px' }}>
+            <Link onClick={onClose} to="/policy" className="legal-link" style={{ color: 'var(--on-surface-variant)', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
+              <FiShield style={{ marginRight: '5px', fontSize: '1rem' }} />
+              Policies
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

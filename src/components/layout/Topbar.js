@@ -141,11 +141,17 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
               </Link>
             </li>
           </ul>
-          <div className={classes["header-alert-news"]}>
-            <p >
+          <div className={classes["header-alert-news"]} style={{ display: 'flex', alignItems: 'center', gap: '15px', justifyContent: 'center' }}>
+            <p style={{ margin: 0 }}>
               <b >{txt_1}</b>{' '}
               {txt_2}
             </p>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Link to="/policy" className="legal-link" style={{ color: 'var(--on-surface-variant)', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}>
+                <FiShield style={{ marginRight: '5px', fontSize: '1rem' }} />
+                Policies
+              </Link>
+            </div>
           </div>
           <div className={classes["header-top-actions"]}>
             {!isLoggedIn && pageActions}

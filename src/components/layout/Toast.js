@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
-import error_img from '../../assets/ERROR.png' ;
-import success_img from '../../assets/success.png' ;
+import { RiRobot2Line } from "react-icons/ri";
 import classes from './Toast.module.scss' ;
 
 
 function Toast({close , status , title , message , onAnimationEnd}) {
-    let img ;
+    let color;
     if(status === 'error'||status === 'fail'){
-        img = error_img
+        color = 'var(--color-danger)';
     }else {
-        img = success_img
+        color = 'var(--color-success)';
     }
     //-------------------
     var today = new Date();
@@ -20,8 +19,8 @@ function Toast({close , status , title , message , onAnimationEnd}) {
             <button className={classes["toast-close-btn"]} onClick={close}>
                 <ion-icon name="close-outline"></ion-icon>
             </button>
-            <div className={classes["toast-banner"]}>
-                <img src={img} alt="robotics" width="80" height="70"/>
+            <div className={classes["toast-banner"]} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <RiRobot2Line style={{ fontSize: '40px', color: color }} />
             </div>
             <div className={classes["toast-detail"]}>
                 <h3 className={classes["toast-message"]}>

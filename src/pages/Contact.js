@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import img from '../assets/ai-face.png';
+import { RiRobot2Line } from "react-icons/ri";
 import classes from './Contact.module.scss';
 import { vals } from '../constants/marketingData';
 import Val from '../components/Val';
@@ -72,8 +72,8 @@ function Contact() {
                 <div className={classes['contact__container']}>
                     <aside className={classes['contact__aside']}>
                         <div className={classes.secCon}>
-                            <div className={classes['aside__image']}>
-                                <img src={img} alt="contact us" />
+                            <div className={classes['aside__image']} style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                                <RiRobot2Line style={{ fontSize: '150px', color: 'var(--primary)', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.4))' }} />
                             </div>
                             <h2 className="page-main-title" style={{ textAlign: 'left', marginBottom: '1rem', marginTop: '0' }}>
                                 <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Contact Us 📩</span>

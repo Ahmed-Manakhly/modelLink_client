@@ -513,13 +513,22 @@ function WalletPage() {
                                     style={{ background: 'var(--bg-main)', color: 'var(--on-surface)', border: 'var(--border-standard)' }}
                                 />
                             </Form.Group>
-                            <div className="d-flex justify-content-end gap-2 pt-3 border-top" style={{ borderColor: 'var(--border-glass) !important' }}>
-                                <button className="btn-glass-outline" type="button" onClick={closePayoutModal}>
-                                    Close
-                                </button>
-                                <button className="btn-glass-primary" type="submit">
-                                    Submit Request
-                                </button>
+                            <div className="d-flex flex-column gap-3 pt-3 border-top" style={{ borderColor: 'var(--border-glass) !important' }}>
+                                <div className="d-flex flex-wrap align-items-center" style={{ gap: '4px', fontSize: '0.85rem', color: 'var(--on-surface-variant)' }}>
+                                    <span>By requesting a payout you agree to our</span>
+                                    <Link to="/policy?tab=payouts" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Payout Policy</Link>
+                                    <span>and</span>
+                                    <Link to="/policy?tab=terms" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Seller Terms</Link>
+                                    <span>.</span>
+                                </div>
+                                <div className="d-flex justify-content-end gap-2">
+                                    <button className="btn-glass-outline" type="button" onClick={closePayoutModal}>
+                                        Close
+                                    </button>
+                                    <button className="btn-glass-primary" type="submit">
+                                        Submit Request
+                                    </button>
+                                </div>
                             </div>
                         </Form>
                     </div>

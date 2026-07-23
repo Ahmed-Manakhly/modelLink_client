@@ -24,6 +24,7 @@ import AssetDeliveryCallout from '../components/ui/AssetDeliveryCallout'
 import VersionHistoryPanel from '../components/ui/VersionHistoryPanel'
 import MetricsComparisonTable from '../components/ui/MetricsComparisonTable'
 import { getModelRating } from '../lib/modelHelpers'
+import { ModelViewSEO } from '../lib/seo';
 
 
 //==========================
@@ -374,6 +375,8 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
 
     //--------------------------------------------------
     return (
+        <>
+        <ModelViewSEO model={modelForDisplay} />
         <GlobalWrapper className="global-page-margin-top py-5">
             {(model && isLoggedIn && !isSeller) && (
                 <ChatCard userData={model?.developer} userId={model?.developerId} onlineUsers={onlineUsers} />
@@ -441,6 +444,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
                 </div>
             )}
         </GlobalWrapper>
+        </>
     )
 }
 

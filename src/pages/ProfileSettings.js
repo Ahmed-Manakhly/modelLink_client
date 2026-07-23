@@ -5,7 +5,7 @@ import FormProfile from '../components/FormProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authActions } from '../store/authSlice';
 import { getAuthToken } from '../utility/tokenLoader'
 import { updateMyProfileReq } from '../lib/userRequests';
@@ -246,6 +246,18 @@ function ProfileSettings() {
 
             <div className="mt-4">
                 <FormProfile onUpdateProfileAction={onUpdateProfileAction?.bind(null, file ? file : null)} isChanged={isChanged} onRateChange={setCompletionRate} />
+            </div>
+
+            <div className="mt-4 mb-5">
+                <div className="glass-container p-4 w-100" style={{ color: 'var(--on-surface)' }}>
+                    <h4 style={{ color: 'var(--primary)', fontWeight: 700, marginBottom: '20px' }}>Legal & Account</h4>
+                    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                        <Link to="/policy?tab=privacy" className="legal-link" style={{ color: 'var(--on-surface-variant)' }}>Privacy Policy</Link>
+                        <Link to="/policy?tab=terms" className="legal-link" style={{ color: 'var(--on-surface-variant)' }}>Terms of Service</Link>
+                        <Link to="/policy?tab=cookies" className="legal-link" style={{ color: 'var(--on-surface-variant)' }}>Cookies Policy</Link>
+                        <Link to="/contact" className="legal-link" style={{ color: 'var(--color-danger)', fontWeight: 600 }}>Request Account Deletion</Link>
+                    </div>
+                </div>
             </div>
         </div>
     )
