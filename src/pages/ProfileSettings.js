@@ -135,6 +135,8 @@ function ProfileSettings() {
         navigate(`/`, { replace: false });
     }
     //==============================================
+    if (!userData?.id) return null;
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <div className="mb-2">

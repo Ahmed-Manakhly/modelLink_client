@@ -10,12 +10,11 @@ import { getDisplayName } from '../UserProfileStrip';
 const UserChip = ({ user, showVerified = false, linkTo = null, className = '', logoUrl = null }) => {
     if (!user) return null;
 
-    // eslint-disable-next-line
-    const { avatar, isVerified } = user;
+    const { isVerified } = user;
     const resolvedLogoUrl = logoUrl || user.logoUrl;
     const displayName = getDisplayName(user);
-    // eslint-disable-next-line
-    const initial = displayName[0]?.toUpperCase() || '?';
+
+
 
     const content = (
         <>

@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-/* eslint-disable */
 import { Outlet, useLoaderData, useNavigate, ScrollRestoration } from 'react-router-dom';
 import Topbar from '../components/layout/Topbar';
 import TopNavBar from '../components/layout/TopNavBar';
@@ -12,7 +10,6 @@ import LoadingSpinner from '../components/layout/LoadingSpinner';
 //-----------------------------------------
 import { useState, useEffect } from 'react'
 import { createAPI } from '../lib/api';
-const API = createAPI();
 import { getTokenDuration, getAuthToken } from '../utility/tokenLoader';
 import { safeParseStorage } from '../utility/safeParseStorage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,17 +17,19 @@ import { authActions } from '../store/authSlice';
 import { cartActions } from '../store/Cart-slice';
 import { uiActions } from '../store/UI-slice';
 import UpButton from '../components/layout/UpButton'
-import { footerCategoriesData, mobNavData, mobNavData_2, footerNavData } from '../constants/marketingData'
+import { footerNavData } from '../constants/marketingData'
 import WarningModal from '../components/layout/WarningModal'
 import { socket } from '../hooks/useSocket';
 import {
     selectUnreadChats,
     selectUnreadNotifications,
-    selectChats,
-    selectNotifications,
-    selectOnlineUsers,
-    checkOnlineStatus as checkChatOnlineStatus,
+    // selectChats,
+    // selectNotifications,
+    // selectOnlineUsers,
+    // checkOnlineStatus as checkChatOnlineStatus,
 } from '../store/realtimeSlice';
+
+const API = createAPI();
 
 let warningTimeoutId = null;
 let expireTimeoutId = null;
@@ -58,10 +57,10 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
     const isLoading = useSelector(state => state.ui.isLoading)
     const msgCounter = useSelector(selectUnreadChats)
     const notCounter = useSelector(selectUnreadNotifications)
-    const chats = useSelector(selectChats)
-    const notifys = useSelector(selectNotifications)
-    const onlineUsers = useSelector(selectOnlineUsers)
-    const checkOnlineStatus = (chat) => checkChatOnlineStatus(chat, userData?.id, onlineUsers)
+    // const chats = useSelector(selectChats)
+    // const notifys = useSelector(selectNotifications)
+    // const onlineUsers = useSelector(selectOnlineUsers)
+    // const checkOnlineStatus = (chat) => checkChatOnlineStatus(chat, userData?.id, onlineUsers)
     //----------------------------------------
 
     const onAction = async () => {
@@ -130,7 +129,7 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
                     if (!ids) return;
                     const res = await API.get(`aiModel?id=${ids}`);
                     const models = res?.data?.data?.models || [];
-                    
+
                     // Rebuild cart items exactly based on retrieved models + requested versionIds
                     const hydratedItems = [];
                     cartItems.forEach(cartItem => {
@@ -181,8 +180,8 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
             return;
         }
 
-        const warningTime = Math.max(0, tokenDuration - 300000); 
-        
+        const warningTime = Math.max(0, tokenDuration - 300000);
+
         if (warningTimeoutId) clearTimeout(warningTimeoutId);
         warningTimeoutId = setTimeout(() => {
             setWarning({ show: true, type: 'action', message: 'Your Session Will Be Expired Soon', action: 'Keep Me Login', cancelText: 'Close' });
@@ -193,7 +192,7 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
             socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut());
             navigate("/auth?mode=login", { replace: true });
-            setWarning(prev => ({...prev, show: false}));
+            setWarning(prev => ({ ...prev, show: false }));
         }, tokenDuration);
 
         return () => {
@@ -215,7 +214,7 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
             <NavBar handleUpdateNotification={handleUpdateNotification} handleReadAllNotifications={handleReadAllNotifications}
                 handleDeleteNotification={handleDeleteNotification} handleDeleteChat={handleDeleteChat} />
             <MobNav onClick={onClickHandler} txt_3={'sign in'} txt_4={'Join'} />
-            <MobNavMenu menuOpen={menuOpen} onClose={onCloseHandler} NavData={token ? mobNavData_2 : mobNavData}
+            <MobNavMenu menuOpen={menuOpen} onClose={onCloseHandler}
                 txt_1={'Connecting AI developers with buyers worldwide. 🌍'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
             />
             <main >
@@ -223,7 +222,7 @@ const RootLayout = ({ handleDeleteNotification, handleUpdateNotification, handle
                 <ScrollRestoration />
                 <Outlet context={{ msgCounter, notCounter }} />
             </main>
-            <Footer footerNavData={footerNavData} footerCategoriesData={footerCategoriesData} />
+            <Footer footerNavData={footerNavData} />
         </>
     )
 };

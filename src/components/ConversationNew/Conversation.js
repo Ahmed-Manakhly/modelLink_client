@@ -10,8 +10,6 @@ import { getAuthToken } from '../../utility/tokenLoader'
 import { getMessagePreview } from '../../utility/chatHelpers';
 import {
   getCounterpartyDisplayName,
-  // eslint-disable-next-line
-  getCounterpartyInitial,
   getCounterpartyProfileLink,
   isStaffRole,
   resolveCounterpartyUser,

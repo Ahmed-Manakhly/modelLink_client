@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import GlobalWrapper from '../components/layout/GlobalWrapper';
 import { FiFileText, FiShield, FiDollarSign, FiHelpCircle } from 'react-icons/fi';
@@ -41,7 +41,7 @@ const PolicyPage = () => {
                         <p className={classes.paragraph}>
                             Welcome to ModelLink. By accessing or using our platform, you agree to be bound by these Terms & Conditions. ModelLink is an AI Model Marketplace designed to connect developers who create machine learning models with clients seeking robust, production-ready inference solutions.
                         </p>
-                        
+
                         <h2 className={classes.sectionTitle}>1. User Accounts</h2>
                         <p className={classes.paragraph}>
                             You must register for an account to buy or sell models. Developers must complete the Stripe Connect onboarding process before they can receive payouts. Clients must provide valid payment information to purchase and download models.
@@ -156,7 +156,7 @@ const PolicyPage = () => {
                         </button>
                     ))}
                 </aside>
-                
+
                 <main className={`${classes.contentArea} glass-container`} style={{ position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)', zIndex: -1 }}></div>
                     {renderContent()}

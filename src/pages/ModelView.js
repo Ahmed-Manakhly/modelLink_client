@@ -11,8 +11,6 @@ import ModelDataTop from '../components/ModelDataTop'
 import ModelGallery from '../components/ModelGallery'
 import ModelBoxWidgets from '../components/ModelBoxWidgets'
 import FeedbackList from '../components/FeedbackList'
-// eslint-disable-next-line
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getData, getModelByIdReq, getOrdersByModelReq, getModelsByUserReq, getReviewsByModelReq } from '../lib/loaders';
 import { createOrderReq } from '../lib/orderRequests';
 import DashboardDataSection from '../components/layout/DashboardDataSection'
@@ -145,7 +143,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             { onError: redirectIfModelForbidden }
         )
         dispatch(uiActions.showNotification(false))
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {
@@ -175,7 +173,7 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             dispatch(uiActions.showNotification(false))
             setSingleModelUpdated(false)
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [singleModelUpdated, id, dispatch, navigate])
     //------------------------------------------
     useEffect(() => {
@@ -376,74 +374,74 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
     //--------------------------------------------------
     return (
         <>
-        <ModelViewSEO model={modelForDisplay} />
-        <GlobalWrapper className="global-page-margin-top py-5">
-            {(model && isLoggedIn && !isSeller) && (
-                <ChatCard userData={model?.developer} userId={model?.developerId} onlineUsers={onlineUsers} />
-            )}
-            <ModelGallery images={model?.galleryImages} alt={model?.title} />
-            <ModelDataTop formTitle={'Model Details..'} model={modelForDisplay} selectedVersionId={selectedVersionId} />
-            <ModelBoxWidgets
-                model={model}
-                orderRequestHandler={orderRequestHandler}
-                isBuyer={isBuyer}
-                otherDev={otherDev}
-                isSeller={isSeller}
-                profileNotCompleted={profileNotCompleted}
-                selectedVersionId={selectedVersionId}
-                onVersionChange={setSelectedVersionId}
-                modelCount={models.length}
-            />
-            <VersionHistoryPanel
-                fluid={true}
-                versions={model?.versions || []}
-                selectedVersionId={selectedVersionId}
-                onSelect={setSelectedVersionId}
-                showInactive={Boolean(isSeller && model?.status === 'DRAFT')}
-            />
-            <div className="mt-5 pt-3 w-100">
-                <MetricsComparisonTable fluid={true} versions={visibleVersions} />
-            </div>
-            <AssetDeliveryCallout fluid={true} hidden={isSeller && model?.status === 'DRAFT'} />
-            <ModelData formTitle={''} model={model} selectedVersionId={selectedVersionId} />
-            {isSeller && (
-                <DashboardDataSection
-                    fluid={true}
-                    getData={(query) => getOrdersByModelReq(id, typeof query === 'string' ? query : '', { 'Authorization': `Bearer ${token}` })}
-                    contentType="orders"
-                    columns={getOrderColumns()}
-                    tableTitle="Orders Made On This Model"
+            <ModelViewSEO model={modelForDisplay} />
+            <GlobalWrapper className="global-page-margin-top py-5">
+                {(model && isLoggedIn && !isSeller) && (
+                    <ChatCard userData={model?.developer} userId={model?.developerId} onlineUsers={onlineUsers} />
+                )}
+                <ModelGallery images={model?.galleryImages} alt={model?.title} />
+                <ModelDataTop formTitle={'Model Details..'} model={modelForDisplay} selectedVersionId={selectedVersionId} />
+                <ModelBoxWidgets
+                    model={model}
+                    orderRequestHandler={orderRequestHandler}
+                    isBuyer={isBuyer}
+                    otherDev={otherDev}
+                    isSeller={isSeller}
+                    profileNotCompleted={profileNotCompleted}
+                    selectedVersionId={selectedVersionId}
+                    onVersionChange={setSelectedVersionId}
+                    modelCount={models.length}
                 />
-            )}
-            {isBuyer && (
-                <DashboardDataSection
+                <VersionHistoryPanel
                     fluid={true}
-                    getData={(query) => getOrdersByModelReq(id, `?clientId=${thisUserId}` + ((query && typeof query === 'string') ? '&' + query.replace('?', '') : ''), { 'Authorization': `Bearer ${token}` })}
-                    contentType="orders"
-                    columns={getOrderColumns()}
-                    tableTitle="Orders You Made On This Model"
+                    versions={model?.versions || []}
+                    selectedVersionId={selectedVersionId}
+                    onSelect={setSelectedVersionId}
+                    showInactive={Boolean(isSeller && model?.status === 'DRAFT')}
                 />
-            )}
-            {!isLoggedIn && (
-                <Box className="glass-container" sx={{ textAlign: 'center', padding: '40px 20px', margin: '30px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h4 className="gradient-text mb-2" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Want to connect or purchase?</h4>
-                    <p style={{ color: 'var(--on-surface-variant)', marginBottom: '25px', fontSize: '15px' }}>
-                        Please log in to message the developer and place orders on this model.
-                    </p>
-                    <Link to="/auth?mode=login" className="btn-glass-primary" style={{ padding: '10px 25px' }}>
-                        Log In Now
-                    </Link>
-                </Box>
-            )}
-            {reviews.length > 0 && (
-                <FeedbackList rev={reviews} formTitle='Reviews for this model' versionMap={reviewVersionMap} />
-            )}
-            {otherModels.length > 0 && (
                 <div className="mt-5 pt-3 w-100">
-                    <PopularServices fluid={true} models={otherModels.slice(0, 10)} title={<span className="gradient-text">More Models Made By This Developer</span>} titleClassName="page-main-title m-0" />
+                    <MetricsComparisonTable fluid={true} versions={visibleVersions} />
                 </div>
-            )}
-        </GlobalWrapper>
+                <AssetDeliveryCallout fluid={true} hidden={isSeller && model?.status === 'DRAFT'} />
+                <ModelData formTitle={''} model={model} selectedVersionId={selectedVersionId} />
+                {isSeller && (
+                    <DashboardDataSection
+                        fluid={true}
+                        getData={(query) => getOrdersByModelReq(id, typeof query === 'string' ? query : '', { 'Authorization': `Bearer ${token}` })}
+                        contentType="orders"
+                        columns={getOrderColumns()}
+                        tableTitle="Orders Made On This Model"
+                    />
+                )}
+                {isBuyer && (
+                    <DashboardDataSection
+                        fluid={true}
+                        getData={(query) => getOrdersByModelReq(id, `?clientId=${thisUserId}` + ((query && typeof query === 'string') ? '&' + query.replace('?', '') : ''), { 'Authorization': `Bearer ${token}` })}
+                        contentType="orders"
+                        columns={getOrderColumns()}
+                        tableTitle="Orders You Made On This Model"
+                    />
+                )}
+                {!isLoggedIn && (
+                    <Box className="glass-container" sx={{ textAlign: 'center', padding: '40px 20px', margin: '30px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <h4 className="gradient-text mb-2" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Want to connect or purchase?</h4>
+                        <p style={{ color: 'var(--on-surface-variant)', marginBottom: '25px', fontSize: '15px' }}>
+                            Please log in to message the developer and place orders on this model.
+                        </p>
+                        <Link to="/auth?mode=login" className="btn-glass-primary" style={{ padding: '10px 25px' }}>
+                            Log In Now
+                        </Link>
+                    </Box>
+                )}
+                {reviews.length > 0 && (
+                    <FeedbackList rev={reviews} formTitle='Reviews for this model' versionMap={reviewVersionMap} />
+                )}
+                {otherModels.length > 0 && (
+                    <div className="mt-5 pt-3 w-100">
+                        <PopularServices fluid={true} models={otherModels.slice(0, 10)} title={<span className="gradient-text">More Models Made By This Developer</span>} titleClassName="page-main-title m-0" />
+                    </div>
+                )}
+            </GlobalWrapper>
         </>
     )
 }

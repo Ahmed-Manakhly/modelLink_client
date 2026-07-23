@@ -9,8 +9,7 @@ import { useSelector } from 'react-redux';
 
 const ProfileBoxWidgetsDev = ({ user, modelCount, totalOrders }) => {
     const {
-        // eslint-disable-next-line
-        org_username, avatar, first_name, org_name,
+        first_name, org_name,
         last_name, org_desc,
     } = user || {};
 
@@ -50,13 +49,13 @@ const ProfileBoxWidgetsDev = ({ user, modelCount, totalOrders }) => {
                     <Col xs={0} md lg className="d-flex flex-column align-items-left w-100">
                         <label htmlFor="email" className={styles.inputLabel}>Email</label>
                         <p className={styles.user}>
-                            {isLoggedIn ? (user?.email || 'N/A') : <i style={{color: '#f74040', fontSize: '14px'}}>Log in to view contact details</i>}
+                            {isLoggedIn ? (user?.email || 'N/A') : <i style={{ color: '#f74040', fontSize: '14px' }}>Log in to view contact details</i>}
                         </p>
                     </Col>
                     <Col xs={0} md lg className="d-flex flex-column align-items-left w-100">
                         <label htmlFor="org_phone" className={styles.inputLabel}>Phone Number</label>
                         <p className={styles.user}>
-                            {isLoggedIn ? (user?.org_phone || 'N/A') : <i style={{color: '#f74040', fontSize: '14px'}}>Log in to view contact details</i>}
+                            {isLoggedIn ? (user?.org_phone || 'N/A') : <i style={{ color: '#f74040', fontSize: '14px' }}>Log in to view contact details</i>}
                         </p>
                     </Col>
                 </Row>

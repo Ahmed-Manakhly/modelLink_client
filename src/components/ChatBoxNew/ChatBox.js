@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from "./ChatBox.module.scss";
-// eslint-disable-next-line
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
 import { BsEmojiSmile } from "react-icons/bs";
@@ -9,7 +8,6 @@ import EmojiPicker from 'emoji-picker-react';
 import { FILES_BASE_API_URL } from '../../lib/api'
 import { IoImagesOutline } from "react-icons/io5";
 import { IoSend } from "react-icons/io5";
-// import { RiRobot2Line } from "react-icons/ri";
 import { Link } from 'react-router-dom'
 import { getAuthToken } from '../../utility/tokenLoader'
 import { buildChatDisplayItems, getMessageReceipt } from '../../utility/chatHelpers';
@@ -18,8 +16,6 @@ import { RiRobot2Line } from "react-icons/ri";
 import UserProfileStrip from '../UserProfileStrip';
 import {
   getCounterpartyDisplayName,
-  // eslint-disable-next-line
-  getCounterpartyInitial,
   getCounterpartyProfileLink,
   isStaffRole,
   resolveCounterpartyUser,
@@ -67,12 +63,12 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
     typingTimeoutRef.current = setTimeout(emitStopTyping, TYPING_DEBOUNCE_MS);
   };
 
-  // eslint-disable-next-line
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => emitStopTyping(), []);
 
   useEffect(() => {
     emitStopTyping();
-    // eslint-disable-next-line
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat?.id]);
 
   useEffect(() => {
@@ -300,19 +296,19 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
                   <IoImagesOutline />
                 </button>
                 <input name='attachment' type="file" onChange={handelFileChange} ref={imageRef} style={{ display: 'none' }} />
-                
+
                 <div ref={emojiRef}>
-                  <button 
-                    className={classes.iconBtn} 
-                    onClick={() => setShowEmojiPicker((prev) => !prev)} 
+                  <button
+                    className={classes.iconBtn}
+                    onClick={() => setShowEmojiPicker((prev) => !prev)}
                     type="button"
                   >
                     <BsEmojiSmile />
                   </button>
                   {showEmojiPicker && (
                     <div className={classes.emojiPickerWrapper}>
-                      <EmojiPicker 
-                        theme="dark" 
+                      <EmojiPicker
+                        theme="dark"
                         onEmojiClick={handleEmojiClick}
                       />
                     </div>
@@ -329,9 +325,9 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
                   placeholder="Synthesize message..."
                   rows={1}
                 />
-                <button 
-                  className={classes.sendBtn} 
-                  onClick={handleSend} 
+                <button
+                  className={classes.sendBtn}
+                  onClick={handleSend}
                   type="submit"
                   disabled={(newMessage.trim() === '') && (!file)}
                 >

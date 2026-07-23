@@ -21,13 +21,13 @@ const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick
   return (
     <li className={classes["menu-category"]}>
       <button className={`${classes['accordion-menu']} ${isOpen && classes.active}`} onClick={() => { setIsOpen(prev => !prev) }}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
           {menuTitle.toLowerCase() === 'ai models' ? (
-            <RiRobot2Line style={{fontSize: '24px', color: '#e6e6e6'}} />
+            <RiRobot2Line style={{ fontSize: '24px', color: '#e6e6e6' }} />
           ) : (
-            img && <img src={img} alt={menuTitle} style={{width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)'}} />
+            img && <img src={img} alt={menuTitle} style={{ width: '24px', height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(0.9)' }} />
           )}
-          <p className={classes["menu-title"]} style={{marginBottom: 0}}>{menuTitle}</p>
+          <p className={classes["menu-title"]} style={{ marginBottom: 0 }}>{menuTitle}</p>
         </div>
         <div>
           {!isOpen && <ion-icon name="add-outline" className={classes["add-icon"]}></ion-icon>}
@@ -50,20 +50,19 @@ const AccordionLink = ({ menuTitle, menuItems, onClick, img }) => {  //  onClick
 const SingleLink = ({ title, onClick, to, icon }) => {
   return (
     <li className={classes["menu-category"]}>
-      <Link to={to} className={classes["menu-title"]} onClick={onClick} style={{display: 'flex', alignItems: 'center', gap: '15px'}} >
-          {icon} {title}
+      <Link to={to} className={classes["menu-title"]} onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: '15px' }} >
+        {icon} {title}
       </Link>
     </li>
   )
 }
 
-function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) {
+function MobNavMenu({ onClose, menuOpen, txt_1, txt_2, txt_3, txt_4 }) {
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const userData = useSelector(state => state.auth.userData);
-  // eslint-disable-next-line
-  const { org_username, role, id: userID, avatar, first_name } = userData;
+  const { org_username, role, id: userID, first_name } = userData;
   const logoutAction = () => {
     const toast = { status: 'success', message: 'come back soon', title: 'logged out' };
     dispatch(authActions.onLoginOut());
@@ -85,12 +84,12 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
 
   //---------------------------------
   const pageActions = <>
-    <div style={{display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
-      <RiRobot2Line style={{width: '90px', height: '90px', color: 'var(--primary)', filter: 'drop-shadow(0 0 10px rgba(34, 211, 238, 0.4))', borderRadius: '50%', border: '3.5px solid var(--primary)', padding: '10px'}} />
+    <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+      <RiRobot2Line style={{ width: '90px', height: '90px', color: 'var(--primary)', filter: 'drop-shadow(0 0 10px rgba(34, 211, 238, 0.4))', borderRadius: '50%', border: '3.5px solid var(--primary)', padding: '10px' }} />
     </div>
-    <div style={{display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px'}}>
-      <Link onClick={onClose} to="./auth?mode=login" className={`btn-glass-primary`} style={{textAlign: 'center'}}>{txt_3}</Link>
-      <Link onClick={onClose} to="./auth?mode=signup" className={`btn-glass-outline`} style={{textAlign: 'center'}}>{txt_4}</Link>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px' }}>
+      <Link onClick={onClose} to="./auth?mode=login" className={`btn-glass-primary`} style={{ textAlign: 'center' }}>{txt_3}</Link>
+      <Link onClick={onClose} to="./auth?mode=signup" className={`btn-glass-outline`} style={{ textAlign: 'center' }}>{txt_4}</Link>
     </div>
     <br />
   </>
@@ -100,55 +99,55 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
   }
   const userActions = <>
     {/* {============================================} */}
-    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{display: 'flex', justifyContent: 'center', margin: '15px 0'}}>
-      <div className={` ${styles.imgCon} ${styles['menu-title']} `} style={{width: '90px', height: '90px'}} >
+    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{ display: 'flex', justifyContent: 'center', margin: '15px 0' }}>
+      <div className={` ${styles.imgCon} ${styles['menu-title']} `} style={{ width: '90px', height: '90px' }} >
         <UserAvatar user={userData} />
       </div>
     </li>
-    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{textAlign: 'center'}}>
+    <li className={` ${styles.container_} ${styles['menu-category']} `} style={{ textAlign: 'center' }}>
       {first_name && <h4>{first_name?.toUpperCase()?.slice(0, 9)}</h4>}
       {!first_name && <h4>{org_username?.toUpperCase()?.slice(0, 9)}</h4>}
-      <h6 style={{color: 'var(--sonic-silver)', marginTop: '5px'}}>{role}</h6>
+      <h6 style={{ color: 'var(--sonic-silver)', marginTop: '5px' }}>{role}</h6>
     </li>
-    <li style={{padding: '10px 20px 25px 20px'}}>
-        <button onClick={logoutAction} className="btn-glass-logout" style={{width: '100%'}}>
-          <FiLogOut />
-          <span>Logout</span>
-        </button>
+    <li style={{ padding: '10px 20px 25px 20px' }}>
+      <button onClick={logoutAction} className="btn-glass-logout" style={{ width: '100%' }}>
+        <FiLogOut />
+        <span>Logout</span>
+      </button>
     </li>
     <hr />
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/profileSettings`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiSettings /> Profile Settings</Link>
+      <Link onClick={onClose} to={`/profileSettings`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiSettings /> Profile Settings</Link>
     </li>
 
     {role === 'DEVELOPER' &&
       <>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/dashboard-dev`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiGrid /> My Dashboard</Link>
+          <Link onClick={onClose} to={`/dashboard-dev`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiGrid /> My Dashboard</Link>
         </li>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/reviews-dev`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiStar /> My Reviews</Link>
+          <Link onClick={onClose} to={`/reviews-dev`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiStar /> My Reviews</Link>
         </li>
         <li className={` ${styles.container_} ${styles['menu-category']} `}>
-          <Link onClick={onClose} to={`/wallet`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiCreditCard /> My Wallet</Link>
+          <Link onClick={onClose} to={`/wallet`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiCreditCard /> My Wallet</Link>
         </li>
       </>
     }
     {role === 'CLIENT' &&
       <li className={` ${styles.container_} ${styles['menu-category']} `}>
-        <Link onClick={onClose} to={`/orders-client`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiPackage /> My Orders</Link>
+        <Link onClick={onClose} to={`/orders-client`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiPackage /> My Orders</Link>
       </li>
     }
     {(role === 'ADMIN' || role === 'EMPLOYEE') &&
       <li className={` ${styles.container_} ${styles['menu-category']} `}>
-        <Link onClick={onClose} to={`/admin`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiShield /> Admin Dashboard</Link>
+        <Link onClick={onClose} to={`/admin`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiShield /> Admin Dashboard</Link>
       </li>
     }
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/profile/${userID}`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiUser /> My Profile</Link>
+      <Link onClick={onClose} to={`/profile/${userID}`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiUser /> My Profile</Link>
     </li>
     <li className={` ${styles.container_} ${styles['menu-category']} `}>
-      <Link onClick={onClose} to={`/change-password`} style={{display: 'flex', alignItems: 'center', gap: '15px'}}><FiLock /> Change Password</Link>
+      <Link onClick={onClose} to={`/change-password`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><FiLock /> Change Password</Link>
     </li>
     <br />
     <hr />
@@ -162,8 +161,8 @@ function MobNavMenu({ onClose, menuOpen, NavData, txt_1, txt_2, txt_3, txt_4 }) 
   //------------------------
   return (
     <nav className={`${classes['mobile-navigation-menu']}  has-scrollbar ${menuOpen && classes.active} `} >
-      <div className={classes["menu-top"]} style={{borderBottom: 'none'}}>
-        <button className={classes["menu-close-btn"]} onClick={onClose} style={{marginLeft: 'auto'}}>
+      <div className={classes["menu-top"]} style={{ borderBottom: 'none' }}>
+        <button className={classes["menu-close-btn"]} onClick={onClose} style={{ marginLeft: 'auto' }}>
           <ion-icon name="close-outline"></ion-icon>
         </button>
       </div>

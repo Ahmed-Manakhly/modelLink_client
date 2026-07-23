@@ -1,58 +1,57 @@
-// eslint-disable-next-line
-/* eslint-disable */
-import { useLoaderData ,useNavigate  , ScrollRestoration } from 'react-router-dom' ;
-import Topbar from '../components/layout/Topbar' ;
-import TopNavBar from '../components/layout/TopNavBar' ;
-import NavBar from '../components/layout/NavBar' ;
-import MobNav from '../components/layout/MobNav' ;
-import Footer from '../components/layout/Footer' ;
-import MobNavMenu from '../components/layout/MobNavMenu' ;
-import Toast from '../components/layout/Toast' ;
-import LoadingSpinner from '../components/layout/LoadingSpinner' ;
+import { useNavigate, ScrollRestoration } from 'react-router-dom';
+import Topbar from '../components/layout/Topbar';
+import TopNavBar from '../components/layout/TopNavBar';
+import NavBar from '../components/layout/NavBar';
+import MobNav from '../components/layout/MobNav';
+import Footer from '../components/layout/Footer';
+import MobNavMenu from '../components/layout/MobNavMenu';
+import Toast from '../components/layout/Toast';
+import LoadingSpinner from '../components/layout/LoadingSpinner';
 //-----------------------------------------
-import {useState , useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { createAPI } from '../lib/api';
-const API = createAPI();
 import { Link } from 'react-router-dom';
 import { RiRobot2Line } from "react-icons/ri";
 import styles from './ErrorPage.module.scss';
-import { getTokenDuration , getAuthToken } from '../utility/tokenLoader';
+import { getTokenDuration, getAuthToken } from '../utility/tokenLoader';
 import { safeParseStorage } from '../utility/safeParseStorage';
-import { useDispatch , useSelector} from 'react-redux';
-import {authActions} from '../store/authSlice' ;
-import {cartActions} from '../store/Cart-slice' ;
-import {uiActions} from '../store/UI-slice' ;
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../store/authSlice';
+import { cartActions } from '../store/Cart-slice';
+import { uiActions } from '../store/UI-slice';
 import UpButton from '../components/layout/UpButton'
-import { footerCategoriesData , mobNavData , mobNavData_2, footerNavData} from '../constants/marketingData'
+import { footerNavData } from '../constants/marketingData'
 import WarningModal from '../components/layout/WarningModal'
 import { socket } from '../hooks/useSocket';
+
+const API = createAPI();
 
 let warningTimeoutId = null;
 let expireTimeoutId = null;
 const SESSION_MINUTES = 45;
 
-const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification , handleUpdateNotification , chats , checkOnlineStatus , handleDeleteChat , getSearch,
-    onClickLink}) => {
+const ErrorPage = ({ msgCounter, notCounter, notifys, handleDeleteNotification, handleUpdateNotification, chats, checkOnlineStatus, handleDeleteChat, getSearch,
+    onClickLink }) => {
     //----------------------------------------
-    const [menuOpen , setMenuOpen]=useState(false) ;
-    const [warning,setWarning] = useState({show:false , type : '' , message : '' , action : ''}) ;
-    const [sessionKey,setSessionKey] = useState(0) ;
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [warning, setWarning] = useState({ show: false, type: '', message: '', action: '' });
+    const [sessionKey, setSessionKey] = useState(0);
 
-    const onClickHandler = ()=>{
+    const onClickHandler = () => {
         setMenuOpen(true)
     }
-    const onCloseHandler = ()=>{
+    const onCloseHandler = () => {
         setMenuOpen(false)
     }
     //----------------------------------------
     const notificationData = useSelector(state => state.ui.notificationData)
     const showNotification = useSelector(state => state.ui.showNotification)
     const userData = useSelector(state => state.auth.userData) || {}
-    const {status,message,title} = notificationData ;
+    const { status, message, title } = notificationData;
     const isLoading = useSelector(state => state.ui.isLoading)
     //----------------------------------------
 
-    const onAction = async ()=>{
+    const onAction = async () => {
         try {
             const currentToken = getAuthToken();
             if (!currentToken || currentToken === 'EXPIRED') throw new Error("No token");
@@ -60,10 +59,10 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             const response = await API.get(`auth/refresh-token`, {
                 headers: { Authorization: `Bearer ${currentToken}` }
             });
-            
+
             const resData = response.data;
             const newToken = resData.token;
-            
+
             localStorage.setItem('token', newToken);
             let userDataStorage = safeParseStorage('userData');
             if (userDataStorage) {
@@ -83,7 +82,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut());
             navigate("/auth?mode=login", { replace: true });
-            setWarning(prev => ({...prev, show: false}));
+            setWarning(prev => ({ ...prev, show: false }));
         }
     }
     //----------------
@@ -94,15 +93,15 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         })
     }
     //----------------------------------------
-    const onCloseNotificationHandler = ()=>{
+    const onCloseNotificationHandler = () => {
         dispatch(uiActions.showNotification(false))
     }
     //----------------------------------------
     const dispatch = useDispatch();
     //----------------------------------------
-    let token = getAuthToken() ;
+    let token = getAuthToken();
     //----------------------------------CART DATA
-    useEffect(()=>{
+    useEffect(() => {
         // Hydrate cart for ALL users (Guests, Clients, etc)
         const cartItems = safeParseStorage('cartItems');
         if (cartItems && cartItems.length > 0) {
@@ -112,7 +111,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
                     if (!ids) return;
                     const res = await API.get(`aiModel?id=${ids}`);
                     const models = res?.data?.data?.models || [];
-                    
+
                     const hydratedItems = [];
                     cartItems.forEach(cartItem => {
                         const model = models.find(m => String(m.id) === String(cartItem.id));
@@ -129,17 +128,17 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         } else {
             dispatch(cartActions.onSetCart([]));
         }
-    },[dispatch])
+    }, [dispatch])
     //----------------------------------------
     const navigate = useNavigate();
-    const [scroll,setScroll]=useState(false)
-    const scrollHandler =()=>{
-        window.scrollY > 90 ? setScroll(true):setScroll(false) ;
+    const [scroll, setScroll] = useState(false)
+    const scrollHandler = () => {
+        window.scrollY > 90 ? setScroll(true) : setScroll(false);
     }
     window.addEventListener('scroll', scrollHandler)
 
     useEffect(() => {
-        if(!token) return;
+        if (!token) return;
 
         if (token === 'EXPIRED') {
             socket.emit("leavingRoom", userData?.id);
@@ -162,7 +161,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
         }
 
         const warningTime = Math.max(0, tokenDuration - 300000);
-        
+
         if (warningTimeoutId) clearTimeout(warningTimeoutId);
         warningTimeoutId = setTimeout(() => {
             setWarning({ show: true, type: 'action', message: 'Your Session Will Be Expired Soon', action: 'Keep Me Login', cancelText: 'Close' });
@@ -173,7 +172,7 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
             socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut());
             navigate("/auth?mode=login", { replace: true });
-            setWarning(prev => ({...prev, show: false}));
+            setWarning(prev => ({ ...prev, show: false }));
         }, tokenDuration);
 
         return () => {
@@ -187,31 +186,31 @@ const ErrorPage = ({msgCounter , notCounter , notifys , handleDeleteNotification
     //----------------------------------------
 
     return <>
-            {warning.show && <WarningModal onClose={closeModal} warning={warning} onAction={onAction}/>}
-            {showNotification && <Toast close={onCloseNotificationHandler} status={status} title={title} message={message} onAnimationEnd={onCloseNotificationHandler}/>}
-            <div className={`overlay  ${(menuOpen || isLoading) && 'active'}`}  onClick={onCloseHandler} ></div>
-            {isLoading && <LoadingSpinner/>}
-            <Topbar txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
-            <TopNavBar getSearch={getSearch}/>
-            <NavBar msgCounter={msgCounter} notCounter={notCounter} notifys={notifys} handleUpdateNotification={handleUpdateNotification} chats={chats}
-                handleDeleteNotification={handleDeleteNotification}  checkOnlineStatus={checkOnlineStatus} handleDeleteChat={handleDeleteChat}
-                onClickLink={onClickLink} />
-            <MobNav onClick={onClickHandler} txt_3={'sign in'} txt_4={'Join'} msgCounter={msgCounter} notCounter={notCounter}/>
-            <MobNavMenu menuOpen={menuOpen}  onClose={onCloseHandler} NavData={token? mobNavData_2:mobNavData}  onClickLink={onClickLink}
+        {warning.show && <WarningModal onClose={closeModal} warning={warning} onAction={onAction} />}
+        {showNotification && <Toast close={onCloseNotificationHandler} status={status} title={title} message={message} onAnimationEnd={onCloseNotificationHandler} />}
+        <div className={`overlay  ${(menuOpen || isLoading) && 'active'}`} onClick={onCloseHandler} ></div>
+        {isLoading && <LoadingSpinner />}
+        <Topbar txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'} />
+        <TopNavBar getSearch={getSearch} />
+        <NavBar msgCounter={msgCounter} notCounter={notCounter} notifys={notifys} handleUpdateNotification={handleUpdateNotification} chats={chats}
+            handleDeleteNotification={handleDeleteNotification} checkOnlineStatus={checkOnlineStatus} handleDeleteChat={handleDeleteChat}
+            onClickLink={onClickLink} />
+        <MobNav onClick={onClickHandler} txt_3={'sign in'} txt_4={'Join'} msgCounter={msgCounter} notCounter={notCounter} />
+        <MobNavMenu menuOpen={menuOpen} onClose={onCloseHandler} onClickLink={onClickLink}
             txt_1={'Connecting AI developers with buyers worldwide.'} txt_2={''} txt_3={'sign in'} txt_4={'Join'}
-            />
-            <main className={styles['container']}>
-                <UpButton scroll={scroll} />
-                <ScrollRestoration/>
-                <Link to={'/'} className={styles._headding} style={{ textDecoration: 'none' }}>
-                    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                        <RiRobot2Line className={styles.iconImg} style={{ fontSize: '180px', marginBottom: '20px', color: 'var(--primary)', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.4))' }} />
-                    </div>
-                    <br/>
-                    <span style={{ fontSize: '2rem', color: 'var(--main-color)' }}>Something went wrong!</span>
-                </Link>
-            </main>
-        <Footer footerNavData={footerNavData} footerCategoriesData={footerCategoriesData}   onClickLink={onClickLink} />
+        />
+        <main className={styles['container']}>
+            <UpButton scroll={scroll} />
+            <ScrollRestoration />
+            <Link to={'/'} className={styles._headding} style={{ textDecoration: 'none' }}>
+                <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                    <RiRobot2Line className={styles.iconImg} style={{ fontSize: '180px', marginBottom: '20px', color: 'var(--primary)', filter: 'drop-shadow(0 0 20px rgba(34, 211, 238, 0.4))' }} />
+                </div>
+                <br />
+                <span style={{ fontSize: '2rem', color: 'var(--main-color)' }}>Something went wrong!</span>
+            </Link>
+        </main>
+        <Footer footerNavData={footerNavData} onClickLink={onClickLink} />
     </>
-} ;
-export default ErrorPage ;
+};
+export default ErrorPage;

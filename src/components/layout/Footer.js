@@ -49,7 +49,7 @@ const FooterNav = ({ title, links }) => {
   )
 }
 //-----------------------------------------------------------------------
-function Footer({ footerCategoriesData, footerNavData }) {
+function Footer({ footerNavData }) {
   const [categoriesList, setCategoriesList] = useState([]);
   useEffect(() => {
     getCategoriesReq('?parentId=null&limit=5')

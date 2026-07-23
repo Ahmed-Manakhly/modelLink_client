@@ -51,11 +51,11 @@ export function getCounterpartyDisplayName(user) {
   return full || user.org_username || '';
 }
 
-export function getCounterpartyInitial(user) {
-  if (!user) return '?';
-  if (user.isPlatformAccount) return 'ML';
-  return user.org_username?.[0]?.toUpperCase() || '?';
-}
+// export function getCounterpartyInitial(user) {
+//   if (!user) return '?';
+//   if (user.isPlatformAccount) return 'ML';
+//   return user.org_username?.[0]?.toUpperCase() || '?';
+// }
 
 export function getCounterpartyProfileLink(user) {
   if (!user || user.isPlatformAccount || !user.id) return null;

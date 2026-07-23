@@ -1,20 +1,19 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useSelector } from 'react-redux';
 import styles from "./BoxWidgets.module.scss";
 import { Link } from "react-router-dom";
 import { Row, Col } from 'react-bootstrap';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { 
-  FiCpu, 
-  FiShoppingCart, 
-  FiDollarSign, 
-  FiEye, 
-  FiMessageSquare, 
-  FiBell, 
-  FiCreditCard 
+import {
+  FiCpu,
+  FiShoppingCart,
+  FiDollarSign,
+  FiEye,
+  FiMessageSquare,
+  FiBell,
+  FiCreditCard
 } from "react-icons/fi";
-import getStarted from '../assets/getStarted.png';
-// import ProfileHeroCard from './ui/ProfileHeroCard';
+
 import UserProfileStrip from './UserProfileStrip';
 import UserAvatar from './ui/UserAvatar';
 
@@ -62,30 +61,10 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
     </Row>
   );
 
-  const getWelcomeMessage = () => {
-    if (role === 'ADMIN' || role === 'EMPLOYEE') {
-      return "Keep your profile updated to manage the platform effectively!";
-    } else if (role === 'DEVELOPER') {
-      return "Make sure to complete Your profile to be able to create Models!";
-    } else {
-      return "Make sure to complete Your profile to be able to create Orders!";
-    }
-  };
 
-  // eslint-disable-next-line
-  const profileRightContent = (
-    <div className={styles.profileRightCon}>
-      <div className={styles.welcomeSection}>
-        <h2 className="page-main-title" style={{ margin: 0 }}>
-          <span className="gradient-text">Welcome back!</span>
-        </h2>
-      </div>
-      <div className="glass-container p-4 mt-3 text-center">
-        <h5 style={{ color: 'var(--on-surface-variant)', fontWeight: 500, marginBottom: '1.5rem' }}>{getWelcomeMessage()}</h5>
-        <img src={getStarted} alt="getStarted" style={{ maxWidth: '100%', height: 'auto', borderRadius: 'var(--radius-card)', filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.1))' }} />
-      </div>
-    </div>
-  );
+
+
+
 
   if (profile) {
     return (
@@ -110,7 +89,7 @@ const BoxWidgets = ({ profile = false, HandelFileChange, file, totalModels, tota
                 )}
               </div>
             </div>
-            
+
             <div className={styles.__box_rightside}>
               <div className={styles.welcomeSection} style={{ marginBottom: '1.5rem' }}>
                 <h2 className="page-main-title" style={{ margin: 0 }}>

@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import Controls from '../components/Controls';
 import Val from '../components/Val'
 import Services from '../components/Services'
@@ -133,16 +133,7 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
         }
     };
 
-    let activeSearchField = null;
-    let activeSearchValue = null;
-    for (const option of searchBy) {
-        const val = searchParams.get(option.field);
-        if (val) {
-            activeSearchField = option.name;
-            activeSearchValue = val;
-            break;
-        }
-    }
+
 
     const isFiltered = Array.from(searchParams.keys()).some(k => k !== 'page' && k !== 'sort');
 

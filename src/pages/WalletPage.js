@@ -313,6 +313,8 @@ function WalletPage() {
         payoutReady,
     };
 
+    if (!userData?.id) return null;
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {warning.show && <WarningModal

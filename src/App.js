@@ -35,7 +35,6 @@ import WalletPage from './pages/WalletPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ReviewsClient from './pages/ReviewsClient';
 import ReviewsDev from './pages/ReviewsDev';
-import ForgotPassword from './components/layout/auth/ForgotPassword';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import NotFoundPage from './pages/NotFoundPage';
 import PolicyPage from './pages/PolicyPage';

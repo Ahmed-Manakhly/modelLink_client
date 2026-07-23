@@ -31,73 +31,73 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/311</loc>
+    <loc>http://127.0.0.1:3000/models/view/320</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://127.0.0.1:3000/models/view/311</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://127.0.0.1:3000/models/view/322</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/322</loc>
+    <loc>http://127.0.0.1:3000/models/view/338</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/338</loc>
-    <lastmod>2026-07-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>http://127.0.0.1:3000/models/351</loc>
+    <loc>http://127.0.0.1:3000/models/view/351</loc>
     <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/321</loc>
+    <loc>http://127.0.0.1:3000/models/view/321</loc>
     <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/352</loc>
+    <loc>http://127.0.0.1:3000/models/view/352</loc>
     <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/315</loc>
+    <loc>http://127.0.0.1:3000/models/view/315</loc>
     <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/320</loc>
+    <loc>http://127.0.0.1:3000/models/view/347</loc>
     <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/347</loc>
-    <lastmod>2026-07-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>http://127.0.0.1:3000/models/325</loc>
+    <loc>http://127.0.0.1:3000/models/view/325</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/339</loc>
+    <loc>http://127.0.0.1:3000/models/view/339</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/319</loc>
+    <loc>http://127.0.0.1:3000/models/view/319</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>

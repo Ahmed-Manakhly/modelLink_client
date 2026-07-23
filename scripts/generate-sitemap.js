@@ -83,7 +83,7 @@ async function generateSitemap() {
             console.log(`Found ${models.length} dynamic models. Adding to sitemap...`);
             models.forEach(model => {
                 xml += `  <url>\n`;
-                xml += `    <loc>${domain}/models/${model._id || model.id}</loc>\n`;
+                xml += `    <loc>${domain}/models/view/${model._id || model.id}</loc>\n`;
                 if(model.updatedAt) {
                     xml += `    <lastmod>${model.updatedAt.split('T')[0]}</lastmod>\n`;
                 }

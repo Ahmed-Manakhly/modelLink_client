@@ -19,8 +19,7 @@ function Topbar({ txt_1, txt_2, txt_3, txt_4 }) {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const userData = useSelector(state => state.auth.userData);
-  // eslint-disable-next-line
-  const { org_username, role, id: userID, avatar, first_name } = userData;
+  const { org_username, role, id: userID, first_name } = userData;
   const logoutAction = () => {
     socket.emit("leavingRoom", userID);
     const toast = { status: 'success', message: 'come back soon', title: 'logged out' };
