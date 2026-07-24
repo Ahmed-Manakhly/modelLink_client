@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import classes from './Video.module.scss' ;
+import classes from './Video.module.scss';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import aix_v from '../assets/aix_v.mp4';
@@ -29,14 +28,14 @@ function Video() {
 
     return (
         <GlobalWrapper className="global-section-spacing">
-            <div className={headerClasses["hero-container"]} style={{flexDirection: 'column', padding: '40px', alignItems: 'flex-start'}}>
-                <h1 className={headerClasses["banner-title"]} style={{textAlign: 'left', marginBottom: '30px'}}>
-                    Ready to explore? <br/>
+            <div className={headerClasses["hero-container"]} style={{ flexDirection: 'column', padding: '40px', alignItems: 'flex-start' }}>
+                <h1 className={headerClasses["banner-title"]} style={{ textAlign: 'left', marginBottom: '30px' }}>
+                    Ready to explore? <br />
                     <span className={headerClasses["gradientText"]}>Dive into ModelLink!</span>
                 </h1>
-                <div className={`${classes["container_1"]} `} style={{width: '100%', margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-                    <video  controls poster={poster} src={aix_v} style={{width: '100%', aspectRatio: aspectRatio, objectFit: 'cover', borderRadius: 'var(--radius-card)', marginBottom: '30px'}}></video>
-                    <Link to="/models" className="btn-glass-primary" style={{display: 'inline-block', fontSize: '18px', padding: '12px 30px'}}>
+                <div className={`${classes["container_1"]} `} style={{ width: '100%', margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    <video controls poster={poster} src={aix_v} style={{ width: '100%', aspectRatio: aspectRatio, objectFit: 'cover', borderRadius: 'var(--radius-card)', marginBottom: '30px' }}></video>
+                    <Link to="/models" className="btn-glass-primary" style={{ display: 'inline-block', fontSize: '18px', padding: '12px 30px' }}>
                         Explore All Models
                     </Link>
                 </div>

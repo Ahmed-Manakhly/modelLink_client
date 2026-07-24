@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useSearchParams } from 'react-router-dom';
 import classes from './FilterChips.module.scss';
 import { getFilterChips, removeFilterKeys } from '../utility/marketplaceFilters';

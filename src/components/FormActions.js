@@ -146,7 +146,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const imgRef = useRef(null);
     const galleryInputRef = useRef(null);
 
-    const urlEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+    const urlEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
     const { hasError: modelNameIsInvalid, valueIsValid: modelNameIsValid, value: title, valueChangeHandler: modelNameChangeHandler, inputBlurHandler: modelNameBlurHandler } = useInput(value => value.trim() !== '');
     const { hasError: categoryIsInvalid, valueIsValid: categoryIsValid, value: categoryId, valueChangeHandler: categoryChangeHandler, inputBlurHandler: categoryBlurHandler } = useInput(value => value !== '' && value !== '--Please Choose An Option--');

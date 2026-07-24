@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import classes from './MobNavMenu.module.scss';
 import UserAvatar from '../ui/UserAvatar';

@@ -1,13 +1,12 @@
-/* eslint-disable react/prop-types */
 import { RiRobot2Line } from "react-icons/ri";
-import classes from './Toast.module.scss' ;
+import classes from './Toast.module.scss';
 
 
-function Toast({close , status , title , message , onAnimationEnd}) {
+function Toast({ close, status, title, message, onAnimationEnd }) {
     let color;
-    if(status === 'error'||status === 'fail'){
+    if (status === 'error' || status === 'fail') {
         color = 'var(--color-danger)';
-    }else {
+    } else {
         color = 'var(--color-success)';
     }
     //-------------------
@@ -15,7 +14,7 @@ function Toast({close , status , title , message , onAnimationEnd}) {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     //----------------------------
     return (
-        <div className={classes["notification-toast"]} data-toast  onAnimationEnd={onAnimationEnd}>
+        <div className={classes["notification-toast"]} data-toast onAnimationEnd={onAnimationEnd}>
             <button className={classes["toast-close-btn"]} onClick={close}>
                 <ion-icon name="close-outline"></ion-icon>
             </button>

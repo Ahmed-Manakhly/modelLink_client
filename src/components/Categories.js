@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import classes from './Categories.module.scss';
 import { Link } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';

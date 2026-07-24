@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import classes from './UpButton.module.scss'
 import GlobalWrapper from './GlobalWrapper';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 
-function UpButton({scroll}) {
-    const goUpHandler = ()=> {
+function UpButton({ scroll }) {
+    const goUpHandler = () => {
         window.scrollTo({
             top: 0,
             left: 0,

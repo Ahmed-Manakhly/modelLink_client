@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
 import Classes from './Modal.module.scss';
-import ReactDOM from 'react-dom' ;
+import ReactDOM from 'react-dom';
 
 
 
@@ -15,13 +14,13 @@ const ModalOverlay = props => {
     </div>
 };
 
-const portalElement = document.getElementById('overlays') ;
+const portalElement = document.getElementById('overlays');
 
 const Modal = props => {
     return <>
-        {ReactDOM.createPortal(<Backdrop onClose={props.onClose} /> , portalElement)}
-        {ReactDOM.createPortal(<ModalOverlay className={props.className}>{props.children}</ModalOverlay> , portalElement)}
+        {ReactDOM.createPortal(<Backdrop onClose={props.onClose} />, portalElement)}
+        {ReactDOM.createPortal(<ModalOverlay className={props.className}>{props.children}</ModalOverlay>, portalElement)}
     </>
 };
 
-export default Modal ;
+export default Modal;

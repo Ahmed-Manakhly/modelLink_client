@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import classes from './Val.module.scss';
 import GlobalWrapper from './layout/GlobalWrapper';
 import headerClasses from './layout/Header.module.scss';
@@ -7,8 +6,8 @@ import headerClasses from './layout/Header.module.scss';
 
 
 const Card = ({ title, description, img, index }) => {
-    const cardClass = index % 2 !== 0 
-        ? `${classes["room__card"]} ${classes["room__card--blended"]}` 
+    const cardClass = index % 2 !== 0
+        ? `${classes["room__card"]} ${classes["room__card--blended"]}`
         : classes["room__card"];
 
     return (
