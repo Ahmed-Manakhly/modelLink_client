@@ -43,7 +43,7 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
         setUserData(data?.data?.user)
       } catch (error) {
         const isForbidden = error?.response?.status === 403;
-        
+
         if (!isForbidden) {
           dispatch(uiActions.notificationDataChanged({
             status: 'error',
@@ -52,7 +52,7 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
           }));
           dispatch(uiActions.showNotification(true));
         }
-        
+
         setUserData({
           first_name: "SYSTEM",
           org_username: "SYSTEM",
@@ -62,6 +62,7 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
       }
     }
     token && getUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, token])
   //=====================================================================================================================
   return (

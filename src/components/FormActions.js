@@ -187,8 +187,8 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         huggingFaceUrl,
     ].some((value) => (value || '').trim() !== '');
 
-    const { hasError: featureIsInvalid, valueIsValid: featureIsValid, value: feature, reset: resetFeature, valueChangeHandler: featureChangeHandler, inputBlurHandler: featureBlurHandler } = useInput(value => value.trim() !== '');
-    const { hasError: metricIsInvalid, valueIsValid: metricIsValid, value: metric, reset: resetMetric, valueChangeHandler: metricChangeHandler, inputBlurHandler: metricBlurHandler } = useInput(value => value.trim() !== '');
+    const { value: feature, reset: resetFeature, valueChangeHandler: featureChangeHandler } = useInput(value => value.trim() !== '');
+    const { value: metric, reset: resetMetric, valueChangeHandler: metricChangeHandler } = useInput(value => value.trim() !== '');
     const { value: metricValue, reset: resetMetricValue, valueChangeHandler: metricValueChangeHandler } = useInput(value => value.trim() !== '');
     const { value: metricUrl, reset: resetMetricUrl, valueChangeHandler: metricUrlChangeHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
 
@@ -196,6 +196,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         if (!thisModel) {
             versionChangeHandler({ target: { value: '1.0.0' } });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [thisModel]);
 
     useEffect(() => {
