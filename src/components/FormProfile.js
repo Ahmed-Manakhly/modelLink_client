@@ -21,9 +21,9 @@ const isPhoneValid = (phone) => {
 const FormProfile = ({ onUpdateProfileAction, isChanged, onRateChange }) => {
 
     const userData = useSelector(state => state.auth.userData) || {};
-    const { role, first_name, org_name, last_name, org_phone, country: userCountry, org_desc } = userData;
-    let isDev = role === 'DEVELOPER'
+    const { first_name, org_name, last_name, org_phone, country: userCountry, org_desc } = userData;
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         const first_name_r = ((first_name && !isEditing.first_name) || (!first_name && fName) || (first_name && isEditing.first_name && fName)) ? 1 : 0
         const last_name_r = ((last_name && !isEditing.last_name) || (!last_name && lName) || (last_name && isEditing.last_name && lName)) ? 1 : 0
@@ -32,14 +32,12 @@ const FormProfile = ({ onUpdateProfileAction, isChanged, onRateChange }) => {
         const org_desc_r = ((org_desc && !isEditing.org_desc) || (!org_desc && desc) || (org_desc && isEditing.org_desc && desc)) ? 1 : 0
 
         const newRate = (((first_name_r + last_name_r + org_name_r + org_phone_r + org_desc_r) / 5) * 100).toFixed(0);
-        setRate(newRate);
         if (onRateChange) onRateChange(newRate);
     });
 
     const [phone, setPhone] = useState(org_phone || '');
     const [country, setCountry] = useState({ name: userCountry || '' });
     const [isTouched, setIsTouched] = useState(false);
-    const [rate, setRate] = useState(0);
     const [isEditing, setEditing] = useState({ first_name: false, org_name: false, last_name: false, org_phone: false, org_desc: false });
     const phoneIsValid = isPhoneValid(phone);
     const phoneIsInValid = !phoneIsValid && isTouched
@@ -169,7 +167,7 @@ const FormProfile = ({ onUpdateProfileAction, isChanged, onRateChange }) => {
                             <Row>
                                 <Col xs={0} md lg className={`${descClasses} d-flex flex-column align-items-left w-100`}>
                                     <label htmlFor='org_desc'>About You</label>
-                                    {((org_desc === '') || (org_desc !== '') && isEditing.org_desc) && <>
+                                    {((org_desc === '') || (org_desc !== '' && isEditing.org_desc)) && <>
                                         <textarea id='org_desc' name="org_desc" cols="30" rows="7" placeholder="About You" required
                                             onChange={desInputChangeHandler} onBlur={desInputBlurHandler} defaultValue={org_desc} />
                                         {desInputIsInvalid && <p className={classes['error-text']}>Your Description Must Not Be Empty</p>}
