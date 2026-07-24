@@ -68,6 +68,10 @@ const useSocket = (userId, handlers = {}) => {
             handlersRef.current.onReceiveMsg?.(data);
         };
 
+        const onUserVerified = () => {
+            handlersRef.current.onUserVerified?.();
+        };
+
         socket.on('connect', onConnect);
         socket.on('get-users', onGetUsers);
         socket.on('new_model_created', onNewModel);
@@ -75,6 +79,7 @@ const useSocket = (userId, handlers = {}) => {
         socket.on('refresh', onRefresh);
         socket.on('modelRefresh', onModelRefresh);
         socket.on('receive_msg', onReceiveMsg);
+        socket.on('user_verified', onUserVerified);
 
         return () => {
             socket.off('connect', onConnect);
@@ -84,6 +89,7 @@ const useSocket = (userId, handlers = {}) => {
             socket.off('refresh', onRefresh);
             socket.off('modelRefresh', onModelRefresh);
             socket.off('receive_msg', onReceiveMsg);
+            socket.off('user_verified', onUserVerified);
         };
     }, [userId, dispatch]);
 

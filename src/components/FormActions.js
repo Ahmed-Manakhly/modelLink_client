@@ -1,18 +1,18 @@
 import classes from './FormActions.module.scss';
 import CustomSelect from './ui/CustomSelect';
 import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
-import useInput from '../hooks/Use-Input';
+import { useModelForm } from '../hooks/useModelForm';
+import { useGallery } from '../hooks/useGallery';
 import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
 import ToggleSwitch from './ToggleSwitch';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import imgHolder from '../assets/modelPlaceholder.png';
+
 import { FILES_BASE_API_URL } from '../lib/api';
 import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
-import { isMedicalSubcategory } from '../lib/categoryHelpers';
-import { getPrimaryVersion } from '../lib/modelHelpers';
+
 import { createVersionReq } from '../lib/versionRequests';
 import { getAuthToken } from '../utility/tokenLoader';
 import VersionAssetsPanel from './ui/VersionAssetsPanel';
@@ -68,57 +68,56 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const initialCover = thisModel?.galleryImages?.[0] || null;
     const initialGallery = thisModel?.galleryImages?.length > 1 ? thisModel.galleryImages.slice(1) : [];
 
-    const [file, setFile] = useState(null);
-    // const [existingCover, setExistingCover] = useState(initialCover);
-    const existingCover = initialCover;
-    const [fda, setFda] = useState(thisModel ? (thisModel.versions?.[0]?.fda || false) : false);
-    const [isActive, setIsActive] = useState(thisModel ? (thisModel.versions?.[0]?.isActive ?? true) : true);
-    const [isPrimary, setIsPrimary] = useState(thisModel ? (thisModel.versions?.[0]?.isPrimary || false) : false);
-    const [status, setStatus] = useState(thisModel ? (thisModel.status || 'DRAFT') : 'DRAFT');
+    const {
+        file, existingCover, galleryImages, uploadedGalleryFiles,
+        selectedImageKey, selectedGalleryImage, setSelectedImageKey,
+        setCoverFile, removeGalleryImage, handleGalleryFiles, removeUploadedGalleryFile,
+        setUploadedGalleryFiles, setGalleryImages, getCoverPreviewSrc
+    } = useGallery(initialCover, initialGallery);
 
-    const [features, setFeatures] = useState(thisModel ? (thisModel.versions?.[0]?.features?.map(f => typeof f === 'string' ? f : f.feature) || []) : []);
-    const [metrics, setMetrics] = useState(thisModel ? (thisModel.versions?.[0]?.metrics?.map(m => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []) : []);
-    const [tags, setTags] = useState(thisModel ? (thisModel.tags || []) : []);
-    const [galleryImages, setGalleryImages] = useState(initialGallery);
+    const {
+        title, modelNameIsValid, modelNameIsInvalid, modelNameChangeHandler, modelNameBlurHandler,
+        categoryId, categoryIsValid, categoryIsInvalid, categoryChangeHandler, categoryBlurHandler,
+        useCases, useCasesIsValid, useCasesIsInvalid, handleUseCasesChange, handleUseCasesBlur,
+        modalityId, modalityIsValid, modalityIsInvalid, modalityChangeHandler, modalityBlurHandler,
+        fdaUrl, fdaUrlIsValid, fdaUrlIsInvalid, fdaUrlChangeHandler, fdaUrlBlurHandler,
+        endpointUrl, endpointUrlIsValid, endpointUrlIsInvalid, endpointUrlChangeHandler, endpointUrlBlurHandler,
+        deliveryTime, deliveryTimeIsValid, deliveryTimeIsInvalid, deliveryTimeChangeHandler, deliveryTimeBlurHandler,
+        price, priceIsValid, priceIsInvalid, priceChangeHandler, priceBlurHandler,
+        bodyPartId, bodyPartIsValid, bodyPartIsInvalid, bodyPartChangeHandler, bodyPartBlurHandler,
+        desc, descIsValid, descIsInvalid, descChangeHandler, descBlurHandler,
+        version, versionIsValid, versionIsInvalid, versionChangeHandler, versionBlurHandler,
+        dockerImage, dockerImageIsValid, dockerImageIsInvalid, dockerImageChangeHandler, dockerImageBlurHandler,
+        downloadLink, downloadLinkIsValid, downloadLinkIsInvalid, downloadLinkChangeHandler, downloadLinkBlurHandler,
+        licenseKey, licenseKeyIsValid, licenseKeyIsInvalid, licenseKeyChangeHandler, licenseKeyBlurHandler,
+        huggingFaceUrl, huggingFaceUrlIsValid, huggingFaceUrlIsInvalid, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler,
+        feature, resetFeature, featureChangeHandler,
+        metric, resetMetric, metricChangeHandler,
+        metricValue, resetMetricValue, metricValueChangeHandler,
+        metricUrl, resetMetricUrl, metricUrlChangeHandler,
+        fda, setFda,
+        isActive, setIsActive,
+        isPrimary, setIsPrimary,
+        status, setStatus,
+        features, setFeatures,
+        metrics, setMetrics,
+        tags, setTags,
+        tagInput, setTagInput,
+        tagSuggestions, setTagSuggestions,
+        featureSuggestions, setFeatureSuggestions,
+        metricSuggestions, setMetricSuggestions,
+        isEditing, setEditing,
+        isTouched, setIsTouched,
+        isChanged, setIsChanged,
+        showMedicalFields,
+        hasAtLeastOneDeliveryAsset,
+        modelVersions,
+        selectedVersionId,
+        getSelectedVersion,
+        handleVersionSelect,
+    } = useModelForm(thisModel, dbCategories, preferredVersionId);
 
-    const [uploadedGalleryFiles, setUploadedGalleryFiles] = useState([]);
-
-    // Stable blob URL for a newly selected cover file (revoke on replace/unmount)
-    const [coverBlobUrl, setCoverBlobUrl] = useState(null);
-    // Selection by slot key — avoids broken URL equality (createObjectURL returns new refs each call)
-    const [selectedImageKey, setSelectedImageKey] = useState('cover');
-
-    const coverBlobUrlRef = useRef(null);
-    useEffect(() => {
-        coverBlobUrlRef.current = coverBlobUrl;
-    }, [coverBlobUrl]);
-
-    useEffect(() => {
-        return () => {
-            if (coverBlobUrlRef.current) URL.revokeObjectURL(coverBlobUrlRef.current);
-        };
-    }, []);
-
-    const [tagInput, setTagInput] = useState('');
-    const [tagSuggestions, setTagSuggestions] = useState([]);
-    const [featureSuggestions, setFeatureSuggestions] = useState([]);
-    const [metricSuggestions, setMetricSuggestions] = useState([]);
-
-
-
-    const [isEditing, setEditing] = useState({
-        title: false, categoryId: false, useCases: false, modalityId: false, fdaUrl: false, endpointUrl: false,
-        price: false, deliveryTime: false, bodyPart: false, desc: false, version: false, dockerImage: false,
-        downloadLink: false, licenseKey: false, huggingFaceUrl: false
-    });
-
-    const [isTouched, setIsTouched] = useState({ features: false, metrics: false, tags: false });
-    const [isChanged, setIsChanged] = useState(false);
     const [imgWarning, setImgWarning] = useState(false);
-
-    const modelVersions = thisModel?.versions || [];
-    const [selectedVersionId, setSelectedVersionId] = useState(null);
-    const versionDraftsRef = useRef({});
     const token = getAuthToken();
 
     const [showAddVersionModal, setShowAddVersionModal] = useState(false);
@@ -127,14 +126,6 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const [addVersionLoading, setAddVersionLoading] = useState(false);
     const [addVersionError, setAddVersionError] = useState('');
     const [assetWarning, setAssetWarning] = useState(false);
-
-    const getSelectedVersion = () => {
-        if (!modelVersions.length) return null;
-        if (selectedVersionId != null) {
-            return modelVersions.find((v) => v.id === selectedVersionId) || getPrimaryVersion(thisModel);
-        }
-        return getPrimaryVersion(thisModel);
-    };
 
     const featuresIsValid = features.length > 0;
     const featuresIsInValid = !featuresIsValid && isTouched.features;
@@ -145,90 +136,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
     const imgRef = useRef(null);
     const galleryInputRef = useRef(null);
-
-    const urlEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-
-    const { hasError: modelNameIsInvalid, valueIsValid: modelNameIsValid, value: title, valueChangeHandler: modelNameChangeHandler, inputBlurHandler: modelNameBlurHandler } = useInput(value => value.trim() !== '');
-    const { hasError: categoryIsInvalid, valueIsValid: categoryIsValid, value: categoryId, valueChangeHandler: categoryChangeHandler, inputBlurHandler: categoryBlurHandler } = useInput(value => value !== '' && value !== '--Please Choose An Option--');
-    const { hasError: useCasesIsInvalid, valueIsValid: useCasesIsValid, value: useCases, valueChangeHandler: useCasesChangeHandler, inputBlurHandler: useCasesBlurHandler } = useInput(() => true);
-    const { hasError: modalityIsInvalid, valueIsValid: modalityIsValid, value: modalityId, valueChangeHandler: modalityChangeHandler, inputBlurHandler: modalityBlurHandler } = useInput(value => true);
-    const { hasError: fdaUrlIsInvalid, valueIsValid: fdaUrlIsValid, value: fdaUrl, valueChangeHandler: fdaUrlChangeHandler, inputBlurHandler: fdaUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
-    const { hasError: endpointUrlIsInvalid, valueIsValid: endpointUrlIsValid, value: endpointUrl, valueChangeHandler: endpointUrlChangeHandler, inputBlurHandler: endpointUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
-    const { hasError: deliveryTimeIsInvalid, valueIsValid: deliveryTimeIsValid, value: deliveryTime, valueChangeHandler: deliveryTimeChangeHandler, inputBlurHandler: deliveryTimeBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() > 0);
-    const { hasError: priceIsInvalid, valueIsValid: priceIsValid, value: price, valueChangeHandler: priceChangeHandler, inputBlurHandler: priceBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() >= 10);
-    const { hasError: bodyPartIsInvalid, valueIsValid: bodyPartIsValid, value: bodyPartId, valueChangeHandler: bodyPartChangeHandler, inputBlurHandler: bodyPartBlurHandler } = useInput(value => true);
-
-    // Derived AFTER all useInput hooks — categoryId must be initialized first
-    const showMedicalFields = isMedicalSubcategory(categoryId, dbCategories);
-
-    useEffect(() => {
-        if (!showMedicalFields) {
-            modalityChangeHandler({ target: { value: '' } });
-            bodyPartChangeHandler({ target: { value: '' } });
-            fdaUrlChangeHandler({ target: { value: '' } });
-            setFda(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showMedicalFields, categoryId]);
-
-    const { hasError: descIsInvalid, valueIsValid: descIsValid, value: desc, valueChangeHandler: descChangeHandler, inputBlurHandler: descBlurHandler } = useInput(value => value.trim() !== '');
     const versionEx = /^\d+\.\d+\.\d+$/;
-    const { hasError: versionIsInvalid, valueIsValid: versionIsValid, value: version, valueChangeHandler: versionChangeHandler, inputBlurHandler: versionBlurHandler } = useInput(value => value.trim() !== '' && versionEx.test(value));
-    const { hasError: dockerImageIsInvalid, valueIsValid: dockerImageIsValid, value: dockerImage, valueChangeHandler: dockerImageChangeHandler, inputBlurHandler: dockerImageBlurHandler } = useInput(value => value.trim() === '' || true);
-    const { hasError: downloadLinkIsInvalid, valueIsValid: downloadLinkIsValid, value: downloadLink, valueChangeHandler: downloadLinkChangeHandler, inputBlurHandler: downloadLinkBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
-    const { hasError: licenseKeyIsInvalid, valueIsValid: licenseKeyIsValid, value: licenseKey, valueChangeHandler: licenseKeyChangeHandler, inputBlurHandler: licenseKeyBlurHandler } = useInput(value => value.trim() === '' || true);
-    const { hasError: huggingFaceUrlIsInvalid, valueIsValid: huggingFaceUrlIsValid, value: huggingFaceUrl, valueChangeHandler: huggingFaceUrlChangeHandler, inputBlurHandler: huggingFaceUrlBlurHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
-
-    const hasAtLeastOneDeliveryAsset = [
-        endpointUrl,
-        dockerImage,
-        downloadLink,
-        licenseKey,
-        huggingFaceUrl,
-    ].some((value) => (value || '').trim() !== '');
-
-    const { value: feature, reset: resetFeature, valueChangeHandler: featureChangeHandler } = useInput(value => value.trim() !== '');
-    const { value: metric, reset: resetMetric, valueChangeHandler: metricChangeHandler } = useInput(value => value.trim() !== '');
-    const { value: metricValue, reset: resetMetricValue, valueChangeHandler: metricValueChangeHandler } = useInput(value => value.trim() !== '');
-    const { value: metricUrl, reset: resetMetricUrl, valueChangeHandler: metricUrlChangeHandler } = useInput(value => value.trim() === '' || urlEx.test(value));
-
-    useEffect(() => {
-        if (!thisModel) {
-            versionChangeHandler({ target: { value: '1.0.0' } });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [thisModel]);
-
-    useEffect(() => {
-        if (!thisModel?.id) return;
-        const v = preferredVersionId
-            ? modelVersions.find((row) => row.id === preferredVersionId) || getPrimaryVersion(thisModel)
-            : getPrimaryVersion(thisModel);
-        setSelectedVersionId(v?.id ?? modelVersions[0]?.id ?? null);
-        versionDraftsRef.current = {};
-        modelNameChangeHandler({ target: { value: thisModel.title || '' } });
-        categoryChangeHandler({ target: { value: String(thisModel.categoryId || thisModel.categoryRel?.id || '') } });
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useCasesChangeHandler({ target: { value: v?.indications || v?.useCases || '' } });
-        modalityChangeHandler({ target: { value: v?.modalityId ? String(v.modalityId) : '' } });
-        bodyPartChangeHandler({ target: { value: v?.bodyPartId ? String(v.bodyPartId) : '' } });
-        fdaUrlChangeHandler({ target: { value: v?.fdaUrl || '' } });
-        priceChangeHandler({ target: { value: v?.price != null ? String(v.price) : '' } });
-        deliveryTimeChangeHandler({ target: { value: v?.deliveryTime != null ? String(v.deliveryTime) : '' } });
-        descChangeHandler({ target: { value: thisModel.desc || '' } });
-        versionChangeHandler({ target: { value: v?.version || '' } });
-        endpointUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'API_ENDPOINT') } });
-        dockerImageChangeHandler({ target: { value: getAssetFromVersion(v, 'DOCKER_IMAGE') } });
-        downloadLinkChangeHandler({ target: { value: getAssetFromVersion(v, 'DOWNLOAD_LINK') } });
-        licenseKeyChangeHandler({ target: { value: getAssetFromVersion(v, 'LICENSE_KEY') } });
-        huggingFaceUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'HUGGINGFACE_URL') } });
-        setFda(v.fda || false);
-        setIsActive(v.isActive ?? true);
-        setIsPrimary(v.isPrimary || false);
-        setFeatures(v?.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
-        setMetrics(v?.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [thisModel?.id, preferredVersionId]);
 
     const closeAddVersionModal = () => {
         setShowAddVersionModal(false);
@@ -267,93 +175,9 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         }
     };
 
-    const persistCurrentVersionDraft = () => {
-        if (!selectedVersionId) return;
-        versionDraftsRef.current[selectedVersionId] = {
-            price, deliveryTime, version, useCases, modalityId, bodyPartId, fdaUrl,
-            endpointUrl, dockerImage, downloadLink, licenseKey, huggingFaceUrl,
-            fda, isActive, isPrimary, features, metrics,
-        };
-    };
-
-    const loadVersionIntoForm = (v) => {
-        if (!v) return;
-        priceChangeHandler({ target: { value: v.price != null ? String(v.price) : '' } });
-        deliveryTimeChangeHandler({ target: { value: v.deliveryTime != null ? String(v.deliveryTime) : '' } });
-        versionChangeHandler({ target: { value: v.version || '' } });
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useCasesChangeHandler({ target: { value: v.useCases || v.indications || '' } });
-        modalityChangeHandler({ target: { value: v.modalityId ? String(v.modalityId) : '' } });
-        bodyPartChangeHandler({ target: { value: v.bodyPartId ? String(v.bodyPartId) : '' } });
-        fdaUrlChangeHandler({ target: { value: v.fdaUrl || '' } });
-        endpointUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'API_ENDPOINT') } });
-        dockerImageChangeHandler({ target: { value: getAssetFromVersion(v, 'DOCKER_IMAGE') } });
-        downloadLinkChangeHandler({ target: { value: getAssetFromVersion(v, 'DOWNLOAD_LINK') } });
-        licenseKeyChangeHandler({ target: { value: getAssetFromVersion(v, 'LICENSE_KEY') } });
-        huggingFaceUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'HUGGINGFACE_URL') } });
-        setFda(v.fda || false);
-        setIsActive(v.isActive ?? true);
-        setIsPrimary(v.isPrimary || false);
-        setFeatures(v.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
-        setMetrics(v.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
-        setEditing({
-            title: false, categoryId: false, useCases: false, modalityId: false, fdaUrl: false, endpointUrl: false,
-            price: false, deliveryTime: false, bodyPart: false, desc: false, version: false, dockerImage: false,
-            downloadLink: false, licenseKey: false, huggingFaceUrl: false,
-        });
-        setIsChanged(false);
-    };
-
-    const handleVersionSelect = (nextId) => {
-        const parsedId = parseInt(nextId, 10);
-        if (!parsedId || parsedId === selectedVersionId) return;
-        persistCurrentVersionDraft();
-        setSelectedVersionId(parsedId);
-        const draft = versionDraftsRef.current[parsedId];
-        const versionRow = modelVersions.find((v) => v.id === parsedId);
-        if (draft) {
-            loadVersionIntoForm({ ...versionRow, ...draft, features: draft.features, metrics: draft.metrics });
-        } else {
-            loadVersionIntoForm(versionRow);
-        }
-    };
-
     const getClasses = (isInvalid) => isInvalid ? `${classes["form-control"]} ${classes.invalid}` : `${classes["form-control"]}`;
 
     const defaultData = { sales: 0, starFrequency: 0, totalStars: 0, reviewCount: 0, userId: authority };
-
-    const getCoverPreviewSrc = () => {
-        if (coverBlobUrl) return coverBlobUrl;
-        if (existingCover) {
-            return existingCover.startsWith('http') ? existingCover : FILES_BASE_API_URL + existingCover;
-        }
-        return imgHolder;
-    };
-
-    const getPreviewForKey = (key) => {
-        if (key === 'cover') return getCoverPreviewSrc();
-        if (key.startsWith('gallery-url-')) {
-            const idx = Number(key.replace('gallery-url-', ''));
-            const img = galleryImages[idx];
-            if (!img) return imgHolder;
-            return img.startsWith('http') ? img : FILES_BASE_API_URL + img;
-        }
-        if (key.startsWith('gallery-file-')) {
-            const idx = Number(key.replace('gallery-file-', ''));
-            return uploadedGalleryFiles[idx]?.preview || imgHolder;
-        }
-        return imgHolder;
-    };
-
-    const selectedGalleryImage = getPreviewForKey(selectedImageKey);
-
-    const setCoverFile = (newFile) => {
-        if (coverBlobUrl) URL.revokeObjectURL(coverBlobUrl);
-        const nextUrl = newFile ? URL.createObjectURL(newFile) : null;
-        setCoverBlobUrl(nextUrl);
-        setFile(newFile);
-        setSelectedImageKey('cover');
-    };
 
     const navigate = useNavigate();
     function cancelHandler() { navigate('..'); }
@@ -431,49 +255,6 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         setIsChanged(true);
     };
 
-
-    const removeGalleryImage = (index) => {
-        const cloned = [...galleryImages];
-        cloned.splice(index, 1);
-        setGalleryImages(cloned);
-        if (selectedImageKey === `gallery-url-${index}`) {
-            setSelectedImageKey('cover');
-        } else if (selectedImageKey.startsWith('gallery-url-')) {
-            const selectedIdx = Number(selectedImageKey.replace('gallery-url-', ''));
-            if (selectedIdx > index) {
-                setSelectedImageKey(`gallery-url-${selectedIdx - 1}`);
-            }
-        }
-        setIsChanged(true);
-    };
-    const handleGalleryFiles = (e) => {
-        const files = Array.from(e.target.files || []);
-        const previews = files.map(f => ({ file: f, preview: URL.createObjectURL(f), name: f.name }));
-        setUploadedGalleryFiles(prev => {
-            const startIdx = prev.length;
-            if (previews.length > 0) {
-                setSelectedImageKey(`gallery-file-${startIdx}`);
-            }
-            return [...prev, ...previews];
-        });
-        setIsChanged(true);
-        e.target.value = '';
-    };
-    const removeUploadedGalleryFile = (index) => {
-        const cloned = [...uploadedGalleryFiles];
-        URL.revokeObjectURL(cloned[index].preview);
-        cloned.splice(index, 1);
-        setUploadedGalleryFiles(cloned);
-        if (selectedImageKey === `gallery-file-${index}`) {
-            setSelectedImageKey('cover');
-        } else if (selectedImageKey.startsWith('gallery-file-')) {
-            const selectedIdx = Number(selectedImageKey.replace('gallery-file-', ''));
-            if (selectedIdx > index) {
-                setSelectedImageKey(`gallery-file-${selectedIdx - 1}`);
-            }
-        }
-        setIsChanged(true);
-    };
 
     const handleEditMainViewerImage = (e) => {
         const newFile = e.target.files[0];
@@ -869,7 +650,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     </Row>
                                     <Row>
                                         <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, useCasesChangeHandler, useCasesBlurHandler, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
+                                            {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, handleUseCasesChange, handleUseCasesBlur, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
                                         </Col>
                                         <Col xs={12} md={6}>
                                             {renderInputRow('Model Description', 'desc', desc, desc, descChangeHandler, descBlurHandler, descIsInvalid, 'desc', 'desc', 'textarea', 'Description...')}
