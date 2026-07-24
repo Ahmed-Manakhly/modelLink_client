@@ -41,33 +41,6 @@ const Card = ({ title, items, img, onClickLink, activeCat }) => {
     );
 };
 
-const CardFilter = ({ title, items, img, onClickLink, activeControls }) => (
-    <div className={classes['category-item']}>
-        <div className={classes['category-content-box']}>
-            <div className={classes['category-content-flex']}>
-                <h3 className={classes['category-item-title']}>{title}</h3>
-            </div>
-            {items.map((item, index) => (
-                <button
-                    key={index}
-                    onClick={onClickLink?.bind(null, item?.title)}
-                    className={`${classes['category-btn']} ${activeControls?.find((control) => control === item?.title) ? classes.active : ''
-                        }`}
-                >
-                    {item?.title}
-                </button>
-            ))}
-        </div>
-        {img && (
-            <div className={classes['category-img-box']}>
-                <img src={img} alt={title} width="30" />
-            </div>
-        )}
-    </div>
-);
-
-
-
 function readControlsFromParams(searchParams) {
     const priceRule = searchParams.get('versions.priceRule');
     const priceVal = searchParams.get('versions.price');
@@ -87,14 +60,8 @@ function readControlsFromParams(searchParams) {
     const minPrice = searchParams.get('priceMin') || '';
     const maxPrice = searchParams.get('priceMax') || '';
 
-    const sortVal = searchParams.get('sort') || '';
-    const isBestSeller = sortVal === '-sales';
 
-    const activeControls = [];
-    if (price) activeControls.push(price);
-    if (deliveryTime) activeControls.push(deliveryTime);
-    if (highestRated) activeControls.push('Has Reviews');
-    if (isBestSeller) activeControls.push('Best Seller');
+
 
     return {
         catFilter: searchParams.get('categoryRel.name') || searchParams.get('categoryRel.slug'),
@@ -111,7 +78,6 @@ function readControlsFromParams(searchParams) {
         metric: searchParams.get('versions.metrics.metric') || '',
         verifiedOnly: searchParams.get('developer.isVerified') === 'true',
         sort: searchParams.get('sort') || '',
-        activeControls,
     };
 }
 
@@ -125,7 +91,6 @@ function Controls({ filterOptions = {}, children }) {
     const [maxPrice, setMaxPrice] = useState('');
     const [deliveryTime, setDeliveryTime] = useState(null);
     const [highestRated, setHighestRated] = useState(false);
-    const [activeControls, setActiveControls] = useState([]);
     const [modalityId, setModalityId] = useState('');
     const [bodyPartId, setBodyPartId] = useState('');
     const [fda, setFda] = useState('');
@@ -149,7 +114,6 @@ function Controls({ filterOptions = {}, children }) {
         setMaxPrice(state.maxPrice);
         setDeliveryTime(state.deliveryTime);
         setHighestRated(state.highestRated);
-        setActiveControls(state.activeControls);
         setModalityId(state.modalityId);
         setBodyPartId(state.bodyPartId);
         setFda(state.fda);
@@ -252,7 +216,6 @@ function Controls({ filterOptions = {}, children }) {
         setMetric('');
         setVerifiedOnly(false);
         setSort('');
-        setActiveControls([]);
         setSelectedSavedFilter('');
         setSearchParams(new URLSearchParams());
     };
@@ -447,11 +410,6 @@ function Controls({ filterOptions = {}, children }) {
                                     value={sort}
                                     onChange={(val) => {
                                         setSort(val);
-                                        if (val !== '-sales') {
-                                            setActiveControls((prev) => prev.filter((c) => c !== 'Best Seller'));
-                                        } else {
-                                            setActiveControls((prev) => prev.includes('Best Seller') ? prev : [...prev, 'Best Seller']);
-                                        }
                                     }}
                                     options={SORT_OPTIONS.map(opt =>
                                         opt.value === ''
