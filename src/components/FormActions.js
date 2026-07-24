@@ -69,7 +69,8 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const initialGallery = thisModel?.galleryImages?.length > 1 ? thisModel.galleryImages.slice(1) : [];
 
     const [file, setFile] = useState(null);
-    const [existingCover, setExistingCover] = useState(initialCover);
+    // const [existingCover, setExistingCover] = useState(initialCover);
+    const existingCover = initialCover;
     const [fda, setFda] = useState(thisModel ? (thisModel.versions?.[0]?.fda || false) : false);
     const [isActive, setIsActive] = useState(thisModel ? (thisModel.versions?.[0]?.isActive ?? true) : true);
     const [isPrimary, setIsPrimary] = useState(thisModel ? (thisModel.versions?.[0]?.isPrimary || false) : false);
@@ -137,6 +138,10 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
     const featuresIsValid = features.length > 0;
     const featuresIsInValid = !featuresIsValid && isTouched.features;
+    const tagsIsValid = tags.length > 0;
+    const tagsIsInValid = !tagsIsValid && isTouched.tags;
+    const metricsIsValid = metrics.length > 0;
+    const metricsIsInValid = !metricsIsValid && isTouched.metrics;
 
     const imgRef = useRef(null);
     const galleryInputRef = useRef(null);
@@ -533,6 +538,10 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
     const featuresRequired = !thisModel;
     const featuresPass = featuresRequired ? featuresIsValid : true;
+    const tagsRequired = !thisModel;
+    const tagsPass = tagsRequired ? tagsIsValid : true;
+    const metricsRequired = !thisModel;
+    const metricsPass = metricsRequired ? metricsIsValid : true;
 
     const editHasChanges = isChanged || !!file || uploadedGalleryFiles.length > 0;
     const submitGate = thisModel ? editHasChanges : (!formCompleted || isChanged);
@@ -562,6 +571,8 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
             hasAtLeastOneDeliveryAsset
         ) : true) &&
         featuresPass &&
+        tagsPass &&
+        metricsPass &&
         submitGate
     ) {
         formIsValid = true;
@@ -923,19 +934,20 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
                                     {/* TAGS */}
                                     <Row>
-                                        <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                        <Col xs={0} md lg className={`${getClasses(tagsIsInValid)} d-flex flex-column align-items-left w-100`} >
                                             <label>Model Tags</label>
-                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`} style={{ position: 'relative' }}>
-                                                <Col>
+                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
+                                                <Col style={{ position: 'relative' }}>
                                                     <input type='text' placeholder="Add a Tag" value={tagInput} onChange={handleTagInputChange}
+                                                        onBlur={() => setIsTouched({ ...isTouched, tags: true })}
                                                         onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }} />
                                                     {tagSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', top: '100%', left: '15px', zIndex: 10, background: '#fff', width: 'calc(100% - 30px)', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
                                                             {tagSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
                                                                     onMouseDown={() => { setTagInput(s); setTagSuggestions([]); }}
-                                                                    onMouseEnter={(e) => e.target.style.background = '#f5f5f5'}
-                                                                    onMouseLeave={(e) => e.target.style.background = '#fff'}
+                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
                                                                 >
                                                                     {s}
                                                                 </li>
@@ -947,6 +959,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     <button type="button" onClick={addTag} className="btn-glass-outline mt-2 w-100">Add Tag</button>
                                                 </Col>
                                             </Row>
+                                            {tagsIsInValid && tagsRequired && <p className={classes['error-text']}>Set at least one Tag</p>}
                                             <Row className={classes.f_list}>
                                                 {tags.map((tag, index) => (
                                                     <Col key={`tag-${index}`} className={classes.f_item}>
@@ -963,13 +976,19 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                         <Col xs={0} md lg className={`${getClasses(featuresIsInValid)} d-flex flex-column align-items-left w-100`} >
                                             <label htmlFor='feature'>Model Features</label>
                                             <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                                <Col>
+                                                <Col style={{ position: 'relative' }}>
                                                     <input type='text' id='feature' name="feature" placeholder="Enter Feature Name"
                                                         onChange={handleFeatureInputChange} onBlur={() => setIsTouched({ ...isTouched, features: true })} value={feature} />
                                                     {featureSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', zIndex: 10, background: '#fff', width: '100%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
                                                             {featureSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer' }} onMouseDown={() => { featureChangeHandler({ target: { value: s } }); setFeatureSuggestions([]); }}>{s}</li>
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
+                                                                    onMouseDown={() => { featureChangeHandler({ target: { value: s } }); setFeatureSuggestions([]); }}
+                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                                                                >
+                                                                    {s}
+                                                                </li>
                                                             ))}
                                                         </ul>
                                                     )}
@@ -992,15 +1011,21 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                     {/* METRICS */}
                                     <Row>
-                                        <Col xs={0} md lg className={`${getClasses(false)} d-flex flex-column align-items-left w-100`} >
+                                        <Col xs={0} md lg className={`${getClasses(metricsIsInValid)} d-flex flex-column align-items-left w-100`} >
                                             <label>Model Metrics</label>
                                             <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                                <Col xs={12} md={4}>
-                                                    <input type='text' placeholder="Metric Name (e.g. Accuracy)" onChange={handleMetricInputChange} value={metric} />
+                                                <Col xs={12} md={4} style={{ position: 'relative' }}>
+                                                    <input type='text' placeholder="Metric Name (e.g. Accuracy)" onChange={handleMetricInputChange} onBlur={() => setIsTouched({ ...isTouched, metrics: true })} value={metric} />
                                                     {metricSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', zIndex: 10, background: '#fff', width: '100%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ddd', borderRadius: '4px', maxHeight: '150px', overflowY: 'auto' }}>
+                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
                                                             {metricSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer' }} onMouseDown={() => { metricChangeHandler({ target: { value: s } }); setMetricSuggestions([]); }}>{s}</li>
+                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
+                                                                    onMouseDown={() => { metricChangeHandler({ target: { value: s } }); setMetricSuggestions([]); }}
+                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                                                                >
+                                                                    {s}
+                                                                </li>
                                                             ))}
                                                         </ul>
                                                     )}
@@ -1015,6 +1040,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                                     <button type="button" onClick={addMetric} className="btn-glass-outline mt-2 w-100" style={{ padding: '10px' }}>Add Metric</button>
                                                 </Col>
                                             </Row>
+                                            {metricsIsInValid && metricsRequired && <p className={classes['error-text']}>Set at least one Metric</p>}
                                             <Row className={classes.f_list} style={{ flexDirection: 'column', gap: '10px' }}>
                                                 {metrics.map((m, index) => (
                                                     <div key={`metric-${index}`} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--primary-glow)', padding: '10px 15px', borderRadius: '8px', color: 'var(--primary)' }}>
@@ -1084,6 +1110,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
                                 />
                             </Form.Group>
+                            {addVersionError && <p className="text-danger mt-2">{addVersionError}</p>}
                             <div className="d-flex justify-content-end gap-2 mt-4">
                                 <button type="button" className="btn-glass-danger" onClick={closeAddVersionModal} style={{ padding: '8px 16px' }}>
                                     Close

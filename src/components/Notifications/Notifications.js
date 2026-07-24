@@ -42,12 +42,17 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
         const { data } = await getUser(userId, token)
         setUserData(data?.data?.user)
       } catch (error) {
-        dispatch(uiActions.notificationDataChanged({
-          status: 'error',
-          title: 'Error',
-          message: error?.response?.data?.message || 'Failed to fetch user data',
-        }));
-        dispatch(uiActions.showNotification(true));
+        const isForbidden = error?.response?.status === 403;
+        
+        if (!isForbidden) {
+          dispatch(uiActions.notificationDataChanged({
+            status: 'error',
+            title: 'Error',
+            message: error?.response?.data?.message || 'Failed to fetch user data',
+          }));
+          dispatch(uiActions.showNotification(true));
+        }
+        
         setUserData({
           first_name: "SYSTEM",
           org_username: "SYSTEM",
