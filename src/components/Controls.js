@@ -133,7 +133,7 @@ function Controls({ filterOptions = {}, children }) {
                 const cats = res.data?.data?.categories || [];
                 setCategoriesList(buildCategoriesList(cats, { includeAllModels: false }));
             })
-            .catch((err) => console.error(err));
+            .catch(() => {});
     }, []);
 
     useEffect(() => {

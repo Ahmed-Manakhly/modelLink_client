@@ -77,7 +77,7 @@ function MobNavMenu({ onClose, menuOpen, txt_1, txt_2, txt_3, txt_4 }) {
         const dbCategories = res.data?.data?.categories || [];
         setCategoriesList(buildCategoriesList(dbCategories));
       })
-      .catch((err) => console.error('Failed to load mobnav categories:', err));
+      .catch(() => {});
   }, []);
 
   //---------------------------------

@@ -45,7 +45,7 @@ function Footer({ footerNavData }) {
         const dbCategories = res.data?.data?.categories || [];
         setCategoriesList(buildCategoriesList(dbCategories));
       })
-      .catch((err) => console.error('Failed to load footer categories:', err));
+      .catch(() => {});
   }, []);
 
   return (

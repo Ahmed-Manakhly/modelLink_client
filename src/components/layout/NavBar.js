@@ -106,7 +106,7 @@ function NavBar({ handleDeleteNotification, handleUpdateNotification, handleRead
         const dbCategories = res.data?.data?.categories || [];
         setCategoriesList(buildCategoriesList(dbCategories));
       })
-      .catch((err) => console.error('Failed to load navbar categories:', err));
+      .catch(() => {});
   }, []);
 
   const getMember = (chat) => {

@@ -37,7 +37,7 @@ function Categories({ categoryCards }) {
                 const cats = res.data?.data?.categories || [];
                 setParents(mapParentCategoriesToHomeCards(cats));
             })
-            .catch((err) => console.error('Failed to load home categories:', err));
+            .catch(() => {});
     }, [categoryCards]);
 
     const responsive = {
