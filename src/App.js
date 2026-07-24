@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createBrowserRouter, RouterProvider, Link, redirect, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './store/authSlice';

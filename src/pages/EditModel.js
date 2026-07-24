@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';

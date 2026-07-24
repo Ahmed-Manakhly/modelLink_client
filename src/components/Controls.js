@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable */
 import classes from './Controls.module.scss';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -18,10 +16,6 @@ import {
 import FilterChips from './FilterChips';
 import CustomSelect from './ui/CustomSelect';
 import GlobalWrapper from './layout/GlobalWrapper';
-
-// import priceIcon from '../assets/price.png';
-// import deliveryIcon from '../assets/delivery-truck.png';
-// import ratingIcon from '../assets/Efficiency_3.png';
 
 const Card = ({ title, items, img, onClickLink, activeCat }) => {
     const isParentActive = items.some(item => item.title === activeCat);
@@ -364,7 +358,7 @@ function Controls({ filterOptions = {}, children }) {
                                     placeholder="Load saved filter..."
                                 />
                             </label>
-                            
+
                             <div className={classes.saveFilterFooter}>
                                 <input
                                     type="text"
@@ -408,15 +402,15 @@ function Controls({ filterOptions = {}, children }) {
                                     <input type="range" min="0" max="10000" step="50" value={minPrice || 0} onChange={(e) => setMinPrice(e.target.value)} className={classes.thumbLeft} />
                                     <input type="range" min="0" max="10000" step="50" value={maxPrice || 10000} onChange={(e) => setMaxPrice(e.target.value)} className={classes.thumbRight} />
                                     <div className={classes.sliderTrack}></div>
-                                    <div className={classes.sliderRange} style={{ left: `${Math.min(100, Math.max(0, (minPrice||0)/100))}%`, right: `${100 - Math.min(100, Math.max(0, (maxPrice||10000)/100))}%` }}></div>
+                                    <div className={classes.sliderRange} style={{ left: `${Math.min(100, Math.max(0, (minPrice || 0) / 100))}%`, right: `${100 - Math.min(100, Math.max(0, (maxPrice || 10000) / 100))}%` }}></div>
                                 </div>
                             </label>
                         </div>
 
-                        <button type="button" className={classes.advancedFiltersBtn} onClick={() => setShowAdvanced(true)} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'}}>
-                            <ion-icon name="options-outline" style={{fontSize: '18px'}}></ion-icon> Advanced Filters
+                        <button type="button" className={classes.advancedFiltersBtn} onClick={() => setShowAdvanced(true)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                            <ion-icon name="options-outline" style={{ fontSize: '18px' }}></ion-icon> Advanced Filters
                         </button>
-                        
+
                         <div className={classes.desktopApply}>
                             {pendingParams.toString() !== searchParams.toString() && (
                                 <button type="button" className={classes.applyBtn} onClick={ApplyFilters}>

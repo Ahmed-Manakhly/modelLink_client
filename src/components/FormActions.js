@@ -1,4 +1,3 @@
-/* eslint-disable */
 import classes from './FormActions.module.scss';
 import CustomSelect from './ui/CustomSelect';
 import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
@@ -202,6 +201,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         versionDraftsRef.current = {};
         modelNameChangeHandler({ target: { value: thisModel.title || '' } });
         categoryChangeHandler({ target: { value: String(thisModel.categoryId || thisModel.categoryRel?.id || '') } });
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useCasesChangeHandler({ target: { value: v?.indications || v?.useCases || '' } });
         modalityChangeHandler({ target: { value: v?.modalityId ? String(v.modalityId) : '' } });
         bodyPartChangeHandler({ target: { value: v?.bodyPartId ? String(v.bodyPartId) : '' } });
@@ -273,6 +273,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         priceChangeHandler({ target: { value: v.price != null ? String(v.price) : '' } });
         deliveryTimeChangeHandler({ target: { value: v.deliveryTime != null ? String(v.deliveryTime) : '' } });
         versionChangeHandler({ target: { value: v.version || '' } });
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useCasesChangeHandler({ target: { value: v.useCases || v.indications || '' } });
         modalityChangeHandler({ target: { value: v.modalityId ? String(v.modalityId) : '' } });
         bodyPartChangeHandler({ target: { value: v.bodyPartId ? String(v.bodyPartId) : '' } });

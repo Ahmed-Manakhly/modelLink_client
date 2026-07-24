@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Row, Col } from 'react-bootstrap';
 import BoxWidgets from '../components/BoxWidgets';
 import FormProfile from '../components/FormProfile';
@@ -173,72 +172,72 @@ function ProfileSettings() {
 
                             return (
                                 <div className="p-4 glass-container w-100 h-100" style={{ color: 'var(--on-surface)' }}>
-                        <h4 style={{ color: 'var(--primary)', fontWeight: 700 }}>Developer Identity Verification</h4>
+                                    <h4 style={{ color: 'var(--primary)', fontWeight: 700 }}>Developer Identity Verification</h4>
 
-                        {/* APPROVED */}
-                        {isApproved && (
-                            <div className="mt-3">
-                                <span className="badge bg-success fs-6">APPROVED</span>
-                                <p className="text-muted small mt-2">
-                                    Verified on {verification.verifiedAt ? new Date(verification.verifiedAt).toLocaleDateString() : 'N/A'}
-                                </p>
-                            </div>
-                        )}
+                                    {/* APPROVED */}
+                                    {isApproved && (
+                                        <div className="mt-3">
+                                            <span className="badge bg-success fs-6">APPROVED</span>
+                                            <p className="text-muted small mt-2">
+                                                Verified on {verification.verifiedAt ? new Date(verification.verifiedAt).toLocaleDateString() : 'N/A'}
+                                            </p>
+                                        </div>
+                                    )}
 
-                        {/* PENDING — document submitted, awaiting admin review */}
-                        {isAwaiting && (
-                            <div className="mt-3">
-                                <span className="badge bg-warning text-dark fs-6">PENDING</span>
-                                <p className="text-muted small mt-2">
-                                    Document submitted on {verification.createdAt ? new Date(verification.createdAt).toLocaleDateString() : 'N/A'}.
-                                    An admin will review your submission shortly.
-                                </p>
-                            </div>
-                        )}
+                                    {/* PENDING — document submitted, awaiting admin review */}
+                                    {isAwaiting && (
+                                        <div className="mt-3">
+                                            <span className="badge bg-warning text-dark fs-6">PENDING</span>
+                                            <p className="text-muted small mt-2">
+                                                Document submitted on {verification.createdAt ? new Date(verification.createdAt).toLocaleDateString() : 'N/A'}.
+                                                An admin will review your submission shortly.
+                                            </p>
+                                        </div>
+                                    )}
 
-                        {/* REJECTED — show reason + re-submit form */}
-                        {isRejected && (
-                            <div className="mt-3 mb-2">
-                                <span className="badge bg-danger fs-6">REJECTED</span>
-                                <p className="text-danger mt-2"><strong>Reason:</strong> {verification.rejectionReason}</p>
-                            </div>
-                        )}
+                                    {/* REJECTED — show reason + re-submit form */}
+                                    {isRejected && (
+                                        <div className="mt-3 mb-2">
+                                            <span className="badge bg-danger fs-6">REJECTED</span>
+                                            <p className="text-danger mt-2"><strong>Reason:</strong> {verification.rejectionReason}</p>
+                                        </div>
+                                    )}
 
-                        {/* Upload / re-submit form */}
-                        {canSubmit && (
-                            <form onSubmit={handleVerificationSubmit} className="mt-3">
-                                <p style={{ color: 'var(--on-surface-variant)' }}>
-                                    {isRejected
-                                        ? 'Re-submit a corrected document to try again.'
-                                        : 'Submit an official PDF document or image proving your developer or organization credentials to unlock full marketplace publishing privileges.'}
-                                </p>
-                                <div className="mb-3">
-                                    <label className="form-label" style={{ color: 'var(--on-surface-variant)' }}>Upload Document (PDF, PNG, JPG)</label>
-                                    <input
-                                        type="file"
-                                        id="verification-file-input"
-                                        accept=".pdf,.png,.jpg,.jpeg"
-                                        onChange={(e) => setVerifDoc(e.target.files[0])}
-                                        style={{ display: 'none' }}
-                                    />
-                                    <div className="d-flex align-items-center gap-3 mt-2">
-                                        <button 
-                                            type="button" 
-                                            className="btn-glass-primary"
-                                            onClick={() => document.getElementById('verification-file-input').click()}
-                                        >
-                                            Choose File
-                                        </button>
-                                        <span style={{ color: 'var(--on-surface-variant)' }}>
-                                            {verifDoc ? verifDoc.name : 'No file chosen'}
-                                        </span>
-                                    </div>
-                                </div>
-                                <button type="submit" className="btn-glass-primary">
-                                    {isRejected ? 'Re-Submit Verification' : 'Submit Verification'}
-                                </button>
-                            </form>
-                        )}
+                                    {/* Upload / re-submit form */}
+                                    {canSubmit && (
+                                        <form onSubmit={handleVerificationSubmit} className="mt-3">
+                                            <p style={{ color: 'var(--on-surface-variant)' }}>
+                                                {isRejected
+                                                    ? 'Re-submit a corrected document to try again.'
+                                                    : 'Submit an official PDF document or image proving your developer or organization credentials to unlock full marketplace publishing privileges.'}
+                                            </p>
+                                            <div className="mb-3">
+                                                <label className="form-label" style={{ color: 'var(--on-surface-variant)' }}>Upload Document (PDF, PNG, JPG)</label>
+                                                <input
+                                                    type="file"
+                                                    id="verification-file-input"
+                                                    accept=".pdf,.png,.jpg,.jpeg"
+                                                    onChange={(e) => setVerifDoc(e.target.files[0])}
+                                                    style={{ display: 'none' }}
+                                                />
+                                                <div className="d-flex align-items-center gap-3 mt-2">
+                                                    <button
+                                                        type="button"
+                                                        className="btn-glass-primary"
+                                                        onClick={() => document.getElementById('verification-file-input').click()}
+                                                    >
+                                                        Choose File
+                                                    </button>
+                                                    <span style={{ color: 'var(--on-surface-variant)' }}>
+                                                        {verifDoc ? verifDoc.name : 'No file chosen'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <button type="submit" className="btn-glass-primary">
+                                                {isRejected ? 'Re-Submit Verification' : 'Submit Verification'}
+                                            </button>
+                                        </form>
+                                    )}
                                 </div>
                             );
                         })()}

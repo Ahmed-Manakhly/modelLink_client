@@ -1,4 +1,3 @@
-/* eslint-disable */
 import classes from './FormProfile.module.scss';
 import { useNavigate, Form, useNavigation } from 'react-router-dom';
 import useInput from '../hooks/Use-Input';
