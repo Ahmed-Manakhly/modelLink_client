@@ -3,7 +3,7 @@ import classes from './FormActions.module.scss';
 import CustomSelect from './ui/CustomSelect';
 import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
 import useInput from '../hooks/Use-Input';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
 import ToggleSwitch from './ToggleSwitch';
@@ -42,7 +42,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                 }));
                 dispatch(uiActions.showNotification(true));
             });
-        
+
         getModalitiesReq('?limit=500')
             .then(res => setDbModalities(res.data?.data?.modalities || []))
             .catch(err => {

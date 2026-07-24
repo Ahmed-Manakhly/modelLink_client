@@ -176,41 +176,7 @@
         }
     }
 
-    .form-control {
-        width: 35%;
 
-        select {
-            padding: 2px;
-            outline: none !important;
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.01) 100%);
-            backdrop-filter: blur(var(--glass-blur, 12px));
-            border: 1px solid rgba(34, 211, 238, 0.2) !important;
-            box-shadow: var(--glass-shadow);
-            border-radius: var(--radius-card) 0 0 var(--radius-card) !important; // Only round the left side since it attaches to search bar
-            color: var(--on-surface);
-            width: 100%;
-            background-image: url("../../assets/select_down_direction_download_pointer_arrow_icon.png") !important;
-            background-size: 5%;
-            background-position: 95% center;
-            background-repeat: no-repeat;
-            font-size: 15px;
-            padding: 8px 10px;
-            padding-right: 50px;
-            border: var(--border-standard);
-            border-right: none;
-            border-radius: var(--radius-input) 0 0 var(--radius-input);
-
-            &.done {
-                color: var(--on-surface) !important;
-                background-color: var(--surface-glass);
-            }
-
-            &::placeholder {
-                color: var(--on-surface-variant);
-                font-size: smaller;
-            }
-        }
-    }
 }
 
 

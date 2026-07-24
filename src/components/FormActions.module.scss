@@ -210,25 +210,8 @@ a {
                 background: rgba(255, 255, 255, 0.05) !important;
             }
         }
-        select {
-            color: var(--on-surface, #E2E8F0) !important;
-            border-radius: var(--radius-input, 8px) !important;
-            background: rgba(255, 255, 255, 0.03) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            outline: none !important;
-            padding: 15px !important;
-            transition: var(--transition-smooth, all 0.3s cubic-bezier(0.4, 0, 0.2, 1));
-            
-            &.done{
-                color : var(--primary, #22D3EE) !important;
-            }
-            &:focus {
-                border-color: var(--primary, #22D3EE) !important;
-                box-shadow: var(--input-focus-glow) !important;
-            }
-        }
     }
-    .invalid input  , .invalid textarea , .invalid select , .invalid select.done {
+    .invalid input  , .invalid textarea {
         border: 1px solid #ef9a9a !important;
         background-color: rgba(239, 154, 154, 0.05) !important;
         color: var(--on-surface, #E2E8F0) !important;

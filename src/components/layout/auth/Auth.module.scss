@@ -326,26 +326,8 @@
                 font-size: smaller;
             }
         }
-        select {
-            // font-weight: 600;
-            // color : #001668 !important;
-            color: var(--sonic-silver);
-            @extend %rad15 ;
-            // border: none !important;
-            border: 2px solid  var(--cultured);
-            outline: none !important;
-            padding: 15px !important;
-            // box-shadow: inset -4px -1px 12px rgba(0, 0, 0, 0.148), inset 1px 1px 12px var(--sonic-silver)30;
-            &.done{
-                color : var(--primary) !important;
-            }
-            &::placeholder {
-                color: var(--sonic-silver) ;
-                font-size: smaller;
-            }
-        }
     }
-    .invalid input  , .invalid textarea , .invalid select , .invalid select.done {
+    .invalid input  , .invalid textarea {
         border: 2px solid var(--color-danger) !important;
         background-color: var(--cultured) !important;
         // box-shadow: inset -4px -1px 12px rgba(255, 255, 255, 0.761), inset 1px 1px 12px #000;
