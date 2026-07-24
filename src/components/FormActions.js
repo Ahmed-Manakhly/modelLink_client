@@ -168,6 +168,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
             fdaUrlChangeHandler({ target: { value: '' } });
             setFda(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showMedicalFields, categoryId]);
 
     const { hasError: descIsInvalid, valueIsValid: descIsValid, value: desc, valueChangeHandler: descChangeHandler, inputBlurHandler: descBlurHandler } = useInput(value => value.trim() !== '');
@@ -225,6 +226,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         setIsPrimary(v.isPrimary || false);
         setFeatures(v?.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
         setMetrics(v?.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [thisModel?.id, preferredVersionId]);
 
     const closeAddVersionModal = () => {
