@@ -76,12 +76,12 @@ const FormProfile = ({ onUpdateProfileAction, isChanged, onRateChange }) => {
     const handelSubmit = (e) => {
         e.preventDefault();
         let authData = {}
-        value_org_desc ? authData.org_desc = value_org_desc : null
-        value_org_name ? authData.org_name = value_org_name : null
-        value_first_name ? authData.first_name = value_first_name : null
-        value_last_name ? authData.last_name = value_last_name : null
-        phone ? authData.org_phone = phone : null
-        country.name ? authData.country = country.name : null
+        if (value_org_desc) authData.org_desc = value_org_desc;
+        if (value_org_name) authData.org_name = value_org_name;
+        if (value_first_name) authData.first_name = value_first_name;
+        if (value_last_name) authData.last_name = value_last_name;
+        if (phone) authData.org_phone = phone;
+        if (country.name) authData.country = country.name;
 
         onUpdateProfileAction(Object.keys(authData).length !== 0 ? authData : null)
     }
