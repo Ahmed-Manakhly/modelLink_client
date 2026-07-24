@@ -1,9 +1,5 @@
 import classes from './ToggleSwitch.module.scss' ;
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faCheck ,faXmark } from '@fortawesome/free-solid-svg-icons'
 
-// import { FaToggleOff } from "react-icons/fa";
-// import { FaToggleOn } from "react-icons/fa";
 
 const ToggleSwitch = props => {
 

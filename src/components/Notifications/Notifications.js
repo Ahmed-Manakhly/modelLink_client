@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Notifications.module.scss'
-// import { FILES_BASE_API_URL } from '../../lib/api'
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import { getAuthToken } from '../../utility/tokenLoader'
 import { getNotificationType, getNotificationTypeLabel } from '../../utility/chatHelpers';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { uiActions } from '../../store/UI-slice';
 
 const resolveActionLink = (link, role) => {
   if (role === 'CLIENT' && link === '/dashboard/orders') {
@@ -18,6 +18,7 @@ const resolveActionLink = (link, role) => {
 };
 
 const Notifications = ({ data, onRemove, onUpdate }) => {
+  const dispatch = useDispatch();
   const token = getAuthToken();
   const userRole = useSelector((state) => state.auth.userData?.role);
   const [userData, setUserData] = useState(null)
@@ -41,7 +42,12 @@ const Notifications = ({ data, onRemove, onUpdate }) => {
         const { data } = await getUser(userId, token)
         setUserData(data?.data?.user)
       } catch (error) {
-        console.log(error?.response?.data?.message);
+        dispatch(uiActions.notificationDataChanged({
+          status: 'error',
+          title: 'Error',
+          message: error?.response?.data?.message || 'Failed to fetch user data',
+        }));
+        dispatch(uiActions.showNotification(true));
         setUserData({
           first_name: "SYSTEM",
           org_username: "SYSTEM",

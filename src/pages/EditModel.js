@@ -1,8 +1,4 @@
 /* eslint-disable */
-// import Header from '../components/layout/Header';
-// import Val from '../components/Val'
-// import { vals } from '../constants/marketingData';
-// import banner from '../assets/banner_4.png'
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';

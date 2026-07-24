@@ -120,7 +120,12 @@ function App() {
         const { data } = await userChats(userId, token);
         dispatch(realtimeActions.setChats(data?.data?.chats || []));
       } catch (error) {
-        console.log(error?.response?.data?.message);
+        dispatch(uiActions.notificationDataChanged({
+          status: 'error',
+          title: 'Error',
+          message: error?.response?.data?.message || 'Failed to fetch chats',
+        }));
+        dispatch(uiActions.showNotification(true));
       }
     };
     if (chatsUpdated || chatRefreshTick > 0) {
@@ -135,7 +140,12 @@ function App() {
           const { data } = await userNotifications(userId, token);
           dispatch(realtimeActions.setNotifications(data?.data || []));
         } catch (error) {
-          console.log(error?.response?.data?.message);
+          dispatch(uiActions.notificationDataChanged({
+            status: 'error',
+            title: 'Error',
+            message: error?.response?.data?.message || 'Failed to fetch notifications',
+          }));
+          dispatch(uiActions.showNotification(true));
         }
       };
       getNotifications();
@@ -151,7 +161,12 @@ function App() {
       dispatch(realtimeActions.setNotificationsUpdated(true))
       dispatch(realtimeActions.setNotify(data))
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      dispatch(uiActions.notificationDataChanged({
+        status: 'error',
+        title: 'Error',
+        message: err?.response?.data?.message || 'Failed to delete notification',
+      }));
+      dispatch(uiActions.showNotification(true));
     }
   }
 
@@ -162,7 +177,12 @@ function App() {
       dispatch(realtimeActions.setNotificationsUpdated(true))
       dispatch(realtimeActions.setNotify(data))
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      dispatch(uiActions.notificationDataChanged({
+        status: 'error',
+        title: 'Error',
+        message: err?.response?.data?.message || 'Failed to update notification',
+      }));
+      dispatch(uiActions.showNotification(true));
     }
   }
 
@@ -172,7 +192,12 @@ function App() {
       dispatch(realtimeActions.markAllNotificationsRead());
       dispatch(realtimeActions.setNotificationsUpdated(true));
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      dispatch(uiActions.notificationDataChanged({
+        status: 'error',
+        title: 'Error',
+        message: err?.response?.data?.message || 'Failed to mark all as read',
+      }));
+      dispatch(uiActions.showNotification(true));
     }
   };
 
@@ -182,7 +207,12 @@ function App() {
       dispatch(realtimeActions.removeChat(id))
       dispatch(realtimeActions.setChatsUpdated(true))
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      dispatch(uiActions.notificationDataChanged({
+        status: 'error',
+        title: 'Error',
+        message: err?.response?.data?.message || 'Failed to delete chat',
+      }));
+      dispatch(uiActions.showNotification(true));
     }
   }
 

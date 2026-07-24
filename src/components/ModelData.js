@@ -1,5 +1,4 @@
 import classes from './ModelData.module.scss';
-// import { Container, Row, Col, Badge } from 'react-bootstrap';
 import { getModelMarketingFields, getVersionById } from '../lib/modelHelpers';
 
 const ModelData = ({ model = null, selectedVersionId }) => {

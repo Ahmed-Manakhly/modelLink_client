@@ -11,7 +11,6 @@ import { authActions } from '../../store/authSlice';
 import { uiActions } from '../../store/UI-slice';
 import styles from './Topbar.module.scss';
 import { RiRobot2Line } from "react-icons/ri";
-// import {FILES_BASE_API_URL} from '../../lib/api'
 import { getCategoriesReq } from '../../lib/loaders';
 import { buildCategoriesList } from '../../lib/categoryHelpers';
 import { menuList } from '../../constants/marketingData';

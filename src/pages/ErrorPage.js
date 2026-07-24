@@ -78,7 +78,12 @@ const ErrorPage = ({ msgCounter, notCounter, notifys, handleDeleteNotification, 
             setSessionKey(prev => prev + 1);
             setWarning(prev => ({ ...prev, show: false }));
         } catch (error) {
-            console.error("Session refresh failed:", error);
+            dispatch(uiActions.notificationDataChanged({
+                status: 'error',
+                title: 'Session Expired',
+                message: error?.response?.data?.message || 'Your session has expired. Please log in again.',
+            }));
+            dispatch(uiActions.showNotification(true));
             socket.emit("leavingRoom", userData?.id);
             dispatch(authActions.onLoginOut());
             navigate("/auth?mode=login", { replace: true });
@@ -121,7 +126,12 @@ const ErrorPage = ({ msgCounter, notCounter, notifys, handleDeleteNotification, 
                     });
                     dispatch(cartActions.onSetCart(hydratedItems));
                 } catch (err) {
-                    console.error("Failed to sync cart data from DB:", err);
+                    dispatch(uiActions.notificationDataChanged({
+                        status: 'error',
+                        title: 'Error',
+                        message: err?.response?.data?.message || 'Failed to sync cart data from DB',
+                    }));
+                    dispatch(uiActions.showNotification(true));
                 }
             };
             fetchCartModels();

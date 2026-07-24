@@ -4,7 +4,6 @@ import { FaLocationDot, FaPhone } from 'react-icons/fa6';
 import { FaUserAlt, FaBuilding, FaIdBadge } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-// import { FILES_BASE_API_URL } from '../lib/api';
 import VerifiedBadge from './ui/VerifiedBadge';
 import styles from './UserProfileStrip.module.scss';
 import UserAvatar from './ui/UserAvatar';

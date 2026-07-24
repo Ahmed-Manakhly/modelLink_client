@@ -6,7 +6,6 @@ import SignupFormStep1 from './SignupFormStep1';
 import SignupFormStep2 from './SignupFormStep2';
 import AccountRoleForm from './AccountRoleForm';
 import ForgotPassword from './ForgotPassword';
-// import logo from '../../../assets/robot-mascot.png'
 import { RiRobot2Line } from "react-icons/ri";
 import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap'

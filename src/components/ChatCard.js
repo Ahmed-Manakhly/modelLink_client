@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import classes from './ChatCard.module.scss'
-// import {FILES_BASE_API_URL} from '../lib/api';
 import UserAvatar from './ui/UserAvatar';
 import GlobalWrapper from './layout/GlobalWrapper';
 

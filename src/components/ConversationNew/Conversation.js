@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getUser } from "../../lib/ChatRequests";
 import classes from './Conversation.module.scss'
-// import { FILES_BASE_API_URL } from '../../lib/api'
 import { format } from "timeago.js";
 import UserAvatar from '../ui/UserAvatar';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,8 +13,11 @@ import {
   isStaffRole,
   resolveCounterpartyUser,
 } from '../../utility/chatParticipantDisplay';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../store/UI-slice';
 
 const Conversation = ({ data, online, currentUserId, onRemove, to, isActive }) => {
+  const dispatch = useDispatch();
   const token = getAuthToken();
   const [userData, setUserData] = useState(null)
 
@@ -41,7 +43,12 @@ const Conversation = ({ data, online, currentUserId, onRemove, to, isActive }) =
         const isForbidden = error?.response?.status === 403;
         setUserData(resolveCounterpartyUser(embeddedUser, null, { apiForbidden: isForbidden }));
         if (!isForbidden) {
-          console.log(error?.response?.data?.message);
+          dispatch(uiActions.notificationDataChanged({
+            status: 'error',
+            title: 'Error',
+            message: error?.response?.data?.message || 'Failed to fetch user data',
+          }));
+          dispatch(uiActions.showNotification(true));
         }
       }
     };

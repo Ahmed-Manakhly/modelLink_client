@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./ProfileBoxWidgetsDev.module.scss";
 import { RiRobot2Line } from "react-icons/ri";
 import { Row, Col } from 'react-bootstrap';
-// import { FILES_BASE_API_URL } from '../lib/api';
 import ProfileHeroCard from './ui/ProfileHeroCard';
 import UserProfileStrip, { getDisplayName } from './UserProfileStrip';
 import { useSelector } from 'react-redux';

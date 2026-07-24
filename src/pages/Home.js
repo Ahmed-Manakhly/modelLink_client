@@ -88,7 +88,12 @@ function Home({ modelsUpdated, onModelsUpdated }) {
 
             setCategoryTrendingSections(sectionResults.filter(Boolean));
         } catch (err) {
-            console.error('Failed to load category trending sections:', err);
+            dispatch(uiActions.notificationDataChanged({
+                status: 'error',
+                title: 'Error',
+                message: err?.response?.data?.message || 'Failed to load category trending sections',
+            }));
+            dispatch(uiActions.showNotification(true));
             setCategoryTrendingSections([]);
             setTopCategoryCards([]);
         }

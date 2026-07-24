@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/authSlice';
 import { uiActions } from '../../store/UI-slice';
 import classes from './Topbar.module.scss';
-// import { FILES_BASE_API_URL } from '../../lib/api'
 import { socket } from '../../hooks/useSocket';
 import UserAvatar from '../ui/UserAvatar';
 import { FiSettings, FiGrid, FiStar, FiCreditCard, FiPackage, FiShield, FiUser, FiLock, FiLogOut } from 'react-icons/fi';

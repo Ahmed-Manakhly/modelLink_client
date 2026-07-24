@@ -1,5 +1,3 @@
-// import logo from '../../assets/logo-black-noSolgan.png'
-// import logo from '../../assets/LOGO_3.png'
 import { Link, useNavigate } from 'react-router-dom';
 import classes from './TopNavBar.module.scss';
 import { searchBy } from '../../utility/Consts';

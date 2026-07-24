@@ -3,7 +3,6 @@ import classes from './MobNav.module.scss' ;
 import GlobalWrapper from './GlobalWrapper';
 import {Link} from 'react-router-dom' ;
 import {useSelector} from 'react-redux';
-// import styles from './Topbar.module.scss' ;
 import { selectUnreadChats, selectUnreadNotifications } from '../../store/realtimeSlice';
 
 function MobNav({onClick , txt_3 , txt_4}) {

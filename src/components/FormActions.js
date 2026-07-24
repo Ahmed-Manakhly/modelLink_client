@@ -4,12 +4,11 @@ import CustomSelect from './ui/CustomSelect';
 import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
 import useInput from '../hooks/Use-Input';
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
 import ToggleSwitch from './ToggleSwitch';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-// import DeleteIcon from '@mui/icons-material/Delete';
 import imgHolder from '../assets/modelPlaceholder.png';
 import { FILES_BASE_API_URL } from '../lib/api';
 import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
@@ -19,12 +18,13 @@ import { createVersionReq } from '../lib/versionRequests';
 import { getAuthToken } from '../utility/tokenLoader';
 import VersionAssetsPanel from './ui/VersionAssetsPanel';
 import Modal from './layout/Modal';
-// import { Button as BsButton } from 'react-bootstrap';
+import { uiActions } from '../store/UI-slice';
 
 const getAssetFromVersion = (version, type) =>
     version?.assets?.find((a) => a.type === type)?.decryptedValue || '';
 
 const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onModelReload, preferredVersionId = null }) => {
+    const dispatch = useDispatch();
     const authority = useSelector(state => state.auth.userData)?.id;
 
     const [dbCategories, setDbCategories] = useState([]);
@@ -34,10 +34,37 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     useEffect(() => {
         getCategoriesReq('?subcategoriesOnly=true&limit=500')
             .then(res => setDbCategories(res.data?.data?.categories || []))
-            .catch(err => console.error(err));
-        getModalitiesReq('?limit=500').then(res => setDbModalities(res.data?.data?.modalities || [])).catch(err => console.error(err));
-        getBodyPartsReq('?limit=500').then(res => setDbBodyParts(res.data?.data?.bodyParts || [])).catch(err => console.error(err));
-    }, []);
+            .catch(err => {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.response?.data?.message || 'Failed to fetch categories'
+                }));
+                dispatch(uiActions.showNotification(true));
+            });
+        
+        getModalitiesReq('?limit=500')
+            .then(res => setDbModalities(res.data?.data?.modalities || []))
+            .catch(err => {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.response?.data?.message || 'Failed to fetch modalities'
+                }));
+                dispatch(uiActions.showNotification(true));
+            });
+
+        getBodyPartsReq('?limit=500')
+            .then(res => setDbBodyParts(res.data?.data?.bodyParts || []))
+            .catch(err => {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.response?.data?.message || 'Failed to fetch body parts'
+                }));
+                dispatch(uiActions.showNotification(true));
+            });
+    }, [dispatch]);
 
     const initialCover = thisModel?.galleryImages?.[0] || null;
     const initialGallery = thisModel?.galleryImages?.length > 1 ? thisModel.galleryImages.slice(1) : [];

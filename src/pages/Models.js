@@ -60,7 +60,14 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
                     metrics: data.metrics || [],
                 }));
             })
-            .catch((err) => console.error('Failed to load marketplace filters:', err));
+            .catch((err) => {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.response?.data?.message || 'Failed to load marketplace filters',
+                }));
+                dispatch(uiActions.showNotification(true));
+            });
 
         getCategoriesReq('?parentId=null&limit=100')
             .then((res) => {
@@ -70,7 +77,14 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
                     parentCategories: cats.map((c) => ({ name: c.name, slug: c.slug })),
                 }));
             })
-            .catch((err) => console.error('Failed to load parent categories:', err));
+            .catch((err) => {
+                dispatch(uiActions.notificationDataChanged({
+                    status: 'error',
+                    title: 'Error',
+                    message: err?.response?.data?.message || 'Failed to load parent categories',
+                }));
+                dispatch(uiActions.showNotification(true));
+            });
     }, []);
 
     const fetchModels = useCallback((page = 1) => {

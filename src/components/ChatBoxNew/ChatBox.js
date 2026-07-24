@@ -13,6 +13,8 @@ import { getAuthToken } from '../../utility/tokenLoader'
 import { buildChatDisplayItems, getMessageReceipt } from '../../utility/chatHelpers';
 import { socket } from '../../hooks/useSocket';
 import { RiRobot2Line } from "react-icons/ri";
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../store/UI-slice';
 import UserProfileStrip from '../UserProfileStrip';
 import {
   getCounterpartyDisplayName,
@@ -24,6 +26,7 @@ import {
 const TYPING_DEBOUNCE_MS = 2000;
 
 const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, onClose, online, isOtherTyping = false }) => {
+  const dispatch = useDispatch();
   const token = getAuthToken();
   const [userData, setUserData] = useState(null);
   const [newMessage, setNewMessage] = useState("");
@@ -113,7 +116,12 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
         const isForbidden = error?.response?.status === 403;
         setUserData(resolveCounterpartyUser(embeddedUser, null, { apiForbidden: isForbidden }));
         if (!isForbidden) {
-          console.log(error?.response?.data?.message);
+          dispatch(uiActions.notificationDataChanged({
+            status: 'error',
+            title: 'Error',
+            message: error?.response?.data?.message || 'Failed to fetch user data',
+          }));
+          dispatch(uiActions.showNotification(true));
         }
       }
     };

@@ -1,7 +1,3 @@
-// import Header from '../components/layout/Header';
-// import Val from '../components/Val'
-// import { vals } from '../constants/marketingData';
-// import banner from '../assets/banner_3.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/UI-slice';
 import { getAuthToken } from '../utility/tokenLoader'
