@@ -5,7 +5,7 @@ import useInput from '../../hooks/Use-Input';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import CustomSelect from '../ui/CustomSelect';
 import { useDispatch } from 'react-redux';
-import { getTagsReq, getAllModelsReq } from '../../lib/loaders';
+import { getTagsReq, getAllModelsReq, getCategoriesReq } from '../../lib/loaders';
 import { uiActions } from '../../store/UI-slice';
 import { getRecentSearches, saveRecentSearch } from '../../utility/recentSearches';
 import GlobalWrapper from './GlobalWrapper';
@@ -17,13 +17,14 @@ function TopNavBar({ getSearch }) {
   const searchWrapRef = useRef(null);
   const debounceRef = useRef(null);
   const tagsScrollRef = useRef(null);
-  const { hasError: categoryIsInvalid,  value: searchByVal,
+  const { hasError: categoryIsInvalid, value: searchByVal,
     valueChangeHandler: categoryChangeHandler } = useInput(value => value.trim() !== '' && value.trim() !== "--Search By--");
 
-  const { hasError: searchIsInvalid,  value: searchVal,
+  const { hasError: searchIsInvalid, value: searchVal,
     valueChangeHandler: searchChangeHandler, inputBlurHandler: searchBlurHandler, reset } = useInput(value => value.trim() !== '' && value.trim() !== "");
 
   const [dynamicTags, setDynamicTags] = useState([]);
+  const [hasCategories, setHasCategories] = useState(null);
   const [recentSearches, setRecentSearches] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -32,6 +33,13 @@ function TopNavBar({ getSearch }) {
     getTagsReq('', 1000)
       .then((res) => setDynamicTags(res.data?.data?.tags || []))
       .catch(() => { });
+
+    getCategoriesReq('?limit=1')
+      .then((res) => {
+        const cats = res.data?.data?.categories || [];
+        setHasCategories(cats.length > 0);
+      })
+      .catch(() => setHasCategories(false));
   }, []);
 
   useEffect(() => {
@@ -192,25 +200,27 @@ function TopNavBar({ getSearch }) {
       <div className={classes.trendingBar}>
         <GlobalWrapper>
           <div className={classes.trendingInner}>
-          <span className={classes.trendingLabel}>TRENDING: 🔥</span>
+            <span className={classes.trendingLabel}>TRENDING: 🔥</span>
 
-          <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('left')}>
-            <ion-icon name="chevron-back-outline"></ion-icon>
-          </button>
+            <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('left')}>
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
 
-          <div className={classes.trendingTagsScroll} ref={tagsScrollRef}>
-            {dynamicTags.length === 0 && <span className={classes.trendingPlaceholder}>Waiting for data to be seeded...</span>}
-            {dynamicTags.map((tag, i) => (
-              <Link to={`/models?tags=${encodeURIComponent(tag)}`} key={i} className={classes.trendingLink}>
-                {tag}
-              </Link>
-            ))}
+            <div className={classes.trendingTagsScroll} ref={tagsScrollRef}>
+              {dynamicTags.length === 0 && hasCategories === null && <span className={classes.trendingPlaceholder}>Loading tags...</span>}
+              {dynamicTags.length === 0 && hasCategories === false && <span className={classes.trendingPlaceholder} style={{ color: 'var(--color-danger)', marginBottom: '6.5px' }}>Waiting for data to be seeded...</span>}
+              {dynamicTags.length === 0 && hasCategories === true && <span className={classes.trendingPlaceholder} style={{ marginBottom: '6.5px' }}>No tags available yet.</span>}
+              {dynamicTags.map((tag, i) => (
+                <Link to={`/models?tags=${encodeURIComponent(tag)}`} key={i} className={classes.trendingLink}>
+                  {tag}
+                </Link>
+              ))}
+            </div>
+
+            <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('right')}>
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
           </div>
-
-          <button type="button" className={classes.scrollBtn} onClick={() => scrollTags('right')}>
-            <ion-icon name="chevron-forward-outline"></ion-icon>
-          </button>
-        </div>
         </GlobalWrapper>
       </div>
     </div>
