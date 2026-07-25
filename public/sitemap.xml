@@ -31,13 +31,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/view/354</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>http://127.0.0.1:3000/models/view/397</loc>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>http://127.0.0.1:3000/models/view/395</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://127.0.0.1:3000/models/view/396</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://127.0.0.1:3000/models/view/354</loc>
     <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -67,13 +79,13 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/view/358</loc>
+    <loc>http://127.0.0.1:3000/models/view/357</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://127.0.0.1:3000/models/view/357</loc>
+    <loc>http://127.0.0.1:3000/models/view/358</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -86,18 +98,6 @@
   </url>
   <url>
     <loc>http://127.0.0.1:3000/models/view/382</loc>
-    <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>http://127.0.0.1:3000/models/view/376</loc>
-    <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>http://127.0.0.1:3000/models/view/359</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>

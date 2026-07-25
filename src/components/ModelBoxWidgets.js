@@ -4,6 +4,7 @@ import { RiRobot2Line } from "react-icons/ri";
 import { Row, Col } from 'react-bootstrap'
 import { getModelMarketingFields } from '../lib/modelHelpers';
 import UserProfileStrip from './UserProfileStrip';
+import CustomSelect from './ui/CustomSelect';
 
 const ModelBoxWidgets = ({ model, orderRequestHandler, isBuyer, otherDev, isSeller, profileNotCompleted, selectedVersionId, onVersionChange, modelCount = null }) => {
   const marketing = getModelMarketingFields(model, selectedVersionId);
@@ -66,18 +67,15 @@ const ModelBoxWidgets = ({ model, orderRequestHandler, isBuyer, otherDev, isSell
                 <Row className={`d-flex justify-content-center align-items-start gap-3 w-100 ${styles["controlCon-2"]} mt-2`}>
                   <Col className={`${styles.f_list} gap-2`}>
                     <label htmlFor="model-version-select" className={styles.f_item_title}>Select Version</label>
-                    <select
-                      id="model-version-select"
-                      className="form-select form-select-sm"
-                      value={selectedVersionId ?? ''}
-                      onChange={(e) => onVersionChange?.(parseInt(e.target.value, 10))}
-                    >
-                      {versions.map((version) => (
-                        <option key={version.id} value={version.id}>
-                          v{version.version} — ${Number(version.price || 0).toFixed(2)}
-                        </option>
-                      ))}
-                    </select>
+                    <CustomSelect
+                      options={versions.map((version) => ({
+                        label: `v${version.version} — $${Number(version.price || 0).toFixed(2)}`,
+                        value: String(version.id)
+                      }))}
+                      value={selectedVersionId != null ? String(selectedVersionId) : ''}
+                      onChange={(val) => onVersionChange?.(parseInt(val, 10))}
+                      placeholder="Select a Version"
+                    />
                   </Col>
                 </Row>
               )}

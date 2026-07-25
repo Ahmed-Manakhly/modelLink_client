@@ -14,18 +14,23 @@ export const useGallery = (initialCover, initialGallery) => {
     const [selectedImageKey, setSelectedImageKey] = useState('cover');
 
     const coverBlobUrlRef = useRef(null);
+    const uploadedGalleryFilesRef = useRef([]);
+
     useEffect(() => {
         coverBlobUrlRef.current = coverBlobUrl;
     }, [coverBlobUrl]);
 
     useEffect(() => {
+        uploadedGalleryFilesRef.current = uploadedGalleryFiles;
+    }, [uploadedGalleryFiles]);
+
+    useEffect(() => {
         return () => {
             if (coverBlobUrlRef.current) URL.revokeObjectURL(coverBlobUrlRef.current);
-            // Cleanup gallery previews
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            uploadedGalleryFiles.forEach(f => URL.revokeObjectURL(f.preview));
+            // Cleanup gallery previews only on unmount
+            uploadedGalleryFilesRef.current.forEach(f => URL.revokeObjectURL(f.preview));
         };
-    }, [uploadedGalleryFiles]);
+    }, []);
 
     const getCoverPreviewSrc = () => {
         if (coverBlobUrl) return coverBlobUrl;
@@ -77,13 +82,15 @@ export const useGallery = (initialCover, initialGallery) => {
     const handleGalleryFiles = (e) => {
         const files = Array.from(e.target.files || []);
         const previews = files.map(f => ({ file: f, preview: URL.createObjectURL(f), name: f.name }));
+        
         setUploadedGalleryFiles(prev => {
-            const startIdx = prev.length;
-            if (previews.length > 0) {
-                setSelectedImageKey(`gallery-file-${startIdx}`);
-            }
             return [...prev, ...previews];
         });
+        
+        if (previews.length > 0) {
+            setSelectedImageKey(`gallery-file-${uploadedGalleryFiles.length}`);
+        }
+        
         e.target.value = '';
     };
 
