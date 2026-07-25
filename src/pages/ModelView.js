@@ -142,7 +142,6 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             'model!',
             { onError: redirectIfModelForbidden }
         )
-        dispatch(uiActions.showNotification(false))
         // eslint-disable-next-line
     }, [id, dispatch, navigate])
     //------------------------------------------
@@ -170,7 +169,6 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
                 'model details!',
                 { onError: redirectIfModelForbidden }
             )
-            dispatch(uiActions.showNotification(false))
             setSingleModelUpdated(false)
         }
         // eslint-disable-next-line
@@ -196,7 +194,6 @@ function ModelView({ onlineUsers, refresh, modelRefresh }) {
             'Authorization': `Bearer ${token}`
         };
         getData(() => getOrdersByModelReq(id, '', headers), toastHandler, loadingState, notificationState, gettingData, 'Orders!')
-        dispatch(uiActions.showNotification(false))
     }, [dispatch, id, token])
     //----------------------------------------------------
     useEffect(() => {

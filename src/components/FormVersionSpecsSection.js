@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
 import CustomSelect from './ui/CustomSelect';
 import ToggleSwitch from './ToggleSwitch';
 
@@ -23,19 +22,19 @@ const FormVersionSpecsSection = ({
     } = form;
 
     return (
-        <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
-            <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
+        <div className={`w-100 mb-4 glass-container p-4 ${classes.formSection}`}>
+            <h4 className={`gradient-text ${classes.sectionTitle}`}>
                 {thisModel ? 'Version specifications' : 'Initial version (v1.0.0)'}
-                <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
+                <span className={classes.subtitle}>
                     {thisModel
                         ? 'Select a version to edit its public specs. Use Add new version for v2+.'
                         : 'Public specs and delivery assets for your first version. After save you can add more versions on Edit.'}
                 </span>
             </h4>
             {thisModel && modelVersions && modelVersions.length >= 1 && (
-                <Row className="align-items-end">
-                    <Col xs={12} md={6}>
-                        <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
+                <div className={`${classes.assetRow} align-items-end`}>
+                    <div className={classes.flexFill}>
+                        <div className={`${getClasses(false)} ${classes.statusWrapper}`}>
                             <label htmlFor="versionSelect">Editing Version</label>
                             <CustomSelect
                                 options={modelVersions.map((v) => ({
@@ -46,9 +45,9 @@ const FormVersionSpecsSection = ({
                                 onChange={handleVersionSelect}
                                 placeholder="Select version to edit"
                             />
-                        </Row>
-                    </Col>
-                    <Col xs={12} md={6} className="mb-3">
+                        </div>
+                    </div>
+                    <div className={`${classes.flexFill} mb-3`}>
                         <button type="button" className="btn-glass-outline" onClick={() => {
                             setNewVersionCode('');
                             setNewVersionPrice(price || String(selectedVersion?.price || ''));
@@ -57,63 +56,63 @@ const FormVersionSpecsSection = ({
                         }}>
                             Add new version
                         </button>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             )}
-            <Row>
-                <Col xs={12} md={6}>
+            <div className={classes.assetRow}>
+                <div className={classes.flexFill}>
                     {!thisModel ? (
-                        <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
+                        <div className={`${getClasses(false)} ${classes.statusWrapper}`}>
                             <label htmlFor="version">Version</label>
-                            <p style={{ margin: 0, fontWeight: 600 }}>1.0.0</p>
-                            <span style={{ fontSize: '13px', color: 'var(--on-surface-variant)' }}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
-                        </Row>
+                            <p className={classes.versionLabel}>1.0.0</p>
+                            <span className={classes.versionHint}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
+                        </div>
                     ) : (
                         renderVersionInputRow('Version', 'version', selectedVersion?.version, version, versionChangeHandler, versionBlurHandler, versionIsInvalid, 'version', 'version', 'text', '1.0.0')
                     )}
-                </Col>
-                <Col xs={12} md={6}>
+                </div>
+                <div className={classes.flexFill}>
                     {renderVersionInputRow('Delivery Time (Days)', 'deliveryTime', selectedVersion?.deliveryTime, deliveryTime, deliveryTimeChangeHandler, deliveryTimeBlurHandler, deliveryTimeIsInvalid, 'deliveryTime', 'deliveryTime', 'number', '3')}
-                </Col>
-            </Row>
+                </div>
+            </div>
             {showMedicalFields && (
-                <p style={{ fontSize: '14px', color: 'var(--on-surface-variant)', marginBottom: '8px' }}>
+                <p className={classes.sectionHint}>
                     Technical specs — optional fields for medical AI listings (modality, anatomy, regulatory).
                 </p>
             )}
-            <Row>
+            <div className={classes.assetRow}>
                 {showMedicalFields && (
                     <>
-                        <Col xs={12} md={6}>
+                        <div className={classes.flexFill}>
                             {renderVersionInputRow('Modality', 'modalityId', selectedVersion?.modalityRel?.name, modalityId, modalityChangeHandler, modalityBlurHandler, modalityIsInvalid, 'modalityId', 'modalityId', 'text', '', true, dbModalities || [])}
-                        </Col>
-                        <Col xs={12} md={6}>
+                        </div>
+                        <div className={classes.flexFill}>
                             {renderVersionInputRow('Body Part', 'bodyPartId', selectedVersion?.bodyPartRel?.name, bodyPartId, bodyPartChangeHandler, bodyPartBlurHandler, bodyPartIsInvalid, 'bodyPartId', 'bodyPartId', 'text', '', true, dbBodyParts || [])}
-                        </Col>
+                        </div>
                     </>
                 )}
-            </Row>
-            <Row>
-                <Col xs={12} md={6}>
+            </div>
+            <div className={classes.assetRow}>
+                <div className={classes.flexFill}>
                     {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, handleUseCasesChange, handleUseCasesBlur, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
-                </Col>
-                <Col xs={12} md={6}>
+                </div>
+                <div className={classes.flexFill}>
                     {renderInputRow('Model Description', 'desc', desc, desc, descChangeHandler, descBlurHandler, descIsInvalid, 'desc', 'desc', 'textarea', 'Description...')}
-                </Col>
-            </Row>
-            <Row>
+                </div>
+            </div>
+            <div className={classes.assetRow}>
                 {showMedicalFields && (
-                    <Col xs={12} md={6}>
+                    <div className={classes.flexFill}>
                         {renderVersionInputRow('FDA URL', 'fdaUrl', selectedVersion?.fdaUrl, fdaUrl, fdaUrlChangeHandler, fdaUrlBlurHandler, fdaUrlIsInvalid, 'fdaUrl', 'fdaUrl', 'url', 'https://fda.gov/...')}
-                    </Col>
+                    </div>
                 )}
-                <Col xs={12} md={6} className="d-flex align-items-center gap-4">
+                <div className={`${classes.flexFill} ${classes.toggleWrapper}`}>
                     {showMedicalFields && <ToggleSwitch type='checkbox' name='fda' value={fda} onChange={handelFdaChange} title='FDA Compliant' checked={fda} id='fda' />}
                     <ToggleSwitch type='checkbox' name='isActive' value={isActive} onChange={handelIsActiveChange} title='Is Active Version' checked={isActive} id='isActive' />
                     <ToggleSwitch type='checkbox' name='isPrimary' value={isPrimary} onChange={handelIsPrimaryChange} title='Is Primary Version' checked={isPrimary} id='isPrimary' />
-                </Col>
-            </Row>
-        </Row>
+                </div>
+            </div>
+        </div>
     );
 };
 

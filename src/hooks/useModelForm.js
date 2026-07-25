@@ -19,16 +19,9 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
     // showMedicalFields is computed from categoryId
     const showMedicalFields = isMedicalSubcategory(categoryId, dbCategories);
 
-    const { hasError: fdaUrlIsInvalid, valueIsValid: fdaUrlIsValid, value: fdaUrl, valueChangeHandler: fdaUrlChangeHandler, inputBlurHandler: fdaUrlBlurHandler } = useInput(value => {
-        if (showMedicalFields) return value.trim() !== '' && urlEx.test(value);
+    const { hasError: fdaUrlHasError, value: fdaUrl, valueChangeHandler: fdaUrlChangeHandler, inputBlurHandler: fdaUrlBlurHandler, isTouched: fdaUrlIsTouched } = useInput(value => {
         return value.trim() === '' || urlEx.test(value);
     });
-
-    // We will calculate hasAtLeastOneDeliveryAsset manually here for the closures
-    // Wait, useInput relies on the latest value passed, but we don't have the values yet!
-    // We can just rely on the fact that if a field is empty, and we want to validate it, we can't easily reference the other hooks' values before they are declared.
-    // Let's declare the hooks first, then we can't use `endpointUrl` inside its own useInput initialization unless we pass a function that reads them.
-    // Wait, React hooks closures will capture the values from the PREVIOUS render. This is fine!
 
     const { hasError: deliveryTimeIsInvalid, valueIsValid: deliveryTimeIsValid, value: deliveryTime, valueChangeHandler: deliveryTimeChangeHandler, inputBlurHandler: deliveryTimeBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() > 0);
     const { hasError: priceIsInvalid, valueIsValid: priceIsValid, value: price, valueChangeHandler: priceChangeHandler, inputBlurHandler: priceBlurHandler } = useInput(value => value.trim() !== '' && +value.trim() >= 10);
@@ -90,6 +83,9 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
     const [isPrimary, setIsPrimary] = useState(thisModel ? (thisModel.versions?.[0]?.isPrimary || false) : false);
     const [status, setStatus] = useState(thisModel ? (thisModel.status || 'DRAFT') : 'DRAFT');
 
+    const fdaUrlIsValid = fda ? (fdaUrl.trim() !== '' && urlEx.test(fdaUrl)) : (fdaUrl.trim() === '' || urlEx.test(fdaUrl));
+    const fdaUrlIsInvalid = (!fdaUrlIsValid && fdaUrlIsTouched) || fdaUrlHasError;
+
     const [features, setFeatures] = useState(thisModel ? (thisModel.versions?.[0]?.features?.map(f => typeof f === 'string' ? f : f.feature) || []) : []);
     const [metrics, setMetrics] = useState(thisModel ? (thisModel.versions?.[0]?.metrics?.map(m => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []) : []);
     const [tags, setTags] = useState(thisModel ? (thisModel.tags || []) : []);
@@ -114,14 +110,14 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
 
 
     useEffect(() => {
-        if (!showMedicalFields) {
+        if (!showMedicalFields && dbCategories && dbCategories.length > 0) {
             modalityChangeHandler({ target: { value: '' } });
             bodyPartChangeHandler({ target: { value: '' } });
             fdaUrlChangeHandler({ target: { value: '' } });
             setFda(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showMedicalFields, categoryId]);
+    }, [showMedicalFields, categoryId, dbCategories]);
 
     useEffect(() => {
         if (!thisModel) {

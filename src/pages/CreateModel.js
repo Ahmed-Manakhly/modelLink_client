@@ -91,16 +91,15 @@ function CreateModel() {
             toast = { status: 'error', message: err.response?.data?.message || err.message, title: 'Creating Model failed' };
             toastHandler(toast);
         }
-        dispatch(uiActions.showNotification(false));
     };
     //==========================================================================================
     return (
         <GlobalWrapper className="mt-4">
             <div className="mb-4">
-                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
-                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Create a New Model 🚀</span>
+                <h2 className="page-main-title text-start mb-2">
+                    <span className="gradient-text fs-1">Create a New Model 🚀</span>
                 </h2>
-                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>Be part of something bigger. Share your insights. Together, we're advancing the frontier of production AI.</p>
+                <p className="fs-5 text-on-surface-variant">Be part of something bigger. Share your insights. Together, we're advancing the frontier of production AI.</p>
             </div>
             <ProfileCompletionGuard>
                 <div className="w-100 h-100 p-0 m-0">

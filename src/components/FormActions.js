@@ -5,7 +5,7 @@ import { useModelForm } from '../hooks/useModelForm';
 import { useGallery } from '../hooks/useGallery';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Row, Col, Form } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
@@ -223,7 +223,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
 
 
-    const handelFdaChange = () => { setFda(prev => !prev); setIsChanged(true); };
+    const handelFdaChange = () => { setFda(prev => !prev); setIsChanged(true); setEditing(prev => ({ ...prev, fdaUrl: true })); };
     const handelIsActiveChange = () => { setIsActive(prev => !prev); setIsChanged(true); };
     const handelIsPrimaryChange = () => { setIsPrimary(prev => !prev); setIsChanged(true); };
     const handelStatusChange = (e) => { setStatus(e.target.value); setIsChanged(true); };
@@ -268,19 +268,17 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         isFieldValid(isEditing.useCases, useCasesIsValid) &&
         (!showMedicalFields || isFieldValid(isEditing.modalityId, modalityIsValid && modalityId !== '')) &&
         isFieldValid(isEditing.fdaUrl, fdaUrlIsValid) &&
-        (!thisModel ? isFieldValid(isEditing.endpointUrl, endpointUrlIsValid) : true) &&
+        isFieldValid(isEditing.endpointUrl, endpointUrlIsValid) &&
         isFieldValid(isEditing.price, priceIsValid) &&
         isFieldValid(isEditing.deliveryTime, deliveryTimeIsValid) &&
         (!showMedicalFields || isFieldValid(isEditing.bodyPartId, bodyPartIsValid && bodyPartId !== '')) &&
         isFieldValid(isEditing.desc, descIsValid) &&
         isFieldValid(isEditing.version, versionIsValid) &&
-        (!thisModel ? (
-            isFieldValid(isEditing.dockerImage, dockerImageIsValid) &&
-            isFieldValid(isEditing.downloadLink, downloadLinkIsValid) &&
-            isFieldValid(isEditing.licenseKey, licenseKeyIsValid) &&
-            isFieldValid(isEditing.huggingFaceUrl, huggingFaceUrlIsValid) &&
-            hasAtLeastOneDeliveryAsset
-        ) : true) &&
+        isFieldValid(isEditing.dockerImage, dockerImageIsValid) &&
+        isFieldValid(isEditing.downloadLink, downloadLinkIsValid) &&
+        isFieldValid(isEditing.licenseKey, licenseKeyIsValid) &&
+        isFieldValid(isEditing.huggingFaceUrl, huggingFaceUrlIsValid) &&
+        hasAtLeastOneDeliveryAsset &&
         featuresPass &&
         tagsPass &&
         metricsPass &&
@@ -297,7 +295,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
             setImgWarning(true);
             return;
         }
-        if (!thisModel && !hasAtLeastOneDeliveryAsset) {
+        if (!hasAtLeastOneDeliveryAsset) {
             setAssetWarning(true);
             return;
         }
@@ -366,7 +364,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const displayValue = name === 'categoryId' ? (thisModel?.categoryRel?.name || thisModel?.category || thisModel?.categoryId) : thisModel?.[name];
 
         return (
-            <div className={`${classesName} d-flex flex-column align-items-left w-100 mb-3`} >
+        <div className={`${classesName} ${classes.statusWrapper}`}>
                 <label htmlFor={name}>{label}</label>
                 {(!hasValue || (hasValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
@@ -379,13 +377,13 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                         />
                     ) : (
                         type === 'textarea' ?
-                            <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} /> :
-                            <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                            <textarea className="w-100" id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} /> :
+                            <input className="w-100" type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
                     )}
                     {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
                 </>}
                 {(hasValue && !isEditing[setEditingField]) &&
-                    <p>{displayValue} <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                    <p>{displayValue} <EditOutlinedIcon className={classes.editIcon} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
                 }
             </div>
         );
@@ -396,7 +394,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const onChange = wrapChange(hookChange);
         const onSelectChange = wrapSelectChange(hookChange);
         return (
-            <div className={`${classesName} d-flex flex-column align-items-left w-100 mb-3`} >
+        <div className={`${classesName} ${classes.statusWrapper}`}>
                 <label htmlFor={name}>{label}</label>
                 {(!thisValue || (thisValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
@@ -408,14 +406,14 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                         />
                     ) : type === 'textarea' ? (
-                        <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} />
+                        <textarea className="w-100" id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} />
                     ) : (
-                        <input type={type} id={name} name={name} placeholder={placeholder} required={type !== 'url' && !placeholder.includes('URL')} onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                        <input className="w-100" type={type} id={name} name={name} placeholder={placeholder} required={type !== 'url' && !placeholder.includes('URL')} onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
                     )}
                     {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
                 </>}
                 {(thisValue && !isEditing[setEditingField]) &&
-                    <p>{thisValue} <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
+                    <p>{thisValue} <EditOutlinedIcon className={classes.editIcon} titleAccess="edit" onClick={() => setEditing(prev => ({ ...prev, [setEditingField]: true }))} /></p>
                 }
             </div>
         );
@@ -428,7 +426,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                 <div className={`g-5 p-0 gap-5 justify-content-center w-100 m-0`}>
                     <Col className={`${classes["contact-col"]} flex-fill`}>
                         <RouterForm method='post'>
-                            <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                            <div className={classes.formContainerWrapper}>
                                 {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
                                 <FormIdentitySection 
                                     classes={classes}
@@ -470,36 +468,33 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     onModelReload={onModelReload}
                                 />
 
-                                {/* SECTION 4: DYNAMIC METADATA */}
-                                <Col className="w-100 glass-container p-4 mb-4">
-                                    <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Search & Performance Metadata</h4>
+                                <Col className={classes.metaSection}>
+                                    <h4 className={`gradient-text ${classes.sectionTitle}`}>Search & Performance Metadata</h4>
                                     {/* TAGS */}
-                                    <Row>
-                                        <Col xs={0} md lg className={`${getClasses(tagsIsInValid)} d-flex flex-column align-items-left w-100`} >
+                                    <Row className="flex gap-3 items-center mb-5">
+                                        <Col xs={0} md lg className={`${getClasses(tagsIsInValid)} ${classes.inputWrapper}`} >
                                             <label>Model Tags</label>
-                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                                <Col style={{ position: 'relative' }}>
+                                            <div className={classes.metadataRow}>
+                                                <div className={`${classes.relativeCol} ${classes.colHalf}`}>
                                                     <input type='text' placeholder="Add a Tag" value={tagInput} onChange={handleTagInputChange}
                                                         onBlur={() => setIsTouched({ ...isTouched, tags: true })}
                                                         onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }} />
                                                     {tagSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
+                                                        <ul className={classes.autocompleteList}>
                                                             {tagSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
+                                                                <li key={idx} className={classes.autocompleteItem}
                                                                     onMouseDown={() => { setTagInput(s); setTagSuggestions([]); }}
-                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
                                                                 >
                                                                     {s}
                                                                 </li>
                                                             ))}
                                                         </ul>
                                                     )}
-                                                </Col>
-                                                <Col>
-                                                    <button type="button" onClick={addTag} className="btn-glass-outline mt-2 w-100">Add Tag</button>
-                                                </Col>
-                                            </Row>
+                                                </div>
+                                                <div className={classes.colHalf}>
+                                                    <button type="button" onClick={addTag} className="btn-glass-outline w-100">Add Tag</button>
+                                                </div>
+                                            </div>
                                             {tagsIsInValid && tagsRequired && <p className={classes['error-text']}>Set at least one Tag</p>}
                                             <Row className={classes.f_list}>
                                                 {tags.map((tag, index) => (
@@ -514,30 +509,28 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                     {/* FEATURES */}
                                     <Row>
-                                        <Col xs={0} md lg className={`${getClasses(featuresIsInValid)} d-flex flex-column align-items-left w-100`} >
+                                        <Col xs={0} md lg className={`${getClasses(featuresIsInValid)} ${classes.inputWrapper}`} >
                                             <label htmlFor='feature'>Model Features</label>
-                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                                <Col style={{ position: 'relative' }}>
+                                            <div className={classes.metadataRow}>
+                                                <div className={`${classes.relativeCol} ${classes.colHalf}`}>
                                                     <input type='text' id='feature' name="feature" placeholder="Enter Feature Name"
                                                         onChange={handleFeatureInputChange} onBlur={() => setIsTouched({ ...isTouched, features: true })} value={feature} />
                                                     {featureSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
+                                                        <ul className={classes.autocompleteList}>
                                                             {featureSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
+                                                                <li key={idx} className={classes.autocompleteItem}
                                                                     onMouseDown={() => { featureChangeHandler({ target: { value: s } }); setFeatureSuggestions([]); }}
-                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
                                                                 >
                                                                     {s}
                                                                 </li>
                                                             ))}
                                                         </ul>
                                                     )}
-                                                </Col>
-                                                <Col>
-                                                    <button type="button" onClick={addFeature} className="btn-glass-outline mt-2 w-100">Add Feature</button>
-                                                </Col>
-                                            </Row>
+                                                </div>
+                                                <div className={classes.colHalf}>
+                                                    <button type="button" onClick={addFeature} className="btn-glass-outline w-100">Add Feature</button>
+                                                </div>
+                                            </div>
                                             {featuresIsInValid && featuresRequired && <p className={classes['error-text']}>Set at least one Feature</p>}
                                             <Row className={classes.f_list}>
                                                 {features.map((feat, index) => (
@@ -552,44 +545,42 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
                                     {/* METRICS */}
                                     <Row>
-                                        <Col xs={0} md lg className={`${getClasses(metricsIsInValid)} d-flex flex-column align-items-left w-100`} >
+                                        <Col xs={0} md lg className={`${getClasses(metricsIsInValid)} ${classes.inputWrapper}`} >
                                             <label>Model Metrics</label>
-                                            <Row className={`flex gap-3 items-center mb-5 ${classes.f_con_2}`}>
-                                                <Col xs={12} md={4} style={{ position: 'relative' }}>
+                                            <div className={classes.metadataRow}>
+                                                <div className={`${classes.relativeCol} ${classes.col4}`}>
                                                     <input type='text' placeholder="Metric Name (e.g. Accuracy)" onChange={handleMetricInputChange} onBlur={() => setIsTouched({ ...isTouched, metrics: true })} value={metric} />
                                                     {metricSuggestions.length > 0 && (
-                                                        <ul style={{ position: 'absolute', top: 'calc(100% + 5px)', left: '2%', zIndex: 10, background: 'var(--bg-surface)', width: '96%', listStyle: 'none', padding: 0, margin: 0, border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-input, 8px)', maxHeight: '150px', overflowY: 'auto', backdropFilter: 'blur(10px)' }}>
+                                                        <ul className={classes.autocompleteList}>
                                                             {metricSuggestions.map((s, idx) => (
-                                                                <li key={idx} style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--on-surface)' }}
+                                                                <li key={idx} className={classes.autocompleteItem}
                                                                     onMouseDown={() => { metricChangeHandler({ target: { value: s } }); setMetricSuggestions([]); }}
-                                                                    onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-                                                                    onMouseLeave={(e) => e.target.style.background = 'transparent'}
                                                                 >
                                                                     {s}
                                                                 </li>
                                                             ))}
                                                         </ul>
                                                     )}
-                                                </Col>
-                                                <Col xs={12} md={3}>
+                                                </div>
+                                                <div className={classes.col3}>
                                                     <input type='text' placeholder="Value (e.g. 98%)" onChange={metricValueChangeHandler} value={metricValue} />
-                                                </Col>
-                                                <Col xs={12} md={3}>
+                                                </div>
+                                                <div className={classes.col3}>
                                                     <input type='text' placeholder="URL (Optional)" onChange={metricUrlChangeHandler} value={metricUrl} />
-                                                </Col>
-                                                <Col xs={12} md={2}>
-                                                    <button type="button" onClick={addMetric} className="btn-glass-outline mt-2 w-100" style={{ padding: '10px' }}>Add Metric</button>
-                                                </Col>
-                                            </Row>
+                                                </div>
+                                                <div className={classes.col2}>
+                                                    <button type="button" onClick={addMetric} className="btn-glass-outline w-100 py-2">Add Metric</button>
+                                                </div>
+                                            </div>
                                             {metricsIsInValid && metricsRequired && <p className={classes['error-text']}>Set at least one Metric</p>}
-                                            <Row className={classes.f_list} style={{ flexDirection: 'column', gap: '10px' }}>
+                                            <Row className={classes.f_list_col}>
                                                 {metrics.map((m, index) => (
-                                                    <div key={`metric-${index}`} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--primary-glow)', padding: '10px 15px', borderRadius: '8px', color: 'var(--primary)' }}>
-                                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                                    <div key={`metric-${index}`} className={classes.metricCard}>
+                                                        <div className={classes.metricCardContent}>
                                                             <strong>{m.metric}:</strong> <span>{m.value}</span>
                                                             {m.metricsUrl && <a href={m.metricsUrl} target="_blank" rel="noreferrer">Link</a>}
                                                         </div>
-                                                        <span onClick={() => removeMetric(index)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>&times;</span>
+                                                        <span onClick={() => removeMetric(index)} className={classes.removeMetricBtn}>&times;</span>
                                                     </div>
                                                 ))}
                                             </Row>
@@ -597,22 +588,22 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     </Row>
                                 </Col>
 
-                                {imgWarning && <p className={classes['error-text']} style={{ textAlign: 'center' }}>Please Select a cover Image</p>}
-                                <div className="w-100 mt-4 d-flex flex-column flex-md-row justify-content-between gap-3 m-0 p-0">
+                                {imgWarning && <p className={`${classes['error-text']} ${classes.imgWarningText}`}>Please Select a cover Image</p>}
+                                <div className={classes.actionButtonsContainer}>
                                     <div className="flex-grow-1">
-                                        <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className="btn-glass-primary w-100" style={{ padding: '12px', fontSize: '1rem' }} type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
+                                        <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className="btn-glass-primary w-100 py-2 fs-6" type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
                                     </div>
                                     <div className="flex-grow-1">
-                                        <button type="button" onClick={cancelHandler} className="btn-glass-danger w-100" style={{ padding: '12px', fontSize: '1rem' }}>Cancel</button>
+                                        <button type="button" onClick={cancelHandler} className="btn-glass-danger w-100 py-2 fs-6">Cancel</button>
                                     </div>
                                 </div>
-                                <div className="w-100 mt-3 d-flex flex-wrap align-items-center" style={{ gap: '4px', fontSize: '0.85rem', color: 'var(--on-surface-variant)' }}>
+                                <div className={classes.legalTextContainer}>
                                     <span>Publishing this model means you agree to the</span>
-                                    <Link to="/policy?tab=terms" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Developer Terms</Link>
+                                    <Link to="/policy?tab=terms" target="_blank" className={`legal-link ${classes.legalLink}`}>Developer Terms</Link>
                                     <span>,</span>
-                                    <Link to="/policy?tab=content" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Content Policy</Link>
+                                    <Link to="/policy?tab=content" target="_blank" className={`legal-link ${classes.legalLink}`}>Content Policy</Link>
                                     <span>, and</span>
-                                    <Link to="/policy?tab=licensing" target="_blank" className="legal-link" style={{ color: 'var(--primary)', display: 'inline-block' }}>Licensing Rules</Link>
+                                    <Link to="/policy?tab=licensing" target="_blank" className={`legal-link ${classes.legalLink}`}>Licensing Rules</Link>
                                     <span>.</span>
                                 </div>
                             </div>
@@ -622,45 +613,45 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
             </section>
             {showAddVersionModal && (
                 <Modal onClose={closeAddVersionModal}>
-                    <div className="p-4" style={{ background: 'var(--bg-surface)', borderRadius: '15px' }}>
-                        <div className="d-flex justify-content-between align-items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-glass)' }}>
+                    <div className={`p-4 ${classes.modalContainer}`}>
+                        <div className={classes.modalHeader}>
                             <h5 className="mb-0 gradient-text">Add New Version</h5>
                             <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={closeAddVersionModal} />
                         </div>
-                        <Form onSubmit={handleAddVersionSubmit}>
-                            <Form.Group className="mb-3">
-                                <Form.Label style={{ color: 'var(--on-surface-variant)' }}>Version (semver)</Form.Label>
-                                <Form.Control
+                        <form onSubmit={handleAddVersionSubmit} className={classes["contact-col"]}>
+                            <div className={classes["form-control"]}>
+                                <label>Version (semver)</label>
+                                <input
                                     type="text"
                                     placeholder="1.1.0"
                                     value={newVersionCode}
                                     onChange={(e) => setNewVersionCode(e.target.value)}
                                     required
-                                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
+                                    className="w-100"
                                 />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label style={{ color: 'var(--on-surface-variant)' }}>Price (USD)</Form.Label>
-                                <Form.Control
+                            </div>
+                            <div className={classes["form-control"]}>
+                                <label>Price (USD)</label>
+                                <input
                                     type="number"
                                     min={10}
                                     placeholder="10"
                                     value={newVersionPrice}
                                     onChange={(e) => setNewVersionPrice(e.target.value)}
                                     required
-                                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: 'var(--on-surface)', padding: '10px' }}
+                                    className="w-100"
                                 />
-                            </Form.Group>
+                            </div>
                             {addVersionError && <p className="text-danger mt-2">{addVersionError}</p>}
-                            <div className="d-flex justify-content-end gap-2 mt-4">
-                                <button type="button" className="btn-glass-danger" onClick={closeAddVersionModal} style={{ padding: '8px 16px' }}>
+                            <div className={classes.modalFooter}>
+                                <button type="button" className="btn-glass-danger py-2 px-4" onClick={closeAddVersionModal}>
                                     Close
                                 </button>
-                                <button type="submit" className="btn-glass-primary" disabled={addVersionLoading} style={{ padding: '8px 16px' }}>
+                                <button type="submit" className="btn-glass-primary py-2 px-4" disabled={addVersionLoading}>
                                     {addVersionLoading ? 'Creating...' : 'Create Version'}
                                 </button>
                             </div>
-                        </Form>
+                        </form>
                     </div>
                 </Modal>
             )}

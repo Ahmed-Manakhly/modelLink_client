@@ -71,7 +71,6 @@ function EditModel() {
             setModel(data ? data : null)
         }
         getData(() => getModelByIdReq(id, token ? { Authorization: `Bearer ${token}` } : {}), toastHandler, loadingState, notificationState, gettingData, 'model!')
-        dispatch(uiActions.showNotification(false))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     //------------------------------------------
@@ -114,7 +113,7 @@ function EditModel() {
                 toast = { status: resData.status, message: 'Model has been updated', title: 'Updating Model' };
                 socket.emit("new_model");
                 toastHandler(toast);
-                reloadModel(modelData?.versionId ?? preferredVersionId);
+                navigate(`/models/view/${id}`, { replace: true });
             } catch (err) {
                 loadingState(false);
                 toast = { status: 'error', message: err.response?.data?.message || err.message, title: 'Updating Model failed' };
@@ -130,15 +129,14 @@ function EditModel() {
         };
 
         updatingModelAction(toastHandler, loadingState);
-        dispatch(uiActions.showNotification(false));
     };
     return (
         <GlobalWrapper className="mt-4">
             <div className="mb-4">
-                <h2 className="page-main-title" style={{ textAlign: 'left', margin: '0 0 0.5rem 0' }}>
-                    <span className="gradient-text" style={{ fontSize: '2.5rem' }}>Modify Your Model 🔨</span>
+                <h2 className="page-main-title text-start mb-2">
+                    <span className="gradient-text fs-1">Modify Your Model 🔨</span>
                 </h2>
-                <p style={{ fontSize: '1.1rem', color: 'var(--on-surface-variant)' }}>Getting New Ideas is always amazing. Keep your model up to date.</p>
+                <p className="fs-5 text-on-surface-variant">Getting New Ideas is always amazing. Keep your model up to date.</p>
             </div>
             <ProfileCompletionGuard>
                 {Object.keys(model).length > 0 && (
