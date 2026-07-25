@@ -53,6 +53,7 @@ const Conversation = ({ data, online, currentUserId, onRemove, to, isActive }) =
       }
     };
     token && userId && getUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, currentUserId, token, isDeletedAccount, otherParticipant?.userId, otherParticipant?.user]);
 
   const displayName = isDeletedAccount ? 'Deleted Account' : getCounterpartyDisplayName(userData);

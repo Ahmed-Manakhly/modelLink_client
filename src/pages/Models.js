@@ -85,6 +85,7 @@ function Models({ modelsUpdated, onModelsUpdated, searchByVal, searchVal }) {
                 }));
                 dispatch(uiActions.showNotification(true));
             });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchModels = useCallback((page = 1) => {

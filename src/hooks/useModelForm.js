@@ -159,8 +159,16 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
         setIsPrimary(v.isPrimary || false);
         setFeatures(v?.features?.map((f) => (typeof f === 'string' ? f : f.feature)) || []);
         setMetrics(v?.metrics?.map((m) => ({ metric: m.metric, value: m.value, metricsUrl: m.metricsUrl || '' })) || []);
+        
+        setIsChanged(false);
+        setEditing({
+            title: false, categoryId: false, useCases: false, modalityId: false, fdaUrl: false, endpointUrl: false,
+            price: false, deliveryTime: false, bodyPart: false, desc: false, version: false, dockerImage: false,
+            downloadLink: false, licenseKey: false, huggingFaceUrl: false
+        });
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [thisModel?.id, preferredVersionId]);
+    }, [thisModel, preferredVersionId]);
 
     const getSelectedVersion = () => {
         if (!modelVersions.length) return null;
@@ -261,6 +269,7 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
         modelVersions,
         selectedVersionId,
         getSelectedVersion,
+        selectedVersion: getSelectedVersion(),
         handleVersionSelect,
     };
 };

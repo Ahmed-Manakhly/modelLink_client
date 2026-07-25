@@ -97,6 +97,7 @@ function Home({ modelsUpdated, onModelsUpdated }) {
             setCategoryTrendingSections([]);
             setTopCategoryCards([]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadHomeData = useCallback((showLoading = true) => {
@@ -154,9 +155,9 @@ function Home({ modelsUpdated, onModelsUpdated }) {
                     viewAllLink="/models?featured=true&sort=-avgRating"
                 />
             )}
-            <PopularServices 
-                models={models} 
-                title="Top Trending Overall" 
+            <PopularServices
+                models={models}
+                title="Top Trending Overall"
                 viewAllLink="/models?sort=-sales"
             />
             {categoryTrendingSections.map(({ slug, name, models: sectionModels }) => (

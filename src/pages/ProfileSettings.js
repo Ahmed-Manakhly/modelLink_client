@@ -18,7 +18,7 @@ function ProfileSettings() {
     const [isChanged, setIsChanged] = useState(false);
     const [completionRate, setCompletionRate] = useState(0);
     const userData = useSelector(state => state.auth.userData) || {};
-    const { id, role } = userData;
+    const { role } = userData;
     let avatar = null
     if (userData?.avatar) {
         avatar = userData.avatar;

@@ -3,21 +3,20 @@ import CustomSelect from './ui/CustomSelect';
 import { useNavigate, Form as RouterForm, useNavigation, Link } from 'react-router-dom';
 import { useModelForm } from '../hooks/useModelForm';
 import { useGallery } from '../hooks/useGallery';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Form } from 'react-bootstrap';
-import ToggleSwitch from './ToggleSwitch';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-import { FILES_BASE_API_URL } from '../lib/api';
 import { getCategoriesReq, getModalitiesReq, getBodyPartsReq, getTagsReq, getFeaturesReq, getMetricsReq } from '../lib/loaders';
 
 import { createVersionReq } from '../lib/versionRequests';
 import { getAuthToken } from '../utility/tokenLoader';
-import VersionAssetsPanel from './ui/VersionAssetsPanel';
 import Modal from './layout/Modal';
 import { uiActions } from '../store/UI-slice';
+import FormIdentitySection from './FormIdentitySection';
+import FormVersionSpecsSection from './FormVersionSpecsSection';
+import FormDeliveryAssetsSection from './FormDeliveryAssetsSection';
 
 const getAssetFromVersion = (version, type) =>
     version?.assets?.find((a) => a.type === type)?.decryptedValue || '';
@@ -67,55 +66,23 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
 
     const initialCover = thisModel?.galleryImages?.[0] || null;
     const initialGallery = thisModel?.galleryImages?.length > 1 ? thisModel.galleryImages.slice(1) : [];
-
+    const galleryReturn = useGallery(initialCover, initialGallery);
     const {
-        file, existingCover, galleryImages, uploadedGalleryFiles,
-        selectedImageKey, selectedGalleryImage, setSelectedImageKey,
-        setCoverFile, removeGalleryImage, handleGalleryFiles, removeUploadedGalleryFile,
-        setUploadedGalleryFiles, setGalleryImages, getCoverPreviewSrc
-    } = useGallery(initialCover, initialGallery);
+        file, uploadedGalleryFiles, existingCover, galleryImages
+    } = galleryReturn;
 
+    const useModelFormReturn = useModelForm(thisModel, dbCategories, preferredVersionId);
     const {
-        title, modelNameIsValid, modelNameIsInvalid, modelNameChangeHandler, modelNameBlurHandler,
-        categoryId, categoryIsValid, categoryIsInvalid, categoryChangeHandler, categoryBlurHandler,
-        useCases, useCasesIsValid, useCasesIsInvalid, handleUseCasesChange, handleUseCasesBlur,
-        modalityId, modalityIsValid, modalityIsInvalid, modalityChangeHandler, modalityBlurHandler,
-        fdaUrl, fdaUrlIsValid, fdaUrlIsInvalid, fdaUrlChangeHandler, fdaUrlBlurHandler,
-        endpointUrl, endpointUrlIsValid, endpointUrlIsInvalid, endpointUrlChangeHandler, endpointUrlBlurHandler,
-        deliveryTime, deliveryTimeIsValid, deliveryTimeIsInvalid, deliveryTimeChangeHandler, deliveryTimeBlurHandler,
-        price, priceIsValid, priceIsInvalid, priceChangeHandler, priceBlurHandler,
-        bodyPartId, bodyPartIsValid, bodyPartIsInvalid, bodyPartChangeHandler, bodyPartBlurHandler,
-        desc, descIsValid, descIsInvalid, descChangeHandler, descBlurHandler,
-        version, versionIsValid, versionIsInvalid, versionChangeHandler, versionBlurHandler,
-        dockerImage, dockerImageIsValid, dockerImageIsInvalid, dockerImageChangeHandler, dockerImageBlurHandler,
-        downloadLink, downloadLinkIsValid, downloadLinkIsInvalid, downloadLinkChangeHandler, downloadLinkBlurHandler,
-        licenseKey, licenseKeyIsValid, licenseKeyIsInvalid, licenseKeyChangeHandler, licenseKeyBlurHandler,
-        huggingFaceUrl, huggingFaceUrlIsValid, huggingFaceUrlIsInvalid, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler,
-        feature, resetFeature, featureChangeHandler,
-        metric, resetMetric, metricChangeHandler,
-        metricValue, resetMetricValue, metricValueChangeHandler,
-        metricUrl, resetMetricUrl, metricUrlChangeHandler,
-        fda, setFda,
-        isActive, setIsActive,
-        isPrimary, setIsPrimary,
-        status, setStatus,
-        features, setFeatures,
-        metrics, setMetrics,
-        tags, setTags,
-        tagInput, setTagInput,
-        tagSuggestions, setTagSuggestions,
-        featureSuggestions, setFeatureSuggestions,
-        metricSuggestions, setMetricSuggestions,
-        isEditing, setEditing,
-        isTouched, setIsTouched,
-        isChanged, setIsChanged,
-        showMedicalFields,
-        hasAtLeastOneDeliveryAsset,
-        modelVersions,
-        selectedVersionId,
-        getSelectedVersion,
-        handleVersionSelect,
-    } = useModelForm(thisModel, dbCategories, preferredVersionId);
+        title, modelNameIsValid, categoryId, categoryIsValid, useCases, useCasesIsValid, modalityId, modalityIsValid,
+        fdaUrl, fdaUrlIsValid, endpointUrl, endpointUrlIsValid, deliveryTime, deliveryTimeIsValid, price, priceIsValid, bodyPartId, bodyPartIsValid,
+        desc, descIsValid, version, versionIsValid, dockerImage, dockerImageIsValid, downloadLink, downloadLinkIsValid, licenseKey, licenseKeyIsValid, huggingFaceUrl, huggingFaceUrlIsValid,
+        feature, resetFeature, featureChangeHandler, metric, resetMetric, metricChangeHandler, metricValue, resetMetricValue,
+        metricValueChangeHandler, metricUrl, resetMetricUrl, metricUrlChangeHandler, fda, setFda, isActive, setIsActive, isPrimary, setIsPrimary,
+        status, setStatus, features, setFeatures, metrics, setMetrics, tags, setTags, tagInput, setTagInput, tagSuggestions,
+        setTagSuggestions, featureSuggestions, setFeatureSuggestions, metricSuggestions, setMetricSuggestions, isEditing,
+        setEditing, isTouched, setIsTouched, isChanged, setIsChanged, showMedicalFields, hasAtLeastOneDeliveryAsset,
+        selectedVersionId, handleVersionSelect
+    } = useModelFormReturn;
 
     const [imgWarning, setImgWarning] = useState(false);
     const token = getAuthToken();
@@ -134,8 +101,6 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const metricsIsValid = metrics.length > 0;
     const metricsIsInValid = !metricsIsValid && isTouched.metrics;
 
-    const imgRef = useRef(null);
-    const galleryInputRef = useRef(null);
     const versionEx = /^\d+\.\d+\.\d+$/;
 
     const closeAddVersionModal = () => {
@@ -256,45 +221,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     };
 
 
-    const handleEditMainViewerImage = (e) => {
-        const newFile = e.target.files[0];
-        if (!newFile) return;
 
-        if (selectedImageKey === 'cover') {
-            setCoverFile(newFile);
-        } else if (selectedImageKey.startsWith('gallery-file-')) {
-            const fileIdx = Number(selectedImageKey.replace('gallery-file-', ''));
-            const newPreviews = [...uploadedGalleryFiles];
-            if (newPreviews[fileIdx]) {
-                URL.revokeObjectURL(newPreviews[fileIdx].preview);
-                newPreviews[fileIdx] = {
-                    file: newFile,
-                    preview: URL.createObjectURL(newFile),
-                    name: newFile.name,
-                };
-                setUploadedGalleryFiles(newPreviews);
-                setSelectedImageKey(`gallery-file-${fileIdx}`);
-            }
-        } else if (selectedImageKey.startsWith('gallery-url-')) {
-            const urlIdx = Number(selectedImageKey.replace('gallery-url-', ''));
-            const newGalleryImages = [...galleryImages];
-            newGalleryImages.splice(urlIdx, 1);
-            setGalleryImages(newGalleryImages);
-
-            const newPreview = {
-                file: newFile,
-                preview: URL.createObjectURL(newFile),
-                name: newFile.name,
-            };
-            setUploadedGalleryFiles(prev => {
-                const nextIdx = prev.length;
-                setSelectedImageKey(`gallery-file-${nextIdx}`);
-                return [...prev, newPreview];
-            });
-        }
-        setIsChanged(true);
-        e.target.value = '';
-    };
 
     const handelFdaChange = () => { setFda(prev => !prev); setIsChanged(true); };
     const handelIsActiveChange = () => { setIsActive(prev => !prev); setIsChanged(true); };
@@ -428,8 +355,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         onCreatingModelAction(file ? file : null, Object.keys(modelData).length !== 0 ? modelData : null, uploadedGalleryFiles);
     };
 
-    const selectedVersion = getSelectedVersion();
-    const getAsset = (type) => getAssetFromVersion(selectedVersion, type);
+    const getAsset = (type) => getAssetFromVersion(useModelFormReturn.selectedVersion, type);
 
     const renderInputRow = (label, name, value, hookValue, hookChange, hookBlur, hookInvalid, isEditingField, setEditingField, type = 'text', placeholder = '', isSelect = false, options = []) => {
         const classesName = getClasses(hookInvalid);
@@ -453,8 +379,8 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                         />
                     ) : (
                         type === 'textarea' ?
-                            <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} /> :
-                            <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} defaultValue={thisModel?.[name] || ''} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
+                            <textarea id={name} name={name} cols="30" rows="3" placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} /> :
+                            <input type={type} id={name} name={name} placeholder={placeholder} required onChange={onChange} onBlur={hookBlur} value={hookValue} step={type === 'number' ? "0.01" : undefined} min={type === 'number' ? "0" : undefined} />
                     )}
                     {hookInvalid && <p className={classes['error-text']}>Invalid input for {label}</p>}
                 </>}
@@ -504,214 +430,45 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                         <RouterForm method='post'>
                             <div className="d-flex flex-column justify-content-center align-items-center w-100">
                                 {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
-                                <Row className="w-100 mb-4 glass-container p-4" style={{ gap: '20px' }}>
-                                    {/* LEFT: GALLERY UX */}
-                                    <Col xs={12} lg={5} className="d-flex flex-column gap-3">
-                                        <h4 className="gradient-text" style={{ textAlign: 'left', marginBottom: '15px' }}>Model Gallery</h4>
-                                        <div className={`${classes.img_cover} d-flex flex-column align-items-center w-100`} style={{ minHeight: '300px', background: 'var(--gradient-marketing)', border: '1px solid var(--border-glass)', borderRadius: '15px', position: 'relative', overflow: 'hidden', padding: '0' }} >
-                                            <input name='cover' type="file" onChange={handleEditMainViewerImage} ref={imgRef} style={{ display: 'none' }} accept="image/*" />
-                                            <span style={{ position: 'absolute', top: 10, right: 10, background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '5px', borderRadius: '50%', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
-                                                <EditOutlinedIcon style={{ color: 'var(--primary)', cursor: 'pointer' }} titleAccess="Upload Main Cover" onClick={() => imgRef.current.click()} />
-                                            </span>
-                                            <img src={selectedGalleryImage} alt="Model Main Viewer" style={{ width: '100%', height: '400px', objectFit: 'contain' }} />
-                                        </div>
-
-                                        <div className="w-100" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
-                                            <div onClick={() => setSelectedImageKey('cover')}
-                                                style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === 'cover' ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
-                                                <img src={getCoverPreviewSrc()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="cover thumb" />
-                                            </div>
-                                            {galleryImages.map((img, idx) => (
-                                                <div key={`gal-url-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-url-${idx}` ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
-                                                    <img src={img.startsWith('http') ? img : FILES_BASE_API_URL + img} onClick={() => setSelectedImageKey(`gallery-url-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
-                                                    <div onClick={(e) => { e.stopPropagation(); removeGalleryImage(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
-                                                </div>
-                                            ))}
-                                            {uploadedGalleryFiles.map((item, idx) => (
-                                                <div key={`gal-file-${idx}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: selectedImageKey === `gallery-file-${idx}` ? '2px solid var(--primary)' : '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
-                                                    <img src={item.preview} onClick={() => setSelectedImageKey(`gallery-file-${idx}`)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="thumb" />
-                                                    <div onClick={(e) => { e.stopPropagation(); removeUploadedGalleryFile(idx); }} style={{ position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 0 0 5px' }}>&times;</div>
-                                                </div>
-                                            ))}
-                                            <div onClick={() => galleryInputRef.current?.click()} style={{ width: '80px', height: '80px', flexShrink: 0, cursor: 'pointer', border: '2px dashed #ccc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}>
-                                                <AddPhotoAlternateIcon />
-                                            </div>
-                                        </div>
-
-                                        <div className="w-100 d-flex gap-2">
-                                            <input ref={galleryInputRef} type="file" multiple accept="image/*" style={{ display: 'none' }} onChange={handleGalleryFiles} />
-
-
-                                        </div>
-                                    </Col>
-
-                                    {/* RIGHT: CORE DETAILS */}
-                                    <Col xs={12} lg={6} className="d-flex flex-column gap-3">
-                                        <h4 className="gradient-text" style={{ textAlign: 'left', marginBottom: '15px' }}>Core Identity</h4>
-                                        <Row>
-                                            <Col xs={12}>
-                                                {renderInputRow('Model Name', 'title', title, title, modelNameChangeHandler, modelNameBlurHandler, modelNameIsInvalid, 'title', 'title')}
-                                            </Col>
-                                            <Col xs={12}>
-                                                {renderInputRow('Model Category (subcategory)', 'categoryId', categoryId, categoryId, categoryChangeHandler, categoryBlurHandler, categoryIsInvalid, 'categoryId', 'categoryId', 'text', '', true, dbCategories)}
-                                            </Col>
-                                            <Col xs={12}>
-                                                {renderVersionInputRow('Model Price (USD)', 'price', selectedVersion?.price, price, priceChangeHandler, priceBlurHandler, priceIsInvalid, 'price', 'price', 'number', '10.00')}
-                                            </Col>
-                                            <Col xs={12}>
-                                                <div className={`${getClasses(false)} d-flex flex-column align-items-left w-100 mb-3`} >
-                                                    <label htmlFor='status'>Status</label>
-                                                    <div style={{ width: '100%', marginTop: '5px' }}>
-                                                        <CustomSelect
-                                                            options={[{ label: 'DRAFT', value: 'DRAFT' }, { label: 'PUBLISHED', value: 'PUBLISHED' }, { label: 'SUSPENDED', value: 'SUSPENDED' }]}
-                                                            value={status}
-                                                            onChange={(val) => handelStatusChange({ target: { value: val } })}
-                                                            placeholder="Select Status"
-
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
+                                <FormIdentitySection 
+                                    classes={classes}
+                                    thisModel={thisModel}
+                                    form={{ ...useModelFormReturn, dbCategories }}
+                                    gallery={galleryReturn}
+                                    renderInputRow={renderInputRow}
+                                    renderVersionInputRow={renderVersionInputRow}
+                                    getClasses={getClasses}
+                                    handelStatusChange={handelStatusChange}
+                                />
 
                                 {/* SECTION 2: PUBLIC SPECIFICATIONS / VERSIONS */}
-                                <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
-                                    <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
-                                        {thisModel ? 'Version specifications' : 'Initial version (v1.0.0)'}
-                                        <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
-                                            {thisModel
-                                                ? 'Select a version to edit its public specs. Use Add new version for v2+.'
-                                                : 'Public specs and delivery assets for your first version. After save you can add more versions on Edit.'}
-                                        </span>
-                                    </h4>
-                                    {thisModel && modelVersions.length >= 1 && (
-                                        <Row className="align-items-end">
-                                            <Col xs={12} md={6}>
-                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
-                                                    <label htmlFor="versionSelect">Editing Version</label>
-                                                    <CustomSelect
-                                                        options={modelVersions.map((v) => ({
-                                                            label: `${v.version}${v.isPrimary ? ' (primary)' : ''}${v.isActive === false ? ' [inactive]' : ''}`,
-                                                            value: String(v.id),
-                                                        }))}
-                                                        value={selectedVersionId != null ? String(selectedVersionId) : ''}
-                                                        onChange={handleVersionSelect}
-                                                        placeholder="Select version to edit"
-
-                                                    />
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6} className="mb-3">
-                                                <button type="button" className="btn-glass-outline" onClick={() => {
-                                                    setNewVersionCode('');
-                                                    setNewVersionPrice(price || String(selectedVersion?.price || ''));
-                                                    setAddVersionError('');
-                                                    setShowAddVersionModal(true);
-                                                }}>
-                                                    Add new version
-                                                </button>
-                                            </Col>
-                                        </Row>
-                                    )}
-                                    <Row>
-                                        <Col xs={12} md={6}>
-                                            {!thisModel ? (
-                                                <Row className={`${getClasses(false)} d-flex flex-column align-items-left w-100`}>
-                                                    <label htmlFor="version">Version</label>
-                                                    <p style={{ margin: 0, fontWeight: 600 }}>1.0.0</p>
-                                                    <span style={{ fontSize: '13px', color: 'var(--on-surface-variant)' }}>First version is always 1.0.0. Add v1.1.0, v2.0.0, etc. from Edit after save.</span>
-                                                </Row>
-                                            ) : (
-                                                renderVersionInputRow('Version', 'version', selectedVersion?.version, version, versionChangeHandler, versionBlurHandler, versionIsInvalid, 'version', 'version', 'text', '1.0.0')
-                                            )}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Delivery Time (Days)', 'deliveryTime', selectedVersion?.deliveryTime, deliveryTime, deliveryTimeChangeHandler, deliveryTimeBlurHandler, deliveryTimeIsInvalid, 'deliveryTime', 'deliveryTime', 'number', '3')}
-                                        </Col>
-                                    </Row>
-                                    {showMedicalFields && (
-                                        <p style={{ fontSize: '14px', color: 'var(--on-surface-variant)', marginBottom: '8px' }}>
-                                            Technical specs — optional fields for medical AI listings (modality, anatomy, regulatory).
-                                        </p>
-                                    )}
-                                    <Row>
-                                        {showMedicalFields && (
-                                            <>
-                                                <Col xs={12} md={6}>
-                                                    {renderVersionInputRow('Modality', 'modalityId', selectedVersion?.modalityRel?.name, modalityId, modalityChangeHandler, modalityBlurHandler, modalityIsInvalid, 'modalityId', 'modalityId', 'text', '', true, dbModalities)}
-                                                </Col>
-                                                <Col xs={12} md={6}>
-                                                    {renderVersionInputRow('Body Part', 'bodyPartId', selectedVersion?.bodyPartRel?.name, bodyPartId, bodyPartChangeHandler, bodyPartBlurHandler, bodyPartIsInvalid, 'bodyPartId', 'bodyPartId', 'text', '', true, dbBodyParts)}
-                                                </Col>
-                                            </>
-                                        )}
-                                    </Row>
-                                    <Row>
-                                        <Col xs={12} md={6}>
-                                            {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, handleUseCasesChange, handleUseCasesBlur, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            {renderInputRow('Model Description', 'desc', desc, desc, descChangeHandler, descBlurHandler, descIsInvalid, 'desc', 'desc', 'textarea', 'Description...')}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        {showMedicalFields && (
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('FDA URL', 'fdaUrl', selectedVersion?.fdaUrl, fdaUrl, fdaUrlChangeHandler, fdaUrlBlurHandler, fdaUrlIsInvalid, 'fdaUrl', 'fdaUrl', 'url', 'https://fda.gov/...')}
-                                            </Col>
-                                        )}
-                                        <Col xs={12} md={6} className="d-flex align-items-center gap-4">
-                                            {showMedicalFields && <ToggleSwitch type='checkbox' name='fda' value={fda} onChange={handelFdaChange} title='FDA Compliant' checked={fda} id='fda' />}
-                                            <ToggleSwitch type='checkbox' name='isActive' value={isActive} onChange={handelIsActiveChange} title='Is Active Version' checked={isActive} id='isActive' />
-                                            <ToggleSwitch type='checkbox' name='isPrimary' value={isPrimary} onChange={handelIsPrimaryChange} title='Is Primary Version' checked={isPrimary} id='isPrimary' />
-                                        </Col>
-                                    </Row>
-                                </Row>
+                                <FormVersionSpecsSection
+                                    classes={classes}
+                                    thisModel={thisModel}
+                                    form={{ ...useModelFormReturn, dbModalities, dbBodyParts }}
+                                    renderInputRow={renderInputRow}
+                                    renderVersionInputRow={renderVersionInputRow}
+                                    getClasses={getClasses}
+                                    setNewVersionCode={setNewVersionCode}
+                                    setNewVersionPrice={setNewVersionPrice}
+                                    setAddVersionError={setAddVersionError}
+                                    setShowAddVersionModal={setShowAddVersionModal}
+                                    handelFdaChange={handelFdaChange}
+                                    handelIsActiveChange={handelIsActiveChange}
+                                    handelIsPrimaryChange={handelIsPrimaryChange}
+                                    handleVersionSelect={handleVersionSelect}
+                                />
 
                                 {/* SECTION 3: DELIVERY ASSETS */}
-                                {thisModel && selectedVersion && (
-                                    <VersionAssetsPanel
-                                        version={selectedVersion}
-                                        assetsLocked={selectedVersion?.hasPaidOrders === true}
-                                        onAssetsChanged={() => onModelReload?.(selectedVersionId)}
-                                    />
-                                )}
-                                {!thisModel && (
-                                    <Row className="w-100 mb-4 glass-container p-4 d-flex flex-column gap-3">
-                                        <h4 className="gradient-text" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
-                                            Delivery assets (v1.0.0)
-                                            <span style={{ fontSize: '14px', color: 'var(--on-surface-variant)', fontWeight: 'normal', display: 'block', marginTop: '6px' }}>
-                                                At least one field is required (API endpoint, Docker image, download link, license key, or Hugging Face URL).
-                                            </span>
-                                        </h4>
-                                        {assetWarning && (
-                                            <p className={classes['error-text']}>Add at least one delivery asset before submitting.</p>
-                                        )}
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('Endpoint URL', 'endpointUrl', getAsset('API_ENDPOINT'), endpointUrl, endpointUrlChangeHandler, endpointUrlBlurHandler, endpointUrlIsInvalid, 'endpointUrl', 'endpointUrl', 'url', 'https://api.example.com')}
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('Docker Image', 'dockerImage', getAsset('DOCKER_IMAGE'), dockerImage, dockerImageChangeHandler, dockerImageBlurHandler, dockerImageIsInvalid, 'dockerImage', 'dockerImage', 'text', 'docker.io/your/image:tag')}
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('Download Link', 'downloadLink', getAsset('DOWNLOAD_LINK'), downloadLink, downloadLinkChangeHandler, downloadLinkBlurHandler, downloadLinkIsInvalid, 'downloadLink', 'downloadLink', 'url', 'https://...')}
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('License Key', 'licenseKey', getAsset('LICENSE_KEY'), licenseKey, licenseKeyChangeHandler, licenseKeyBlurHandler, licenseKeyIsInvalid, 'licenseKey', 'licenseKey')}
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                {renderVersionInputRow('HuggingFace URL', 'huggingFaceUrl', getAsset('HUGGINGFACE_URL'), huggingFaceUrl, huggingFaceUrlChangeHandler, huggingFaceUrlBlurHandler, huggingFaceUrlIsInvalid, 'huggingFaceUrl', 'huggingFaceUrl', 'url', 'https://huggingface.co/...')}
-                                            </Col>
-                                        </Row>
-                                    </Row>
-                                )}
+                                <FormDeliveryAssetsSection 
+                                    classes={classes}
+                                    thisModel={thisModel}
+                                    form={useModelFormReturn}
+                                    getAsset={getAsset}
+                                    renderVersionInputRow={renderVersionInputRow}
+                                    assetWarning={assetWarning}
+                                    onModelReload={onModelReload}
+                                />
 
                                 {/* SECTION 4: DYNAMIC METADATA */}
                                 <Col className="w-100 glass-container p-4 mb-4">

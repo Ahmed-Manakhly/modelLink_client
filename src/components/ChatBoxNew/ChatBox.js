@@ -71,7 +71,7 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
 
   useEffect(() => {
     emitStopTyping();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat?.id]);
 
   useEffect(() => {
@@ -127,6 +127,7 @@ const ChatBox = ({ chat, currentUserRole, messages, currentUser, onHandleSend, o
     };
 
     getUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat, currentUser, embeddedUser, otherParticipant?.userId, token]);
 
   const displayName = getCounterpartyDisplayName(userData);

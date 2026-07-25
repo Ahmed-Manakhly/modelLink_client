@@ -5,30 +5,49 @@ import imgHolder from '../assets/modelPlaceholder.png';
 export const useGallery = (initialCover, initialGallery) => {
     const [file, setFile] = useState(null);
     const existingCover = initialCover;
-    const [galleryImages, setGalleryImages] = useState(initialGallery);
-    const [uploadedGalleryFiles, setUploadedGalleryFiles] = useState([]);
+    const [galleryItems, setGalleryItems] = useState(
+        initialGallery.map(url => ({ type: 'url', value: url }))
+    );
+
+    const initialGalleryStr = (initialGallery || []).join(',');
 
     // Stable blob URL for a newly selected cover file (revoke on replace/unmount)
     const [coverBlobUrl, setCoverBlobUrl] = useState(null);
-    // Selection by slot key — avoids broken URL equality (createObjectURL returns new refs each call)
+    // Selection by slot key
     const [selectedImageKey, setSelectedImageKey] = useState('cover');
 
     const coverBlobUrlRef = useRef(null);
-    const uploadedGalleryFilesRef = useRef([]);
+    const galleryItemsRef = useRef([]);
 
     useEffect(() => {
         coverBlobUrlRef.current = coverBlobUrl;
     }, [coverBlobUrl]);
 
     useEffect(() => {
-        uploadedGalleryFilesRef.current = uploadedGalleryFiles;
-    }, [uploadedGalleryFiles]);
+        galleryItemsRef.current = galleryItems;
+    }, [galleryItems]);
+
+    useEffect(() => {
+        // Reset state when backend data changes (e.g. after update)
+        setFile(null);
+        if (coverBlobUrl) {
+            URL.revokeObjectURL(coverBlobUrl);
+            setCoverBlobUrl(null);
+        }
+        galleryItemsRef.current.forEach(item => {
+            if (item.type === 'file') URL.revokeObjectURL(item.preview);
+        });
+        setGalleryItems((initialGallery || []).map(url => ({ type: 'url', value: url })));
+        setSelectedImageKey('cover');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialCover, initialGalleryStr]);
 
     useEffect(() => {
         return () => {
             if (coverBlobUrlRef.current) URL.revokeObjectURL(coverBlobUrlRef.current);
-            // Cleanup gallery previews only on unmount
-            uploadedGalleryFilesRef.current.forEach(f => URL.revokeObjectURL(f.preview));
+            galleryItemsRef.current.forEach(item => {
+                if (item.type === 'file') URL.revokeObjectURL(item.preview);
+            });
         };
     }, []);
 
@@ -42,15 +61,14 @@ export const useGallery = (initialCover, initialGallery) => {
 
     const getPreviewForKey = (key) => {
         if (key === 'cover') return getCoverPreviewSrc();
-        if (key.startsWith('gallery-url-')) {
-            const idx = Number(key.replace('gallery-url-', ''));
-            const img = galleryImages[idx];
-            if (!img) return imgHolder;
-            return img.startsWith('http') ? img : FILES_BASE_API_URL + img;
-        }
-        if (key.startsWith('gallery-file-')) {
-            const idx = Number(key.replace('gallery-file-', ''));
-            return uploadedGalleryFiles[idx]?.preview || imgHolder;
+        if (key.startsWith('gallery-item-')) {
+            const idx = Number(key.replace('gallery-item-', ''));
+            const item = galleryItems[idx];
+            if (!item) return imgHolder;
+            if (item.type === 'url') {
+                return item.value.startsWith('http') ? item.value : FILES_BASE_API_URL + item.value;
+            }
+            return item.preview;
         }
         return imgHolder;
     };
@@ -65,64 +83,55 @@ export const useGallery = (initialCover, initialGallery) => {
         setSelectedImageKey('cover');
     };
 
-    const removeGalleryImage = (index) => {
-        const cloned = [...galleryImages];
-        cloned.splice(index, 1);
-        setGalleryImages(cloned);
-        if (selectedImageKey === `gallery-url-${index}`) {
+    const removeGalleryItem = (index) => {
+        const cloned = [...galleryItems];
+        const removed = cloned.splice(index, 1)[0];
+        if (removed && removed.type === 'file') {
+            URL.revokeObjectURL(removed.preview);
+        }
+        setGalleryItems(cloned);
+        if (selectedImageKey === `gallery-item-${index}`) {
             setSelectedImageKey('cover');
-        } else if (selectedImageKey.startsWith('gallery-url-')) {
-            const selectedIdx = Number(selectedImageKey.replace('gallery-url-', ''));
+        } else if (selectedImageKey.startsWith('gallery-item-')) {
+            const selectedIdx = Number(selectedImageKey.replace('gallery-item-', ''));
             if (selectedIdx > index) {
-                setSelectedImageKey(`gallery-url-${selectedIdx - 1}`);
+                setSelectedImageKey(`gallery-item-${selectedIdx - 1}`);
             }
         }
     };
 
     const handleGalleryFiles = (e) => {
         const files = Array.from(e.target.files || []);
-        const previews = files.map(f => ({ file: f, preview: URL.createObjectURL(f), name: f.name }));
+        const previews = files.map(f => ({ type: 'file', file: f, preview: URL.createObjectURL(f), name: f.name }));
         
-        setUploadedGalleryFiles(prev => {
+        setGalleryItems(prev => {
             return [...prev, ...previews];
         });
         
         if (previews.length > 0) {
-            setSelectedImageKey(`gallery-file-${uploadedGalleryFiles.length}`);
+            setSelectedImageKey(`gallery-item-${galleryItems.length}`);
         }
         
         e.target.value = '';
     };
 
-    const removeUploadedGalleryFile = (index) => {
-        const cloned = [...uploadedGalleryFiles];
-        URL.revokeObjectURL(cloned[index].preview);
-        cloned.splice(index, 1);
-        setUploadedGalleryFiles(cloned);
-        if (selectedImageKey === `gallery-file-${index}`) {
-            setSelectedImageKey('cover');
-        } else if (selectedImageKey.startsWith('gallery-file-')) {
-            const selectedIdx = Number(selectedImageKey.replace('gallery-file-', ''));
-            if (selectedIdx > index) {
-                setSelectedImageKey(`gallery-file-${selectedIdx - 1}`);
-            }
-        }
-    };
+    // Derived properties for backward compatibility with form submit logic
+    const galleryImages = galleryItems.filter(item => item.type === 'url').map(item => item.value);
+    const uploadedGalleryFiles = galleryItems.filter(item => item.type === 'file');
 
     return {
         file,
         existingCover,
+        galleryItems,
         galleryImages,
         uploadedGalleryFiles,
         selectedImageKey,
         selectedGalleryImage,
         setSelectedImageKey,
         setCoverFile,
-        removeGalleryImage,
+        setGalleryItems,
+        removeGalleryItem,
         handleGalleryFiles,
-        removeUploadedGalleryFile,
-        setUploadedGalleryFiles,
-        setGalleryImages,
         getCoverPreviewSrc
     };
 };

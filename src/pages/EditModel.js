@@ -72,6 +72,7 @@ function EditModel() {
         }
         getData(() => getModelByIdReq(id, token ? { Authorization: `Bearer ${token}` } : {}), toastHandler, loadingState, notificationState, gettingData, 'model!')
         dispatch(uiActions.showNotification(false))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     //------------------------------------------
     const reloadModel = (selectVersionId) => {

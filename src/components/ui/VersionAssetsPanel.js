@@ -33,6 +33,19 @@ const VersionAssetsPanel = ({ version, onAssetsChanged, assetsLocked = false }) 
         if (assetsLocked) return;
         const value = (drafts[type] ?? '').trim();
         if (!value) return;
+
+        if (['API_ENDPOINT', 'DOWNLOAD_LINK', 'HUGGINGFACE_URL'].includes(type)) {
+            try {
+                new URL(value);
+            } catch (e) {
+                setError(`Please enter a valid URL for ${type.replace('_', ' ')}`);
+                return;
+            }
+        } else if (type === 'LICENSE_KEY' && value.length < 10) {
+            setError(`Please enter a valid License Key (minimum 10 characters)`);
+            return;
+        }
+
         setSaving(type);
         setError('');
         try {
@@ -62,7 +75,7 @@ const VersionAssetsPanel = ({ version, onAssetsChanged, assetsLocked = false }) 
                 </span>
             </h4>
             {error && (
-                <p className="error-text" style={{ fontSize: '14px', margin: 0 }}>{error}</p>
+                <p style={{ color: 'var(--danger, #ff4d4f)', fontSize: '14px', margin: 0 }}>{error}</p>
             )}
             {ASSET_TYPES.map(({ type, label, placeholder }) => {
                 const existing = getAsset(type);
@@ -77,7 +90,7 @@ const VersionAssetsPanel = ({ version, onAssetsChanged, assetsLocked = false }) 
                         </p>
                         <Form.Group className="d-flex gap-2 flex-wrap">
                             <Form.Control
-                                type="text"
+                                type={['API_ENDPOINT', 'DOWNLOAD_LINK', 'HUGGINGFACE_URL'].includes(type) ? 'url' : 'text'}
                                 placeholder={assetsLocked ? 'Locked for sold versions' : (existing ? 'Replace value…' : placeholder)}
                                 value={drafts[type] ?? ''}
                                 disabled={assetsLocked}
