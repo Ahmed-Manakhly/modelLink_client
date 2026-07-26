@@ -208,8 +208,8 @@ function TopNavBar({ getSearch }) {
 
             <div className={classes.trendingTagsScroll} ref={tagsScrollRef}>
               {dynamicTags.length === 0 && hasCategories === null && <span className={classes.trendingPlaceholder}>Loading tags...</span>}
-              {dynamicTags.length === 0 && hasCategories === false && <span className={classes.trendingPlaceholder} style={{ color: 'var(--color-danger)', marginBottom: '6.5px' }}>Waiting for data to be seeded...</span>}
-              {dynamicTags.length === 0 && hasCategories === true && <span className={classes.trendingPlaceholder} style={{ marginBottom: '6.5px' }}>No tags available yet.</span>}
+              {dynamicTags.length === 0 && hasCategories === false && <span className={classes.trendingPlaceholder} style={{ color: 'var(--color-danger)', marginBottom: '3.25px', marginTop: '3.25px' }}>Waiting for data to be seeded...</span>}
+              {dynamicTags.length === 0 && hasCategories === true && <span className={classes.trendingPlaceholder} style={{ marginBottom: '3.25px', marginTop: '3.25px' }}>No tags available yet.</span>}
               {dynamicTags.map((tag, i) => (
                 <Link to={`/models?tags=${encodeURIComponent(tag)}`} key={i} className={classes.trendingLink}>
                   {tag}

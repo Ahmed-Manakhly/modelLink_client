@@ -1,4 +1,19 @@
 User-agent: *
 Allow: /
+# Disallow crawling of private/authenticated routes
+Disallow: /auth/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /dashboard-dev/
+Disallow: /orders-client/
+Disallow: /reviews-client/
+Disallow: /reviews-dev/
+Disallow: /profileSettings/
+Disallow: /wallet/
+# Disallow direct API crawling from the frontend domain just in case
+Disallow: /api/
+
+# Optional: Add a slight crawl delay if your server is sensitive to heavy bot traffic
+Crawl-delay: 2
 
 Sitemap: https://www.modellink.com/sitemap.xml

@@ -5,6 +5,14 @@ import { FiMap, FiHome, FiInfo, FiHelpCircle, FiUser, FiGrid, FiUserPlus, FiShop
 import { RiRobot2Line } from 'react-icons/ri';
 import classes from './SitemapPage.module.scss';
 
+const isDev = process.env.NODE_ENV !== 'production';
+let siteDomain = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
+if (isDev) {
+    const rawDevDomain = process.env.REACT_APP_CLIENT_URL_DEV || 'http://127.0.0.1:3000';
+    siteDomain = rawDevDomain.replace(':3000', '');
+}
+const sitemapUrl = `${siteDomain}/sitemap.xml`;
+
 const SitemapPage = () => {
     return (
         <GlobalWrapper className="global-banner-spacing global-page-margin-top">
@@ -65,7 +73,7 @@ const SitemapPage = () => {
                     </div>
                 </div>
                 <div style={{ textAlign: 'center', marginTop: '50px', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '20px' }}>
-                    <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--sonic-silver)', textDecoration: 'underline', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                    <a href={sitemapUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--sonic-silver)', textDecoration: 'underline', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                         <FiMap style={{ fontSize: '1rem', color: 'var(--primary)' }} /> View XML Sitemap
                     </a>
                 </div>
