@@ -5,7 +5,7 @@ import { FiMap, FiHome, FiInfo, FiHelpCircle, FiUser, FiGrid, FiUserPlus, FiShop
 import { RiRobot2Line } from 'react-icons/ri';
 import classes from './SitemapPage.module.scss';
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENV !== 'production';
 let siteDomain = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
 if (isDev) {
     const rawDevDomain = process.env.REACT_APP_CLIENT_URL_DEV || 'http://127.0.0.1:3000';

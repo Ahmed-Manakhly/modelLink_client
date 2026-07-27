@@ -15,21 +15,21 @@ import { Helmet } from 'react-helmet-async';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENV !== 'production';
 
-const BASE_URL   = isDev
-    ? (process.env.REACT_APP_CLIENT_URL_DEV  || 'http://127.0.0.1:3000')
+const BASE_URL = isDev
+    ? (process.env.REACT_APP_CLIENT_URL_DEV || 'http://127.0.0.1:3000')
     : (process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com');
 
 const FILES_BASE = isDev
-    ? (process.env.REACT_APP_FILES_BASE_API_DEV  || 'http://127.0.0.1:8000/public/')
+    ? (process.env.REACT_APP_FILES_BASE_API_DEV || 'http://127.0.0.1:8000/public/')
     : (process.env.REACT_APP_FILES_BASE_API_PROD || 'https://api.modellink.com/public/');
 
 // Canonical / OG URLs always point to production so search engines index
 // the real domain, not localhost.  Override in dev only if you need local testing.
-const PROD_URL   = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
+const PROD_URL = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
 
-const SITE_NAME  = 'ModelLink';
+const SITE_NAME = 'ModelLink';
 const DEFAULT_OG = `${BASE_URL}/og-image.png`;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ export function SiteSEO({
     type = 'website',
     lang = 'en',
 }) {
-    const fullTitle    = `${title} | ${SITE_NAME}`;
+    const fullTitle = `${title} | ${SITE_NAME}`;
     const canonicalUrl = `${PROD_URL}${path}`;
 
     // Organisation / WebSite structured data
@@ -113,27 +113,27 @@ export function SiteSEO({
         <Helmet htmlAttributes={{ lang }}>
             {/* ── Primary ── */}
             <title>{fullTitle}</title>
-            <meta name="description"        content={truncate(description)} />
-            <meta name="keywords"           content={keywords} />
-            <link rel="canonical"           href={canonicalUrl} />
-            <meta name="robots"             content="index, follow" />
+            <meta name="description" content={truncate(description)} />
+            <meta name="keywords" content={keywords} />
+            <link rel="canonical" href={canonicalUrl} />
+            <meta name="robots" content="index, follow" />
 
             {/* ── Open Graph ── */}
-            <meta property="og:type"        content={type} />
-            <meta property="og:site_name"   content={SITE_NAME} />
-            <meta property="og:title"       content={fullTitle} />
+            <meta property="og:type" content={type} />
+            <meta property="og:site_name" content={SITE_NAME} />
+            <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={truncate(description)} />
-            <meta property="og:url"         content={canonicalUrl} />
-            <meta property="og:image"       content={ogImage} />
-            <meta property="og:locale"      content="en_US" />
+            <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={ogImage} />
+            <meta property="og:locale" content="en_US" />
 
             {/* ── Twitter Card ── */}
-            <meta name="twitter:card"        content="summary_large_image" />
-            <meta name="twitter:site"        content="@ModelLink" />
-            <meta name="twitter:creator"     content="@ModelLink" />
-            <meta name="twitter:title"       content={fullTitle} />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:site" content="@ModelLink" />
+            <meta name="twitter:creator" content="@ModelLink" />
+            <meta name="twitter:title" content={fullTitle} />
             <meta name="twitter:description" content={truncate(description)} />
-            <meta name="twitter:image"       content={ogImage} />
+            <meta name="twitter:image" content={ogImage} />
 
             {/* ── JSON-LD ── */}
             <script type="application/ld+json">
@@ -152,16 +152,16 @@ export function SiteSEO({
  * ModelsSEO — inject meta for /models (the marketplace listing page)
  */
 export function ModelsSEO() {
-    const title       = 'Browse AI Models';
+    const title = 'Browse AI Models';
     const description = 'Explore hundreds of production-ready AI models on ModelLink. Filter by category, modality, and use-case to find the perfect model for your project.';
-    const keywords    = 'AI models, machine learning models, buy AI, computer vision, NLP, clinical AI, generative AI, model marketplace';
+    const keywords = 'AI models, machine learning models, buy AI, computer vision, NLP, clinical AI, generative AI, model marketplace';
     const canonicalUrl = `${PROD_URL}/models`;
 
     const breadcrumb = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home',   item: PROD_URL },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: PROD_URL },
             { '@type': 'ListItem', position: 2, name: 'Models', item: canonicalUrl },
         ],
     };
@@ -182,19 +182,19 @@ export function ModelsSEO() {
     return (
         <Helmet>
             <title>{title} | {SITE_NAME}</title>
-            <meta name="description"        content={truncate(description)} />
-            <meta name="keywords"           content={keywords} />
-            <link rel="canonical"           href={canonicalUrl} />
-            <meta name="robots"             content="index, follow" />
+            <meta name="description" content={truncate(description)} />
+            <meta name="keywords" content={keywords} />
+            <link rel="canonical" href={canonicalUrl} />
+            <meta name="robots" content="index, follow" />
 
-            <meta property="og:type"        content="website" />
-            <meta property="og:site_name"   content={SITE_NAME} />
-            <meta property="og:title"       content={`${title} | ${SITE_NAME}`} />
+            <meta property="og:type" content="website" />
+            <meta property="og:site_name" content={SITE_NAME} />
+            <meta property="og:title" content={`${title} | ${SITE_NAME}`} />
             <meta property="og:description" content={truncate(description)} />
-            <meta property="og:url"         content={canonicalUrl} />
+            <meta property="og:url" content={canonicalUrl} />
 
-            <meta name="twitter:card"        content="summary" />
-            <meta name="twitter:title"       content={`${title} | ${SITE_NAME}`} />
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:title" content={`${title} | ${SITE_NAME}`} />
             <meta name="twitter:description" content={truncate(description)} />
 
             <script type="application/ld+json">{JSON.stringify(breadcrumb)}</script>
@@ -214,9 +214,9 @@ export function ModelsSEO() {
 export function ModelViewSEO({ model }) {
     if (!model?.id) return null;
 
-    const title       = model.title || 'AI Model';
-    const description = model.desc  || `Explore ${title} on ModelLink — a production-ready AI model available for purchase and deployment.`;
-    const keywords    = [
+    const title = model.title || 'AI Model';
+    const description = model.desc || `Explore ${title} on ModelLink — a production-ready AI model available for purchase and deployment.`;
+    const keywords = [
         model.category,
         model.categoryRel?.name,
         model.categoryRel?.parent?.name,
@@ -226,7 +226,7 @@ export function ModelViewSEO({ model }) {
         SITE_NAME,
     ].filter(Boolean).join(', ');
 
-    const firstImage   = resolveFileUrl(model.galleryImages?.[0]);
+    const firstImage = resolveFileUrl(model.galleryImages?.[0]);
     const canonicalUrl = `${PROD_URL}/models/${model.id}`;
     const developerName = model.developer
         ? `${model.developer.firstName || ''} ${model.developer.lastName || ''}`.trim() || model.developer.username
@@ -237,9 +237,9 @@ export function ModelViewSEO({ model }) {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home',   item: PROD_URL },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: PROD_URL },
             { '@type': 'ListItem', position: 2, name: 'Models', item: `${PROD_URL}/models` },
-            { '@type': 'ListItem', position: 3, name: title,    item: canonicalUrl },
+            { '@type': 'ListItem', position: 3, name: title, item: canonicalUrl },
         ],
     };
 
@@ -285,26 +285,26 @@ export function ModelViewSEO({ model }) {
         <Helmet>
             {/* ── Primary ── */}
             <title>{title} | {SITE_NAME}</title>
-            <meta name="description"        content={truncate(description)} />
-            <meta name="keywords"           content={keywords} />
-            <link rel="canonical"           href={canonicalUrl} />
-            <meta name="robots"             content="index, follow" />
+            <meta name="description" content={truncate(description)} />
+            <meta name="keywords" content={keywords} />
+            <link rel="canonical" href={canonicalUrl} />
+            <meta name="robots" content="index, follow" />
 
             {/* ── Open Graph ── */}
-            <meta property="og:type"        content="product" />
-            <meta property="og:site_name"   content={SITE_NAME} />
-            <meta property="og:title"       content={`${title} | ${SITE_NAME}`} />
+            <meta property="og:type" content="product" />
+            <meta property="og:site_name" content={SITE_NAME} />
+            <meta property="og:title" content={`${title} | ${SITE_NAME}`} />
             <meta property="og:description" content={truncate(description)} />
-            <meta property="og:url"         content={canonicalUrl} />
-            <meta property="og:image"       content={firstImage} />
-            <meta property="og:locale"      content="en_US" />
+            <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={firstImage} />
+            <meta property="og:locale" content="en_US" />
 
             {/* ── Twitter Card ── */}
-            <meta name="twitter:card"        content="summary_large_image" />
-            <meta name="twitter:site"        content="@ModelLink" />
-            <meta name="twitter:title"       content={`${title} | ${SITE_NAME}`} />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:site" content="@ModelLink" />
+            <meta name="twitter:title" content={`${title} | ${SITE_NAME}`} />
             <meta name="twitter:description" content={truncate(description)} />
-            <meta name="twitter:image"       content={firstImage} />
+            <meta name="twitter:image" content={firstImage} />
 
             {/* ── JSON-LD ── */}
             <script type="application/ld+json">{JSON.stringify(breadcrumb)}</script>

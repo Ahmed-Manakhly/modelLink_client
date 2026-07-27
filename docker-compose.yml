@@ -1,0 +1,29 @@
+services:
+  frontend:
+    container_name: modellink_frontend
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+        - REACT_APP_ENV=production
+        - REACT_APP_BASE_API_PROD=$REACT_APP_BASE_API_PROD
+        - REACT_APP_FILES_BASE_API_PROD=$REACT_APP_FILES_BASE_API_PROD
+        - REACT_APP_CLIENT_URL_PROD=$REACT_APP_CLIENT_URL_PROD
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_ENV=production
+      - REACT_APP_BASE_API_PROD=$REACT_APP_BASE_API_PROD
+      - REACT_APP_FILES_BASE_API_PROD=$REACT_APP_FILES_BASE_API_PROD
+      - REACT_APP_CLIENT_URL_PROD=$REACT_APP_CLIENT_URL_PROD
+    expose:
+      - "3000"
+    networks:
+      - modelink-network
+
+networks:
+  modelink-network:
+    external: true

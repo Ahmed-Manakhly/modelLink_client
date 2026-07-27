@@ -10,11 +10,11 @@ import svg8 from '../assets/svg_8.svg'
 import { FiFileText, FiShield, FiDollarSign, FiHelpCircle, FiInfo, FiUser, FiPackage, FiStar, FiSettings, FiGrid, FiCreditCard, FiMail, FiBriefcase, FiUsers, FiGlobe, FiMap } from 'react-icons/fi';
 //--------------------
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENV !== 'production';
 let siteDomain = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
 if (isDev) {
-    const rawDevDomain = process.env.REACT_APP_CLIENT_URL_DEV || 'http://127.0.0.1:3000';
-    siteDomain = rawDevDomain.replace(':3000', '');
+  const rawDevDomain = process.env.REACT_APP_CLIENT_URL_DEV || 'http://127.0.0.1:3000';
+  siteDomain = rawDevDomain.replace(':3000', '');
 }
 const sitemapUrl = `${siteDomain}/sitemap.xml`;
 

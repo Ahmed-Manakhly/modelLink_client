@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const rawBaseUrl = process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_BASE_API_DEV
-    : process.env.REACT_APP_BASE_API_PROD;
+const isDev = process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENV !== 'production';
+
+const rawBaseUrl = isDev
+    ? (process.env.REACT_APP_BASE_API_DEV || 'http://127.0.0.1:8000')
+    : (process.env.REACT_APP_BASE_API_PROD || 'https://www.modellink.com');
 
 // Helper to normalize the base URL (strips trailing slashes and /api prefix if present)
 const getNormalizedBaseUrl = (url) => {
@@ -17,10 +19,9 @@ const getNormalizedBaseUrl = (url) => {
 export const BASE_URL = getNormalizedBaseUrl(rawBaseUrl);
 
 // ---------------------------------------------------
-export const FILES_BASE_API_URL = process.env.NODE_ENV === "development" ||
-    process.env.NODE_ENV === "docker_development"
-    ? process.env.REACT_APP_FILES_BASE_API_DEV
-    : process.env.REACT_APP_FILES_BASE_API_PROD;
+export const FILES_BASE_API_URL = isDev
+    ? (process.env.REACT_APP_FILES_BASE_API_DEV || 'http://127.0.0.1:8000/public/')
+    : (process.env.REACT_APP_FILES_BASE_API_PROD || 'https://api.modellink.com/public/');
 
 
 //------------------------------------------------------

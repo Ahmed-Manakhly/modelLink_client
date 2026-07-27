@@ -8,14 +8,14 @@ else
   echo "✅ Docker network 'modelink-network' already exists."
 fi
 
-# Boot the containers using the dev compose file
-echo "🚀 Starting Frontend Docker Compose (Local/Dev)..."
+# Boot the containers
+echo "🚀 Starting Frontend Docker Compose (Production)..."
 MAX_RETRIES=3
 RETRY_COUNT=0
 SUCCESS=false
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-  if docker compose -f docker-compose.dev.yml up -d --build; then
+  if docker compose up -d --build; then
     SUCCESS=true
     break
   else
@@ -29,4 +29,4 @@ if [ "$SUCCESS" = false ]; then
   echo "❌ Docker Compose failed after $MAX_RETRIES attempts. Stopping deployment."
   exit 1
 fi
-echo "✅ Frontend Local/Dev Deployment running!"
+echo "✅ Frontend Production Deployment running!"

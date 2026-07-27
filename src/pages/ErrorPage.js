@@ -126,12 +126,7 @@ const ErrorPage = ({ msgCounter, notCounter, notifys, handleDeleteNotification, 
                     });
                     dispatch(cartActions.onSetCart(hydratedItems));
                 } catch (err) {
-                    dispatch(uiActions.notificationDataChanged({
-                        status: 'error',
-                        title: 'Error',
-                        message: err?.response?.data?.message || 'Failed to sync cart data from DB',
-                    }));
-                    dispatch(uiActions.showNotification(true));
+                    // Silently ignore cart fetch failures to avoid confusing guests/new sessions
                 }
             };
             fetchCartModels();
