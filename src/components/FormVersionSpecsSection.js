@@ -72,7 +72,7 @@ const FormVersionSpecsSection = ({
                     )}
                 </div>
                 <div className={classes.flexFill}>
-                    {renderVersionInputRow('Delivery Time (Days)', 'deliveryTime', selectedVersion?.deliveryTime, deliveryTime, deliveryTimeChangeHandler, deliveryTimeBlurHandler, deliveryTimeIsInvalid, 'deliveryTime', 'deliveryTime', 'number', '3')}
+                    {renderVersionInputRow(<span>Delivery Time (Days) <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'deliveryTime', selectedVersion?.deliveryTime, deliveryTime, deliveryTimeChangeHandler, deliveryTimeBlurHandler, deliveryTimeIsInvalid, 'deliveryTime', 'deliveryTime', 'number', '3')}
                 </div>
             </div>
             {showMedicalFields && (
@@ -84,17 +84,17 @@ const FormVersionSpecsSection = ({
                 {showMedicalFields && (
                     <>
                         <div className={classes.flexFill}>
-                            {renderVersionInputRow('Modality', 'modalityId', selectedVersion?.modalityRel?.name, modalityId, modalityChangeHandler, modalityBlurHandler, modalityIsInvalid, 'modalityId', 'modalityId', 'text', '', true, dbModalities || [])}
+                            {renderVersionInputRow(<span>Modality <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'modalityId', selectedVersion?.modalityRel?.name, modalityId, modalityChangeHandler, modalityBlurHandler, modalityIsInvalid, 'modalityId', 'modalityId', 'text', '', true, dbModalities || [])}
                         </div>
                         <div className={classes.flexFill}>
-                            {renderVersionInputRow('Body Part', 'bodyPartId', selectedVersion?.bodyPartRel?.name, bodyPartId, bodyPartChangeHandler, bodyPartBlurHandler, bodyPartIsInvalid, 'bodyPartId', 'bodyPartId', 'text', '', true, dbBodyParts || [])}
+                            {renderVersionInputRow(<span>Body Part <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'bodyPartId', selectedVersion?.bodyPartRel?.name, bodyPartId, bodyPartChangeHandler, bodyPartBlurHandler, bodyPartIsInvalid, 'bodyPartId', 'bodyPartId', 'text', '', true, dbBodyParts || [])}
                         </div>
                     </>
                 )}
             </div>
             <div className={classes.assetRow}>
                 <div className={classes.flexFill}>
-                    {renderVersionInputRow('Use Cases / Intended Application', 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, handleUseCasesChange, handleUseCasesBlur, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
+                    {renderVersionInputRow(<span>Use Cases / Intended Application <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'useCases', selectedVersion?.useCases || selectedVersion?.indications, useCases, handleUseCasesChange, handleUseCasesBlur, useCasesIsInvalid, 'useCases', 'useCases', 'textarea', 'Describe intended use cases...')}
                 </div>
                 <div className={classes.flexFill}>
                     {renderInputRow('Model Description', 'desc', desc, desc, descChangeHandler, descBlurHandler, descIsInvalid, 'desc', 'desc', 'textarea', 'Description...')}
@@ -103,7 +103,7 @@ const FormVersionSpecsSection = ({
             <div className={classes.assetRow}>
                 {showMedicalFields && (
                     <div className={classes.flexFill}>
-                        {renderVersionInputRow('FDA URL', 'fdaUrl', selectedVersion?.fdaUrl, fdaUrl, fdaUrlChangeHandler, fdaUrlBlurHandler, fdaUrlIsInvalid, 'fdaUrl', 'fdaUrl', 'url', 'https://fda.gov/...')}
+                        {renderVersionInputRow(<span>FDA URL <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'fdaUrl', selectedVersion?.fdaUrl, fdaUrl, fdaUrlChangeHandler, fdaUrlBlurHandler, fdaUrlIsInvalid, 'fdaUrl', 'fdaUrl', 'url', 'https://fda.gov/...')}
                     </div>
                 )}
                 <div className={`${classes.flexFill} ${classes.toggleWrapper}`}>

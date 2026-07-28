@@ -1,5 +1,6 @@
 import classes from './ModelData.module.scss';
 import { getModelMarketingFields, getVersionById } from '../lib/modelHelpers';
+import { Row, Col } from 'react-bootstrap';
 
 const ModelData = ({ model = null, selectedVersionId }) => {
     const version = getVersionById(model, selectedVersionId);
@@ -14,13 +15,13 @@ const ModelData = ({ model = null, selectedVersionId }) => {
                     {showMedical && (
                         <div className="d-flex flex-column flex-md-row w-100 gap-md-4">
                             <div className={`${classes["form-control"]} d-flex flex-column align-items-start mb-4 flex-fill`}>
-                                <h3 className="title_2 mb-2">Body Part</h3>
+                                <h3 className="title_2 mb-2">Body Part <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
                                 <div className="global-read-only-field" style={{ minHeight: 'auto', padding: '12px 15px', fontSize: '15px' }}>
                                     {marketing.bodyPart || 'N/A'}
                                 </div>
                             </div>
                             <div className={`${classes["form-control"]} d-flex flex-column align-items-start mb-4 flex-fill`}>
-                                <h3 className="title_2 mb-2">Modality</h3>
+                                <h3 className="title_2 mb-2">Modality <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
                                 <div className="global-read-only-field" style={{ minHeight: 'auto', padding: '12px 15px', fontSize: '15px' }}>
                                     {marketing.modality || 'N/A'}
                                 </div>
@@ -30,14 +31,14 @@ const ModelData = ({ model = null, selectedVersionId }) => {
 
                     <div className="d-flex flex-column flex-md-row w-100 gap-md-4">
                         <div className={`${classes["form-control"]} d-flex flex-column align-items-start mb-4 flex-fill`}>
-                            <h3 className="title_2 mb-2">Use Cases</h3>
+                            <h3 className="title_2 mb-2">Use Cases <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
                             <div className="global-read-only-field" style={{ minHeight: 'auto', padding: '12px 15px', fontSize: '15px' }}>
-                                {marketing.indications || marketing.useCases || 'N/A'}
+                                {marketing.indications || marketing.useCases || `not assigned yet for version ---&gt; ${marketing.version || 'NEW'}`}
                             </div>
                         </div>
                         {showMedical && (
                             <div className={`${classes["form-control"]} d-flex flex-column align-items-start mb-4 flex-fill`}>
-                                <h3 className="title_2 mb-2">FDA Compliant</h3>
+                                <h3 className="title_2 mb-2">FDA Compliant <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
                                 <div className="global-read-only-field" style={{ minHeight: 'auto', padding: '12px 15px', fontSize: '15px' }}>
                                     <div className="d-flex align-items-center gap-2">
                                         <span>{version?.fda ? 'Yes' : 'No'}</span>
@@ -74,43 +75,55 @@ const ModelData = ({ model = null, selectedVersionId }) => {
                         </div>
                     )}
 
-                    {marketing.features.length > 0 && (
                         <div className="w-100 mt-4">
                             <div className={`${classes["form-control"]} d-flex flex-column align-items-start w-100`}>
-                                <h3 className="title_2 mb-2">Key Features</h3>
+                                <h3 className="title_2 mb-2">Key Features <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
                                 <div className="global-read-only-field" style={{ minHeight: 'auto', padding: '12px 25px', fontSize: '15px' }}>
-                                    <ul style={{ listStyleType: 'disc', margin: 0, paddingLeft: '20px', width: '100%' }}>
-                                        {marketing.features.map((feat, index) => (
-                                            <li key={index} style={{ marginBottom: '8px' }}>
-                                                {typeof feat === 'string' ? feat : feat.feature}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    {marketing.features.length > 0 ? (
+                                        <div className="d-flex flex-wrap gap-2 mt-2 w-100">
+                                            {marketing.features.map((feat, index) => (
+                                                <span key={index} style={{ display: 'inline-block', background: 'transparent', border: '1px solid var(--primary)', padding: '6px 14px', borderRadius: '20px', color: 'var(--primary)', fontWeight: 600, letterSpacing: '0.5px', boxShadow: '0 0 10px rgba(34, 211, 238, 0.2)' }}>
+                                                    🚀 {typeof feat === 'string' ? feat : feat.feature}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <span style={{ color: 'var(--sonic-silver)' }}>not assigned yet for version ---&gt; {marketing.version || 'NEW'}</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                    )}
 
-                    {marketing.metrics.length > 0 && (
                         <div className="w-100 mt-4">
                             <div className={`${classes["form-control"]} d-flex flex-column align-items-start w-100`}>
-                                <h3 className="title_2 mb-2">Performance Metrics</h3>
-                                <div className="d-flex flex-wrap gap-3 mt-2 w-100">
-                                    {marketing.metrics.map((metric, index) => (
-                                        <div key={index} className="global-read-only-field" style={{ minHeight: 'auto', padding: '15px 20px', minWidth: '150px', flex: '0 1 auto', alignItems: 'flex-start' }}>
-                                            <div style={{ fontSize: '0.95rem', color: 'var(--sonic-silver)', fontWeight: '600', marginBottom: '8px' }}>{metric.metric}</div>
-                                            <div style={{ fontSize: '1.4rem', color: 'var(--primary)', fontWeight: 'bold' }}>
-                                                {metric.value}%
-                                            </div>
-                                            {metric.metricsUrl && (
-                                                <a href={metric.metricsUrl} target="_blank" rel="noreferrer" style={{ marginTop: '8px', fontSize: '13px', textDecoration: 'underline', color: 'var(--primary)' }}>Details</a>
-                                            )}
+                                <h3 className="title_2 mb-2">Performance Metrics <span style={{ color: 'var(--primary)', fontSize: '0.6em', fontWeight: 'bold', marginLeft: '8px' }}>(FOR VERSION {marketing.version || 'NEW'})</span></h3>
+                                <div className={`w-100 ${marketing.metrics.length > 0 ? 'mt-2' : ''}`}>
+                                    {marketing.metrics.length > 0 ? (
+                                        <Row className="g-3 w-100 m-0">
+                                            {marketing.metrics.map((metric, index) => (
+                                                <Col xs={12} md={4} key={index}>
+                                                    <div className="global-read-only-field d-flex flex-column h-100" style={{ minHeight: 'auto', padding: '15px 20px', alignItems: 'flex-start' }}>
+                                                        <div style={{ fontSize: '1rem', color: 'var(--sonic-silver)', fontWeight: '600', marginBottom: '12px', width: '100%' }}>🚀 {metric.metric}</div>
+                                                        <div className="d-flex justify-content-between align-items-center w-100 mt-auto">
+                                                            <div style={{ fontSize: '1.6rem', color: 'var(--primary)', fontWeight: 'bold' }}>
+                                                                {metric.value}%
+                                                            </div>
+                                                            {metric.metricsUrl && (
+                                                                <a href={metric.metricsUrl} target="_blank" rel="noreferrer" style={{ fontSize: '14px', textDecoration: 'underline !important', color: 'var(--primary)', fontWeight: '600' }}>Details</a>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            ))}
+                                        </Row>
+                                    ) : (
+                                        <div className="global-read-only-field w-100" style={{ minHeight: 'auto', padding: '12px 25px', fontSize: '15px' }}>
+                                            <span style={{ color: 'var(--sonic-silver)' }}>not assigned yet for version ---&gt; {marketing.version || 'NEW'}</span>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             </div>
                         </div>
-                    )}
 
                     {/* ZERO DB CHANGE FEATURE: Integration Code Snippet
                     {(marketing.category === 'REST API Access' || marketing.category === 'LLMs') && (

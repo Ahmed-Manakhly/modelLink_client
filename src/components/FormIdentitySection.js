@@ -106,7 +106,7 @@ const FormIdentitySection = ({ classes, thisModel, form, gallery, renderInputRow
                         {renderInputRow('Model Category (subcategory)', 'categoryId', categoryId, categoryId, categoryChangeHandler, categoryBlurHandler, categoryIsInvalid, 'categoryId', 'categoryId', 'text', '', true, dbCategories)}
                     </Col>
                     <Col xs={12}>
-                        {renderVersionInputRow('Model Price (USD)', 'price', selectedVersion?.price, price, priceChangeHandler, priceBlurHandler, priceIsInvalid, 'price', 'price', 'number', '10.00')}
+                        {renderVersionInputRow(<span>Model Price (USD) <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}> (FOR VERSION {selectedVersion?.version || 'NEW'})</span></span>, 'price', selectedVersion?.price, price, priceChangeHandler, priceBlurHandler, priceIsInvalid, 'price', 'price', 'number', '10.00')}
                     </Col>
                     <Col xs={12}>
                         <div className={`${getClasses(false)} ${classes.statusWrapper}`}>

@@ -45,26 +45,8 @@ const ModelBoxWidgets = ({ model, orderRequestHandler, isBuyer, otherDev, isSell
           {/* //------------------------- */}
           <div className={styles.__box_rightside}>
             <Col xs={0} md lg className={` ${styles["controlCon-1"]} d-flex flex-column align-items-left w-100`} >
-              <h3 className="gradient-text" style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '1rem' }}>Model Details & Metadata</h3>
-
-              <Row className={`d-flex justify-content-center  align-items-start gap-3 w-100  ${styles["controlCon-2"]} `}>
-                <Col className={`${styles.f_list}  gap-2`}>
-                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
-                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Model Price : $${Number(marketing.price || 0).toFixed(2)}`}</span>
-                  </div>
-                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
-                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Delivery Time : ${marketing.deliveryTime ?? 'N/A'} days`}</span>
-                  </div>
-                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
-                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Category : ${marketing.category || 'N/A'}`}</span>
-                  </div>
-                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
-                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Last Updated : ${model?.updatedAt ? new Date(model.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}`}</span>
-                  </div>
-                </Col>
-              </Row>
-              {hasMultipleVersions && canOrder && (
-                <Row className={`d-flex justify-content-center align-items-start gap-3 w-100 ${styles["controlCon-2"]} mt-2`}>
+              {hasMultipleVersions && (
+                <Row className={`d-flex justify-content-center align-items-start gap-3 w-100 ${styles["controlCon-2"]} mb-3`}>
                   <Col className={`${styles.f_list} gap-2`}>
                     <label htmlFor="model-version-select" className={styles.f_item_title}>Select Version</label>
                     <CustomSelect
@@ -79,6 +61,25 @@ const ModelBoxWidgets = ({ model, orderRequestHandler, isBuyer, otherDev, isSell
                   </Col>
                 </Row>
               )}
+              
+              <h3 className="gradient-text" style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '1rem' }}>Model Details & Metadata</h3>
+
+              <Row className={`d-flex justify-content-center  align-items-start gap-3 w-100  ${styles["controlCon-2"]} `}>
+                <Col className={`${styles.f_list}  gap-2`}>
+                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
+                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>Model Price <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}>(FOR VERSION {marketing.version || 'NEW'})</span> {` : $${Number(marketing.price || 0).toFixed(2)}`}</span>
+                  </div>
+                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
+                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>Delivery Time <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}>(FOR VERSION {marketing.version || 'NEW'})</span> {` : ${marketing.deliveryTime ?? 'N/A'} days`}</span>
+                  </div>
+                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
+                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Category : ${marketing.category || 'N/A'}`}</span>
+                  </div>
+                  <div className="global-read-only-field" style={{ minHeight: '50px', padding: '10px 15px' }}>
+                    <span style={{ fontWeight: '600', color: 'var(--sonic-silver)', fontSize: '14px' }}>{`Last Updated : ${model?.updatedAt ? new Date(model.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}`}</span>
+                  </div>
+                </Col>
+              </Row>
             </Col>
             <Row className="g-2">
               <Col xs={12}>

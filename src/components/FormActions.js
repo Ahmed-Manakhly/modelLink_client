@@ -510,7 +510,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     {/* FEATURES */}
                                     <Row>
                                         <Col xs={0} md lg className={`${getClasses(featuresIsInValid)} ${classes.inputWrapper}`} >
-                                            <label htmlFor='feature'>Model Features</label>
+                                            <label htmlFor='feature'>Model Features <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}>(FOR VERSION {version || 'NEW'})</span></label>
                                             <div className={classes.metadataRow}>
                                                 <div className={`${classes.relativeCol} ${classes.colHalf}`}>
                                                     <input type='text' id='feature' name="feature" placeholder="Enter Feature Name"
@@ -546,7 +546,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     {/* METRICS */}
                                     <Row>
                                         <Col xs={0} md lg className={`${getClasses(metricsIsInValid)} ${classes.inputWrapper}`} >
-                                            <label>Model Metrics</label>
+                                            <label>Model Metrics <span style={{ color: 'var(--primary)', fontSize: '0.8em', fontWeight: 'bold' }}>(FOR VERSION {version || 'NEW'})</span></label>
                                             <div className={classes.metadataRow}>
                                                 <div className={`${classes.relativeCol} ${classes.col4}`}>
                                                     <input type='text' placeholder="Metric Name (e.g. Accuracy)" onChange={handleMetricInputChange} onBlur={() => setIsTouched({ ...isTouched, metrics: true })} value={metric} />

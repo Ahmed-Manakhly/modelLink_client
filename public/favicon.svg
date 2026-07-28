@@ -1,6 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <rect width="1024" height="1024" rx="128" fill="#3665B9" />
+  <defs>
+    <linearGradient id="neural-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#17434f" />
+      <stop offset="100%" stop-color="#0A0C10" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="128" fill="url(#neural-gradient)" />
   <text x="512" y="724" font-family="sans-serif" font-weight="900" font-size="600" text-anchor="middle">
-    <tspan fill="#ffffff">M</tspan><tspan fill="#ffffff">L</tspan>
+    <tspan fill="#22D3EE">M</tspan><tspan fill="#ffffff">L</tspan>
   </text>
 </svg>

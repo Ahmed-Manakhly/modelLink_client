@@ -13,6 +13,7 @@ services:
         - REACT_APP_BASE_API_DEV=$REACT_APP_BASE_API_DEV
         - REACT_APP_FILES_BASE_API_DEV=$REACT_APP_FILES_BASE_API_DEV
         - REACT_APP_CLIENT_URL_DEV=$REACT_APP_CLIENT_URL_DEV
+        - REACT_APP_STRIPE_PUBLIC_KEY=$REACT_APP_STRIPE_PUBLIC_KEY
     restart: always
     # Overriding explicitly (ignores .env runtime configs)
     environment:
