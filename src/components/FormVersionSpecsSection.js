@@ -5,7 +5,7 @@ import ToggleSwitch from './ToggleSwitch';
 const FormVersionSpecsSection = ({
     classes, thisModel, form,
     renderInputRow, renderVersionInputRow, getClasses,
-    setNewVersionCode, setNewVersionPrice, setAddVersionError, setShowAddVersionModal,
+    setNewVersionCode, setNewVersionPrice, setNewVersionDeliveryTime, setAddVersionError, setShowAddVersionModal,
     handelFdaChange, handelIsActiveChange, handelIsPrimaryChange, handleVersionSelect
 }) => {
     const {
@@ -51,6 +51,7 @@ const FormVersionSpecsSection = ({
                         <button type="button" className="btn-glass-outline" onClick={() => {
                             setNewVersionCode('');
                             setNewVersionPrice(price || String(selectedVersion?.price || ''));
+                            setNewVersionDeliveryTime(deliveryTime || String(selectedVersion?.deliveryTime || ''));
                             setAddVersionError('');
                             setShowAddVersionModal(true);
                         }}>

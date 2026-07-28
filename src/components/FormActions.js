@@ -90,6 +90,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
     const [showAddVersionModal, setShowAddVersionModal] = useState(false);
     const [newVersionCode, setNewVersionCode] = useState('');
     const [newVersionPrice, setNewVersionPrice] = useState('');
+    const [newVersionDeliveryTime, setNewVersionDeliveryTime] = useState('');
     const [addVersionLoading, setAddVersionLoading] = useState(false);
     const [addVersionError, setAddVersionError] = useState('');
     const [assetWarning, setAssetWarning] = useState(false);
@@ -107,6 +108,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         setShowAddVersionModal(false);
         setNewVersionCode('');
         setNewVersionPrice('');
+        setNewVersionDeliveryTime('');
         setAddVersionError('');
     };
 
@@ -121,12 +123,17 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
             setAddVersionError('Price must be at least $10.');
             return;
         }
+        const parsedDeliveryTime = parseInt(newVersionDeliveryTime, 10);
+        if (Number.isNaN(parsedDeliveryTime) || parsedDeliveryTime <= 0) {
+            setAddVersionError('Delivery time must be at least 1 day.');
+            return;
+        }
         setAddVersionLoading(true);
         setAddVersionError('');
         try {
             const res = await createVersionReq(
                 thisModel.id,
-                { version: newVersionCode.trim(), price: parsedPrice },
+                { version: newVersionCode.trim(), price: parsedPrice, deliveryTime: parsedDeliveryTime },
                 token
             );
             const newId = res.data?.data?.version?.id;
@@ -364,7 +371,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const displayValue = name === 'categoryId' ? (thisModel?.categoryRel?.name || thisModel?.category || thisModel?.categoryId) : thisModel?.[name];
 
         return (
-        <div className={`${classesName} ${classes.statusWrapper}`}>
+            <div className={`${classesName} ${classes.statusWrapper}`}>
                 <label htmlFor={name}>{label}</label>
                 {(!hasValue || (hasValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
@@ -394,7 +401,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
         const onChange = wrapChange(hookChange);
         const onSelectChange = wrapSelectChange(hookChange);
         return (
-        <div className={`${classesName} ${classes.statusWrapper}`}>
+            <div className={`${classesName} ${classes.statusWrapper}`}>
                 <label htmlFor={name}>{label}</label>
                 {(!thisValue || (thisValue && isEditing[setEditingField])) && <>
                     {isSelect ? (
@@ -428,7 +435,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                         <RouterForm method='post'>
                             <div className={classes.formContainerWrapper}>
                                 {/* SECTION 1: CORE IDENTITY (SIDE-BY-SIDE) */}
-                                <FormIdentitySection 
+                                <FormIdentitySection
                                     classes={classes}
                                     thisModel={thisModel}
                                     form={{ ...useModelFormReturn, dbCategories }}
@@ -449,6 +456,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     getClasses={getClasses}
                                     setNewVersionCode={setNewVersionCode}
                                     setNewVersionPrice={setNewVersionPrice}
+                                    setNewVersionDeliveryTime={setNewVersionDeliveryTime}
                                     setAddVersionError={setAddVersionError}
                                     setShowAddVersionModal={setShowAddVersionModal}
                                     handelFdaChange={handelFdaChange}
@@ -458,7 +466,7 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                 />
 
                                 {/* SECTION 3: DELIVERY ASSETS */}
-                                <FormDeliveryAssetsSection 
+                                <FormDeliveryAssetsSection
                                     classes={classes}
                                     thisModel={thisModel}
                                     form={useModelFormReturn}
@@ -589,6 +597,11 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                 </Col>
 
                                 {imgWarning && <p className={`${classes['error-text']} ${classes.imgWarningText}`}>Please Select a cover Image</p>}
+                                {thisModel && !hasAtLeastOneDeliveryAsset && (
+                                    <p className={`${classes['error-text']} ${classes.imgWarningText}`}>
+                                        ⚠️&nbsp;&nbsp;<strong>Assets Required:</strong>&nbsp;&nbsp;Please add at least one delivery asset to the selected version before you can update the model.
+                                    </p>
+                                )}
                                 <div className={classes.actionButtonsContainer}>
                                     <div className="flex-grow-1">
                                         <button onClick={handelSubmit} disabled={!formIsValid || isSubmitting} className="btn-glass-primary w-100 py-2 fs-6" type="submit">{isSubmitting ? 'Submitting...' : (thisModel ? "Update" : "Submit")}</button>
@@ -638,6 +651,18 @@ const FormActions = ({ thisModel = null, formTitle, onCreatingModelAction, onMod
                                     placeholder="10"
                                     value={newVersionPrice}
                                     onChange={(e) => setNewVersionPrice(e.target.value)}
+                                    required
+                                    className="w-100"
+                                />
+                            </div>
+                            <div className={classes["form-control"]}>
+                                <label>Delivery Time (Days)</label>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    placeholder="3"
+                                    value={newVersionDeliveryTime}
+                                    onChange={(e) => setNewVersionDeliveryTime(e.target.value)}
                                     required
                                     className="w-100"
                                 />

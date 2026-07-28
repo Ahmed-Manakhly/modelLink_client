@@ -35,6 +35,10 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
     const licenseKeyData = useInput(value => value.trim() === '' || value.trim().length >= 3);
     const huggingFaceUrlData = useInput(value => value.trim() === '' || urlEx.test(value));
 
+    const [selectedVersionId, setSelectedVersionId] = useState(null);
+    const versionDraftsRef = useRef({});
+    const modelIdRef = useRef(null);
+
     const endpointUrl = endpointUrlData.value;
     const dockerImage = dockerImageData.value;
     const downloadLink = downloadLinkData.value;
@@ -43,7 +47,7 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
 
     const hasAtLeastOneDeliveryAsset = [
         endpointUrl, dockerImage, downloadLink, licenseKey, huggingFaceUrl
-    ].some((value) => (value || '').trim() !== '');
+    ].some((value) => (value || '').trim() !== '') || (thisModel && thisModel.versions && thisModel.versions.find(v => v.id === selectedVersionId)?.assets?.length > 0);
 
     // Now override the hasError flag dynamically to enforce the "at least one" rule
     const endpointUrlIsInvalid = (!hasAtLeastOneDeliveryAsset && endpointUrlData.isTouched) || endpointUrlData.hasError;
@@ -104,9 +108,6 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
     const [isTouched, setIsTouched] = useState({ features: false, metrics: false, tags: false });
     const [isChanged, setIsChanged] = useState(false);
     
-    const [selectedVersionId, setSelectedVersionId] = useState(null);
-    const versionDraftsRef = useRef({});
-
 
 
     useEffect(() => {
@@ -130,10 +131,29 @@ export const useModelForm = (thisModel, dbCategories, preferredVersionId) => {
 
     useEffect(() => {
         if (!thisModel?.id) return;
+        const isSameModel = modelIdRef.current === thisModel.id;
+        modelIdRef.current = thisModel.id;
+
         const v = preferredVersionId
             ? modelVersions.find((row) => row.id === preferredVersionId) || getPrimaryVersion(thisModel)
             : getPrimaryVersion(thisModel);
-        setSelectedVersionId(v?.id ?? modelVersions[0]?.id ?? null);
+            
+        const nextVersionId = v?.id ?? modelVersions[0]?.id ?? null;
+        const isVersionSwitch = selectedVersionId !== null && selectedVersionId !== nextVersionId;
+        
+        setSelectedVersionId(nextVersionId);
+        
+        // Prevent wiping unsaved changes when model reloads after asset addition
+        if (isSameModel && isChanged && !isVersionSwitch) {
+            // Update only the asset fields so that hasAtLeastOneDeliveryAsset correctly recalculates
+            endpointUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'API_ENDPOINT') } });
+            dockerImageChangeHandler({ target: { value: getAssetFromVersion(v, 'DOCKER_IMAGE') } });
+            downloadLinkChangeHandler({ target: { value: getAssetFromVersion(v, 'DOWNLOAD_LINK') } });
+            licenseKeyChangeHandler({ target: { value: getAssetFromVersion(v, 'LICENSE_KEY') } });
+            huggingFaceUrlChangeHandler({ target: { value: getAssetFromVersion(v, 'HUGGINGFACE_URL') } });
+            return;
+        }
+
         versionDraftsRef.current = {};
         modelNameChangeHandler({ target: { value: thisModel.title || '' } });
         categoryChangeHandler({ target: { value: String(thisModel.categoryId || thisModel.categoryRel?.id || '') } });

@@ -101,9 +101,15 @@ export const getModelColumns = (handleDelete, handleStatusChange, isAdmin = fals
                             <Link to={"/models/edit/" + params?.row?.id} style={{ textDecoration: "none" }}>
                                 <EditOutlinedIcon className="table-action-icon edit" titleAccess="edit" />
                             </Link>
-                            <div onClick={() => handleDelete(params?.row?.id)}>
-                                <DeleteOutlineIcon className="table-action-icon delete" titleAccess="delete" />
-                            </div>
+                            {params?.row?.sales > 0 ? (
+                                <div title="Cannot delete model with sales" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                    <DeleteOutlineIcon className="table-action-icon delete" />
+                                </div>
+                            ) : (
+                                <div onClick={() => handleDelete(params?.row?.id)}>
+                                    <DeleteOutlineIcon className="table-action-icon delete" titleAccess="delete" />
+                                </div>
+                            )}
                         </>
                     )}
                 </Box>
