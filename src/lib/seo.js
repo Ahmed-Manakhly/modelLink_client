@@ -30,7 +30,7 @@ const FILES_BASE = isDev
 const PROD_URL = process.env.REACT_APP_CLIENT_URL_PROD || 'https://www.modellink.com';
 
 const SITE_NAME = 'ModelLink';
-const DEFAULT_OG = `${BASE_URL}/og-image.png`;
+const DEFAULT_OG = `${BASE_URL}/og-image.jpg`;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
