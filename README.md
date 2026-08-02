@@ -34,7 +34,7 @@ Output goes to `build/` (gitignored).
 ## Architecture (high level)
 
 | Layer | Location |
-|-------|----------|
+| ------- | ---------- |
 | Pages | `src/pages/` |
 | Shared components | `src/components/` |
 | API calls | `src/api/` |
@@ -47,7 +47,7 @@ Realtime: navbar badges refresh via `chatRefreshTick` on incoming messages; noti
 ## Environment
 
 | Variable | Purpose |
-|----------|---------|
+| ---------- | --------- |
 | `REACT_APP_BASE_API_DEV` | API base URL (development) |
 | `REACT_APP_FILES_BASE_API_DEV` | Static files base URL |
 | `REACT_APP_MARKETPLACE_DEMO` | Mock payment UI |
