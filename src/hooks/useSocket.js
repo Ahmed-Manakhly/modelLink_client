@@ -5,7 +5,10 @@ import { BASE_URL } from '../lib/api';
 import { getAuthToken } from '../utility/tokenLoader';
 import { uiActions } from '../store/UI-slice';
 
-export const socket = io(BASE_URL, { autoConnect: false });
+export const socket = io(BASE_URL, { 
+    autoConnect: false,
+    path: '/api/socket.io/'
+});
 
 const useSocket = (userId, handlers = {}) => {
     const dispatch = useDispatch();
