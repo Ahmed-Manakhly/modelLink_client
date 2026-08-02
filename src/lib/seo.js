@@ -192,10 +192,14 @@ export function ModelsSEO() {
             <meta property="og:title" content={`${title} | ${SITE_NAME}`} />
             <meta property="og:description" content={truncate(description)} />
             <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={DEFAULT_OG} />
 
-            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:site" content="@ModelLink" />
+            <meta name="twitter:creator" content="@ModelLink" />
             <meta name="twitter:title" content={`${title} | ${SITE_NAME}`} />
             <meta name="twitter:description" content={truncate(description)} />
+            <meta name="twitter:image" content={DEFAULT_OG} />
 
             <script type="application/ld+json">{JSON.stringify(breadcrumb)}</script>
             <script type="application/ld+json">{JSON.stringify(collectionPage)}</script>
