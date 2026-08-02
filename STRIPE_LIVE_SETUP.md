@@ -3,9 +3,11 @@
 This document serves as the single source of truth for ModelLink's Stripe payment and payout integration, covering the architecture, environment variables, dashboard configuration, and local CLI testing commands.
 
 ## 1. System Architecture
+
 ModelLink utilizes a **Dual-Path Payment Architecture** that shares a single source of truth for business logic.
 
 ### Buyer Checkout Flow (Self-Healing)
+
 1. **Real Stripe Checkout**: Uses Stripe Elements to generate a real `PaymentIntent`. When the payment succeeds, Stripe fires a webhook (`payment_intent.succeeded`) to the backend.
 2. **Self-Healing Fallback**: If network conditions cause the webhook to drop or delay, the frontend proactively asks the backend to verify the `PaymentIntent` status. If it's `succeeded`, the backend fulfills the order instantly—preventing the user from being stuck on a "Pending" screen.
 3. **Demo Checkout**: A portfolio-convenience bypass. Simulates an instant payment success by calling a secure `/api/orders/:id/demo-checkout` endpoint.
@@ -13,7 +15,9 @@ ModelLink utilizes a **Dual-Path Payment Architecture** that shares a single sou
 **Crucially:** All paths eventually call the exact same internal `fulfillOrder()` atomic transaction. There is zero duplicated logic for handling wallet balances or race conditions.
 
 ### Developer Payout Flow (Deferred Onboarding via Stripe Connect)
+
 ModelLink uses a **Deferred Onboarding** strategy via **Stripe Connect Express**.
+
 - **Frictionless Uploads**: Developers can upload AI models and start earning money *immediately* without needing to connect a Stripe account.
 - **Internal Ledger**: When an order is paid, the platform retains the funds and increments the developer's internal `pendingBalance`. Once the order is delivered, the funds move to `availableBalance`.
 - **Deferred Payout**: Only when the developer clicks "Connect Stripe" to request a payout are they redirected to Stripe to complete KYC and bank details.
@@ -22,9 +26,11 @@ ModelLink uses a **Deferred Onboarding** strategy via **Stripe Connect Express**
 ---
 
 ## 2. Stripe Dashboard Configuration
+
 The Platform Owner (You) must be verified *before* the API allows you to create Connect sub-accounts.
 
 **Production vs Test Mode Setup:**
+
 1. Navigate to the **Connect** tab in your Stripe Dashboard.
 2. Complete the Platform Onboarding/Verification (KYC).
    - *In Test Mode, use Stripe's provided Test Bank Accounts and Identity numbers.*
@@ -36,12 +42,14 @@ The Platform Owner (You) must be verified *before* the API allows you to create 
 ## 3. Environment Variables (.env)
 
 ### Client (`modelLink_client/.env`)
+
 ```env
 # The publishable key used to initialize Stripe Elements in the frontend
 REACT_APP_STRIPE_PUBLIC_KEY="pk_test_..." 
 ```
 
 ### Server (`modelLink_server/.env`)
+
 ```env
 # The secret key for your Platform account
 STRIPE="sk_test_..."
@@ -58,27 +66,36 @@ STRIPE_WEBHOOK_SECRET="we_..."
 ---
 
 ## 4. Local CLI Testing (Development)
+
 To test webhooks on your local machine, use the Stripe CLI.
 
 ### Step 1: Login to Stripe CLI
+
 Run the login command:
+
 ```bash
 stripe login
 ```
+
 **CRITICAL: Browser Authorization**
+
 - The CLI does **not** log you in automatically. It will print a URL.
 - **You MUST copy and paste that URL into your browser.**
 - In the browser, check the top right corner to ensure you are selecting the **correct Stripe Workspace/Account** (the one that matches your `.env` keys).
 - Click "Allow access".
 
 ### Step 2: Start the Webhook Forwarder
+
 Forward events from Stripe to your local server:
+
 ```bash
 stripe listen --forward-to localhost:8000/api/orders/stripe-webhook
 ```
+
 *(Note: the connection may timeout if left idle, resulting in `websocket: close sent`. Just restart the command).*
 
 ### Step 3: Update your `.env`
+
 The CLI will output a webhook signing secret (`whsec_...`). Copy this and paste it into `STRIPE_LOCAL_WEBHOOK_SECRET` in your server's `.env` file, then **restart your backend container**.
 
 ---
@@ -86,17 +103,18 @@ The CLI will output a webhook signing secret (`whsec_...`). Copy this and paste 
 ### 🚨 Troubleshooting Local Webhooks
 
 **Issue 1: Webhooks are not appearing in the terminal when I make a payment.**
-* **Cause**: Your Stripe CLI is logged into a different workspace (or a Sandbox) than the API keys in your `.env` file.
-* **Fix**: Run `stripe config --list` and check the `account_id` and `test_mode_pub_key`. If they don't match your `.env`, you must re-run `stripe login` and carefully select the correct account in the browser.
+- **Cause**: Your Stripe CLI is logged into a different workspace (or a Sandbox) than the API keys in your `.env` file.
+- **Fix**: Run `stripe config --list` and check the `account_id` and `test_mode_pub_key`. If they don't match your `.env`, you must re-run `stripe login` and carefully select the correct account in the browser.
 
 **Issue 2: `stripe login` prints a JSON block and instantly exits (Headless Mode).**
-* **Cause**: Your terminal environment is not acting as a standard TTY, forcing the CLI into `--non-interactive` mode.
-* **Fix 1**: Run `stripe login --interactive` and manually paste your `sk_test_...` key.
-* **Fix 2 (Hard Override)**: Bypass the CLI entirely by opening `~/.config/stripe/config.toml` in your editor and manually pasting your `account_id`, `test_mode_api_key`, and `test_mode_pub_key`. Then run `stripe listen` to generate a new `whsec_...` secret.
+- **Cause**: Your terminal environment is not acting as a standard TTY, forcing the CLI into `--non-interactive` mode.
+- **Fix 1**: Run `stripe login --interactive` and manually paste your `sk_test_...` key.
+- **Fix 2 (Hard Override)**: Bypass the CLI entirely by opening `~/.config/stripe/config.toml` in your editor and manually pasting your `account_id`, `test_mode_api_key`, and `test_mode_pub_key`. Then run `stripe listen` to generate a new `whsec_...` secret.
 
 ---
 
 ## 5. Production Webhooks (Live Deployment)
+
 When you deploy ModelLink to the web, the Stripe CLI is no longer used. Stripe sends HTTP POST requests directly to your live domain.
 
 1. Go to your Stripe Dashboard: `Developers > Webhooks` (or `Workbench > Webhooks`).
