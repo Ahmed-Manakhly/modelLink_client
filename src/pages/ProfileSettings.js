@@ -178,7 +178,7 @@ function ProfileSettings() {
                                     {isApproved && (
                                         <div className="mt-3">
                                             <span className="badge bg-success fs-6">APPROVED</span>
-                                            <p className="text-muted small mt-2">
+                                            <p className="small mt-2" style={{ color: 'var(--text-secondary)' }}>
                                                 Verified on {verification.verifiedAt ? new Date(verification.verifiedAt).toLocaleDateString() : 'N/A'}
                                             </p>
                                         </div>
@@ -187,8 +187,8 @@ function ProfileSettings() {
                                     {/* PENDING — document submitted, awaiting admin review */}
                                     {isAwaiting && (
                                         <div className="mt-3">
-                                            <span className="badge bg-warning text-dark fs-6">PENDING</span>
-                                            <p className="text-muted small mt-2">
+                                            <span className="badge bg-warning text-dark fs-6">PENDING ⏳</span>
+                                            <p className="small mt-2" style={{ color: 'var(--text-secondary)' }}>
                                                 Document submitted on {verification.createdAt ? new Date(verification.createdAt).toLocaleDateString() : 'N/A'}.
                                                 An admin will review your submission shortly.
                                             </p>
