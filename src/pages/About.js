@@ -1,6 +1,6 @@
 import classes from './About.module.scss' ;
 import img from "../assets/Content team.svg" ;
-import img_1 from "../assets/team_placeholder.svg" ;
+import img_1 from "../assets/ceo_ahmed.jpg" ;
 import img_2 from "../assets/team_placeholder.svg" ;
 import img_3 from "../assets/team_placeholder.svg" ;
 import img_4 from "../assets/team_placeholder.svg" ;
@@ -66,7 +66,7 @@ function About() {
                             <img src={img_1} alt="team_work"/>
                         </div>
                         <div className={classes["team__mem__info"]}>
-                            <h4>John Doe</h4>
+                            <h4>Ahmed Manakhly</h4>
                             <p>CEO</p>
                         </div>
                         <div className={classes["team__mem__social"]}>
