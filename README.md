@@ -1,62 +1,39 @@
-# ModelLink Client
+# 🎨 ModelLink Frontend Web Application
 
-React single-page app for **ModelLink** — browse AI models, place orders, chat with developers, manage wallet and profile.
+> **Senior Software Engineering Portfolio Project**
+>
+> Architected and developed by **Ahmed Manakhly** ([manakhly.tech](https://manakhly.tech) | [GitHub Profile](https://github.com/Ahmed-Manakhly))
+>
+> 🌐 **Live Demo Application**: [https://www.modellink.manakhly.tech/](https://www.modellink.manakhly.tech/)
 
-## Stack
+---
 
-- React 18 + React Router
-- Redux Toolkit (auth, realtime)
-- Socket.IO client
-- SCSS
+## 📖 Client Documentation Framework
 
-## Quick start
+The client application includes technical architecture documentation inside the [`docs/`](./docs) directory:
+
+| Document File | Architecture Scope |
+| :--- | :--- |
+| 📄 **[01_FRONTEND_ARCHITECTURE_AND_STATE.md](./docs/01_FRONTEND_ARCHITECTURE_AND_STATE.md)** | React Router v6 Data API, Redux Toolkit state design, custom hooks (`useSocket` + `useRealtimeSession`), and inline route guards. |
+| 📄 **[02_DESIGN_SYSTEM_AND_UX.md](./docs/02_DESIGN_SYSTEM_AND_UX.md)** | **Neural Midnight** CSS tokens, glassmorphism UI utilities, responsive breakpoints, toast notifications. |
+| 📄 **[03_DYNAMIC_SEO_AND_PUBLIC_ASSETS.md](./docs/03_DYNAMIC_SEO_AND_PUBLIC_ASSETS.md)** | Dynamic client-side metadata & JSON-LD schemas (`react-helmet-async`), static asset rules (`robots.txt`, `manifest.json`). |
+| 📄 **[04_API_INTEGRATION_AND_LOADERS.md](./docs/04_API_INTEGRATION_AND_LOADERS.md)** | Axios interceptors, Bearer token injection, React Router pre-render loaders, Stripe Elements integration. |
+
+---
+
+## ⚡ Quickstart Commands
 
 ```bash
-cp .env.example .env
+# 1. Install client dependencies
 npm install
-npm start   # http://localhost:3000
+
+# 2. Start local dev server (React 18 SPA)
+npm start
 ```
 
-Start the [server](../modelLink_server) on port 8000 first.
+---
 
-## Portfolio demo mode
+## 📜 License & Copyright
 
-Set `REACT_APP_MARKETPLACE_DEMO=true` in `.env` (default in `.env.example`). Matches server `MARKETPLACE_DEMO=true` for mock payments without Stripe.
-
-## Build
-
-```bash
-npm run build
-```
-
-Output goes to `build/` (gitignored).
-
-## Architecture (high level)
-
-| Layer | Location |
-| ------- | ---------- |
-| Pages | `src/pages/` |
-| Shared components | `src/components/` |
-| API calls | `src/api/` |
-| Redux | `src/store/` (`authSlice`, `realtimeSlice`) |
-| Sockets | `src/hooks/useSocket.js` |
-| Routes | `src/App.js` |
-
-Realtime: navbar badges refresh via `chatRefreshTick` on incoming messages; notifications via `setNotify`.
-
-## Environment
-
-| Variable | Purpose |
-| ---------- | --------- |
-| `REACT_APP_BASE_API_DEV` | API base URL (development) |
-| `REACT_APP_FILES_BASE_API_DEV` | Static files base URL |
-| `REACT_APP_MARKETPLACE_DEMO` | Mock payment UI |
-
-## Related repos
-
-- **Server:** `modelLink_server`
-- **Planning:** pre-push reports and Postman collection
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+Distributed under the **MIT License**.  
+Copyright (c) 2026 **Ahmed Manakhly** ([manakhly.tech](https://manakhly.tech) - <https://github.com/Ahmed-Manakhly>). See `LICENSE` for full terms.

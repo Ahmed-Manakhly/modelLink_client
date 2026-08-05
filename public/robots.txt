@@ -16,4 +16,4 @@ Disallow: /api/
 # Optional: Add a slight crawl delay if your server is sensitive to heavy bot traffic
 Crawl-delay: 2
 
-Sitemap: https://www.modellink.com/sitemap.xml
+Sitemap: https://www.modellink.manakhly.tech/sitemap.xml
