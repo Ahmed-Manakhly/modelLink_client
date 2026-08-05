@@ -69,7 +69,7 @@ sequenceDiagram
 
     App->>Hook: Initialize(userId, token)
     Hook->>Socket: Connect Socket Instance
-    Socket->>Server: io.connect('?token=JWT')
+    Socket->>Server: Connect with socket.handshake.auth.token = JWT
     Server-->>Socket: Socket Connected
     Socket->>Hook: Delegate Events via useRef
     Server->>Hook: Emit 'receive_msg'
